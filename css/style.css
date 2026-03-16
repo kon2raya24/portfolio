@@ -1,3 +1,179 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 65px;
+}
+
+/* =======================================================
+*
+*   Navigation
+*
+* ======================================================= */
+#fh5co-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  height: 65px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.fh5co-nav-brand {
+  font-family: "Kaushan Script", cursive;
+  font-size: 24px;
+  color: #FF9000 !important;
+  float: left;
+  line-height: 65px;
+  text-decoration: none;
+}
+.fh5co-nav-brand:hover {
+  color: #e68000 !important;
+}
+.fh5co-nav-links {
+  float: right;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 65px;
+}
+.fh5co-nav-links li {
+  display: inline-block;
+  margin-left: 22px;
+}
+.fh5co-nav-links li a {
+  color: #4d4d4d;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
+  text-decoration: none;
+  -webkit-transition: color 0.3s;
+  -o-transition: color 0.3s;
+  transition: color 0.3s;
+}
+.fh5co-nav-links li a:hover {
+  color: #FF9000;
+}
+.fh5co-nav-links li a.hire-btn {
+  background: #FF9000;
+  color: #fff;
+  padding: 8px 22px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  font-size: 13px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+.fh5co-nav-links li a.hire-btn:hover {
+  background: #e68000;
+  color: #fff;
+}
+@media screen and (max-width: 768px) {
+  .fh5co-nav-links {
+    display: none;
+  }
+}
+
+/* =======================================================
+*
+*   Hero Status Badge
+*
+* ======================================================= */
+.hero-status {
+  margin-bottom: 20px;
+}
+.status-badge {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  padding: 6px 18px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-animation: status-pulse 2s infinite;
+          animation: status-pulse 2s infinite;
+  flex-shrink: 0;
+}
+@-webkit-keyframes status-pulse {
+  0%, 100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+  50%       { opacity: 0.6; -webkit-transform: scale(1.4); transform: scale(1.4); }
+}
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.4); }
+}
+
+/* =======================================================
+*
+*   Tools & Stack
+*
+* ======================================================= */
+.tools-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 10px;
+  padding-bottom: 2em;
+}
+.tool-badge {
+  background: #f5f5f5;
+  color: #4d4d4d;
+  border: 1px solid #e0e0e0;
+  padding: 8px 20px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-family: "Space Mono", Arial, serif;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+.tool-badge:hover {
+  background: #FF9000;
+  color: #fff;
+  border-color: #FF9000;
+}
+.tool-badge.tool-ai {
+  background: #FF9000;
+  color: #fff;
+  border-color: #FF9000;
+}
+.tool-badge.tool-ai:hover {
+  background: #e68000;
+  border-color: #e68000;
+}
+
 @font-face {
   font-family: 'icomoon';
   src: url("../fonts/icomoon/icomoon.eot?srf3rx");
@@ -24,6 +200,7 @@ body {
   overflow-x: hidden;
   width: 100%;
   height: 100%;
+  padding-top: 65px;
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
@@ -682,6 +859,9 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 .progress-bar.progress-bar-5 {
   background-color: #27ae60 !important;
+}
+.progress-bar.progress-bar-ai {
+  background-color: #FF9000 !important;
 }
 
 .chart {
