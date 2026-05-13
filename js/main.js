@@ -106,12 +106,14 @@
 	var pieChart = function() {
 		$('.chart').easyPieChart({
 			scaleColor: false,
-			lineWidth: 4,
-			lineCap: 'butt',
-			barColor: '#FF9000',
-			trackColor:	"#f5f5f5",
+			lineWidth: 5,
+			lineCap: 'round',
+			barColor: function(percent) {
+				return percent >= 90 ? '#00e5ff' : (percent >= 80 ? '#FF9000' : '#0ea5b8');
+			},
+			trackColor:	"rgba(0, 229, 255, 0.08)",
 			size: 160,
-			animate: 1000
+			animate: 1200
 		});
 	};
 
