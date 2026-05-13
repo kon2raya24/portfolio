@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lemmuel Turaya — Resume</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  @page { size: A4; margin: 14mm 14mm 14mm 14mm; }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #eceae0;
+    color: #2b2f2c;
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+
+  .page {
+    background: #eceae0;
+    padding: 26mm 22mm 22mm;
+    max-width: 210mm;
+    margin: 0 auto;
+  }
+
+  /* ---------- Header ---------- */
+  .header {
+    text-align: center;
+    margin-bottom: 18mm;
+  }
+  .header h1 {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-weight: 400;
+    font-size: 30pt;
+    letter-spacing: 6pt;
+    margin: 0 0 4pt;
+    color: #2b3530;
+  }
+  .header .role {
+    font-family: 'Calibri', sans-serif;
+    font-weight: 700;
+    font-size: 13pt;
+    letter-spacing: 4pt;
+    color: #2b3530;
+    margin: 0 0 8pt;
+  }
+  .header hr {
+    border: 0;
+    border-top: 1px solid #6a6f64;
+    margin: 8pt 0;
+  }
+  .header .contact {
+    font-size: 10pt;
+    letter-spacing: 1.5pt;
+    color: #2b3530;
+    margin: 6pt 0 8pt;
+  }
+  .header .contact a { color: inherit; text-decoration: none; }
+  .header .contact .sep { margin: 0 8pt; color: #6a6f64; }
+
+  /* ---------- Body grid: sidebar label + content ---------- */
+  .row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 14pt 18pt;
+    margin-bottom: 12pt;
+  }
+  .label {
+    font-weight: 700;
+    font-size: 10pt;
+    letter-spacing: 1.2pt;
+    color: #4d5a52;
+    border-top: 1px solid #6a6f64;
+    padding-top: 4pt;
+    text-transform: capitalize;
+  }
+  .content {
+    border-top: 1px solid transparent;
+    padding-top: 4pt;
+  }
+  .content p { margin: 0 0 6pt; }
+  .content ul { margin: 4pt 0 0; padding-left: 16pt; }
+  .content ul li { margin-bottom: 3pt; }
+
+  /* Skills block */
+  .skills p { margin: 0 0 4pt; }
+  .skills strong { color: #2b3530; }
+
+  /* Experience block */
+  .role-block { margin-bottom: 12pt; }
+  .role-block .company {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    color: #2b3530;
+    margin-bottom: 1pt;
+  }
+  .role-block .title-line {
+    font-weight: 700;
+    color: #2b3530;
+    margin-bottom: 5pt;
+    font-size: 10.5pt;
+  }
+  .role-block ul { margin: 4pt 0 0 0; padding-left: 16pt; }
+  .role-block ul li {
+    margin-bottom: 4pt;
+    line-height: 1.4;
+  }
+
+  /* Education */
+  .edu .school {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    color: #2b3530;
+    margin-bottom: 1pt;
+  }
+  .edu .degree {
+    font-weight: 700;
+    color: #2b3530;
+    margin-bottom: 4pt;
+  }
+
+  /* Print tweaks */
+  @media print {
+    html, body { background: #eceae0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 0; }
+    .no-print { display: none !important; }
+  }
+
+  /* Helper bar (only visible on screen) */
+  .print-hint {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    background: #2b3530;
+    color: #eceae0;
+    padding: 10px 14px;
+    font-size: 11pt;
+    border-radius: 6px;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    z-index: 99;
+  }
+  .print-hint button {
+    background: #eceae0;
+    color: #2b3530;
+    border: 0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  /* Keep section together when printing */
+  .row, .role-block { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<div class="print-hint no-print">
+  Press <strong>Ctrl + P</strong> → "Save as PDF" to export · then replace <code>resume.pdf</code>
+  <button onclick="window.print()">Print now</button>
+</div>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <h1>LEMMUEL TURAYA</h1>
+    <div class="role">FULL-STACK &amp; MOBILE APP DEVELOPER</div>
+    <hr>
+    <div class="contact">
+      639 2277 86152
+      <span class="sep">|</span>
+      BIÑAN CITY LAGUNA, PH
+      <span class="sep">|</span>
+      TURAYALEMMUEL@GMAIL.COM
+    </div>
+    <hr>
+  </header>
+
+  <!-- Objective -->
+  <section class="row">
+    <div class="label">Objective</div>
+    <div class="content">
+      Results-driven Full-Stack &amp; Mobile App Developer with over <strong>six years</strong>
+      of experience designing and deploying web applications, building cross-platform mobile
+      apps, integrating enterprise systems, and accelerating delivery through AI-assisted
+      engineering workflows. Skilled in shipping reliable, scalable software that solves
+      real operational problems and improves data flow across business systems.
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="row skills">
+    <div class="label">Skills &amp; abilities</div>
+    <div class="content">
+      <p><strong>Programming:</strong> PHP, JavaScript, Node.js, Dart, HTML, CSS, SQL</p>
+      <p><strong>Frameworks &amp; Tools:</strong> Laravel, Vue.js, Nuxt.js, Vuetify, Bootstrap, Flutter, Silverstripe, Statamic, Git Version Control</p>
+      <p><strong>Technologies:</strong> API Integration (SAP, ABN Lookup, XERO, Eversign, Google Maps, FAREYE), jsPDF, AG Grid, SurveyJS</p>
+      <p><strong>Mobile:</strong> Flutter, Dart, Firebase, Android Studio, REST / JSON integration</p>
+      <p><strong>AI-Assisted Delivery:</strong> Vibe Coding with Claude AI, GitHub Copilot, agentic prototyping &amp; refactoring</p>
+      <p><strong>Soft Skills:</strong> Problem Solving, Communication, Team Collaboration, Agile Methodology</p>
+      <p><strong>Specialized Tools:</strong> SEMrush, Ahrefs, SurveyJS</p>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="row">
+    <div class="label">Experience</div>
+    <div class="content">
+
+      <!-- AAI -->
+      <div class="role-block">
+        <div class="company">AAI WORLDWIDE LOGISTICS</div>
+        <div class="title-line">Application Developer | November 1, 2024 – Present</div>
+        <ul>
+          <li>Design and ship a <strong>Flutter-based Warehouse Management System (WMS) mobile
+            app</strong> from concept to production, enabling real-time inventory, receiving,
+            and pick/pack operations on the warehouse floor.</li>
+          <li>Adopted <strong>Vibe Coding</strong> — AI-assisted delivery with <strong>Claude
+            AI</strong> — to compress prototyping and refactoring cycles while keeping code
+            review, tests, and engineering judgment in the loop.</li>
+          <li>Contribute to the development and enhancement of the company's Financial
+            Management System, ensuring robust functionality and reliability.</li>
+          <li>Design and implement key features including journal voucher creation, sundry
+            expense invoice processing, inventory management, and comprehensive reporting
+            using Ag-Grid for data visualization and jsPDF for advanced report generation.</li>
+          <li>Facilitate the integration of orders from the SAP system into the Warehouse
+            Management System (WMS) by converting XML data to JSON format, generating updated
+            XML files, and managing their secure transfer via SFTP for SAP validation.</li>
+          <li>Develop CRM system maintenance modules covering Airline Rates, IATA Rates, and
+            associated charges; create dynamic forms with SurveyJS for Customer Service
+            Representatives.</li>
+          <li>Develop a Trucking Rates module within the Trucking Management System using
+            Vuetify for frontend design and Laravel for backend logic.</li>
+          <li>Stack: <strong>Flutter, Dart, PHP, Laravel, Nuxt.js, Vuetify, Vue.js</strong>
+            with AI-augmented workflows and third-party API integrations.</li>
+        </ul>
+      </div>
+
+      <!-- Octal -->
+      <div class="role-block">
+        <div class="company">OCTAL PHILIPPINES INC.</div>
+        <div class="title-line">Software Developer | October 24, 2022 – October 31, 2024</div>
+        <ul>
+          <li>Assigned to AAI Worldwide Logistics as part of the IT Department, contributing
+            to the development and enhancement of core systems including the Financial
+            Management System (FMS), CRM, Transportation Management System (TMS), and
+            Warehouse Management System (WMS).</li>
+          <li>Developed a Trucking Rates module for the TMS using Vuetify for the frontend
+            and Laravel for the backend.</li>
+          <li>Built a TMS dashboard for the transport team to monitor truck availability,
+            track deployed trucks, and analyze booking frequencies, with integrated graphs,
+            filters, and visualization tools.</li>
+          <li>Enhanced the Logistics Execution System (LES) UI using Vue.js, Ag-Grid for
+            flexible data presentation, and jsPDF for seamless report generation.</li>
+          <li>Integrated the FAREYE API to provide real-time package status updates from
+            third-party providers, and shipped a single-page package tracker application.</li>
+        </ul>
+      </div>
+
+      <!-- Uratex -->
+      <div class="role-block">
+        <div class="company">URATEX PHILIPPINES</div>
+        <div class="title-line">Full Stack Developer | March 28, 2022 – October 5, 2022</div>
+        <ul>
+          <li>Designed and developed surveys using Laravel, incorporating detailed reporting
+            functionalities to analyze demographics and other survey factors.</li>
+          <li>Created a Trip Management System to facilitate efficient scheduling and booking
+            of company vehicles, improving resource management and accessibility.</li>
+          <li>Collaborated with cross-functional teams to design and develop the company's
+            corporate landing page aligned with branding objectives.</li>
+          <li>Built a dynamic landing page for the company's basketball association featuring
+            a live countdown timer, leveraging the Statamic CMS for content management.</li>
+        </ul>
+      </div>
+
+      <!-- Lumina -->
+      <div class="role-block">
+        <div class="company">LUMINA HOMES</div>
+        <div class="title-line">Marketing Staff (Full Stack Developer) | March 10, 2021 – March 30, 2022</div>
+        <ul>
+          <li>Develop, maintain, and optimize websites, landing pages, and applications to
+            support and enhance marketing campaigns.</li>
+          <li>Enhanced the property-listing loan calculator, enabling public users to compute
+            amortization details based on their inputs and receive the results via email.</li>
+          <li>Optimized and maintained the real-estate website built on SilverStripe,
+            ensuring a seamless user experience.</li>
+          <li>Implemented SEO best practices using SEMrush and Ahrefs to manage and optimize
+            site visibility and rankings.</li>
+          <li>Continuously evaluate emerging technologies and marketing tools to recommend
+            innovative solutions aligned with business goals.</li>
+        </ul>
+      </div>
+
+      <!-- Switch Connect -->
+      <div class="role-block">
+        <div class="company">SWITCH CONNECT PTY LTD</div>
+        <div class="title-line">Junior Web Developer | August 5, 2019 – September 28, 2020</div>
+        <ul>
+          <li>Contributed to the development of modules for the company's ERP system,
+            enhancing functionality and optimizing business processes.</li>
+          <li>Integrated Google Maps for address validation in user accounts, ensuring
+            accurate location data.</li>
+          <li>Implemented ABN Lookup for company validation, enabling seamless verification
+            of Australian-based companies via authorized APIs.</li>
+          <li>Integrated Xero for efficient financial management — receipt generation and
+            order monitoring — and Eversign for multi-party digital document signing.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section class="row edu">
+    <div class="label">Education</div>
+    <div class="content">
+      <div class="school">TRIMEX COLLEGES</div>
+      <div class="degree">B.S. in Information Technology</div>
+      <p>
+        Earned a <strong>1.50 GPA</strong> and completed relevant coursework in web
+        development, database management, and programming.
+      </p>
+    </div>
+  </section>
+
+  <!-- Communication -->
+  <section class="row">
+    <div class="label">Communication</div>
+    <div class="content">
+      Excellent written and verbal communication skills, comfortable collaborating with
+      clients, stakeholders, and cross-functional teams across time zones to deliver
+      high-quality results.
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
