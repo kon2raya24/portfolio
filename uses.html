@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>/uses — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The tools, editor, terminal, hardware, and daily software Lemmuel Turaya uses to build full-stack web and mobile apps." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="/uses — Lemmuel Turaya" />
+<meta property="og:description" content="What I use to build full-stack web and mobile apps every day." />
+<meta property="og:url" content="https://kon2raya.netlify.app/uses.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/case-study.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  /* /uses-specific tweaks */
+  .uses-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 28px;
+  }
+  @media (max-width: 768px) { .uses-grid { grid-template-columns: 1fr; } }
+  .uses-card {
+    background: linear-gradient(180deg, #0c1430, #0a1024);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 24px;
+    transition: 0.3s;
+  }
+  .uses-card:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 8px 28px rgba(0, 229, 255, 0.15);
+    transform: translateY(-2px);
+  }
+  .uses-card__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(0, 229, 255, 0.18);
+  }
+  .uses-card__icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid var(--line-strong);
+    padding: 3px 7px;
+    border-radius: 3px;
+    text-shadow: 0 0 6px rgba(0, 229, 255, 0.45);
+  }
+  .uses-card__title {
+    margin: 0;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    letter-spacing: 1.6px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .uses-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .uses-list li {
+    padding: 7px 0;
+    border-bottom: 1px dashed rgba(0, 229, 255, 0.08);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: rgba(230, 243, 255, 0.85);
+    line-height: 1.55;
+  }
+  .uses-list li:last-child { border-bottom: 0; }
+  .uses-list strong {
+    color: var(--cyan);
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .uses-list em {
+    color: rgba(255, 255, 255, 0.5);
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    margin-left: 4px;
+  }
+  .uses-intro {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: rgba(0, 229, 255, 0.78);
+    margin: -10px 0 24px;
+  }
+  .uses-foot {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(0, 229, 255, 0.2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+  }
+  .uses-foot a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--cyan);
+  }
+</style>
+</head>
+<body>
+
+<nav class="cs-nav">
+  <a class="cs-nav__brand" href="./">Back to portfolio</a>
+  <span class="cs-nav__breadcrumb"><span class="active">/uses</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+  <header class="cs-hero">
+    <div class="cs-hero__label">// uses.md</div>
+    <h1>/uses</h1>
+    <p class="cs-hero__tagline">
+      The editor, terminal, hardware, and daily software I lean on to build full-stack web
+      and mobile apps. Inspired by Wes Bos&rsquo;s
+      <a href="https://uses.tech" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--cyan)">uses.tech</a>
+      tradition.
+    </p>
+    <p class="uses-intro">$ cat ~/.config/my-setup &nbsp;&middot;&nbsp; last reviewed 2026-05-13</p>
+  </header>
+
+  <div class="uses-grid">
+
+    <!-- Editor & Coding -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ ED ]</span>
+        <h2 class="uses-card__title">Editor &amp; Coding</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>VS Code</strong> &mdash; daily-driver editor</li>
+        <li><strong>Claude Code</strong> <em>(CLI)</em> &mdash; AI-assisted pair programming</li>
+        <li><strong>GitHub Copilot</strong> &mdash; inline completions</li>
+        <li><strong>Theme:</strong> dark / high-contrast (Tokyo Night-ish)</li>
+        <li><strong>Font:</strong> JetBrains Mono &mdash; ligatures on</li>
+        <li><strong>Key extensions:</strong> Prettier, ESLint, GitLens, Vetur / Volar (Vue), PHP Intelephense, Dart / Flutter, ErrorLens</li>
+        <li><strong>Format-on-save:</strong> always</li>
+      </ul>
+    </section>
+
+    <!-- Terminal & Shell -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ SH ]</span>
+        <h2 class="uses-card__title">Terminal &amp; Shell</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Windows Terminal</strong> &mdash; the main shell host</li>
+        <li><strong>WSL2 / Ubuntu</strong> &mdash; for any *nix tooling, Composer, Laravel artisan</li>
+        <li><strong>Bash</strong> &mdash; default shell</li>
+        <li><strong>git</strong>, <strong>curl</strong>, <strong>jq</strong>, <strong>ssh</strong> as bread-and-butter CLIs</li>
+        <li><strong>Tab title:</strong> shows current directory + git branch</li>
+      </ul>
+    </section>
+
+    <!-- Languages & Stack -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ ST ]</span>
+        <h2 class="uses-card__title">Stack &amp; Languages</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Frontend:</strong> Vue.js, Nuxt.js, Vuetify, HTML5/CSS3, JavaScript</li>
+        <li><strong>Backend:</strong> PHP &middot; Laravel &middot; Node.js</li>
+        <li><strong>Mobile:</strong> Flutter &middot; Dart</li>
+        <li><strong>Database:</strong> MySQL &middot; SQLite (for prototyping)</li>
+        <li><strong>CMS:</strong> Statamic, SilverStripe (when CMS is the right tool)</li>
+        <li><strong>Tables &amp; reports:</strong> Ag-Grid, jsPDF</li>
+      </ul>
+    </section>
+
+    <!-- AI & Automation -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ AI ]</span>
+        <h2 class="uses-card__title">AI &amp; Automation</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Claude AI</strong> &mdash; primary AI pair-programmer (Sonnet for daily, Opus for deep work)</li>
+        <li><strong>Claude Code</strong> &mdash; in-terminal coding agent</li>
+        <li><strong>GitHub Copilot</strong> &mdash; in-editor completions</li>
+        <li><strong>n8n</strong> &mdash; self-hosted workflow automation</li>
+        <li><strong>Zapier / Make.com</strong> &mdash; quick SaaS-to-SaaS glue</li>
+        <li><strong>Postman</strong> &mdash; API design &amp; LLM tool-call testing</li>
+      </ul>
+    </section>
+
+    <!-- Design & API -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ DS ]</span>
+        <h2 class="uses-card__title">Design &amp; API</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Figma</strong> &mdash; UI design, prototyping, design-system work</li>
+        <li><strong>Adobe Suite</strong> <em>(occasional)</em> &mdash; Photoshop, Illustrator</li>
+        <li><strong>Postman</strong> &mdash; REST API design and team-shared collections</li>
+        <li><strong>Pixelmator / built-in</strong> tools for quick screenshot crops</li>
+      </ul>
+    </section>
+
+    <!-- Browser -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ BR ]</span>
+        <h2 class="uses-card__title">Browser</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Chrome</strong> &mdash; primary, with separate work / personal profiles</li>
+        <li><strong>Firefox Developer Edition</strong> &mdash; cross-browser testing</li>
+        <li><strong>Vue DevTools</strong> &mdash; component / Vuex inspection</li>
+        <li><strong>uBlock Origin</strong> &mdash; ad blocker</li>
+        <li><strong>1Password</strong> &mdash; credentials</li>
+        <li><strong>JSON Viewer</strong> &mdash; pretty-print API responses</li>
+      </ul>
+    </section>
+
+    <!-- Productivity -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ PR ]</span>
+        <h2 class="uses-card__title">Productivity</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Notion</strong> &mdash; project notes, specs, second brain</li>
+        <li><strong>Obsidian</strong> &mdash; daily notes, knowledge base</li>
+        <li><strong>Trello / Jira</strong> &mdash; task management depending on team</li>
+        <li><strong>Slack / Discord / Teams</strong> &mdash; team comms</li>
+        <li><strong>Cal.com</strong> &mdash; meeting scheduling</li>
+      </ul>
+    </section>
+
+    <!-- Hardware -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ HW ]</span>
+        <h2 class="uses-card__title">Hardware</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>OS:</strong> Windows 11 Pro &middot; WSL2 Ubuntu for *nix work</li>
+        <li><strong>Daily-driver laptop / desktop</strong> <em>(work-issued + personal)</em></li>
+        <li><strong>External monitor</strong> for second-screen view</li>
+        <li><strong>Mechanical keyboard</strong> &mdash; reliable, tactile</li>
+        <li><strong>Wired mouse</strong> &mdash; no batteries to fail mid-flow</li>
+        <li><strong>Wired earbuds / headphones</strong> &mdash; calls + deep-work music</li>
+        <li><strong>Mobile test device:</strong> Android &mdash; primary for Flutter WMS work</li>
+      </ul>
+    </section>
+
+    <!-- Hosting & DevOps -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ OP ]</span>
+        <h2 class="uses-card__title">Hosting &amp; DevOps</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Netlify</strong> &mdash; this portfolio (CI, forms, redirects)</li>
+        <li><strong>GitHub</strong> &mdash; source-of-truth for everything</li>
+        <li><strong>Docker</strong> &mdash; local-prod parity for Laravel + MySQL stacks</li>
+        <li><strong>XAMPP</strong> &mdash; quick local PHP / MySQL stand-up</li>
+        <li><strong>Firebase</strong> &mdash; auth, RTDB, Cloud Functions for mobile work</li>
+        <li><strong>Composer / npm / Vite</strong> &mdash; package management</li>
+      </ul>
+    </section>
+
+    <!-- Music / Vibe -->
+    <section class="uses-card">
+      <header class="uses-card__head">
+        <span class="uses-card__icon">[ FX ]</span>
+        <h2 class="uses-card__title">Deep-work &amp; Vibe</h2>
+      </header>
+      <ul class="uses-list">
+        <li><strong>Coffee</strong> &mdash; non-negotiable</li>
+        <li><strong>Lo-fi / chillhop</strong> playlists &mdash; default coding soundtrack</li>
+        <li><strong>Cmd+P + focus mode</strong> &mdash; minimal UI, no distractions</li>
+        <li><strong>Pomodoro-ish</strong> &mdash; 50/10 blocks for hard problems</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <p class="uses-foot">
+    What I use changes. This page does too &mdash; check back in a few months.
+    See something missing? <a href="mailto:turayalemmuel@gmail.com">Drop me a line</a>.
+  </p>
+
+  <aside class="cs-cta" style="margin-top:42px;">
+    <h3>Built something with one of these tools?</h3>
+    <p>Always happy to swap notes on workflows, terminal tricks, or AI pair-programming.</p>
+    <div class="cs-cta__btns">
+      <a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Say hi →</a>
+      <a class="cs-btn cs-btn--ghost" href="./">View portfolio</a>
+    </div>
+  </aside>
+
+</main>
+
+</body>
+</html>

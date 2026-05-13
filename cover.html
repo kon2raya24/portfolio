@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OG Cover · 1200×630 — Lemmuel Turaya</title>
+<meta name="viewport" content="width=1200">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #FF9000;
+    --cyan: #00e5ff;
+    --magenta: #ff2bd6;
+    --bg-deep: #050814;
+    --bg-dark: #0a0f1f;
+    --line: rgba(0, 229, 255, 0.18);
+    --line-strong: rgba(0, 229, 255, 0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%;
+    background: #222;
+    font-family: 'JetBrains Mono', monospace;
+    color: #e6f3ff;
+  }
+
+  /* The actual 1200×630 frame to screenshot */
+  .frame {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(0, 229, 255, 0.22), transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(255, 144, 0, 0.18), transparent 55%),
+      linear-gradient(135deg, #050814 0%, #0a0f1f 50%, #050814 100%);
+  }
+
+  /* Grid backdrop */
+  .frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 229, 255, 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 229, 255, 0.12) 1px, transparent 1px);
+    background-size: 60px 60px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 85%);
+            mask-image: radial-gradient(ellipse at center, #000 35%, transparent 85%);
+    opacity: 0.45;
+  }
+
+  /* Scanlines */
+  .frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.03) 0,
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  /* Corner brackets */
+  .corner {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-color: var(--cyan);
+    pointer-events: none;
+    filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.7));
+  }
+  .corner.tl { top: 38px; left: 38px; border-top: 3px solid; border-left: 3px solid; }
+  .corner.tr { top: 38px; right: 38px; border-top: 3px solid; border-right: 3px solid; border-color: var(--brand); filter: drop-shadow(0 0 12px rgba(255, 144, 0, 0.7)); }
+  .corner.bl { bottom: 38px; left: 38px; border-bottom: 3px solid; border-left: 3px solid; border-color: var(--brand); filter: drop-shadow(0 0 12px rgba(255, 144, 0, 0.7)); }
+  .corner.br { bottom: 38px; right: 38px; border-bottom: 3px solid; border-right: 3px solid; }
+
+  .stack-line {
+    position: absolute;
+    top: 70px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--cyan-dim, #0ea5b8);
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .stack-line .left { color: var(--cyan); text-shadow: 0 0 8px rgba(0,229,255,0.5); }
+  .stack-line .pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #28c840;
+    box-shadow: 0 0 8px #28c840;
+    margin-right: 8px;
+    vertical-align: 0;
+  }
+  .stack-line .right { color: rgba(255,255,255,0.55); }
+
+  .content {
+    position: absolute;
+    inset: 130px 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .terminal-prompt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    margin-bottom: 22px;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+  }
+  .terminal-prompt .dollar { color: var(--brand); margin-right: 8px; }
+  .terminal-prompt .cursor {
+    display: inline-block;
+    width: 10px;
+    height: 16px;
+    background: var(--cyan);
+    vertical-align: -2px;
+    margin-left: 4px;
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 88px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    line-height: 1;
+    margin-bottom: 22px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 50%, var(--brand) 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 40px rgba(0, 229, 255, 0.25);
+  }
+
+  .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    margin-bottom: 38px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--line-strong);
+    padding: 8px 18px;
+    border-radius: 6px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+  .role::before { content: '< '; color: var(--brand); }
+  .role::after  { content: ' />'; color: var(--brand); }
+
+  .chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid var(--line-strong);
+    color: var(--cyan);
+    padding: 7px 14px;
+    border-radius: 4px;
+    text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  }
+  .chip.ai {
+    background: linear-gradient(135deg, rgba(255,144,0,0.18), rgba(255,43,214,0.12));
+    border-color: rgba(255,144,0,0.55);
+    color: #ffb352;
+    text-shadow: 0 0 6px rgba(255,144,0,0.4);
+  }
+
+  .url {
+    position: absolute;
+    bottom: 70px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 2.5px;
+    color: rgba(255,255,255,0.6);
+    z-index: 2;
+  }
+  .url .left::before { content: '> '; color: var(--brand); }
+  .url .right { color: var(--cyan); text-shadow: 0 0 6px rgba(0,229,255,0.4); }
+
+  /* On-screen helper bar (hidden during screenshot) */
+  .helpbar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: #2b3530;
+    color: #eceae0;
+    padding: 10px 14px;
+    font-size: 12px;
+    border-radius: 6px;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    z-index: 999;
+    max-width: 330px;
+    line-height: 1.5;
+  }
+  .helpbar code { background: rgba(255,255,255,0.1); padding: 1px 4px; border-radius: 3px; }
+  .helpbar .hide { display: none; }
+  @media print {
+    .helpbar { display: none !important; }
+    .frame { box-shadow: none !important; }
+  }
+  body { display: flex; justify-content: center; padding: 24px 0; }
+  .frame { box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+</style>
+</head>
+<body>
+
+<div class="helpbar">
+  <strong>1200×630 OG cover</strong><br>
+  Take a screenshot of the dark frame below at <strong>exactly 1200×630</strong>, save as
+  <code>images/og-cover.png</code>. Tools: <code>F11</code> + Windows Snip, or
+  <code>chrome://flags</code> &gt; "Force device scale factor 1" + DevTools device mode at 1200×630.
+</div>
+
+<div class="frame">
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="stack-line">
+    <span class="left"><span class="pulse"></span>OPEN TO OPPORTUNITIES &middot; 2026</span>
+    <span class="right">~/portfolio/v3</span>
+  </div>
+
+  <div class="content">
+    <div class="terminal-prompt"><span class="dollar">$</span>./init_developer.sh<span class="cursor"></span></div>
+
+    <h1>LEMMUEL TURAYA</h1>
+
+    <div class="role">Full-Stack &amp; Mobile App Developer</div>
+
+    <div class="chips">
+      <span class="chip">Vue.js</span>
+      <span class="chip">Laravel</span>
+      <span class="chip">Flutter</span>
+      <span class="chip">REST</span>
+      <span class="chip ai">Claude AI</span>
+      <span class="chip ai">n8n</span>
+    </div>
+  </div>
+
+  <div class="url">
+    <span class="left">6+ years &middot; remote-friendly &middot; PH (GMT+8)</span>
+    <span class="right">kon2raya.netlify.app</span>
+  </div>
+</div>
+
+</body>
+</html>

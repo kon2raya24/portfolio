@@ -7,15 +7,29 @@
 		<priority>1.0</priority>
 	</url>
 	<url>
-		<loc>https://kon2raya.netlify.app/resume.html</loc>
-		<lastmod>2026-05-13</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.8</priority>
-	</url>
-	<url>
 		<loc>https://kon2raya.netlify.app/resume.pdf</loc>
 		<lastmod>2026-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.8</priority>
 	</url>
+	<url>
+		<loc>https://kon2raya.netlify.app/resume.json</loc>
+		<lastmod>2026-05-13</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.7</priority>
+	</url>
+	<url>
+		<loc>https://kon2raya.netlify.app/uses.html</loc>
+		<lastmod>2026-05-13</lastmod>
+		<changefreq>quarterly</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>https://kon2raya.netlify.app/changelog.html</loc>
+		<lastmod>2026-05-13</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.5</priority>
+	</url>
+	<!-- Case studies intentionally excluded until final writeups are published.
+	     Add them back here when ready and switch the page-level robots meta to "index, follow". -->
 </urlset>

@@ -305,7 +305,52 @@
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
   })();
 
-  /* ---------- Recent repos panel (live) ---------- */
+  /* ---------- GitHub cache helper (shared) ---------- */
+  var ghCache = {
+    TTL: 30 * 60 * 1000,                 // 30 minutes
+    STALE_MAX: 7 * 24 * 60 * 60 * 1000,   // 7 days — still show as "stale" before giving up
+    get: function (key) {
+      try {
+        var raw = localStorage.getItem('gh.' + key);
+        if (!raw) return null;
+        var p = JSON.parse(raw);
+        if (!p || typeof p.t !== 'number') return null;
+        var age = Date.now() - p.t;
+        return { data: p.d, age: age, fresh: age < this.TTL, stale: age >= this.TTL };
+      } catch (e) { return null; }
+    },
+    set: function (key, data) {
+      try { localStorage.setItem('gh.' + key, JSON.stringify({ t: Date.now(), d: data })); } catch (e) {}
+    }
+  };
+  function ghFetch(url, key, timeoutMs) {
+    timeoutMs = timeoutMs || 4500;
+    var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, timeoutMs);
+    return fetch(url, ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) {
+        clearTimeout(t);
+        if (r.status === 403 || r.status === 429) {
+          var reset = r.headers.get('X-RateLimit-Reset');
+          var err = new Error('rate-limit');
+          err.code = 'RATE_LIMIT';
+          err.resetAt = reset ? Number(reset) * 1000 : null;
+          throw err;
+        }
+        if (!r.ok) throw new Error('bad-' + r.status);
+        return r.json();
+      })
+      .then(function (json) {
+        if (key) ghCache.set(key, json);
+        return json;
+      })
+      .catch(function (e) {
+        clearTimeout(t);
+        throw e;
+      });
+  }
+
+  /* ---------- Recent repos panel (live, cached) ---------- */
   (function recentRepos() {
     var host = document.querySelector('[data-recent-repos]');
     if (!host) return;
@@ -322,53 +367,54 @@
       if (diff < 86400 * 365) return Math.floor(diff / (86400 * 30)) + 'mo ago';
       return Math.floor(diff / (86400 * 365)) + 'y ago';
     }
-
     function escapeHtml(s) {
       return (s == null ? '' : String(s))
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
-
-    function render(repos) {
+    function render(repos, fromCache) {
       if (!repos || !repos.length) {
         host.innerHTML = '<li class="px-repos__loading">no public repos found.</li>';
         return;
       }
-      host.innerHTML = repos.map(function (r) {
+      var nonFork = repos.filter(function (r) { return !r.fork; });
+      var list = (nonFork.length ? nonFork : repos).slice(0, 4);
+      host.innerHTML = list.map(function (r) {
         var desc = r.description ? '<p class="px-repo__desc">' + escapeHtml(r.description) + '</p>' : '';
         var lang = r.language ? '<span class="px-repo__lang">' + escapeHtml(r.language) + '</span>' : '';
-        return '' +
-          '<li>' +
-            '<div class="px-repo__head">' +
-              '<a class="px-repo__name" href="' + escapeHtml(r.html_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.name) + '</a>' +
-              '<span class="px-repo__visibility">' + (r.private ? 'private' : 'public') + '</span>' +
-              lang +
-              '<span class="px-repo__stars"><strong>★</strong> ' + (r.stargazers_count || 0) + '</span>' +
-            '</div>' +
-            desc +
-            '<div class="px-repo__when">updated ' + relativeTime(r.pushed_at || r.updated_at) + '</div>' +
-          '</li>';
+        return '<li>' +
+          '<div class="px-repo__head">' +
+            '<a class="px-repo__name" href="' + escapeHtml(r.html_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.name) + '</a>' +
+            '<span class="px-repo__visibility">' + (r.private ? 'private' : 'public') + '</span>' +
+            lang +
+            '<span class="px-repo__stars"><strong>★</strong> ' + (r.stargazers_count || 0) + '</span>' +
+          '</div>' +
+          desc +
+          '<div class="px-repo__when">updated ' + relativeTime(r.pushed_at || r.updated_at) + (fromCache ? ' · <em>cached</em>' : '') + '</div>' +
+        '</li>';
       }).join('');
     }
+    function rateLimitMsg(resetAt) {
+      var minutes = resetAt ? Math.max(1, Math.ceil((resetAt - Date.now()) / 60000)) : null;
+      return '<li class="px-repos__loading">$ GitHub rate-limited for this IP' +
+        (minutes ? ' &mdash; resets in ~' + minutes + ' min' : '') +
+        ' &mdash; <a href="https://github.com/' + USER + '" target="_blank" rel="noopener" style="color:var(--cyan)">view profile directly &rarr;</a></li>';
+    }
 
-    var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 5000);
-    fetch('https://api.github.com/users/' + USER + '/repos?sort=updated&per_page=4',
-      ctrl ? { signal: ctrl.signal } : {})
-      .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('bad'); return r.json(); })
-      .then(function (repos) {
-        if (!Array.isArray(repos)) throw new Error('bad shape');
-        // Filter forks if any, prefer original work
-        var nonFork = repos.filter(function (r) { return !r.fork; });
-        render((nonFork.length ? nonFork : repos).slice(0, 4));
-      })
-      .catch(function () {
-        clearTimeout(t);
-        host.innerHTML = '<li class="px-repos__loading">$ couldn\'t reach GitHub right now &mdash; <a href="https://github.com/' + USER + '" target="_blank" rel="noopener" style="color:var(--cyan)">visit profile directly &rarr;</a></li>';
+    var cached = ghCache.get('repos');
+    if (cached) render(cached.data, !cached.fresh);
+    if (cached && cached.fresh) return;
+
+    ghFetch('https://api.github.com/users/' + USER + '/repos?sort=updated&per_page=8', 'repos')
+      .then(function (repos) { if (Array.isArray(repos)) render(repos, false); })
+      .catch(function (e) {
+        if (cached) { /* keep showing stale cache */ return; }
+        if (e && e.code === 'RATE_LIMIT') host.innerHTML = rateLimitMsg(e.resetAt);
+        else host.innerHTML = '<li class="px-repos__loading">$ couldn\'t reach GitHub &mdash; <a href="https://github.com/' + USER + '" target="_blank" rel="noopener" style="color:var(--cyan)">view profile &rarr;</a></li>';
       });
   })();
 
-  /* ---------- Live GitHub stats + commit graph ---------- */
+  /* ---------- Live GitHub stats + commit graph (cached) ---------- */
   (function githubStats() {
     var host = document.querySelector('[data-commit-graph]');
     if (!host) return;
@@ -392,69 +438,80 @@
       }
       host.innerHTML = html;
     }
-    function fallback() {
-      var seed = 42;
+    function fallbackBuckets() {
+      var seed = 42, buckets = [];
       function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-      var buckets = [];
       for (var i = 0; i < CELLS; i++) {
         var v = rnd();
         buckets.push(v < 0.4 ? 0 : v < 0.65 ? 1 : v < 0.85 ? 3 : v < 0.96 ? 6 : 10);
       }
-      paint(buckets);
+      return buckets;
+    }
+    function eventsToBuckets(events) {
+      var buckets = new Array(CELLS).fill(0);
+      events.forEach(function (e) {
+        var d = new Date(e.created_at); d.setHours(0,0,0,0);
+        var today = new Date(); today.setHours(0,0,0,0);
+        var diffDays = Math.round((today - d) / 86400000);
+        var idx = CELLS - 1 - diffDays;
+        if (idx >= 0 && idx < CELLS) buckets[idx] += 1;
+      });
+      return buckets;
+    }
+    function setLabel(status, stale) {
+      if (!label) return;
+      if (status === 'live')  label.innerHTML = '// recent github activity &middot; <span style="color:#28c840">live</span>' + (stale ? ' <em style="color:rgba(255,255,255,0.4)">(cached)</em>' : '') + ' &middot; @' + USER;
+      else if (status === 'cached') label.innerHTML = '// recent github activity &middot; <span style="color:var(--brand)">cached</span> &middot; @' + USER;
+      else if (status === 'rate')   label.innerHTML = '// github rate-limited &middot; <span style="color:var(--brand)">retry later</span>';
+      else label.textContent = '// last 6 months · contribution heatmap';
+    }
+    function setMeta(d, fromCache) {
+      var existing = document.querySelector('.commit-graph-meta');
+      if (existing) existing.remove();
+      if (!d || !label) return;
+      var meta = document.createElement('div');
+      meta.className = 'commit-graph-meta';
+      meta.innerHTML =
+        '<span><strong>' + fmt(d.public_repos) + '</strong> repos</span>' +
+        '<span class="sep">·</span>' +
+        '<span><strong>' + fmt(d.followers) + '</strong> followers</span>' +
+        '<span class="sep">·</span>' +
+        '<span><strong>' + fmt(d.following) + '</strong> following</span>' +
+        (fromCache ? '<span class="sep">·</span><em style="color:rgba(255,255,255,0.4)">cached</em>' : '') +
+        '<span class="sep">·</span>' +
+        '<a href="https://github.com/' + USER + '" target="_blank" rel="noopener">view profile &rarr;</a>';
+      label.parentNode.insertBefore(meta, host.nextSibling);
     }
 
-    // Day index: today = CELLS - 1, walk backwards
-    function dayIndexFor(date) {
-      var today = new Date();
-      today.setHours(0,0,0,0);
-      var d = new Date(date);
-      d.setHours(0,0,0,0);
-      var diffDays = Math.round((today - d) / 86400000);
-      var idx = CELLS - 1 - diffDays;
-      return (idx >= 0 && idx < CELLS) ? idx : -1;
+    // 1) Paint cache if we have it, immediately
+    var evCache = ghCache.get('events');
+    var usCache = ghCache.get('user');
+    if (evCache) {
+      paint(eventsToBuckets(evCache.data));
+      setLabel('live', !evCache.fresh);
+    } else {
+      paint(fallbackBuckets());
     }
+    if (usCache) setMeta(usCache.data, !usCache.fresh);
 
-    function loadEvents() {
-      var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-      var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 5000);
-      // Public events: up to 30 of the most recent
-      fetch('https://api.github.com/users/' + USER + '/events/public?per_page=100', ctrl ? { signal: ctrl.signal } : {})
-        .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('bad'); return r.json(); })
-        .then(function (events) {
-          if (!Array.isArray(events) || !events.length) { fallback(); return; }
-          var buckets = new Array(CELLS).fill(0);
-          events.forEach(function (e) {
-            var idx = dayIndexFor(e.created_at);
-            if (idx >= 0) buckets[idx] += 1;
-          });
-          paint(buckets);
-          if (label) label.textContent = '// recent github activity · live · @' + USER;
-        })
-        .catch(function () { clearTimeout(t); fallback(); });
-    }
+    // 2) If both caches are fresh, don't re-fetch
+    if (evCache && evCache.fresh && usCache && usCache.fresh) return;
 
-    // Always paint the deterministic fallback first so layout is stable
-    fallback();
-    loadEvents();
-
-    // Bonus: fetch profile stats and append a tiny meta line
-    fetch('https://api.github.com/users/' + USER)
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) {
-        if (!d || !label) return;
-        var meta = document.createElement('div');
-        meta.className = 'commit-graph-meta';
-        meta.innerHTML =
-          '<span><strong>' + fmt(d.public_repos) + '</strong> repos</span>' +
-          '<span class="sep">·</span>' +
-          '<span><strong>' + fmt(d.followers) + '</strong> followers</span>' +
-          '<span class="sep">·</span>' +
-          '<span><strong>' + fmt(d.following) + '</strong> following</span>' +
-          '<span class="sep">·</span>' +
-          '<a href="https://github.com/' + USER + '" target="_blank" rel="noopener">view profile &rarr;</a>';
-        label.parentNode.insertBefore(meta, host.nextSibling);
+    // 3) Otherwise re-fetch (events first, then user)
+    ghFetch('https://api.github.com/users/' + USER + '/events/public?per_page=100', 'events')
+      .then(function (events) {
+        if (!Array.isArray(events) || !events.length) return;
+        paint(eventsToBuckets(events));
+        setLabel('live', false);
       })
-      .catch(function () {});
+      .catch(function (e) {
+        if (evCache) return; // keep stale cache rendering
+        if (e && e.code === 'RATE_LIMIT') setLabel('rate');
+      });
+
+    ghFetch('https://api.github.com/users/' + USER, 'user')
+      .then(function (d) { if (d) setMeta(d, false); })
+      .catch(function () { /* keep cached meta if present */ });
   })();
 
   /* ---------- Boot loader screen ---------- */
@@ -868,6 +925,9 @@
       { label: 'GitHub: kon2raya24', href: 'https://github.com/kon2raya24', icon: '↗', meta: 'link' },
       { label: 'LinkedIn',          href: 'https://www.linkedin.com/in/lemmuel-turaya/', icon: '↗', meta: 'link' },
       { label: 'Download Resume',  href: 'resume.pdf', icon: '⇣', meta: 'file' },
+      { label: 'Open /uses',       href: 'uses.html', icon: '⚙', meta: 'page' },
+      { label: 'Open /changelog',  href: 'changelog.html', icon: '◷', meta: 'page' },
+      { label: 'Open resume.json', href: 'resume.json', icon: '{}', meta: 'data' },
       { label: 'Toggle Konami Mode', action: 'konami', icon: '★', meta: 'easter egg' },
       { label: 'Scroll to Top',    action: 'top', icon: '↑', meta: 'nav' }
     ];
@@ -1126,21 +1186,69 @@
     });
   })();
 
-  /* ---------- Contact form success ---------- */
-  (function contactSuccess() {
-    if (window.location.search.indexOf('sent=1') === -1) return;
+  /* ---------- Contact form: success + non-Netlify fallback ---------- */
+  (function contactForm() {
     var wrap = document.querySelector('.cta-form-wrap');
-    if (!wrap) return;
-    wrap.setAttribute('open', '');
-    wrap.classList.add('is-sent');
-    setTimeout(function () {
-      var t = document.getElementById('fh5co-started');
-      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
-    // strip the param so refresh doesn't replay
-    if (history.replaceState) {
-      history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    var form = wrap && wrap.querySelector('form');
+
+    // Show success state after Netlify's ?sent=1 redirect
+    if (window.location.search.indexOf('sent=1') > -1 && wrap) {
+      wrap.setAttribute('open', '');
+      wrap.classList.add('is-sent');
+      setTimeout(function () {
+        var t = document.getElementById('fh5co-started');
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+      if (history.replaceState) {
+        history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+      }
     }
+
+    if (!form) return;
+
+    // Detect whether this is running on Netlify (or a real server that handles forms).
+    // On localhost/file:// the native submit would 404, so we intercept and fall back to mailto.
+    var host = window.location.hostname || '';
+    var isLocal =
+      host === '' ||
+      host === 'localhost' ||
+      host === '127.0.0.1' ||
+      /^192\.168\./.test(host) ||
+      /^10\./.test(host) ||
+      window.location.protocol === 'file:';
+    if (!isLocal) return; // production / Netlify handles natively
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var get = function (n) { var el = form.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ''; };
+      // honeypot check
+      if (get('bot-field')) return;
+      var name = get('name'), email = get('email'), company = get('company'),
+          type = get('opportunity_type'), msg = get('message');
+      var body =
+        'Name: ' + name + '\n' +
+        'Email: ' + email + '\n' +
+        (company ? 'Company / role: ' + company + '\n' : '') +
+        (type ? 'Type: ' + type + '\n' : '') +
+        '\n' + msg + '\n';
+      var subject = 'Portfolio inquiry' + (type ? ' — ' + type : '');
+      var mailto = 'mailto:turayalemmuel@gmail.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+
+      techToast('localhost mode · opening your mail client');
+      setTimeout(function () { window.location.href = mailto; }, 350);
+
+      // Show a friendly localhost notice once
+      if (!form.querySelector('.cta-form__localhost')) {
+        var notice = document.createElement('div');
+        notice.className = 'cta-form__localhost';
+        notice.innerHTML =
+          '<strong>Localhost mode</strong> &mdash; this form only sends through Netlify Forms ' +
+          'once the site is deployed. For now your message has been pre-filled in your mail client.';
+        form.appendChild(notice);
+      }
+    });
   })();
 
   /* ---------- Accessibility decorations ---------- */
@@ -1230,6 +1338,7 @@
     var rows = [
       { keys: ['ctrl', 'k'], desc: 'Open command palette' },
       { keys: ['/'],         desc: 'Quick search commands' },
+      { keys: ['`'],         desc: 'Toggle dev terminal' },
       { keys: ['?'],         desc: 'Show this help' },
       { keys: ['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'b', 'a'], desc: 'Konami mode (hue cycle)' },
       { keys: ['esc'],       desc: 'Close any overlay' },
@@ -1370,6 +1479,367 @@
       else if (act === 'konami')     { document.body.classList.toggle('konami-on'); techToast(document.body.classList.contains('konami-on') ? 'konami: ON' : 'konami: OFF'); }
       else if (act === 'top')        { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     });
+  })();
+
+  /* ---------- Interactive terminal (` to toggle) ---------- */
+  (function devTerminal() {
+    if (isTouch) return;
+
+    var el = document.createElement('div');
+    el.className = 'dev-term';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML =
+      '<div class="dev-term__bar">' +
+        '<span class="dev-term__dots"><i></i><i></i><i></i></span>' +
+        '<span class="dev-term__path">~/portfolio &mdash; bash</span>' +
+        '<button class="dev-term__close" type="button" aria-label="close terminal">×</button>' +
+      '</div>' +
+      '<div class="dev-term__body" data-term-body>' +
+        '<div class="dev-term__line">' +
+          '<span class="dev-term__welcome">welcome to <strong>lemmuel@portfolio</strong> &mdash; type <strong>help</strong> for commands. press <strong>` (backtick)</strong> to toggle, <strong>esc</strong> to close.</span>' +
+        '</div>' +
+      '</div>' +
+      '<form class="dev-term__form">' +
+        '<span class="dev-term__prompt"><span class="user">lemmuel@portfolio</span>:<span class="path">~</span>$</span>' +
+        '<input class="dev-term__input" type="text" autocomplete="off" spellcheck="false" autocapitalize="off">' +
+      '</form>';
+    document.body.appendChild(el);
+
+    var body = el.querySelector('[data-term-body]');
+    var input = el.querySelector('.dev-term__input');
+    var form = el.querySelector('.dev-term__form');
+    var closeBtn = el.querySelector('.dev-term__close');
+
+    var history = [];
+    var historyIdx = -1;
+
+    function escape(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function print(html, cls) {
+      var line = document.createElement('div');
+      line.className = 'dev-term__line' + (cls ? ' ' + cls : '');
+      line.innerHTML = html;
+      body.appendChild(line);
+      body.scrollTop = body.scrollHeight;
+    }
+    function echo(cmd) {
+      print('<span class="dev-term__prompt"><span class="user">lemmuel@portfolio</span>:<span class="path">~</span>$</span> ' + escape(cmd));
+    }
+
+    var commands = {
+      help: function () {
+        print('Available commands:', 'dim');
+        print('  <span class="ok">help</span>        list commands');
+        print('  <span class="ok">ls</span>          list sections');
+        print('  <span class="ok">whoami</span>      who am i');
+        print('  <span class="ok">cat resume</span>  show resume summary');
+        print('  <span class="ok">skills</span>      list my skills');
+        print('  <span class="ok">stack</span>       my daily-driver stack');
+        print('  <span class="ok">contact</span>     contact info');
+        print('  <span class="ok">github</span>      open my github');
+        print('  <span class="ok">resume</span>      download resume.pdf');
+        print('  <span class="ok">uses</span>        open /uses page');
+        print('  <span class="ok">changelog</span>   open /changelog');
+        print('  <span class="ok">cat resume.json</span>  open machine-readable resume');
+        print('  <span class="ok">sudo hire-me</span>  request immediate hiring');
+        print('  <span class="ok">date</span>        current date · time');
+        print('  <span class="ok">neofetch</span>    system info');
+        print('  <span class="ok">theme &lt;name&gt;</span>  cyber | matrix | sunset');
+        print('  <span class="ok">go &lt;section&gt;</span>  jump to a section');
+        print('  <span class="ok">konami</span>      toggle hue cycle');
+        print('  <span class="ok">clear</span>       clear the terminal');
+        print('  <span class="ok">exit</span>        close terminal');
+      },
+      ls: function () {
+        print('about/  resume/  services/  skills/  work/  contact/');
+      },
+      whoami: function () {
+        print('<span class="ok">lemmuel.turaya</span> &mdash; full-stack &amp; mobile app developer, philippines, GMT+8.');
+        print('6+ yrs · open to opportunities · pair-programs with claude.', 'dim');
+      },
+      'cat resume': function () {
+        print('<span class="ok">Lemmuel Turaya</span>');
+        print('Full-Stack &amp; Mobile App Developer · Biñan, Laguna · PH');
+        print('-- experience --', 'dim');
+        print('AAI Worldwide Logistics  · Application Developer · Nov 2024 – Now');
+        print('Octal Philippines        · Software Developer    · 2022 – 2024');
+        print('Uratex Philippines       · Full-Stack Developer  · Mar – Oct 2022');
+        print('Lumina Homes             · Marketing Staff (Dev) · 2021 – 2022');
+        print('Switch Connect Pty Ltd   · Junior Web Developer  · 2019 – 2020');
+        print('-- education --', 'dim');
+        print('B.S. Information Technology · Trimex Colleges · GPA 1.50');
+        print('see <a href="resume.pdf" target="_blank">resume.pdf</a> for the full document.', 'dim');
+      },
+      skills: function () {
+        print('<span class="ok">frontend</span>  · vue.js · nuxt.js · vuetify · html5 · css3 · javascript · bootstrap');
+        print('<span class="ok">backend </span>  · laravel · php · mysql · node.js · rest · silverstripe · statamic');
+        print('<span class="ok">mobile  </span>  · flutter · dart · firebase');
+        print('<span class="ok">ai/auto </span>  · claude ai · openai · n8n · zapier · make.com');
+      },
+      stack: function () {
+        print('editor:   vs code + claude code');
+        print('shell:    bash · wsl ubuntu');
+        print('terminal: windows terminal');
+        print('design:   figma');
+        print('api:      postman');
+        print('vc:       git · github');
+      },
+      contact: function () {
+        print('email:    <a href="mailto:turayalemmuel@gmail.com">turayalemmuel@gmail.com</a>');
+        print('phone:    +63 922 778 6152');
+        print('linkedin: <a href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank">lemmuel-turaya</a>');
+        print('github:   <a href="https://github.com/kon2raya24" target="_blank">@kon2raya24</a>');
+        print('book:     <a href="https://cal.com/lemmuel-turaya/intro" target="_blank">cal.com/lemmuel-turaya/intro</a>');
+      },
+      github: function () {
+        print('opening github.com/kon2raya24 ...', 'ok');
+        window.open('https://github.com/kon2raya24', '_blank', 'noopener');
+      },
+      resume: function () {
+        print('downloading <a href="resume.pdf" target="_blank">resume.pdf</a> ...', 'ok');
+        window.location.href = 'resume.pdf';
+      },
+      uses: function () {
+        print('opening <a href="uses.html" target="_blank">/uses</a> &mdash; what I work with daily.', 'ok');
+        window.open('uses.html', '_blank', 'noopener');
+      },
+      changelog: function () {
+        print('opening <a href="changelog.html" target="_blank">/changelog</a> &mdash; portfolio iteration log.', 'ok');
+        window.open('changelog.html', '_blank', 'noopener');
+      },
+      'cat resume.json': function () {
+        print('opening <a href="resume.json" target="_blank">resume.json</a> (JSON Resume format)', 'ok');
+        window.open('resume.json', '_blank', 'noopener');
+      },
+      'sudo hire-me': function () {
+        print('[sudo] elevating privileges...', 'dim');
+        print('granted.', 'ok');
+        print('redirecting to the hire section &mdash; let\'s talk.', 'ok');
+        setTimeout(function () {
+          var t = document.getElementById('fh5co-started');
+          if (t) t.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      },
+      date: function () {
+        var d = new Date();
+        print(d.toString());
+      },
+      neofetch: function () {
+        print('             <span class="ok">lemmuel@portfolio</span>');
+        print('             -------------------');
+        print('  ◢◤◤◣◣      <span class="ok">OS:</span>       Portfolio v3 (cyber-os)');
+        print(' ◢◤    ◣◣    <span class="ok">Host:</span>     kon2raya.netlify.app');
+        print(' ◤      ◥    <span class="ok">Uptime:</span>   ' + Math.floor(performance.now() / 1000) + 's (since page load)');
+        print(' ◣      ◢    <span class="ok">Shell:</span>    bash · zsh');
+        print(' ◥◣    ◢◤    <span class="ok">Editor:</span>   VS Code + Claude Code');
+        print('  ◥◣◣◢◢      <span class="ok">Stack:</span>    Vue · Laravel · Flutter · Claude');
+        print('             <span class="ok">Status:</span>   Open to opportunities');
+      },
+      konami: function () {
+        document.body.classList.toggle('konami-on');
+        print(document.body.classList.contains('konami-on') ? 'konami mode: <span class="ok">ON</span> 🎮' : 'konami mode: <span class="err">OFF</span>');
+      },
+      clear: function () { body.innerHTML = ''; },
+      cls:   function () { body.innerHTML = ''; },
+      exit:  function () { close(); },
+      quit:  function () { close(); }
+    };
+
+    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset' };
+    function handleTheme(arg) {
+      if (!arg || !themeAliases[arg]) {
+        print('usage: theme &lt;cyber | matrix | sunset&gt;', 'err');
+        return;
+      }
+      var btn = document.querySelector('.theme-pick__btn[data-th="' + arg + '"]');
+      if (btn) btn.click();
+      print('theme set: <span class="ok">' + arg + '</span>');
+    }
+
+    function handleGo(arg) {
+      var map = {
+        about: 'fh5co-about', resume: 'fh5co-resume', services: 'fh5co-features',
+        skills: 'fh5co-skills', work: 'fh5co-work', contact: 'fh5co-started',
+        hire: 'fh5co-started', home: 'fh5co-header', hero: 'fh5co-header'
+      };
+      var id = map[arg];
+      if (!id) { print('unknown section: ' + escape(arg), 'err'); return; }
+      var t = document.getElementById(id);
+      if (t) {
+        t.scrollIntoView({ behavior: 'smooth' });
+        print('navigating to /' + arg + ' ...', 'ok');
+      }
+    }
+
+    function run(cmd) {
+      cmd = cmd.trim();
+      if (!cmd) return;
+      echo(cmd);
+      history.push(cmd);
+      historyIdx = history.length;
+
+      if (commands[cmd]) { commands[cmd](); return; }
+
+      var parts = cmd.split(/\s+/);
+      var head = parts[0];
+      var arg = parts.slice(1).join(' ');
+
+      if (head === 'theme') return handleTheme(arg);
+      if (head === 'go' || head === 'cd') return handleGo(arg);
+      if (head === 'cat' && (arg === 'resume' || arg === 'resume.pdf')) { commands['cat resume'](); return; }
+      if (head === 'sudo' && (arg === 'hire-me' || arg === 'hire')) { commands['sudo hire-me'](); return; }
+      if (head === 'open' && arg) {
+        var ok = /^https?:\/\//.test(arg);
+        if (ok) { window.open(arg, '_blank', 'noopener'); print('opening ' + escape(arg) + ' ...', 'ok'); }
+        else print('open: only https://… urls allowed', 'err');
+        return;
+      }
+      if (head === 'echo') { print(escape(arg)); return; }
+      if (head === 'pwd')  { print('/home/lemmuel/portfolio'); return; }
+      if (head === 'man' || head === '--help' || head === '-h') { commands.help(); return; }
+
+      print('command not found: <span class="err">' + escape(head) + '</span> &mdash; type <strong>help</strong>.');
+    }
+
+    function open() {
+      el.classList.add('is-open');
+      el.setAttribute('aria-hidden', 'false');
+      setTimeout(function () { input.focus(); }, 30);
+    }
+    function close() {
+      el.classList.remove('is-open');
+      el.setAttribute('aria-hidden', 'true');
+      input.blur();
+    }
+    function toggle() {
+      el.classList.contains('is-open') ? close() : open();
+    }
+
+    closeBtn.addEventListener('click', close);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = input.value;
+      input.value = '';
+      run(v);
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowUp') {
+        if (historyIdx > 0) historyIdx--;
+        if (history[historyIdx]) { input.value = history[historyIdx]; e.preventDefault(); }
+      } else if (e.key === 'ArrowDown') {
+        if (historyIdx < history.length - 1) {
+          historyIdx++; input.value = history[historyIdx];
+        } else { historyIdx = history.length; input.value = ''; }
+        e.preventDefault();
+      } else if (e.key === 'Escape') { close(); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      // Don't fire when typing in an input/textarea
+      var tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (e.key === '`' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        e.preventDefault();
+        toggle();
+      } else if (e.key === '`' && document.activeElement === input) {
+        // Allow backtick to close from inside the term too
+        e.preventDefault();
+        close();
+      }
+    });
+
+    console.log('%c💻 Press ` (backtick) to open the dev terminal', 'color:#FF9000;font-family:monospace;font-size:12px;');
+  })();
+
+  /* ---------- UTM-aware welcome pill ---------- */
+  (function utmPill() {
+    var params = new URLSearchParams(window.location.search);
+    var raw = params.get('utm_source') || params.get('utm') || params.get('from') || params.get('ref');
+    var stored = null;
+    try { stored = sessionStorage.getItem('portfolio.referrer'); } catch (e) {}
+    if (raw) {
+      try { sessionStorage.setItem('portfolio.referrer', raw); } catch (e) {}
+      stored = raw;
+    } else if (!stored) {
+      // Fall back to document.referrer hostname
+      try {
+        var r = document.referrer || '';
+        if (r) {
+          var url = new URL(r);
+          var h = url.hostname.replace(/^www\./, '');
+          if (h && h !== window.location.hostname) {
+            stored = h;
+            try { sessionStorage.setItem('portfolio.referrer', h); } catch (e) {}
+          }
+        }
+      } catch (e) {}
+    }
+    if (!stored) return;
+
+    // Strip the utm params so a refresh doesn't keep them in the URL
+    if (raw && history.replaceState) {
+      ['utm_source','utm','from','ref'].forEach(function (k) { params.delete(k); });
+      var qs = params.toString();
+      history.replaceState({}, document.title, window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+    }
+
+    var key = String(stored).toLowerCase().replace(/[^a-z0-9.-]/g, '');
+    var sources = {
+      linkedin: { label: 'LinkedIn', emoji: '🟦', color: '#0a66c2' },
+      'linkedin.com': { label: 'LinkedIn', emoji: '🟦', color: '#0a66c2' },
+      github: { label: 'GitHub', emoji: '🐙', color: '#fff' },
+      'github.com': { label: 'GitHub', emoji: '🐙', color: '#fff' },
+      twitter: { label: 'Twitter / X', emoji: '✕', color: '#fff' },
+      'twitter.com': { label: 'Twitter / X', emoji: '✕', color: '#fff' },
+      x: { label: 'X', emoji: '✕', color: '#fff' },
+      upwork: { label: 'Upwork', emoji: '💼', color: '#14a800' },
+      'upwork.com': { label: 'Upwork', emoji: '💼', color: '#14a800' },
+      reddit: { label: 'Reddit', emoji: '👽', color: '#ff4500' },
+      'reddit.com': { label: 'Reddit', emoji: '👽', color: '#ff4500' },
+      hn: { label: 'Hacker News', emoji: '🟧', color: '#ff6600' },
+      'news.ycombinator.com': { label: 'Hacker News', emoji: '🟧', color: '#ff6600' },
+      facebook: { label: 'Facebook', emoji: '👍', color: '#1877f2' },
+      'facebook.com': { label: 'Facebook', emoji: '👍', color: '#1877f2' },
+      instagram: { label: 'Instagram', emoji: '📷', color: '#e1306c' },
+      'instagram.com': { label: 'Instagram', emoji: '📷', color: '#e1306c' },
+      'google.com': { label: 'Google search', emoji: '🔎', color: '#4285f4' },
+      google: { label: 'Google', emoji: '🔎', color: '#4285f4' },
+      email: { label: 'Email', emoji: '✉️', color: '#FF9000' },
+      resume: { label: 'Resume link', emoji: '📄', color: '#FF9000' }
+    };
+    var meta = sources[key] || { label: stored, emoji: '👋', color: '#00e5ff' };
+
+    var pill = document.createElement('div');
+    pill.className = 'utm-pill';
+    pill.innerHTML =
+      '<span class="utm-pill__emoji">' + meta.emoji + '</span>' +
+      '<span class="utm-pill__txt">welcome from <strong>' + meta.label + '</strong></span>' +
+      '<button class="utm-pill__close" type="button" aria-label="dismiss">×</button>';
+    document.body.appendChild(pill);
+    pill.style.setProperty('--utm-accent', meta.color);
+
+    setTimeout(function () { pill.classList.add('is-show'); }, 600);
+    pill.querySelector('.utm-pill__close').addEventListener('click', function () {
+      pill.classList.remove('is-show');
+      setTimeout(function () { pill.remove(); }, 400);
+    });
+    // Auto-dismiss after 12s
+    setTimeout(function () {
+      pill.classList.remove('is-show');
+      setTimeout(function () { if (pill.parentNode) pill.remove(); }, 400);
+    }, 12000);
+
+    // Bonus: add a "source" row to the live-stats footer if it exists
+    var stats = document.querySelector('.live-stats');
+    if (stats && !stats.querySelector('[data-live="source"]')) {
+      var item = document.createElement('div');
+      item.className = 'live-stats__item';
+      item.innerHTML =
+        '<span class="live-stats__label">source</span>' +
+        '<span class="live-stats__val" data-live="source">' + meta.label + '</span>';
+      stats.appendChild(item);
+    }
   })();
 
   /* ---------- Konami code easter egg ---------- */

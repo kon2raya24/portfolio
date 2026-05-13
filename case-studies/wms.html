@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · WMS Mobile App — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Designing and shipping a Flutter-based Warehouse Management System mobile app from concept to production at AAI Worldwide Logistics." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="noindex, nofollow, noarchive">
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · Flutter WMS Mobile App — Lemmuel Turaya" />
+<meta property="og:description" content="From concept to production: a Flutter Warehouse Management System for AAI Worldwide Logistics." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/wms.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+  <a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+  <span class="cs-nav__breadcrumb">case-studies / <span class="active">wms-mobile-app</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+  <!-- Draft banner — sets expectations before recruiters read further -->
+  <aside class="cs-draft" role="note">
+    <span class="cs-draft__badge">DRAFT</span>
+    <p class="cs-draft__txt">
+      <strong>Work in progress.</strong> This writeup is being polished in public &mdash;
+      screenshots, exact metrics, and finer detail are landing as the rollout matures.
+      For the full story today, the fastest path is to
+      <a href="mailto:turayalemmuel@gmail.com">email me</a> or
+      <a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener">book a call</a>.
+    </p>
+  </aside>
+
+  <!-- Hero -->
+  <header class="cs-hero">
+    <div class="cs-hero__label">// case-study.md</div>
+    <h1>WMS Mobile App<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Warehouse Management on Flutter</span></h1>
+    <p class="cs-hero__tagline">
+      Designing and shipping a cross-platform mobile app that brings real-time inventory,
+      receiving, and pick/pack operations to the warehouse floor — built end-to-end in Flutter
+      with a Laravel REST backend.
+    </p>
+
+    <div class="cs-meta">
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">company</span>
+        <span class="cs-meta__v">AAI Worldwide Logistics</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">role</span>
+        <span class="cs-meta__v">Application Developer</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">period</span>
+        <span class="cs-meta__v">2024 — Present</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">status</span>
+        <span class="cs-meta__v">In production</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">team</span>
+        <span class="cs-meta__v">Application Developer · in-house</span>
+      </div>
+    </div>
+
+    <div class="cs-hero__chips">
+      <span class="cs-chip">Flutter</span>
+      <span class="cs-chip">Dart</span>
+      <span class="cs-chip">Laravel</span>
+      <span class="cs-chip">REST</span>
+      <span class="cs-chip">MySQL</span>
+      <span class="cs-chip">Android</span>
+      <span class="cs-chip cs-chip--ai">Claude AI</span>
+      <span class="cs-chip cs-chip--ai">Vibe Coding</span>
+    </div>
+  </header>
+
+  <!-- TL;DR -->
+  <section class="cs-section">
+    <div class="cs-section__label">tl;dr</div>
+    <h2>What it is</h2>
+    <p>
+      A Flutter mobile app that <strong>replaces paper-based and laptop-bound warehouse
+      operations</strong> with a single device a forwarder/picker can carry on the floor —
+      scanning, receiving, picking, packing, and stock-checks, all syncing live to the
+      central WMS over a Laravel REST API.
+    </p>
+    <p>
+      Built in-house, pair-programmed with Claude AI to accelerate UI scaffolding and
+      targeted refactors. Currently in active rollout to the operations team
+      <span class="cs-pending">timeline details on request</span>.
+    </p>
+  </section>
+
+  <!-- Problem -->
+  <section class="cs-section">
+    <div class="cs-section__label">problem</div>
+    <h2>The bottleneck</h2>
+    <p>
+      Before the mobile app, AAI's warehouse workflows lived on a mix of <strong>desktop
+      browser sessions</strong>, printed picklists, and manual XLSX exports. That created
+      several friction points:
+    </p>
+    <ul>
+      <li>Pickers had to walk back and forth between the floor and a fixed workstation to
+        confirm each step.</li>
+      <li>Stock counts drifted through the day because updates lagged behind physical
+        movement.</li>
+      <li>Receiving inbound shipments required cross-referencing paper documents against
+        the SAP-bridged WMS records.</li>
+      <li>The existing web UI wasn't built for one-handed, on-the-go use on a phone or
+        rugged scanner-device.</li>
+    </ul>
+    <p>
+      The asks from operations: <strong>scan + confirm in &lt;3 seconds</strong>, work even
+      with shaky warehouse Wi-Fi, and keep parity with the existing web WMS as the source
+      of truth.
+    </p>
+  </section>
+
+  <!-- Approach -->
+  <section class="cs-section">
+    <div class="cs-section__label">approach</div>
+    <h2>How I broke it down</h2>
+    <ul>
+      <li><strong>Flutter for a single codebase</strong> — Android-first for the rugged
+        warehouse devices, with iOS parity available for ops managers.</li>
+      <li><strong>Laravel REST API</strong> mirroring the existing WMS endpoints — no
+        separate "mobile backend." One source of truth, one set of business rules.</li>
+      <li><strong>Offline-first reads</strong> — cached lookups for SKUs, locations, and
+        recent transactions so a temporary Wi-Fi drop doesn't stop a pick.</li>
+      <li><strong>Write-through with retry queues</strong> — every scan/confirm is queued
+        locally and replayed on reconnect, so the database always converges.</li>
+      <li><strong>AI-assisted velocity</strong> — used Claude AI to scaffold widget trees,
+        generate test fixtures, and run targeted refactors. Human review and engineering
+        judgment stayed in the loop for every commit.</li>
+    </ul>
+  </section>
+
+  <!-- Solution -->
+  <section class="cs-section">
+    <div class="cs-section__label">solution</div>
+    <h2>What I built</h2>
+
+    <p><strong>Core flows shipped:</strong></p>
+    <ul>
+      <li><strong>Receiving</strong> &mdash; scan inbound shipments against SAP-bridged
+        documents, with line-item validation and discrepancy capture.</li>
+      <li><strong>Pick &amp; Pack</strong> &mdash; one-handed scan-confirm flow with
+        batch support; designed for fast repetition on the warehouse floor.</li>
+      <li><strong>Stock Check &amp; Transfer</strong> &mdash; on-floor inventory counts
+        and bin-to-bin movements with audit trails.</li>
+      <li><strong>SKU lookup</strong> &mdash; cached search across products, locations,
+        and recent transactions for offline use.</li>
+    </ul>
+
+    <div class="cs-shot--coming">
+      <span class="cs-shot__title">Screenshots coming with the final writeup</span>
+      <span class="cs-shot__sub">live screens are part of an internal operations system &mdash; demo available on request</span>
+    </div>
+
+    <p><strong>API contract example</strong> — every scan posts a confirm event the server
+      validates against current stock and inbound documents:</p>
+
+    <div class="cs-code">
+      <header class="cs-code__chrome">
+        <span class="cs-code__dots"><i></i><i></i><i></i></span>
+        <span class="cs-code__file">~/api/<span class="active">routes/wms.php</span></span>
+      </header>
+<pre><span class="tk-cmt">// POST /api/wms/pick/confirm</span>
+<span class="tk-key">Route</span><span class="tk-punct">::</span><span class="tk-fn">post</span><span class="tk-punct">(</span><span class="tk-str">'/pick/confirm'</span><span class="tk-punct">,</span> <span class="tk-key">function</span> <span class="tk-punct">(</span>Request <span class="tk-num">$req</span><span class="tk-punct">)</span> <span class="tk-punct">{</span>
+    <span class="tk-num">$validated</span> = <span class="tk-num">$req</span><span class="tk-punct">-&gt;</span><span class="tk-fn">validate</span><span class="tk-punct">([</span>
+        <span class="tk-str">'order_id'</span>  =&gt; <span class="tk-str">'required|exists:orders,id'</span><span class="tk-punct">,</span>
+        <span class="tk-str">'sku'</span>       =&gt; <span class="tk-str">'required|string'</span><span class="tk-punct">,</span>
+        <span class="tk-str">'qty'</span>       =&gt; <span class="tk-str">'required|integer|min:1'</span><span class="tk-punct">,</span>
+        <span class="tk-str">'location'</span>  =&gt; <span class="tk-str">'required|string'</span><span class="tk-punct">,</span>
+        <span class="tk-str">'device_id'</span> =&gt; <span class="tk-str">'required|string'</span><span class="tk-punct">,</span>
+    <span class="tk-punct">]);</span>
+    <span class="tk-key">return</span> <span class="tk-fn">PickService</span><span class="tk-punct">::</span><span class="tk-fn">confirm</span><span class="tk-punct">(</span><span class="tk-num">$validated</span><span class="tk-punct">);</span>
+<span class="tk-punct">});</span></pre>
+    </div>
+
+    <p><strong>Offline queue (Flutter side)</strong> — every action is recorded locally
+      and replayed automatically when connectivity returns:</p>
+
+    <div class="cs-code">
+      <header class="cs-code__chrome">
+        <span class="cs-code__dots"><i></i><i></i><i></i></span>
+        <span class="cs-code__file">~/lib/<span class="active">sync/queue.dart</span></span>
+      </header>
+<pre><span class="tk-cmt">// Hive-backed retry queue, replays in FIFO order</span>
+<span class="tk-key">class</span> <span class="tk-fn">SyncQueue</span> <span class="tk-punct">{</span>
+  <span class="tk-key">final</span> Box&lt;<span class="tk-fn">QueuedOp</span>&gt; _box<span class="tk-punct">;</span>
+
+  Future&lt;<span class="tk-key">void</span>&gt; <span class="tk-fn">enqueue</span><span class="tk-punct">(</span><span class="tk-fn">QueuedOp</span> op<span class="tk-punct">)</span> <span class="tk-key">async</span> <span class="tk-punct">{</span>
+    <span class="tk-key">await</span> _box<span class="tk-punct">.</span><span class="tk-fn">add</span><span class="tk-punct">(</span>op<span class="tk-punct">);</span>
+    <span class="tk-key">if</span> <span class="tk-punct">(</span><span class="tk-key">await</span> Connectivity<span class="tk-punct">().</span>checkConnectivity<span class="tk-punct">()</span> != ConnectivityResult.<span class="tk-bool">none</span><span class="tk-punct">)</span> <span class="tk-punct">{</span>
+      <span class="tk-key">await</span> <span class="tk-fn">drain</span><span class="tk-punct">();</span>
+    <span class="tk-punct">}</span>
+  <span class="tk-punct">}</span>
+
+  Future&lt;<span class="tk-key">void</span>&gt; <span class="tk-fn">drain</span><span class="tk-punct">()</span> <span class="tk-key">async</span> <span class="tk-punct">{</span> <span class="tk-cmt">/* … */</span> <span class="tk-punct">}</span>
+<span class="tk-punct">}</span></pre>
+    </div>
+
+    <div class="cs-shot--coming">
+      <span class="cs-shot__title">Receiving flow &amp; ops dashboard</span>
+      <span class="cs-shot__sub">screen captures publishing once the rollout is complete</span>
+    </div>
+  </section>
+
+  <!-- Tech stack -->
+  <section class="cs-section">
+    <div class="cs-section__label">stack</div>
+    <h2>Tech</h2>
+    <ul>
+      <li><strong>Mobile:</strong> Flutter / Dart, Hive (local DB), Connectivity Plus,
+        mobile_scanner</li>
+      <li><strong>Backend:</strong> Laravel 10, MySQL, REST (JSON), Sanctum tokens</li>
+      <li><strong>Integrations:</strong> SAP-bridged inbound documents (XML / SFTP),
+        existing WMS web app</li>
+      <li><strong>Tooling:</strong> VS Code · Claude Code · Postman · Git · GitHub</li>
+      <li><strong>Deployment:</strong> internal distribution via signed APK; build pipeline
+        details <span class="cs-pending">available on request</span>.</li>
+    </ul>
+  </section>
+
+  <!-- Outcome -->
+  <section class="cs-section">
+    <div class="cs-section__label">outcome</div>
+    <h2>Results</h2>
+
+    <div class="cs-metrics">
+      <div class="cs-metric">
+        <div class="cs-metric__k">scan-to-confirm</div>
+        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">measuring in production</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric__k">active operators</div>
+        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">in rollout</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric__k">throughput</div>
+        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">measuring</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric__k">offline resilience</div>
+        <div class="cs-metric__v">queue-replay ✓</div>
+      </div>
+    </div>
+
+    <p>
+      Specific metrics &mdash; pick-time, error rate, end-of-day reconciliation effort,
+      onboarding time for new operators &mdash; are being measured live as the rollout
+      expands. Full numbers will be published with the final writeup;
+      <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to share what we&rsquo;re seeing in detail on request</a>.
+    </p>
+  </section>
+
+  <!-- Lessons -->
+  <section class="cs-section">
+    <div class="cs-section__label">lessons</div>
+    <h2>What I'd do again — and differently</h2>
+    <p><strong>Worked well:</strong></p>
+    <ul>
+      <li>Treating the existing WMS REST API as the source of truth and resisting the urge
+        to invent a "mobile API." Less divergence, simpler ops.</li>
+      <li>Offline-first writes with a replay queue — the warehouse Wi-Fi <em>will</em> drop;
+        the question is just how gracefully you handle it.</li>
+      <li>AI-assisted refactors saved meaningful hours, especially when iterating UI states
+        and adapting to operator feedback.</li>
+    </ul>
+    <p><strong>Would tighten:</strong></p>
+    <ul>
+      <li>Lock in an automated-test suite earlier in the rollout &mdash; especially around
+        the offline queue replay, where edge cases are easy to miss until production traffic
+        finds them.</li>
+      <li>Smaller-cohort rollouts: introduce screens to one zone or shift first, gather
+        feedback, then expand &mdash; instead of pushing a multi-flow update broadly at once.</li>
+    </ul>
+  </section>
+
+  <!-- CTA -->
+  <aside class="cs-cta">
+    <h3>Like what you see?</h3>
+    <p>Open to full-time, contract, or freelance work — let's talk about your next build.</p>
+    <div class="cs-cta__btns">
+      <a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch →</a>
+      <a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+    </div>
+  </aside>
+
+</main>
+
+</body>
+</html>

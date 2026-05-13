@@ -1,0 +1,288 @@
+{
+  "$schema": "https://jsonresume.org/schema/1.0.0/resume.json",
+  "meta": {
+    "version": "1.0.0",
+    "canonical": "https://kon2raya.netlify.app/resume.json",
+    "lastModified": "2026-05-13"
+  },
+  "basics": {
+    "name": "Lemmuel Turaya",
+    "label": "Full-Stack & Mobile App Developer",
+    "image": "https://kon2raya.netlify.app/images/1615352107595.jpg",
+    "email": "turayalemmuel@gmail.com",
+    "phone": "+63 922 778 6152",
+    "url": "https://kon2raya.netlify.app",
+    "summary": "Full-stack developer with 6+ years designing and shipping production web and mobile applications across logistics, real estate, marketing, and education. Specializes in Vue.js + Laravel on the web, Flutter on mobile, and clean REST API design. Pairs daily with Claude AI to accelerate delivery without sacrificing code quality. Open to remote, hybrid, or onsite roles.",
+    "location": {
+      "address": "Biñan",
+      "postalCode": "4024",
+      "city": "Biñan",
+      "countryCode": "PH",
+      "region": "Laguna"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "kon2raya24",
+        "url": "https://github.com/kon2raya24"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "lemmuel-turaya",
+        "url": "https://www.linkedin.com/in/lemmuel-turaya/"
+      },
+      {
+        "network": "Facebook",
+        "username": "lemmuel.turaya",
+        "url": "https://www.facebook.com/lemmuel.turaya"
+      },
+      {
+        "network": "Instagram",
+        "username": "kon2raya",
+        "url": "https://www.instagram.com/kon2raya/"
+      },
+      {
+        "network": "DeviantArt",
+        "username": "lemmuelturaya",
+        "url": "https://www.deviantart.com/lemmuelturaya"
+      },
+      {
+        "network": "Portfolio",
+        "username": "kon2raya",
+        "url": "https://kon2raya.netlify.app"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "AAI Worldwide Logistics",
+      "location": "Philippines",
+      "position": "Application Developer",
+      "url": "",
+      "startDate": "2024-11-01",
+      "endDate": "",
+      "summary": "Contribute to the development and enhancement of the company's Financial Management System, connected logistics platforms, and a new Flutter-based Warehouse Management mobile app — integrating SAP and third-party services with internal applications.",
+      "highlights": [
+        "Designing and shipping a Flutter-based Warehouse Management System (WMS) mobile app from concept to production, enabling real-time inventory, receiving, and pick/pack operations on the warehouse floor.",
+        "Adopted Vibe Coding — AI-assisted delivery with Claude AI — to compress prototyping and refactoring cycles while keeping code review, tests, and engineering judgment in the loop.",
+        "Designed and implemented key FMS features — journal voucher creation, sundry expense invoice processing, inventory management, and reporting using Ag-Grid for data visualization and jsPDF for advanced reports.",
+        "Facilitated SAP-to-WMS order integration by converting XML payloads to JSON, generating updated XML files, and managing secure SFTP transfers for SAP validation.",
+        "Built CRM maintenance modules for Airline Rates, IATA Rates, and associated charges; created customizable forms with SurveyJS for Customer Service Representatives.",
+        "Developed a Trucking Rates module within the TMS using Vuetify for the front-end and Laravel for back-end logic."
+      ],
+      "keywords": ["Flutter", "Dart", "Laravel", "Nuxt.js", "Vue.js", "Vuetify", "Ag-Grid", "jsPDF", "SurveyJS", "SAP API", "Claude AI", "Vibe Coding"]
+    },
+    {
+      "name": "Octal Philippines Inc.",
+      "location": "Assigned to AAI Worldwide Logistics · PH",
+      "position": "Software Developer",
+      "startDate": "2022-10-24",
+      "endDate": "2024-10-31",
+      "summary": "Assigned to the AAI Worldwide Logistics IT department, contributing to core systems — FMS, CRM, TMS, and WMS — across two years of continuous delivery.",
+      "highlights": [
+        "Developed the Trucking Rates module for the TMS using Vuetify on the front-end and Laravel for back-end logic.",
+        "Built a TMS dashboard for the transport team to monitor truck availability, deployed-truck counts, and booking frequencies, with integrated graphs, filters, and other data-visualization tools.",
+        "Enhanced the Logistics Execution System (LES) UI using Vue.js for dynamic interactions, Ag-Grid for flexible data presentation, and jsPDF for report generation.",
+        "Integrated the FAREYE API for real-time package status updates from third-party providers, and shipped a single-page package tracker for end-user delivery monitoring."
+      ],
+      "keywords": ["Vue.js", "Laravel", "Vuetify", "Ag-Grid", "jsPDF", "FAREYE API", "MySQL"]
+    },
+    {
+      "name": "Uratex Philippines",
+      "location": "Philippines",
+      "position": "Full-Stack Developer",
+      "startDate": "2022-03-28",
+      "endDate": "2022-10-05",
+      "summary": "Built internal tools, surveys, and brand landing pages supporting operations and marketing teams at Uratex.",
+      "highlights": [
+        "Designed and developed surveys in Laravel with detailed reporting to analyze demographics and other critical survey factors.",
+        "Created a Trip Management System for efficient scheduling and booking of company vehicles, improving resource management and accessibility.",
+        "Collaborated with cross-functional teams to design and develop the company's corporate landing page, aligned with brand objectives.",
+        "Shipped a dynamic landing page for the company's basketball association featuring a live countdown timer, built on the Statamic CMS for easy content updates."
+      ],
+      "keywords": ["Laravel", "Statamic", "PHP", "JavaScript"]
+    },
+    {
+      "name": "Lumina Homes, Inc.",
+      "location": "Philippines",
+      "position": "Marketing Staff (Full-Stack Developer)",
+      "startDate": "2021-03-10",
+      "endDate": "2022-03-30",
+      "summary": "Hybrid role combining full-stack development with digital marketing — building the technology and SEO that powered the marketing team's lead pipeline.",
+      "highlights": [
+        "Developed, maintained, and optimized websites, landing pages, and applications that support marketing campaigns.",
+        "Enhanced the property-listing loan calculator, enabling public users to compute amortization details and receive results via email.",
+        "Optimized and maintained the real-estate website on SilverStripe, ensuring a seamless user experience.",
+        "Implemented SEO best practices using SEMrush and Ahrefs to manage and improve site visibility.",
+        "Continuously evaluate emerging technologies and marketing tools to recommend solutions aligned with business goals."
+      ],
+      "keywords": ["SilverStripe", "PHP", "SEMrush", "Ahrefs", "SEO"]
+    },
+    {
+      "name": "Switch Connect Pty Ltd",
+      "location": "Australia · Remote",
+      "position": "Junior Web Developer",
+      "startDate": "2019-08-05",
+      "endDate": "2020-09-28",
+      "summary": "Contributed to the company's ERP system, integrating multiple third-party APIs to streamline accounting, validation, and document workflows.",
+      "highlights": [
+        "Developed ERP modules that enhanced functionality and optimized day-to-day business processes.",
+        "Integrated Google Maps API for address validation in user accounts, ensuring accurate location data.",
+        "Implemented ABN Lookup for verifying Australian-based companies through an authorized API.",
+        "Integrated Xero for financial management — receipt generation and order monitoring — and Eversign for multi-party digital document signing."
+      ],
+      "keywords": ["PHP", "JavaScript", "Google Maps API", "Xero", "Eversign", "ABN Lookup"]
+    },
+    {
+      "name": "Trimex Colleges",
+      "location": "Philippines",
+      "position": "Graphic Designer",
+      "startDate": "2019-01-01",
+      "endDate": "2019-12-31",
+      "summary": "Produced visual collateral for institutional campaigns, events, and publications.",
+      "highlights": [
+        "Designed posters, banners, social-media creatives, and event branding on tight deadlines using the Adobe Suite.",
+        "Refined the design fundamentals — typography, layout, hierarchy — that still inform my approach to UI and UX."
+      ],
+      "keywords": ["Photoshop", "Illustrator", "Branding", "Typography"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Trimex Colleges",
+      "url": "",
+      "area": "Information Technology",
+      "studyType": "Bachelor of Science",
+      "startDate": "2015-06-01",
+      "endDate": "2019-04-30",
+      "score": "GPA 1.50",
+      "courses": ["Web Development", "Database Management", "Programming", "Software Engineering", "Networking"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "level": "Advanced",
+      "keywords": ["Vue.js", "Nuxt.js", "Vuetify", "HTML5", "CSS3", "JavaScript", "TypeScript", "Bootstrap", "jQuery"]
+    },
+    {
+      "name": "Backend",
+      "level": "Advanced",
+      "keywords": ["Laravel", "PHP", "Node.js", "MySQL", "SQL", "REST API Design", "SilverStripe", "Statamic", "WordPress"]
+    },
+    {
+      "name": "Mobile",
+      "level": "Proficient",
+      "keywords": ["Flutter", "Dart", "Firebase", "Android Studio"]
+    },
+    {
+      "name": "AI & Automation",
+      "level": "Proficient",
+      "keywords": ["Claude AI", "Claude Code", "GitHub Copilot", "OpenAI API", "n8n", "Zapier", "Make.com", "Workflow Automation", "AI-Assisted Delivery"]
+    },
+    {
+      "name": "Libraries & Integrations",
+      "level": "Proficient",
+      "keywords": ["Ag-Grid", "jsPDF", "SurveyJS", "SAP API", "XERO", "Eversign", "ABN Lookup", "Google Maps API", "FAREYE API"]
+    },
+    {
+      "name": "DevOps & Tooling",
+      "level": "Proficient",
+      "keywords": ["Git", "GitHub", "Docker", "Linux", "VS Code", "Postman", "Composer", "npm", "Vite"]
+    },
+    {
+      "name": "Design & SEO",
+      "level": "Working",
+      "keywords": ["Figma", "Adobe Photoshop", "Adobe Illustrator", "SEMrush", "Ahrefs", "SEO"]
+    }
+  ],
+  "languages": [
+    { "language": "English",  "fluency": "Professional" },
+    { "language": "Filipino", "fluency": "Native" }
+  ],
+  "interests": [
+    { "name": "Open Source", "keywords": ["ph-dev-utils", "developer-tooling"] },
+    { "name": "AI-Assisted Development", "keywords": ["Claude AI", "Vibe Coding", "agentic workflows"] },
+    { "name": "Design", "keywords": ["UI/UX", "Vexel art", "branding"] }
+  ],
+  "projects": [
+    {
+      "name": "PH Dev Utils",
+      "description": "Open-source utilities for Filipino developers — peso formatting, government ID validators, PH phone helpers, and address data — for both JavaScript/TypeScript and PHP.",
+      "highlights": [
+        "Monorepo with npm (@ph-dev-utils/core) and Composer (phdevutils/core) packages",
+        "Modules: Peso, TIN, SSS, PhilHealth, PagIBIG, Phone, Address",
+        "MIT licensed, v0.1.0"
+      ],
+      "keywords": ["TypeScript", "PHP", "npm", "Composer", "Open Source", "MIT"],
+      "startDate": "2026-01-01",
+      "url": "https://github.com/kon2raya24/ph-dev-utils",
+      "roles": ["Author", "Maintainer"],
+      "type": "library"
+    },
+    {
+      "name": "WMS Mobile App (Flutter)",
+      "description": "Flutter-based Warehouse Management System mobile app for AAI Worldwide Logistics — real-time inventory, receiving, and pick/pack on the warehouse floor.",
+      "highlights": [
+        "Offline-first reads with cached lookups for SKUs, locations, recent transactions",
+        "Write-through retry queue replays on reconnect, no lost writes",
+        "Laravel REST backend mirroring the existing WMS endpoints"
+      ],
+      "keywords": ["Flutter", "Dart", "Laravel", "REST", "MySQL", "Claude AI"],
+      "startDate": "2024-11-01",
+      "url": "https://kon2raya.netlify.app/case-studies/wms.html",
+      "roles": ["Lead Developer"],
+      "type": "application"
+    },
+    {
+      "name": "Pamanaland Realty Management System",
+      "description": "Full-stack realty management platform for Pamanaland Realty — property inventory, agent assignments, commission tracking, and role-based dashboards.",
+      "highlights": [
+        "Vue + Laravel monolith with role-aware UI",
+        "Auto-calculated commissions exportable per agent / period",
+        "CSV + PDF report exports replaced manual Excel reconciliations"
+      ],
+      "keywords": ["Vue.js", "Laravel", "MySQL", "Ag-Grid", "jsPDF"],
+      "url": "https://portal.pamanaland.com/",
+      "roles": ["Full-Stack Developer"],
+      "type": "application"
+    },
+    {
+      "name": "JBC Commission Management System",
+      "description": "Sales commission management system for JBC Marketing OPC.",
+      "keywords": ["Vue.js", "Laravel", "REST"],
+      "url": "https://portal.jbcmarketing.com.ph/",
+      "roles": ["Full-Stack Developer"],
+      "type": "application"
+    },
+    {
+      "name": "UPHDJGT Medical University",
+      "description": "Institutional website for UPHDJGT Medical University.",
+      "keywords": ["Vue.js", "PHP", "CMS"],
+      "url": "https://uphdjgtmedicaluniversity.edu.ph/",
+      "roles": ["Web Developer"],
+      "type": "website"
+    },
+    {
+      "name": "Portfolio (this site)",
+      "description": "Hand-crafted HTML / CSS / JavaScript portfolio with cyber-themed UI, animated effects, interactive terminal, live GitHub stats, and AI-assisted-delivery framing. Deployed on Netlify.",
+      "highlights": [
+        "Zero frameworks — pure HTML/CSS/JS",
+        "Interactive dev terminal with real commands (~/portfolio bash)",
+        "Live visitor counter, GitHub events graph, recent repos panel",
+        "Multi-theme switcher (cyber / matrix / sunset)",
+        "Accessible: skip-link, ARIA labels, prefers-reduced-motion respected"
+      ],
+      "keywords": ["HTML5", "CSS3", "JavaScript", "Netlify"],
+      "url": "https://kon2raya.netlify.app",
+      "roles": ["Designer", "Developer"],
+      "type": "portfolio"
+    }
+  ],
+  "references": [
+    {
+      "name": "Available on request",
+      "reference": "Professional references can be provided upon request. Contact turayalemmuel@gmail.com."
+    }
+  ]
+}

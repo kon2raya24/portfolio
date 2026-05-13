@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · Pamanaland RMS — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Pamanaland Realty Management System — a Vue + Laravel platform for managing property listings, agents, and commissions." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="noindex, nofollow, noarchive">
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · Pamanaland Realty MS — Lemmuel Turaya" />
+<meta property="og:description" content="A full-stack realty management platform on Vue + Laravel." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/pamanaland.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+  <a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+  <span class="cs-nav__breadcrumb">case-studies / <span class="active">pamanaland-rms</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+  <aside class="cs-draft" role="note">
+    <span class="cs-draft__badge">DRAFT</span>
+    <p class="cs-draft__txt">
+      <strong>Work in progress.</strong> Polishing in public &mdash; screenshots, exact
+      figures, and additional context land as I refine the writeup. For the full picture,
+      <a href="mailto:turayalemmuel@gmail.com">email me</a> or
+      <a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener">book a call</a>.
+    </p>
+  </aside>
+
+  <header class="cs-hero">
+    <div class="cs-hero__label">// case-study.md</div>
+    <h1>Pamanaland RMS<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Realty Management on Vue + Laravel</span></h1>
+    <p class="cs-hero__tagline">
+      A full-stack platform for managing property inventory, agent assignments, and
+      commission tracking &mdash; replacing the brokerage's spreadsheet-driven workflow
+      with a clean web app the team actually wants to use.
+    </p>
+
+    <div class="cs-meta">
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">company</span>
+        <span class="cs-meta__v">Pamanaland Realty</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">role</span>
+        <span class="cs-meta__v">Full-Stack Developer</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">period</span>
+        <span class="cs-meta__v">2023 &mdash; 2024</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">status</span>
+        <span class="cs-meta__v">In production</span>
+      </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">live</span>
+        <span class="cs-meta__v"><a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">portal.pamanaland.com</a></span>
+      </div>
+    </div>
+
+    <div class="cs-hero__chips">
+      <span class="cs-chip">Vue.js</span>
+      <span class="cs-chip">Laravel</span>
+      <span class="cs-chip">MySQL</span>
+      <span class="cs-chip">REST</span>
+      <span class="cs-chip">Vuetify</span>
+      <span class="cs-chip">Ag-Grid</span>
+    </div>
+  </header>
+
+  <section class="cs-section">
+    <div class="cs-section__label">tl;dr</div>
+    <h2>What it is</h2>
+    <p>
+      A web portal where Pamanaland's team manages <strong>property listings</strong>,
+      <strong>agent assignments</strong>, and <strong>commission records</strong> in one
+      place &mdash; with role-aware access for admins, managers, and agents, and reports
+      they can export when month-end rolls around.
+    </p>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section__label">problem</div>
+    <h2>The bottleneck</h2>
+    <p>
+      Before the RMS, day-to-day operations ran on a tangle of:
+    </p>
+    <ul>
+      <li>Shared Excel files for inventory &mdash; with stale rows nobody owned.</li>
+      <li>Email threads for assigning leads to agents.</li>
+      <li>Month-end commission calculations done by hand.</li>
+      <li>No single dashboard for management to see live pipeline state.</li>
+    </ul>
+    <p>
+      The team needed <strong>one source of truth</strong> they trusted, role-based access
+      so agents only saw what was theirs, and reports they could pull without bothering IT.
+    </p>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section__label">approach</div>
+    <h2>How I broke it down</h2>
+    <ul>
+      <li><strong>Domain modelling first.</strong> Talked through real workflows with the
+        team before writing schema &mdash; properties, units, agents, assignments,
+        commissions, payouts.</li>
+      <li><strong>Vue + Laravel monolith.</strong> Single deployment, single team, single
+        repo. No microservices theater for a brokerage-sized product.</li>
+      <li><strong>Role-aware UI.</strong> One Vue app, gated views per role. No "admin
+        portal" / "agent portal" duplication.</li>
+      <li><strong>Reports as a first-class feature.</strong> Filterable, paginated tables
+        with CSV / PDF export rather than ad-hoc Excel dumps.</li>
+    </ul>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section__label">solution</div>
+    <h2>What I built</h2>
+
+    <p><strong>Modules shipped:</strong></p>
+    <ul>
+      <li><strong>Property &amp; Unit management</strong> &mdash; inventory CRUD, status,
+        pricing, ownership history.</li>
+      <li><strong>Agent management</strong> &mdash; profiles, assignments, performance
+        view.</li>
+      <li><strong>Commission tracking</strong> &mdash; auto-calculated from agreement type
+        and unit value, exportable per agent and per period.</li>
+      <li><strong>Role-based dashboards</strong> &mdash; admin sees the brokerage state;
+        agents see their own pipeline; managers see their team.</li>
+      <li><strong>Reports &amp; exports</strong> &mdash; filterable, paginated tables with
+        CSV and PDF output for month-end review.</li>
+    </ul>
+
+    <div class="cs-shot--coming">
+      <span class="cs-shot__title">Live screens at portal.pamanaland.com</span>
+      <span class="cs-shot__sub">portal is access-gated &mdash; sanitized walkthrough available on request</span>
+    </div>
+
+    <p><strong>Example: commission calculation</strong> &mdash; one of the harder pieces
+      since rules vary by agreement type:</p>
+
+    <div class="cs-code">
+      <header class="cs-code__chrome">
+        <span class="cs-code__dots"><i></i><i></i><i></i></span>
+        <span class="cs-code__file">~/app/<span class="active">Services/CommissionService.php</span></span>
+      </header>
+<pre><span class="tk-key">class</span> <span class="tk-fn">CommissionService</span>
+<span class="tk-punct">{</span>
+    <span class="tk-key">public function</span> <span class="tk-fn">compute</span><span class="tk-punct">(</span>Sale <span class="tk-num">$sale</span><span class="tk-punct">):</span> Collection
+    <span class="tk-punct">{</span>
+        <span class="tk-key">return</span> <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>agreement<span class="tk-punct">-&gt;</span>rules
+            <span class="tk-punct">-&gt;</span><span class="tk-fn">map</span><span class="tk-punct">(</span><span class="tk-key">fn</span> <span class="tk-punct">(</span>Rule <span class="tk-num">$r</span><span class="tk-punct">)</span> =&gt; <span class="tk-punct">[</span>
+                <span class="tk-str">'payee_id'</span> =&gt; <span class="tk-num">$r</span><span class="tk-punct">-&gt;</span>agent_id<span class="tk-punct">,</span>
+                <span class="tk-str">'amount'</span>   =&gt; <span class="tk-fn">round</span><span class="tk-punct">(</span><span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>price * <span class="tk-num">$r</span><span class="tk-punct">-&gt;</span>percent / <span class="tk-num">100</span><span class="tk-punct">,</span> <span class="tk-num">2</span><span class="tk-punct">),</span>
+                <span class="tk-str">'tier'</span>     =&gt; <span class="tk-num">$r</span><span class="tk-punct">-&gt;</span>tier<span class="tk-punct">,</span>
+                <span class="tk-str">'period'</span>   =&gt; <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>closed_at<span class="tk-punct">-&gt;</span><span class="tk-fn">format</span><span class="tk-punct">(</span><span class="tk-str">'Y-m'</span><span class="tk-punct">),</span>
+            <span class="tk-punct">]);</span>
+    <span class="tk-punct">}</span>
+<span class="tk-punct">}</span></pre>
+    </div>
+
+    <div class="cs-shot--coming">
+      <span class="cs-shot__title">Commission report &amp; agent dashboard</span>
+      <span class="cs-shot__sub">redacted captures coming with the final writeup</span>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section__label">stack</div>
+    <h2>Tech</h2>
+    <ul>
+      <li><strong>Frontend:</strong> Vue.js, Vuetify, Ag-Grid for tables, jsPDF for exports</li>
+      <li><strong>Backend:</strong> Laravel, MySQL, Sanctum for auth, REST API</li>
+      <li><strong>Tooling:</strong> VS Code · Git · GitHub · Postman</li>
+      <li><strong>Hosting:</strong> production deployment <span class="cs-pending">details on request</span></li>
+    </ul>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section__label">outcome</div>
+    <h2>Results</h2>
+
+    <div class="cs-metrics">
+      <div class="cs-metric">
+        <div class="cs-metric__k">spreadsheets retired</div>
+        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">multiple</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric__k">role coverage</div>
+        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">admin · mgr · agent</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric__k">month-end reporting</div>
+        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">faster &middot; auditable</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric__k">source of truth</div>
+        <div class="cs-metric__v">✓</div>
+      </div>
+    </div>
+
+    <p>
+      The platform replaced a tangle of spreadsheets and email threads with a single
+      auditable source of truth, with month-end reporting that now runs as a self-service
+      export instead of a manual reconciliation. Quantified figures will be published with
+      the final writeup;
+      <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
+    </p>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section__label">lessons</div>
+    <h2>What I'd do again — and differently</h2>
+    <ul>
+      <li><strong>Talk to the actual users first.</strong> The commission rules were more
+        nuanced than the brief suggested &mdash; only field interviews surfaced the edge
+        cases.</li>
+      <li><strong>Ag-Grid was worth it.</strong> Sortable, filterable, exportable tables
+        out of the box meant I didn't reinvent that for every screen.</li>
+      <li>Invest in seed data and a staging environment earlier &mdash; the team caught
+        edge cases faster when they could try flows on realistic data without fear.</li>
+      <li>Bake more &ldquo;sanity-check&rdquo; queries into the admin dashboard from day
+        one &mdash; cheap to add upfront, expensive to retrofit once reports are live.</li>
+    </ul>
+  </section>
+
+  <aside class="cs-cta">
+    <h3>Need similar?</h3>
+    <p>I build internal platforms like this for ops, real estate, and logistics teams. Let's talk.</p>
+    <div class="cs-cta__btns">
+      <a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch →</a>
+      <a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+    </div>
+  </aside>
+
+</main>
+
+</body>
+</html>

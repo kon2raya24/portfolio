@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Changelog — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What's new on lemmuel-turaya.dev / kon2raya portfolio — versioned log of features, fixes, and content updates." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Changelog — Lemmuel Turaya" />
+<meta property="og:description" content="Versioned log of portfolio iterations." />
+<meta property="og:url" content="https://kon2raya.netlify.app/changelog.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/case-study.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  .log-list { list-style: none; margin: 28px 0 0; padding: 0; position: relative; }
+  .log-list::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 28px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--cyan), var(--brand));
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    opacity: 0.5;
+  }
+  .log-entry {
+    position: relative;
+    padding: 0 0 28px 44px;
+  }
+  .log-entry::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg-deep);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.12), 0 0 12px var(--cyan);
+    z-index: 2;
+  }
+  .log-entry--latest::before {
+    background: var(--cyan);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.25); }
+  }
+  .log-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .log-version {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    color: #fff;
+  }
+  .log-version .num { color: var(--cyan); text-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
+  .log-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+  }
+  .log-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid var(--line-strong);
+    color: var(--cyan);
+    padding: 2px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .log-tag--major { background: rgba(255, 144, 0, 0.12); border-color: rgba(255, 144, 0, 0.5); color: var(--brand); }
+  .log-tag--latest { background: linear-gradient(135deg, var(--cyan), var(--brand)); color: var(--bg-dark); border-color: transparent; font-weight: 700; box-shadow: 0 0 10px rgba(0, 229, 255, 0.45); }
+  .log-summary {
+    font-family: 'Inter', sans-serif;
+    color: rgba(230, 243, 255, 0.78);
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+  }
+  .log-list ul {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+  .log-list ul li {
+    position: relative;
+    padding: 4px 0 4px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: rgba(230, 243, 255, 0.82);
+    line-height: 1.55;
+  }
+  .log-list ul li::before {
+    content: '+';
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    color: #28c840;
+    font-weight: 700;
+    text-shadow: 0 0 6px rgba(40, 200, 64, 0.5);
+  }
+  .log-list ul li.fix::before  { content: '~'; color: var(--brand); text-shadow: 0 0 6px rgba(255, 144, 0, 0.5); }
+  .log-list ul li.docs::before { content: '·'; color: var(--cyan); }
+  .log-list ul li code {
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.18);
+    color: var(--cyan);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .log-foot {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed rgba(0, 229, 255, 0.18);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+  }
+  .log-foot a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--cyan);
+  }
+</style>
+</head>
+<body>
+
+<nav class="cs-nav">
+  <a class="cs-nav__brand" href="./">Back to portfolio</a>
+  <span class="cs-nav__breadcrumb"><span class="active">/changelog</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+  <header class="cs-hero">
+    <div class="cs-hero__label">// changelog.md</div>
+    <h1>Changelog</h1>
+    <p class="cs-hero__tagline">
+      Public log of portfolio iterations &mdash; features, content, and fixes shipped to
+      <a href="https://kon2raya.netlify.app" style="color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--cyan)">kon2raya.netlify.app</a>.
+      Think of it as a public commit log for the portfolio itself.
+    </p>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(0,229,255,0.7);margin-top:-10px;">
+      <strong style="color:#28c840;">+</strong> added &nbsp;
+      <strong style="color:var(--brand);">~</strong> changed/fixed &nbsp;
+      <strong style="color:var(--cyan);">·</strong> docs/content
+    </p>
+  </header>
+
+  <ol class="log-list">
+
+    <!-- LATEST -->
+    <li class="log-entry log-entry--latest">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.4</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        Dev-credibility passes &mdash; <code>/uses</code>, <code>resume.json</code>, this changelog.
+      </p>
+      <ul>
+        <li>Added <code>/uses.html</code> &mdash; editor, terminal, hardware, daily software (Wes Bos's <code>uses.tech</code> tradition).</li>
+        <li>Added <code>resume.json</code> &mdash; machine-readable resume in <a href="https://jsonresume.org" style="color:var(--cyan)">JSON Resume</a> format.</li>
+        <li>Added this <code>/changelog</code> page.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.3</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag">case-studies</span>
+      </div>
+      <p class="log-summary">
+        Recruiter-safe case-study scaffolds &mdash; iterate in public without the embarrassing draft markers.
+      </p>
+      <ul>
+        <li>Added <code>case-studies/wms.html</code> and <code>case-studies/pamanaland.html</code>.</li>
+        <li>Shared <code>case-study.css</code> with window-chrome code blocks, metric grid, and CTA cards.</li>
+        <li class="fix">Marked draft pages <code>noindex,nofollow</code> &mdash; excluded from sitemap until polished.</li>
+        <li class="fix">Replaced literal <code>TODO</code> placeholders with neutral &ldquo;in progress&rdquo; framing + a <strong>DRAFT</strong> banner at the top of every draft.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.2</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag">hire-funnel</span>
+      </div>
+      <p class="log-summary">
+        Conversion + outbound &mdash; turning the portfolio into a hiring funnel I can measure.
+      </p>
+      <ul>
+        <li>Added Cal.com booking button in the Hire&nbsp;Me card (15-min intro call).</li>
+        <li>Designed <code>cover.html</code> &mdash; 1200&times;630 OG image you screenshot to PNG.</li>
+        <li>Added interactive dev terminal &mdash; press <code>`</code> to open. Real commands: <code>help</code>, <code>ls</code>, <code>cat resume</code>, <code>skills</code>, <code>sudo hire-me</code>&hellip;</li>
+        <li>UTM-aware welcome pill &mdash; <code>?utm=linkedin</code> renders &ldquo;welcome from LinkedIn&rdquo; and stamps the source in the live stats footer.</li>
+        <li>LinkedIn copy-paste pack: <code>linkedin-summary.md</code> with headline, About, all 5 experience blocks, skills, recommendation script.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.1</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag">prod-ready</span>
+      </div>
+      <p class="log-summary">
+        Ship-readiness &mdash; SEO, accessibility, performance, fallbacks.
+      </p>
+      <ul>
+        <li>JSON-LD <code>Person</code> schema, <code>sitemap.xml</code>, <code>robots.txt</code>, PWA manifest.</li>
+        <li>Netlify Forms contact form with honeypot + success state.</li>
+        <li>Real-time visitor counter (counterapi.dev) with 30s polling + localStorage fallback.</li>
+        <li>Live GitHub events graph &amp; recent-repos panel from <code>api.github.com</code>.</li>
+        <li>Skip-to-content link, <code>focus-visible</code> outlines, auto-injected ARIA labels on icon-only buttons.</li>
+        <li>404 page in terminal-style.</li>
+        <li class="fix">Matrix rain + particles pause when offscreen / tab hidden &mdash; meaningful CPU savings.</li>
+        <li class="fix">GitHub API responses cached 30 min in localStorage &mdash; gracefully degrade to cached or rate-limit notice instead of falling back to fake commit data.</li>
+        <li class="fix">Contact form falls back to <code>mailto:</code> on localhost since Netlify Forms only work after deploy.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.0</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag log-tag--major">major redesign</span>
+      </div>
+      <p class="log-summary">
+        Full redesign from a generic FH5co template into a dev-by-dev cyber-themed portfolio.
+      </p>
+      <ul>
+        <li>Replaced light theme end-to-end &mdash; dark cyber gradient + neon grid.</li>
+        <li>Redesigned <strong>About</strong>: developer.js code card + about-panel pillars + <code>profile.config</code> terminal panel.</li>
+        <li>Redesigned <strong>Resume</strong> timeline: single-rail card list with file-path tabs, period badges, and tech chips per role.</li>
+        <li>Redesigned <strong>Services</strong>: numbered cards 01&ndash;11 with terminal command headers, deliverable bullets, and stack chips.</li>
+        <li>Redesigned <strong>Skills</strong>: 4 categorized cards with animated bars; replaced redundant pie+progress duplication.</li>
+        <li>Redesigned <strong>Tools&nbsp;&amp;&nbsp;Stack</strong>: 6 grouped categories (<code>#ai &middot; assistants</code>, <code>#automation &middot; no-code</code>, etc.).</li>
+        <li>Redesigned <strong>Work</strong>: thumbnail + status badge + tech chips + file-path tabs, with filter pills.</li>
+        <li>Redesigned <strong>Case Studies</strong> placeholder as a terminal <code>ls</code> listing.</li>
+        <li>Redesigned <strong>Hire&nbsp;Me</strong>: full availability card with 4 CTAs, copy-email, meta footer.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">2.5</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag">resume-aligned</span>
+      </div>
+      <p class="log-summary">
+        Aligned every visible field with the actual resume PDF.
+      </p>
+      <ul>
+        <li>Rewrote all 5 work-experience entries to match the resume bullets (Ag-Grid, jsPDF, SAP integration, FAREYE API, Xero, Eversign, SilverStripe, SEMrush, Ahrefs, etc.).</li>
+        <li>Fixed Octal title: <code>Software Engineer</code> &rarr; <code>Software Developer</code>.</li>
+        <li>Fixed Uratex: was &ldquo;Multiflx RNC, 2022&ndash;2024&rdquo; &rarr; &ldquo;Uratex Philippines, Mar&ndash;Oct 2022&rdquo;.</li>
+        <li>Added <code>1.50 GPA</code> to education.</li>
+        <li>Added current-employment bullets: Flutter WMS mobile app + Vibe Coding with Claude AI.</li>
+        <li>Added libraries-and-integrations stack group (Ag-Grid, jsPDF, SurveyJS, Vuetify, SAP API, XERO, Eversign, ABN Lookup, Google Maps).</li>
+        <li>Added SEO &middot; marketing stack group (SEMrush, Ahrefs, SEO).</li>
+        <li class="docs">Email switched site-wide to <code>turayalemmuel@gmail.com</code> (matches the PDF).</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">2.0</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag log-tag--major">hyperframes</span>
+      </div>
+      <p class="log-summary">
+        Advanced interactive layer &mdash; HUD, palette, hyperframe brackets, tilt.
+      </p>
+      <ul>
+        <li>Fixed HUD (top-right): live clock, FPS, scroll&nbsp;%, current section, views, theme switcher, rotating &ldquo;now:&rdquo; status.</li>
+        <li>Command palette (<code>Ctrl+K</code> / <code>/</code>) with fuzzy filter, keyboard nav.</li>
+        <li>Side-rail section navigator (right edge) with active-state dot.</li>
+        <li>Right-click context menu replaced with dev-themed actions (copy email, jump to&hellip;, konami).</li>
+        <li>Keyboard shortcuts help overlay (<code>?</code>).</li>
+        <li>3D mouse-tilt on cards.</li>
+        <li>Hyperframe corner brackets on the code card.</li>
+        <li>Theme switcher (cyber / matrix / sunset) with localStorage.</li>
+        <li>Hover tooltips on every tech chip / tool badge.</li>
+        <li>Project filter pills + tech tags per work tile.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">1.0</span></span>
+        <span class="log-date">2026-05-13</span>
+        <span class="log-tag">foundation</span>
+      </div>
+      <p class="log-summary">
+        Foundation pass &mdash; futuristic theme, custom fx, dev-by-dev personality.
+      </p>
+      <ul>
+        <li>Boot-sequence loader.</li>
+        <li>Top scroll-progress bar.</li>
+        <li>Custom dot+ring cursor + magnetic hover.</li>
+        <li>Matrix code rain in hero + particle network in services.</li>
+        <li>Cycling typewriter terminal-tag.</li>
+        <li>RGB-split glitch on hero name + heading hover-jitter.</li>
+        <li>IDE code-card with syntax-highlighted developer object.</li>
+        <li>Mini contribution heatmap (mocked at the time).</li>
+        <li>Console welcome message + Konami code easter egg.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">0.1</span></span>
+        <span class="log-date">prior</span>
+        <span class="log-tag">origin</span>
+      </div>
+      <p class="log-summary">
+        Generic FH5co-derived single-page portfolio &mdash; light theme, alternating timeline, basic services grid.
+        Starting point.
+      </p>
+    </li>
+
+  </ol>
+
+  <p class="log-foot">
+    Built &amp; iterated in public.
+    <a href="./">Back to portfolio</a>
+    &middot;
+    <a href="https://github.com/kon2raya24" target="_blank" rel="noopener">github.com/kon2raya24</a>
+  </p>
+
+</main>
+
+</body>
+</html>
