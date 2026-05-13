@@ -305,6 +305,69 @@
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
   })();
 
+  /* ---------- Recent repos panel (live) ---------- */
+  (function recentRepos() {
+    var host = document.querySelector('[data-recent-repos]');
+    if (!host) return;
+    var USER = 'kon2raya24';
+
+    function relativeTime(iso) {
+      var d = new Date(iso);
+      var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+      if (diff < 60) return 'just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      if (diff < 86400 * 7) return Math.floor(diff / 86400) + 'd ago';
+      if (diff < 86400 * 30) return Math.floor(diff / (86400 * 7)) + 'w ago';
+      if (diff < 86400 * 365) return Math.floor(diff / (86400 * 30)) + 'mo ago';
+      return Math.floor(diff / (86400 * 365)) + 'y ago';
+    }
+
+    function escapeHtml(s) {
+      return (s == null ? '' : String(s))
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function render(repos) {
+      if (!repos || !repos.length) {
+        host.innerHTML = '<li class="px-repos__loading">no public repos found.</li>';
+        return;
+      }
+      host.innerHTML = repos.map(function (r) {
+        var desc = r.description ? '<p class="px-repo__desc">' + escapeHtml(r.description) + '</p>' : '';
+        var lang = r.language ? '<span class="px-repo__lang">' + escapeHtml(r.language) + '</span>' : '';
+        return '' +
+          '<li>' +
+            '<div class="px-repo__head">' +
+              '<a class="px-repo__name" href="' + escapeHtml(r.html_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.name) + '</a>' +
+              '<span class="px-repo__visibility">' + (r.private ? 'private' : 'public') + '</span>' +
+              lang +
+              '<span class="px-repo__stars"><strong>★</strong> ' + (r.stargazers_count || 0) + '</span>' +
+            '</div>' +
+            desc +
+            '<div class="px-repo__when">updated ' + relativeTime(r.pushed_at || r.updated_at) + '</div>' +
+          '</li>';
+      }).join('');
+    }
+
+    var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 5000);
+    fetch('https://api.github.com/users/' + USER + '/repos?sort=updated&per_page=4',
+      ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('bad'); return r.json(); })
+      .then(function (repos) {
+        if (!Array.isArray(repos)) throw new Error('bad shape');
+        // Filter forks if any, prefer original work
+        var nonFork = repos.filter(function (r) { return !r.fork; });
+        render((nonFork.length ? nonFork : repos).slice(0, 4));
+      })
+      .catch(function () {
+        clearTimeout(t);
+        host.innerHTML = '<li class="px-repos__loading">$ couldn\'t reach GitHub right now &mdash; <a href="https://github.com/' + USER + '" target="_blank" rel="noopener" style="color:var(--cyan)">visit profile directly &rarr;</a></li>';
+      });
+  })();
+
   /* ---------- Live GitHub stats + commit graph ---------- */
   (function githubStats() {
     var host = document.querySelector('[data-commit-graph]');
