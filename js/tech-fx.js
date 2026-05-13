@@ -91,9 +91,20 @@
     resize();
     window.addEventListener('resize', resize);
 
+    // Pause when host scrolls offscreen — saves CPU dramatically on long pages
+    var visible = true;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(host);
+    }
+    document.addEventListener('visibilitychange', function () {
+      visible = visible && document.visibilityState === 'visible';
+    });
+
     var lastFrame = 0;
     function draw(ts) {
-      if (ts - lastFrame > 55) {
+      if (visible && document.visibilityState === 'visible' && ts - lastFrame > 55) {
         lastFrame = ts;
         ctx.fillStyle = 'rgba(5, 8, 20, 0.18)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -126,6 +137,12 @@
     host.insertBefore(canvas, host.firstChild);
     var ctx = canvas.getContext('2d');
     var pts = [];
+    var visible = false;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(host);
+    } else { visible = true; }
     function resize() {
       canvas.width = host.offsetWidth;
       canvas.height = host.offsetHeight;
@@ -145,6 +162,7 @@
     window.addEventListener('resize', resize);
 
     function draw() {
+      if (!visible || document.visibilityState !== 'visible') { requestAnimationFrame(draw); return; }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (var i = 0; i < pts.length; i++) {
         var p = pts[i];
@@ -287,20 +305,93 @@
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
   })();
 
-  /* ---------- Mini commit graph (deterministic seed) ---------- */
-  (function commitGraph() {
+  /* ---------- Live GitHub stats + commit graph ---------- */
+  (function githubStats() {
     var host = document.querySelector('[data-commit-graph]');
     if (!host) return;
-    var weeks = 26, days = 7, cells = weeks * days;
-    var html = '';
-    var seed = 42;
-    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-    for (var i = 0; i < cells; i++) {
-      var v = rnd();
-      var lvl = v < 0.4 ? 0 : v < 0.65 ? 1 : v < 0.85 ? 2 : v < 0.96 ? 3 : 4;
-      html += '<span class="commit-cell" data-level="' + lvl + '"></span>';
+    var label = document.querySelector('.commit-graph-label');
+    var WEEKS = 26, DAYS = 7, CELLS = WEEKS * DAYS;
+    var USER = 'kon2raya24';
+
+    function fmt(n) { return n.toLocaleString('en-US'); }
+    function levelFor(count) {
+      if (!count) return 0;
+      if (count < 2) return 1;
+      if (count < 4) return 2;
+      if (count < 7) return 3;
+      return 4;
     }
-    host.innerHTML = html;
+    function paint(buckets) {
+      var html = '';
+      for (var i = 0; i < CELLS; i++) {
+        var c = buckets[i] || 0;
+        html += '<span class="commit-cell" data-level="' + levelFor(c) + '" title="' + c + ' event' + (c !== 1 ? 's' : '') + '"></span>';
+      }
+      host.innerHTML = html;
+    }
+    function fallback() {
+      var seed = 42;
+      function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      var buckets = [];
+      for (var i = 0; i < CELLS; i++) {
+        var v = rnd();
+        buckets.push(v < 0.4 ? 0 : v < 0.65 ? 1 : v < 0.85 ? 3 : v < 0.96 ? 6 : 10);
+      }
+      paint(buckets);
+    }
+
+    // Day index: today = CELLS - 1, walk backwards
+    function dayIndexFor(date) {
+      var today = new Date();
+      today.setHours(0,0,0,0);
+      var d = new Date(date);
+      d.setHours(0,0,0,0);
+      var diffDays = Math.round((today - d) / 86400000);
+      var idx = CELLS - 1 - diffDays;
+      return (idx >= 0 && idx < CELLS) ? idx : -1;
+    }
+
+    function loadEvents() {
+      var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 5000);
+      // Public events: up to 30 of the most recent
+      fetch('https://api.github.com/users/' + USER + '/events/public?per_page=100', ctrl ? { signal: ctrl.signal } : {})
+        .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('bad'); return r.json(); })
+        .then(function (events) {
+          if (!Array.isArray(events) || !events.length) { fallback(); return; }
+          var buckets = new Array(CELLS).fill(0);
+          events.forEach(function (e) {
+            var idx = dayIndexFor(e.created_at);
+            if (idx >= 0) buckets[idx] += 1;
+          });
+          paint(buckets);
+          if (label) label.textContent = '// recent github activity · live · @' + USER;
+        })
+        .catch(function () { clearTimeout(t); fallback(); });
+    }
+
+    // Always paint the deterministic fallback first so layout is stable
+    fallback();
+    loadEvents();
+
+    // Bonus: fetch profile stats and append a tiny meta line
+    fetch('https://api.github.com/users/' + USER)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !label) return;
+        var meta = document.createElement('div');
+        meta.className = 'commit-graph-meta';
+        meta.innerHTML =
+          '<span><strong>' + fmt(d.public_repos) + '</strong> repos</span>' +
+          '<span class="sep">·</span>' +
+          '<span><strong>' + fmt(d.followers) + '</strong> followers</span>' +
+          '<span class="sep">·</span>' +
+          '<span><strong>' + fmt(d.following) + '</strong> following</span>' +
+          '<span class="sep">·</span>' +
+          '<a href="https://github.com/' + USER + '" target="_blank" rel="noopener">view profile &rarr;</a>';
+        label.parentNode.insertBefore(meta, host.nextSibling);
+      })
+      .catch(function () {});
   })();
 
   /* ---------- Boot loader screen ---------- */
@@ -442,53 +533,144 @@
     rotateNow();
     setInterval(rotateNow, 3800);
 
-    /* Visit counter */
+    // Visit counter HUD value is shared with footer LiveStats
     var viewsEl = el.querySelector('[data-h="views"]');
+    var cached = null;
+    try { cached = parseInt(localStorage.getItem('portfolio.views') || '0', 10); } catch (_) {}
+    if (cached && cached > 0 && viewsEl) viewsEl.textContent = cached.toLocaleString('en-US');
+  })();
+
+  /* ---------- Live visitor stats (counter + polling) ---------- */
+  (function liveStats() {
+    var NAMESPACE = 'kon2raya-portfolio';
+    var KEY = 'views';
+    var POLL_MS = 30000; // 30s
+
+    var totalEl = document.querySelector('[data-live="total"]');
+    var sessionEl = document.querySelector('[data-live="session"]');
+    var refreshEl = document.querySelector('[data-live="refresh"]');
+    var hudEl = document.querySelector('[data-h="views"]');
+
     function fmt(n) { return n.toLocaleString('en-US'); }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+    // ----- session timer -----
+    var sessionStart = Date.now();
+    if (sessionEl) {
+      setInterval(function () {
+        var s = Math.floor((Date.now() - sessionStart) / 1000);
+        var m = Math.floor(s / 60);
+        var sec = s % 60;
+        sessionEl.textContent = pad(m) + ':' + pad(sec);
+      }, 1000);
+    }
+
+    // ----- local fallback so the counter is never blank -----
     function localFallback() {
-      var key = 'portfolio.views';
-      var seedKey = 'portfolio.views.seed';
-      var sessKey = 'portfolio.views.session';
+      var k = 'portfolio.views', seedKey = 'portfolio.views.seed', sessKey = 'portfolio.views.session';
       var seed = parseInt(localStorage.getItem(seedKey) || '0', 10);
       if (!seed) {
         seed = 1247 + Math.floor(Math.random() * 80);
         try { localStorage.setItem(seedKey, String(seed)); } catch (_) {}
       }
-      var n = parseInt(localStorage.getItem(key) || '0', 10) || seed;
-      var hasSess = sessionStorage.getItem(sessKey);
-      if (!hasSess) {
+      var n = parseInt(localStorage.getItem(k) || '0', 10) || seed;
+      if (!sessionStorage.getItem(sessKey)) {
         n += 1;
         try {
-          localStorage.setItem(key, String(n));
+          localStorage.setItem(k, String(n));
           sessionStorage.setItem(sessKey, '1');
         } catch (_) {}
       }
       return n;
     }
-    function loadViews() {
-      var ctrl, timer;
-      var url = 'https://api.counterapi.dev/v1/kon2raya-portfolio/views/up';
-      if (typeof AbortController !== 'undefined') ctrl = new AbortController();
-      timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 3500);
-      fetch(url, { signal: ctrl ? ctrl.signal : undefined })
-        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-        .then(function (d) {
-          clearTimeout(timer);
-          var v = (d && (d.count || (d.data && d.data.up_count))) || null;
-          if (typeof v === 'number' && v > 0) {
-            viewsEl.textContent = fmt(v);
-            try { localStorage.setItem('portfolio.views', String(v)); } catch (_) {}
-          } else { viewsEl.textContent = fmt(localFallback()); }
-        })
-        .catch(function () {
-          clearTimeout(timer);
-          viewsEl.textContent = fmt(localFallback());
-        });
+
+    function bump(el) {
+      if (!el) return;
+      el.classList.remove('is-bumped');
+      // force reflow then re-add
+      void el.offsetWidth;
+      el.classList.add('is-bumped');
+      setTimeout(function () { el.classList.remove('is-bumped'); }, 600);
     }
-    var cached = null;
+
+    function setTotal(n, didIncrement) {
+      var prev = parseInt((totalEl && totalEl.dataset.raw) || '0', 10);
+      if (totalEl) {
+        totalEl.dataset.raw = String(n);
+        totalEl.textContent = fmt(n);
+        if (didIncrement || (prev && n > prev)) bump(totalEl);
+      }
+      if (hudEl) hudEl.textContent = fmt(n);
+      try { localStorage.setItem('portfolio.views', String(n)); } catch (_) {}
+    }
+
+    function stampRefresh() {
+      if (!refreshEl) return;
+      var d = new Date();
+      refreshEl.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    }
+
+    function withTimeout(url, ms) {
+      var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, ms);
+      return fetch(url, ctrl ? { signal: ctrl.signal } : {})
+        .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('bad'); return r.json(); })
+        .catch(function (e) { clearTimeout(t); throw e; });
+    }
+
+    function parseCount(d) {
+      if (!d) return null;
+      if (typeof d.count === 'number') return d.count;
+      if (d.data) {
+        if (typeof d.data.up_count === 'number') return d.data.up_count;
+        if (typeof d.data.count === 'number') return d.data.count;
+      }
+      if (typeof d.value === 'number') return d.value;
+      return null;
+    }
+
+    // ---- Increment on first load (only once per session) ----
+    function initialIncrement() {
+      var sessKey = 'portfolio.views.incremented';
+      if (sessionStorage.getItem(sessKey)) { poll(); return; }
+      withTimeout('https://api.counterapi.dev/v1/' + NAMESPACE + '/' + KEY + '/up', 4000)
+        .then(function (d) {
+          var n = parseCount(d);
+          if (n != null && n > 0) {
+            setTotal(n, true);
+            try { sessionStorage.setItem(sessKey, '1'); } catch (_) {}
+          } else {
+            setTotal(localFallback(), true);
+          }
+        })
+        .catch(function () { setTotal(localFallback(), true); })
+        .then(stampRefresh);
+    }
+
+    // ---- Poll (read-only) every 30s ----
+    function poll() {
+      withTimeout('https://api.counterapi.dev/v1/' + NAMESPACE + '/' + KEY, 4000)
+        .then(function (d) {
+          var n = parseCount(d);
+          if (n != null && n > 0) setTotal(n, false);
+        })
+        .catch(function () {})
+        .then(stampRefresh);
+    }
+
+    // initial cached value so the slot isn't empty during fetch
+    var cached = 0;
     try { cached = parseInt(localStorage.getItem('portfolio.views') || '0', 10); } catch (_) {}
-    if (cached && cached > 0) viewsEl.textContent = fmt(cached);
-    loadViews();
+    if (cached > 0 && totalEl) totalEl.textContent = fmt(cached);
+
+    initialIncrement();
+
+    setInterval(poll, POLL_MS);
+
+    // poll once when the tab becomes visible again
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') poll();
+    });
   })();
 
   /* ---------- Hover tooltip system ---------- */
@@ -502,7 +684,19 @@
       'dart':         'Modern, type-safe language · powers Flutter',
       'claude ai':    'Anthropic\'s AI · pair-programming partner',
       'claude':       'Anthropic\'s AI · pair-programming partner',
+      'claude code':  'Anthropic\'s CLI for AI-assisted coding',
+      'claude api':   'Anthropic\'s API for LLM-powered features',
+      'openai api':   'GPT models · embeddings · function calling',
       'vibe coding':  'AI-assisted dev flow · ship at hyper-speed',
+      'n8n':          'Open-source workflow automation · self-hosted',
+      'n8n workflows':'Open-source workflow automation · self-hosted',
+      'zapier':       'SaaS automation · 6000+ app integrations',
+      'zapier / make.com': 'No-code automation platforms',
+      'make.com':     'Visual no-code automation (formerly Integromat)',
+      'pipedream':    'Code-first event-driven workflows',
+      'webhooks':     'Event-driven integrations · push notifications',
+      'cron jobs':    'Scheduled task execution',
+      'ai-assisted dev': 'Pair programming with AI agents',
       'html5':        'Semantic markup · accessible structure',
       'css3':         'Styling, animations, modern layout systems',
       'jquery':       'Battle-tested DOM utility · legacy projects',
@@ -867,6 +1061,23 @@
       });
       tile.appendChild(wrap);
     });
+  })();
+
+  /* ---------- Contact form success ---------- */
+  (function contactSuccess() {
+    if (window.location.search.indexOf('sent=1') === -1) return;
+    var wrap = document.querySelector('.cta-form-wrap');
+    if (!wrap) return;
+    wrap.setAttribute('open', '');
+    wrap.classList.add('is-sent');
+    setTimeout(function () {
+      var t = document.getElementById('fh5co-started');
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+    // strip the param so refresh doesn't replay
+    if (history.replaceState) {
+      history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    }
   })();
 
   /* ---------- Toast helper (shared) ---------- */
