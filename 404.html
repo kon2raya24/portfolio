@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>404 · command not found — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #FF9000;
+    --cyan: #00e5ff;
+    --magenta: #ff2bd6;
+    --bg-deep: #050814;
+    --bg-dark: #0a0f1f;
+    --line: rgba(0, 229, 255, 0.22);
+    --line-strong: rgba(0, 229, 255, 0.5);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg-deep);
+    color: #e6f3ff;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 229, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 229, 255, 0.08) 1px, transparent 1px);
+    background-size: 60px 60px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 80%);
+            mask-image: radial-gradient(ellipse at center, #000 20%, transparent 80%);
+    pointer-events: none;
+    opacity: 0.4;
+  }
+  .terminal {
+    width: min(640px, 92vw);
+    background: linear-gradient(180deg, #0b1226 0%, #070a18 100%);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 229, 255, 0.18);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    background: linear-gradient(180deg, #0d1430, #0a1024);
+    border-bottom: 1px solid var(--line);
+  }
+  .dots { display: inline-flex; gap: 6px; }
+  .dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+  }
+  .dots i:nth-child(1) { background: #ff5f57; }
+  .dots i:nth-child(2) { background: #febc2e; }
+  .dots i:nth-child(3) { background: #28c840; }
+  .path {
+    margin-left: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .path .active { color: var(--cyan); border-bottom: 1px solid var(--cyan); padding-bottom: 1px; }
+  .badge {
+    margin-left: auto;
+    background: rgba(255, 95, 87, 0.12);
+    border: 1px solid rgba(255, 95, 87, 0.5);
+    color: #ff7a72;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+  .body { padding: 26px 28px 30px; }
+  .line { margin: 6px 0; font-size: 13px; line-height: 1.6; }
+  .prompt { color: var(--brand); margin-right: 6px; }
+  .cmd { color: var(--cyan); }
+  .err { color: #ff7a72; }
+  .ok { color: #28c840; }
+  .dim { color: rgba(230, 243, 255, 0.55); }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 84px;
+    letter-spacing: 12px;
+    margin: 8px 0 4px;
+    background: linear-gradient(135deg, var(--cyan), var(--brand), var(--magenta));
+    -webkit-background-clip: text;
+            background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 28px rgba(0, 229, 255, 0.25);
+    line-height: 1;
+  }
+  .tagline {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    letter-spacing: 5px;
+    color: rgba(230, 243, 255, 0.7);
+    margin: 0 0 18px;
+  }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--cyan);
+    vertical-align: -2px;
+    margin-left: 2px;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { to { visibility: hidden; } }
+
+  .actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    transition: 0.22s;
+  }
+  .btn:hover {
+    background: rgba(0, 229, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+  }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--cyan), var(--brand));
+    color: var(--bg-dark);
+    border-color: transparent;
+    font-weight: 700;
+  }
+  .btn.primary:hover { box-shadow: 0 0 22px rgba(0, 229, 255, 0.5); }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 64px; letter-spacing: 8px; }
+    .body { padding: 20px; }
+    .actions { flex-direction: column; }
+    .btn { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<main class="terminal" role="main">
+  <header class="chrome">
+    <span class="dots"><i></i><i></i><i></i></span>
+    <span class="path">~/portfolio/<span class="active">404.log</span></span>
+    <span class="badge">ERR 404</span>
+  </header>
+  <div class="body">
+    <div class="line"><span class="prompt">$</span><span class="cmd"> navigate</span> <span class="dim">--to=&quot;<span id="bad-path">/this-page</span>&quot;</span></div>
+    <div class="line err">  ✗ Error: route not found</div>
+    <div class="line dim">  at Router.resolve (portfolio.js:42)</div>
+    <div class="line dim">  at History.handleNavigation (browser.js:101)</div>
+
+    <h1>404</h1>
+    <div class="tagline">COMMAND NOT FOUND</div>
+    <div class="line">The page you requested isn&rsquo;t in the repo. Maybe it was renamed, archived, or just never existed.<span class="cursor"></span></div>
+
+    <div class="line dim" style="margin-top:14px;">  // try one of these</div>
+    <div class="actions">
+      <a href="/" class="btn primary">cd ~ <span aria-hidden="true">→</span></a>
+      <a href="/#fh5co-work" class="btn">ls projects/</a>
+      <a href="/#fh5co-resume" class="btn">cat resume</a>
+      <a href="/#fh5co-started" class="btn">contact &middot;</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Show the actual requested path
+  try {
+    var p = (window.location && window.location.pathname) || '';
+    if (p && p !== '/' && p !== '/404.html') {
+      var el = document.getElementById('bad-path');
+      if (el) el.textContent = p.length > 50 ? p.slice(0, 47) + '…' : p;
+    }
+  } catch (e) {}
+</script>
+
+</body>
+</html>

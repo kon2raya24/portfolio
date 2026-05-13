@@ -3,6 +3,42 @@
  *  Layered on top of style.css (loaded after it)
  * ======================================================= */
 
+/* ---------- A11y: skip link + focus styles ---------- */
+.skip-link {
+  position: absolute;
+  top: -42px;
+  left: 8px;
+  background: var(--cyan);
+  color: var(--bg-dark) !important;
+  padding: 8px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+  z-index: 100000;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 18px rgba(0, 229, 255, 0.4);
+  transition: top 0.18s;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+/* Visible keyboard focus for everything */
+*:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.btn:focus-visible,
+.cta-btn:focus-visible,
+.cta-form__submit:focus-visible,
+.work-filter:focus-visible {
+  outline-offset: 4px;
+}
+
 /* ---------- Global dark-theme overrides (kill white surfaces) ---------- */
 html, body {
   background: var(--bg-deep) !important;
@@ -3113,6 +3149,95 @@ body.theme-sunset {
 }
 @media (max-width: 640px) {
   .live-stats { gap: 14px; font-size: 10.5px; }
+}
+
+/* =======================================================
+ *  Mobile QA — defensive fixes for narrow screens
+ * ======================================================= */
+@media (max-width: 768px) {
+  /* Hero stats: tighter spacing, smaller numbers */
+  .hero-stats { gap: 8px; }
+  .hero-stats .stat { padding: 8px 10px; min-width: 78px; flex: 1 1 calc(50% - 8px); }
+  .hero-stats .stat strong { font-size: 16px; }
+  .terminal-tag { font-size: 11px; padding: 5px 10px !important; min-width: 0; max-width: 92vw; overflow: hidden; text-overflow: ellipsis; }
+  .tech-stack-strip { gap: 6px; }
+  .tech-chip { font-size: 10px; padding: 4px 8px; }
+
+  /* Code card: shrink gutter and code */
+  .code-card { max-width: 100%; }
+  .code-card__gutter { padding: 12px 6px 12px 10px !important; font-size: 10px !important; }
+  .code-card__code { padding: 12px !important; overflow-x: auto; }
+  .code-card__code pre { font-size: 10.5px !important; line-height: 1.55 !important; }
+  .code-card__title { font-size: 11px; }
+
+  /* About panel + pillars */
+  .about-panel { padding: 18px 18px; }
+  .about-panel__title { font-size: 16px !important; letter-spacing: 1px; }
+  .about-panel__cta { gap: 8px; }
+  .about-panel__cta .btn { width: 100%; text-align: center; }
+
+  /* Profile-config: collapse into single column already, make rows wrap better */
+  .profile-config__chrome { flex-wrap: wrap; gap: 8px; padding: 9px 12px; }
+  .profile-config__path { margin-left: 0; font-size: 11px; }
+  .profile-config__status { margin-left: 0; }
+  .cfg-col { padding: 14px 16px; }
+  .cfg-key { font-size: 11px; }
+  .cfg-val, .cfg-link { font-size: 11.5px; word-break: break-word; }
+
+  /* Resume cards */
+  .exp-card__chrome { flex-wrap: wrap; row-gap: 4px; }
+  .exp-card__period { font-size: 9px; padding: 2px 6px; }
+  .exp-card__role { font-size: 15px !important; }
+  .exp-card__role .exp-card__sub { display: block; font-size: 11px; margin-left: 0; margin-top: 2px; }
+  .exp-card__bullets li { font-size: 12.5px; line-height: 1.55; padding-left: 18px; }
+  .exp-card__bullets li::before { left: 2px; top: 5px; }
+
+  /* Services cards */
+  .services-grid > [class*="col-"] { margin-bottom: 14px; }
+  .svc-card { padding: 18px 16px 16px; }
+  .svc-card__title { font-size: 14px !important; }
+  .svc-card__lead { font-size: 12.5px; }
+  .svc-card__deliverables li { font-size: 12px; line-height: 1.5; }
+
+  /* Project cards */
+  .proj-card__thumb { height: 150px; }
+  .proj-card__title { font-size: 14px !important; }
+  .proj-card__meta { font-size: 11px; }
+
+  /* CTA card */
+  .cta-card__chrome { flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+  .cta-card__path { font-size: 11px; }
+  .cta-status { font-size: 9px; padding: 3px 6px; }
+  .cta-card__body { padding: 22px 18px 24px; }
+  .cta-card__title { font-size: 22px !important; letter-spacing: 2px !important; }
+  .cta-card__lead { font-size: 13px; }
+  .cta-email { padding: 10px 12px; gap: 8px; font-size: 12.5px; }
+  .cta-email__addr { font-size: 12.5px; word-break: break-all; }
+
+  /* Filter pills */
+  .work-filters { gap: 5px; }
+  .work-filter { font-size: 10px; padding: 5px 10px; }
+
+  /* Side rail / HUD already hidden, double-check */
+  .siderail, .hud, .cmdk-hint, .cursor-dot, .cursor-ring { display: none !important; }
+
+  /* Footer live stats */
+  .live-stats { padding: 10px 12px; gap: 10px 12px; font-size: 10.5px; }
+
+  /* Skip section number being absurdly tall on long titles */
+  .skill-card__title { font-size: 13px !important; letter-spacing: 1.5px; }
+
+  /* Section heading sizes */
+  .fh5co-heading h2 { font-size: 26px !important; letter-spacing: 3px; }
+}
+
+@media (max-width: 380px) {
+  .hero-stats .stat { flex: 1 1 100%; }
+  .cta-card__title { font-size: 18px !important; }
+  .exp-group { padding-left: 22px; }
+  .exp-group::before { left: 8px; }
+  .exp-item__dot { left: -22px; width: 12px; height: 12px; }
+  .commit-cell { width: 9px; height: 9px; }
 }
 
 /* Respect reduced motion */

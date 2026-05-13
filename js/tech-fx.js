@@ -1080,6 +1080,45 @@
     }
   })();
 
+  /* ---------- Accessibility decorations ---------- */
+  (function a11y() {
+    var iconMap = {
+      'icon-github2':    'GitHub',
+      'icon-linkedin2':  'LinkedIn',
+      'icon-facebook2':  'Facebook',
+      'icon-facebook3':  'Facebook',
+      'icon-instagram2': 'Instagram',
+      'icon-paintbrush': 'DeviantArt',
+      'icon-envelope':   'Email',
+      'icon-phone':      'Phone',
+      'icon-link':       'Website',
+      'icon-location':   'Location',
+      'icon-user2':      'Full name',
+      'icon-download':   'Download',
+      'icon-arrow-up22': 'Back to top',
+      'icon-mobile':     'Mobile',
+      'icon-suitcase':   'Work experience',
+      'icon-graduation-cap': 'Education'
+    };
+    document.querySelectorAll('a, button').forEach(function (el) {
+      // skip if already labeled or has text content
+      if (el.getAttribute('aria-label')) return;
+      var text = (el.textContent || '').trim();
+      if (text.length > 0 && !/^[<>→↓↤⋯\s]+$/.test(text)) return;
+      var icon = el.querySelector('[class*="icon-"]');
+      if (icon) {
+        var cls = icon.className.split(/\s+/).filter(function (c) { return c.indexOf('icon-') === 0; })[0];
+        var label = iconMap[cls];
+        if (label) el.setAttribute('aria-label', label);
+        icon.setAttribute('aria-hidden', 'true');
+      }
+    });
+    // Decorative canvases
+    document.querySelectorAll('.matrix-canvas, .particles-canvas').forEach(function (c) {
+      c.setAttribute('aria-hidden', 'true');
+    });
+  })();
+
   /* ---------- Toast helper (shared) ---------- */
   var techToast = (function () {
     var el = null, timer = null;

@@ -1,0 +1,47 @@
+{
+  "name": "Lemmuel Turaya — Full-Stack & Mobile App Developer",
+  "short_name": "Lemmuel Turaya",
+  "description": "Full-stack developer building production web and mobile applications with Vue.js, Laravel, and Flutter. AI-assisted delivery with Claude.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050814",
+  "theme_color": "#050814",
+  "lang": "en",
+  "categories": ["business", "portfolio", "developer"],
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Hire Me",
+      "short_name": "Contact",
+      "url": "/#fh5co-started",
+      "description": "Open the contact section"
+    },
+    {
+      "name": "View Projects",
+      "short_name": "Work",
+      "url": "/#fh5co-work",
+      "description": "Browse my project portfolio"
+    },
+    {
+      "name": "Download Resume",
+      "short_name": "Resume",
+      "url": "/resume.pdf",
+      "description": "Download my resume PDF"
+    }
+  ]
+}
