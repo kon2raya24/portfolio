@@ -5993,13 +5993,22 @@ body.theme-sunset {
   text-shadow: 0 0 6px rgba(255, 144, 0, 0.35);
   font-weight: 700;
 }
+/* outcome chip sits on its own sub-row under the case-name so the
+   original tree | name | tags | LIVE single-line layout stays intact */
+.case-studies__list li { grid-template-rows: auto auto; row-gap: 2px; }
+.case-studies__list li > .case-tree {
+  grid-row: 1 / span 2;
+  align-self: start;
+  padding-top: 2px;
+}
 .case-outcome {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  justify-self: start;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.5px;
   color: rgba(124, 255, 140, 0.85);
-  padding: 2px 8px;
-  margin-left: 4px;
   white-space: nowrap;
 }
 .case-outcome::before {
@@ -6049,11 +6058,12 @@ body.theme-sunset {
   box-shadow: 0 0 12px rgba(198, 106, 0, 0.45) !important;
 }
 
-/* Mobile: outcome chip wraps onto its own line to avoid overflow */
+/* Mobile: outcome flows in col 2 row 4 (after tags + status); reset
+   the desktop tree span because the mobile grid already stacks cleanly. */
 @media (max-width: 768px) {
-  .case-outcome {
-    display: block;
-    margin: 4px 0 0 22px;
+  .case-studies__list li {
+    grid-template-rows: auto auto auto auto;
   }
-  .case-outcome::before { content: ""; }
+  .case-studies__list li > .case-tree { grid-row: 1; padding-top: 0; }
+  .case-outcome { grid-column: 2; grid-row: 4; }
 }
