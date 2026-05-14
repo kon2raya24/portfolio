@@ -6099,7 +6099,7 @@ body.theme-sunset {
   border: 2px solid var(--cyan);
   pointer-events: none;
   filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.55));
-  z-index: 1;
+  z-index: 5; /* sit above any sibling content inside the hyperframe */
 }
 .hyperframe__corner--tl { top: -12px; left: -12px; border-right: none; border-bottom: none; }
 .hyperframe__corner--tr { top: -12px; right: -12px; border-left: none; border-bottom: none; }
@@ -6128,7 +6128,7 @@ body.theme-sunset {
   pointer-events: none;
   border-radius: inherit;
   animation: hyperframe-pulse 3.6s ease-in-out infinite;
-  z-index: 0;
+  z-index: 4; /* below corners but above container background */
 }
 @keyframes hyperframe-pulse {
   0%, 100% {

@@ -639,6 +639,11 @@ body::before {
  *  for scanners who never make it past the fold.
  * ======================================================= */
 .cs-metrics--top {
+  /* Re-state the grid here so a future .cs-metrics override doesn't
+     change the top-grid behavior, and the label can span all columns. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
   margin: 0 0 40px;
   padding: 22px;
   background: linear-gradient(180deg, rgba(0, 229, 255, 0.04), rgba(10, 16, 36, 0.55));
@@ -646,11 +651,13 @@ body::before {
   border-radius: 8px;
 }
 .cs-metrics--top .cs-metrics__label {
+  grid-column: 1 / -1; /* span full row — otherwise it consumes one grid slot
+                          and pushes a metric tile onto the next row */
   font-size: 11px;
   letter-spacing: 2px;
   color: var(--cyan-dim);
   text-transform: lowercase;
-  margin-bottom: 14px;
+  margin: 0 0 6px;
   font-family: 'JetBrains Mono', monospace;
 }
 
