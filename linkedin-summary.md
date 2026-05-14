@@ -6,12 +6,12 @@ Drop each section directly into the matching LinkedIn field. Edit anything in **
 
 ## 1) Headline (max 220 characters)
 
-> Full-Stack & Mobile App Developer · AI Engineer · Vue · Laravel · Flutter · Multi-LLM agent pipelines (Claude · Gemini · OpenAI) · Open to remote roles · GMT+8
+> Full-Stack & Mobile App Developer · AI Engineer · 8 shipped case studies · Vue · Laravel · Flutter · Multi-LLM agent pipelines (Claude · Gemini · OpenAI) · Open to remote · GMT+8
 
 *Variants depending on what you're optimizing for:*
 
 - **Hiring-funnel focused:**
-  > Full-Stack & AI Engineer · Vue + Laravel + Flutter + Claude/Gemini/OpenAI agent pipelines · 6+ yrs · Open to remote/hybrid · GMT+8
+  > Full-Stack & AI Engineer · Vue + Laravel + Flutter + Claude/Gemini/OpenAI agent pipelines · 6+ yrs · 8 case studies · Open to remote · GMT+8
 
 - **Specialist:**
   > Application Developer @ AAI Worldwide Logistics · Built a production multi-LLM autonomous AI engineer · Vue · Laravel · Flutter
@@ -19,17 +19,17 @@ Drop each section directly into the matching LinkedIn field. Edit anything in **
 - **Punchier:**
   > I ship full-stack + mobile production software, and I build autonomous AI engineers that ship alongside the human team
 
-- **AI-engineering forward:**
-  > AI Engineer + Full-Stack Developer · Multi-LLM orchestration (Claude / Gemini / OpenAI / OpenRouter / Qwen) · Vue · Laravel · Flutter
+- **Karpathy-style AI-augmented:**
+  > Full-Stack & AI Engineer · Pairs daily with Claude Code (Karpathy-style AI-augmented workflow) · Builds multi-LLM agent pipelines · Vue · Laravel · Flutter · GMT+8
 
 ---
 
 ## 2) About / Summary (max ~2,600 characters)
 
 ```
-Full-Stack and Mobile App Developer (with growing AI Engineering focus) — 6+ years shipping production platforms across logistics, real estate, marketing, education, and finance.
+Full-Stack and Mobile App Developer (with growing AI Engineering focus) — 6+ years shipping production platforms across logistics, real estate, marketing, education, and finance, with 8 published case studies on the portfolio.
 
-I work end-to-end — requirements, architecture, implementation, testing, deployment — and I build autonomous AI-engineer pipelines that ship alongside the human team, not just chat with it.
+I work end-to-end — requirements, architecture, implementation, testing, deployment — and I build autonomous AI-engineer pipelines that ship alongside the human team, not just chat with it. I also pair daily with Claude Code in a Karpathy-style AI-augmented workflow — prototyping and refactoring at speed without compromising code review, tests, or engineering judgment.
 
 — Specializations —
 • Vue.js / Nuxt.js / TypeScript on the front-end
@@ -238,8 +238,8 @@ A great recommendation talks about *behavior* (how you work) more than *output* 
 
 ## 10) Quick checklist before going live
 
-- [ ] Headline updated (AI Engineer + multi-LLM angle)
-- [ ] About section pasted in (mentions autonomous AI engineer + WMS v2 + LLM wiki + 6+ years)
+- [ ] Headline updated (AI Engineer + 8 case studies + multi-LLM angle)
+- [ ] About section pasted in (mentions 8 case studies + autonomous AI engineer + Karpathy-style AI-augmented daily workflow + WMS v2 + LLM wiki + 6+ years)
 - [ ] Current role (AAI) bullets refreshed with AI Engineer + WMS v2 + LLM wiki
 - [ ] Featured section: 5 case studies + GitHub (AI Engineer + LLM Wiki pinned highest)
 - [ ] Top 5 skills set to Full-Stack / AI Engineering / Vue.js / Laravel / Flutter
