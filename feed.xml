@@ -10,7 +10,7 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Wed, 14 May 2026 00:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Thu, 14 May 2026 23:59:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
   <item>
@@ -34,8 +34,8 @@
   <item>
     <title>v4.8 — Two more case studies: LLM-Friendly Wiki + WMS v2 Inventory Rewrite</title>
     <link>https://kon2raya.netlify.app/case-studies/</link>
-    <guid isPermaLink="false">portfolio-v4.8-2026-05-15</guid>
-    <pubDate>Fri, 15 May 2026 05:00:00 +0800</pubDate>
+    <guid isPermaLink="false">portfolio-v4.8-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 23:55:00 +0800</pubDate>
     <category>case-study</category>
     <description><![CDATA[
       Two more case studies, hero stat bumped 6 → 8. (1) LLM-Friendly Wiki — a
@@ -55,8 +55,8 @@
   <item>
     <title>v4.7 — Two new case studies: Transport Mgmt System + Autonomous AI Engineer</title>
     <link>https://kon2raya.netlify.app/case-studies/</link>
-    <guid isPermaLink="false">portfolio-v4.7-2026-05-15</guid>
-    <pubDate>Fri, 15 May 2026 03:00:00 +0800</pubDate>
+    <guid isPermaLink="false">portfolio-v4.7-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 23:50:00 +0800</pubDate>
     <category>case-study</category>
     <description><![CDATA[
       Added two new case studies, pushing the proof shelf from 4 to 6. (1) Transport
@@ -76,7 +76,7 @@
     <title>v4.6 — Anonymized mock screenshots wired into every case study</title>
     <link>https://kon2raya.netlify.app/case-studies/</link>
     <guid isPermaLink="false">portfolio-v4.6-2026-05-14</guid>
-    <pubDate>Fri, 15 May 2026 01:00:00 +0800</pubDate>
+    <pubDate>Thu, 14 May 2026 23:45:00 +0800</pubDate>
     <category>visual</category>
     <description><![CDATA[
       Generated four anonymized mock screenshots (1600×900) — one per case study —
