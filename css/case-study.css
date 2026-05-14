@@ -61,11 +61,46 @@ body::before {
   text-decoration: none;
   text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
 }
+.cs-nav__brand {
+  position: relative;
+  display: inline-block;
+}
 .cs-nav__brand::before { content: '← '; color: var(--brand); }
 .cs-nav__brand:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 4px;
   border-radius: 2px;
+}
+/* Scanning underline — 1px cyan stripe slowly travels left-to-right
+   under the link, always-on. Speeds up + brightens on hover. */
+.cs-nav__brand::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--cyan) 30%,
+    var(--cyan) 70%,
+    transparent 100%);
+  background-size: 220% 100%;
+  background-position: 0 50%;
+  animation: cs-nav-brand-scan 4s linear infinite;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.cs-nav__brand:hover::after {
+  opacity: 1;
+  animation-duration: 1.5s;
+}
+@keyframes cs-nav-brand-scan {
+  from { background-position: -110% 50%; }
+  to   { background-position:  110% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-nav__brand::after { animation: none; opacity: 0.4; }
 }
 .cs-nav__breadcrumb {
   font-size: 12px;
