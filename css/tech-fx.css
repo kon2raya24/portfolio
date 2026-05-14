@@ -6279,6 +6279,90 @@ body.theme-sunset {
 }
 
 /* =======================================================
+ *  Armed-state pulse on the nav "Hire Me" CTA
+ *
+ *  Two signals stacked:
+ *  - Ripple ring emanating outward from the button (says
+ *    "armed" without nagging)
+ *  - Green indicator dot in the top-right (says "ready")
+ *
+ *  Both loop slowly enough to read as ambient, not anxious.
+ *  The button itself stays orange-on-dark / brand-on-light;
+ *  this just frames it.
+ * ======================================================= */
+.fh5co-nav-links li a.hire-btn {
+  position: relative !important;
+  animation: hire-btn-ripple 2.8s ease-out infinite;
+}
+.fh5co-nav-links li a.hire-btn::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #7cff8c;
+  box-shadow: 0 0 6px #7cff8c, 0 0 12px rgba(124, 255, 140, 0.55);
+  animation: hire-btn-dot 1.6s ease-in-out infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes hire-btn-ripple {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(255, 144, 0, 0.55),
+      0 0 14px rgba(255, 144, 0, 0.35);
+  }
+  70% {
+    box-shadow:
+      0 0 0 12px rgba(255, 144, 0, 0),
+      0 0 14px rgba(255, 144, 0, 0.35);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(255, 144, 0, 0),
+      0 0 14px rgba(255, 144, 0, 0.35);
+  }
+}
+@keyframes hire-btn-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.65); }
+}
+
+/* Light theme: orange-against-cream is fine, just dampen the ripple
+   so it doesn't blow out against the brighter background */
+:root[data-theme="light"] .fh5co-nav-links li a.hire-btn {
+  animation-name: hire-btn-ripple-light;
+}
+@keyframes hire-btn-ripple-light {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(255, 144, 0, 0.45),
+      0 0 10px rgba(255, 144, 0, 0.25);
+  }
+  70% {
+    box-shadow:
+      0 0 0 10px rgba(255, 144, 0, 0),
+      0 0 10px rgba(255, 144, 0, 0.25);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(255, 144, 0, 0),
+      0 0 10px rgba(255, 144, 0, 0.25);
+  }
+}
+:root[data-theme="light"] .fh5co-nav-links li a.hire-btn::before {
+  background: #1f8a3e;
+  box-shadow: 0 0 6px rgba(31, 138, 62, 0.7), 0 0 12px rgba(31, 138, 62, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fh5co-nav-links li a.hire-btn,
+  .fh5co-nav-links li a.hire-btn::before { animation: none; }
+}
+
+/* =======================================================
  *  LIVE-pill streaming highlight
  *
  *  .case-status--live (work-tree case studies) and
