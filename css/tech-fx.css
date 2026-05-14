@@ -6069,3 +6069,143 @@ body.theme-sunset {
   .case-studies__list li > .case-tree { grid-row: 1; padding-top: 0; }
   .case-outcome { grid-column: 2; grid-row: 4; }
 }
+
+/* =======================================================
+ *  Hyperframe — reusable HUD-style frame chrome
+ *
+ *  Drop in any container. Renders 4 corner L-brackets, a
+ *  pulsing halo, and an inert (animated) inner trace line.
+ *  Designed to feel like a sci-fi HUD plate without making
+ *  the content inside any harder to scan.
+ *
+ *  Usage:
+ *    <div class="hero-stats hyperframe">
+ *      <span class="hyperframe__corner hyperframe__corner--tl" aria-hidden="true"></span>
+ *      <span class="hyperframe__corner hyperframe__corner--tr" aria-hidden="true"></span>
+ *      <span class="hyperframe__corner hyperframe__corner--bl" aria-hidden="true"></span>
+ *      <span class="hyperframe__corner hyperframe__corner--br" aria-hidden="true"></span>
+ *      <span class="hyperframe__halo" aria-hidden="true"></span>
+ *      ...existing content...
+ *    </div>
+ * ======================================================= */
+.hyperframe {
+  position: relative;
+  isolation: isolate;
+}
+.hyperframe__corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--cyan);
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.55));
+  z-index: 1;
+}
+.hyperframe__corner--tl { top: -12px; left: -12px; border-right: none; border-bottom: none; }
+.hyperframe__corner--tr { top: -12px; right: -12px; border-left: none; border-bottom: none; }
+.hyperframe__corner--bl { bottom: -12px; left: -12px; border-right: none; border-top: none; }
+.hyperframe__corner--br { bottom: -12px; right: -12px; border-left: none; border-top: none; }
+
+/* tiny radar tick on each corner */
+.hyperframe__corner::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--cyan);
+}
+.hyperframe__corner--tl::after { top: -3px; left: -3px; }
+.hyperframe__corner--tr::after { top: -3px; right: -3px; }
+.hyperframe__corner--bl::after { bottom: -3px; left: -3px; }
+.hyperframe__corner--br::after { bottom: -3px; right: -3px; }
+
+.hyperframe__halo {
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgba(0, 229, 255, 0.22);
+  pointer-events: none;
+  border-radius: inherit;
+  animation: hyperframe-pulse 3.6s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes hyperframe-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 18px rgba(0, 229, 255, 0.18),
+      inset 0 0 14px rgba(0, 229, 255, 0.06);
+    border-color: rgba(0, 229, 255, 0.22);
+  }
+  50% {
+    box-shadow:
+      0 0 32px rgba(0, 229, 255, 0.34),
+      inset 0 0 22px rgba(0, 229, 255, 0.12);
+    border-color: rgba(0, 229, 255, 0.42);
+  }
+}
+
+/* Brand-orange variant for hero-stats so the four cyan tile borders
+   don't visually compete with cyan brackets. */
+.hyperframe--brand .hyperframe__corner {
+  border-color: var(--brand);
+  filter: drop-shadow(0 0 6px rgba(255, 144, 0, 0.55));
+}
+.hyperframe--brand .hyperframe__corner::after {
+  background: var(--brand);
+  box-shadow: 0 0 8px var(--brand);
+}
+.hyperframe--brand .hyperframe__halo {
+  border-color: rgba(255, 144, 0, 0.22);
+  animation-name: hyperframe-pulse-brand;
+}
+@keyframes hyperframe-pulse-brand {
+  0%, 100% {
+    box-shadow:
+      0 0 18px rgba(255, 144, 0, 0.18),
+      inset 0 0 14px rgba(255, 144, 0, 0.06);
+    border-color: rgba(255, 144, 0, 0.22);
+  }
+  50% {
+    box-shadow:
+      0 0 32px rgba(255, 144, 0, 0.34),
+      inset 0 0 22px rgba(255, 144, 0, 0.12);
+    border-color: rgba(255, 144, 0, 0.42);
+  }
+}
+
+/* Light-theme overrides — brackets need darker hue to stay visible on cream */
+:root[data-theme="light"] .hyperframe__corner {
+  border-color: #007a90 !important;
+  filter: drop-shadow(0 0 4px rgba(0, 102, 122, 0.45)) !important;
+}
+:root[data-theme="light"] .hyperframe__corner::after {
+  background: #007a90 !important;
+  box-shadow: 0 0 6px rgba(0, 102, 122, 0.5) !important;
+}
+:root[data-theme="light"] .hyperframe--brand .hyperframe__corner {
+  border-color: #c66a00 !important;
+  filter: drop-shadow(0 0 4px rgba(198, 106, 0, 0.45)) !important;
+}
+:root[data-theme="light"] .hyperframe--brand .hyperframe__corner::after {
+  background: #c66a00 !important;
+  box-shadow: 0 0 6px rgba(198, 106, 0, 0.5) !important;
+}
+:root[data-theme="light"] .hyperframe__halo {
+  border-color: rgba(10, 30, 60, 0.18) !important;
+}
+
+/* Reduced-motion users get the static frame, no pulse */
+@media (prefers-reduced-motion: reduce) {
+  .hyperframe__halo { animation: none; }
+}
+
+/* Mobile: pull the brackets closer to the content so they don't
+   collide with viewport edges on narrow screens */
+@media (max-width: 480px) {
+  .hyperframe__corner { width: 14px; height: 14px; }
+  .hyperframe__corner--tl { top: -8px; left: -8px; }
+  .hyperframe__corner--tr { top: -8px; right: -8px; }
+  .hyperframe__corner--bl { bottom: -8px; left: -8px; }
+  .hyperframe__corner--br { bottom: -8px; right: -8px; }
+}
