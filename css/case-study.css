@@ -510,3 +510,60 @@ body::before {
   .cs-section h2 { font-size: 19px; }
   .cs-meta { gap: 14px; padding: 14px 16px; }
 }
+
+/* =======================================================
+ *  Pager — prev/next case study at bottom of <main>
+ * ======================================================= */
+.cs-pager {
+  display: flex;
+  gap: 14px;
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.cs-pager__link {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  background: rgba(10, 16, 36, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  color: #e6f3ff;
+  font-family: 'JetBrains Mono', monospace;
+  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.cs-pager__link:hover {
+  border-color: var(--line-strong);
+  background: rgba(10, 16, 36, 0.85);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-cyan);
+}
+.cs-pager__link:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+.cs-pager__next { text-align: right; }
+.cs-pager__dir {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: lowercase;
+  color: var(--cyan);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.35);
+}
+.cs-pager__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.cs-pager__placeholder {
+  flex: 1 1 0;
+  visibility: hidden;
+}
+@media (max-width: 640px) {
+  .cs-pager { flex-direction: column; }
+  .cs-pager__next { text-align: left; }
+}
