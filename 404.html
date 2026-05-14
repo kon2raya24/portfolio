@@ -186,7 +186,10 @@
     <div class="tagline">COMMAND NOT FOUND</div>
     <div class="line">The page you requested isn&rsquo;t in the repo. Maybe it was renamed, archived, or just never existed.<span class="cursor"></span></div>
 
-    <div class="line dim" style="margin-top:14px;">  // try one of these</div>
+    <div class="line dim" id="dymean-line" style="margin-top:14px;display:none;">  // did you mean:</div>
+    <div class="actions" id="dymean-actions" style="display:none;"></div>
+
+    <div class="line dim" style="margin-top:14px;">  // or try one of these</div>
     <div class="actions">
       <a href="/" class="btn primary">cd ~ <span aria-hidden="true">→</span></a>
       <a href="/#fh5co-work" class="btn">ls projects/</a>
@@ -197,12 +200,82 @@
 </main>
 
 <script>
-  // Show the actual requested path
+  // 1. Show the actual requested path
+  var pathname = '';
   try {
-    var p = (window.location && window.location.pathname) || '';
-    if (p && p !== '/' && p !== '/404.html') {
+    pathname = (window.location && window.location.pathname) || '';
+    if (pathname && pathname !== '/' && pathname !== '/404.html') {
       var el = document.getElementById('bad-path');
-      if (el) el.textContent = p.length > 50 ? p.slice(0, 47) + '…' : p;
+      if (el) el.textContent = pathname.length > 50 ? pathname.slice(0, 47) + '…' : pathname;
+    }
+  } catch (e) {}
+
+  // 2. Levenshtein-based "did you mean" suggestions.
+  //
+  // The known-good paths roughly mirror sitemap.xml. We compare the bad
+  // path against each, normalized to alphanumerics so /case-studies/wms-v2
+  // matches "wmsv2" mis-typings, and surface the top 3 nearest.
+  try {
+    var KNOWN = [
+      { path: '/',                                  label: '/' },
+      { path: '/resume.html',                       label: '/resume.html' },
+      { path: '/resume.pdf',                        label: '/resume.pdf' },
+      { path: '/now.html',                          label: '/now.html' },
+      { path: '/uses.html',                         label: '/uses.html' },
+      { path: '/changelog.html',                    label: '/changelog.html' },
+      { path: '/cover.html',                        label: '/cover.html' },
+      { path: '/admin/messages.html',               label: '/admin/messages.html' },
+      { path: '/case-studies/wms.html',             label: '/case-studies/wms.html' },
+      { path: '/case-studies/pamanaland.html',      label: '/case-studies/pamanaland.html' },
+      { path: '/case-studies/jbc.html',             label: '/case-studies/jbc.html' },
+      { path: '/case-studies/hris.html',            label: '/case-studies/hris.html' },
+      { path: '/case-studies/tms.html',             label: '/case-studies/tms.html' },
+      { path: '/case-studies/ai-engineer.html',     label: '/case-studies/ai-engineer.html' },
+      { path: '/case-studies/wms-v2.html',          label: '/case-studies/wms-v2.html' },
+      { path: '/case-studies/llm-wiki.html',        label: '/case-studies/llm-wiki.html' }
+    ];
+
+    function normalize(s) {
+      return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+    // Classic Levenshtein, iterative O(m*n).
+    function lev(a, b) {
+      a = normalize(a); b = normalize(b);
+      if (!a.length) return b.length;
+      if (!b.length) return a.length;
+      var prev = new Array(b.length + 1);
+      var curr = new Array(b.length + 1);
+      for (var j = 0; j <= b.length; j++) prev[j] = j;
+      for (var i = 1; i <= a.length; i++) {
+        curr[0] = i;
+        for (var j = 1; j <= b.length; j++) {
+          var cost = a.charCodeAt(i - 1) === b.charCodeAt(j - 1) ? 0 : 1;
+          curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+        }
+        var tmp = prev; prev = curr; curr = tmp;
+      }
+      return prev[b.length];
+    }
+
+    if (pathname && pathname !== '/' && pathname !== '/404.html') {
+      var scored = KNOWN.map(function (k) {
+        return { path: k.path, label: k.label, d: lev(pathname, k.path) };
+      }).sort(function (a, b) { return a.d - b.d; });
+
+      // Threshold: only suggest if the best match has < 60% of the longer string in edits.
+      // Keeps gibberish from showing "did you mean: /resume.pdf"
+      var best = scored[0];
+      var longer = Math.max(normalize(pathname).length, normalize(best.path).length);
+      if (longer > 0 && best.d / longer < 0.6) {
+        var top = scored.slice(0, 3);
+        var line = document.getElementById('dymean-line');
+        var actions = document.getElementById('dymean-actions');
+        actions.innerHTML = top.map(function (t) {
+          return '<a href="' + t.path + '" class="btn">' + t.label + '</a>';
+        }).join('');
+        line.style.display = '';
+        actions.style.display = '';
+      }
     }
   } catch (e) {}
 </script>

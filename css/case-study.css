@@ -632,3 +632,162 @@ body::before {
   .cs-toc { position: static; padding: 10px 12px; }
   .cs-toc__nav a { font-size: 11px; padding: 3px 8px; }
 }
+
+/* =======================================================
+ *  Top-of-page TL;DR metric grid — sits between hero and
+ *  first content section, mirrors .cs-metric at the bottom
+ *  for scanners who never make it past the fold.
+ * ======================================================= */
+.cs-metrics--top {
+  margin: 0 0 40px;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.04), rgba(10, 16, 36, 0.55));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.cs-metrics--top .cs-metrics__label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--cyan-dim);
+  text-transform: lowercase;
+  margin-bottom: 14px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* =======================================================
+ *  Inline OG-card preview — a self-aware peek at what the
+ *  page renders as on LinkedIn / X / Slack shares.
+ * ======================================================= */
+.cs-og-preview {
+  margin: 56px 0 0;
+  padding: 24px;
+  background: rgba(10, 16, 36, 0.4);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+.cs-og-preview__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--cyan-dim);
+  text-transform: lowercase;
+  margin: 0 0 12px;
+}
+.cs-og-preview__frame {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+.cs-og-preview__caption {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(230, 243, 255, 0.55);
+  margin: 12px 0 0;
+  line-height: 1.6;
+}
+
+/* =======================================================
+ *  Last-touched stamp — populated by js/case-study.js from
+ *  GitHub commits API. Sits inline with .cs-meta items.
+ * ======================================================= */
+.cs-last-touched {
+  color: rgba(124, 255, 140, 0.85);
+}
+.cs-last-touched[data-loading="true"] {
+  color: rgba(230, 243, 255, 0.35);
+}
+
+/* =======================================================
+ *  Print styles — for the rare hiring manager who prints.
+ *  Strip all the cyber chrome, ink-friendly contrast.
+ * ======================================================= */
+@media print {
+  html, body {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+  body::before, .tech-grid, .scanline { display: none !important; }
+
+  .cs-nav, .cs-toc, .cs-pager, .cs-cta, .cs-og-preview {
+    display: none !important;
+  }
+
+  .cs-wrap {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cs-hero h1,
+  .cs-section h2,
+  .cs-section h3 {
+    color: #0d2238 !important;
+    text-shadow: none !important;
+    font-family: Georgia, serif !important;
+    page-break-after: avoid;
+  }
+  .cs-hero h1 { font-size: 24pt; }
+  .cs-section h2 { font-size: 14pt; border-bottom: 1px solid #999; padding-bottom: 4pt; }
+
+  .cs-hero__label,
+  .cs-section__label { color: #666 !important; font-style: italic; }
+
+  .cs-meta {
+    background: #f4f4f4 !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+    padding: 12pt !important;
+  }
+  .cs-meta__k { color: #666 !important; }
+  .cs-meta__v { color: #1a1a1a !important; }
+
+  .cs-metrics, .cs-metrics--top {
+    background: #fafafa !important;
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+  .cs-metric__k { color: #666 !important; }
+  .cs-metric__v { color: #0d2238 !important; }
+
+  .cs-section { page-break-inside: avoid; }
+
+  pre, code {
+    background: #f5f5f5 !important;
+    color: #1a1a1a !important;
+    border: 1px solid #ddd !important;
+    font-family: 'Courier New', monospace !important;
+    font-size: 9pt !important;
+    page-break-inside: avoid;
+  }
+  .tk-key, .tk-str, .tk-num, .tk-fn, .tk-punct, .tk-cmt, .tk-bool {
+    color: #1a1a1a !important;
+  }
+  .tk-cmt { color: #888 !important; font-style: italic; }
+
+  a { color: #0d2238 !important; text-decoration: underline; }
+  a::after { content: " (" attr(href) ")"; font-size: 8pt; color: #666; }
+  a[href^="#"]::after, a[href^="/"]::after { content: ""; }
+
+  img, .cs-shot-real img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    border: 1px solid #ddd !important;
+  }
+  figure { page-break-inside: avoid; }
+  figcaption { color: #555 !important; font-size: 9pt; }
+  .cs-shot-real .tag {
+    background: #ffeb3b !important;
+    color: #1a1a1a !important;
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    font-size: 8pt;
+  }
+
+  @page { margin: 0.6in; }
+}
