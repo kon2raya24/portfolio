@@ -85,6 +85,57 @@ body::before {
 
 /* Hero */
 .cs-hero { margin-bottom: 56px; position: relative; }
+
+/* =======================================================
+ *  Boot-sequence reveal — case-study hero elements fade up
+ *  in sequence on load, like a HUD initializing. Plays once
+ *  (forwards fill-mode + no iteration), so it never repeats
+ *  on subsequent scrolls / interactions.
+ * ======================================================= */
+.cs-hero__label,
+.cs-hero h1,
+.cs-hero__tagline,
+.cs-meta,
+.cs-hero__chips {
+  animation: cs-boot-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.cs-hero__label   { animation-delay: 0.15s; }
+.cs-hero h1       {
+  /* h1 already has the holographic shimmer; chain the boot-rise alongside it */
+  animation:
+    cs-hero-shimmer 7s ease-in-out infinite,
+    cs-boot-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.30s backwards;
+}
+.cs-hero__tagline { animation-delay: 0.45s; }
+.cs-meta          {
+  /* .cs-meta already has hue-cycle from iter 15 — chain boot-rise too */
+  animation:
+    cs-meta-hue-cycle 9s ease-in-out infinite,
+    cs-boot-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.60s backwards;
+}
+.cs-hero__chips   { animation-delay: 0.75s; }
+
+@keyframes cs-boot-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-hero__label,
+  .cs-hero h1,
+  .cs-hero__tagline,
+  .cs-meta,
+  .cs-hero__chips {
+    animation: none;
+  }
+}
 /* Hero power-on scan beam — sweeps once on load */
 .cs-hero::after {
   content: '';
