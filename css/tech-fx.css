@@ -125,14 +125,34 @@ html, body {
   box-shadow: 0 0 12px var(--cyan);
 }
 .tool-badge.tool-ai {
-  background: linear-gradient(135deg, rgba(255, 144, 0, 0.12), rgba(255, 43, 214, 0.1)) !important;
-  border-color: rgba(255, 144, 0, 0.45) !important;
-  color: #ffb352 !important;
+  /* Hex-clipped sci-fi badge — distinguishes AI tools at a glance.
+     Border becomes redundant (clip-path masks the rect anyway), so
+     swap the cyan/orange border for a more saturated gradient bg. */
+  background: linear-gradient(135deg, rgba(255, 144, 0, 0.22), rgba(255, 43, 214, 0.18)) !important;
+  border: 0 !important;
+  color: #ffd28a !important;
+  text-shadow: 0 0 8px rgba(255, 144, 0, 0.55) !important;
+  padding: 9px 26px !important;
+  border-radius: 0 !important;
+  clip-path: polygon(
+    14px 0,
+    calc(100% - 14px) 0,
+    100% 50%,
+    calc(100% - 14px) 100%,
+    14px 100%,
+    0 50%
+  );
 }
 .tool-badge.tool-ai:hover {
   background: linear-gradient(135deg, var(--brand), var(--magenta)) !important;
   color: #fff !important;
-  box-shadow: 0 0 14px rgba(255, 144, 0, 0.5);
+  /* Box-shadow would be clipped by clip-path. Use a brighter bg
+     gradient + brighter text-shadow as the "hover lift" signal. */
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.7) !important;
+}
+/* Mobile: slightly less padding so hex badges don't crowd narrow viewports */
+@media (max-width: 480px) {
+  .tool-badge.tool-ai { padding: 7px 20px !important; }
 }
 .tool-badge.tool-mobile {
   background: rgba(255, 144, 0, 0.08) !important;
