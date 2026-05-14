@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lemmuel Turaya — Full-Stack and Mobile App Developer · Resume</title>
+<meta name="description" content="Lemmuel Turaya — Full-Stack and Mobile App Developer with 6+ years building production web and mobile applications. Vue.js, Laravel, Flutter, REST APIs. Open to remote roles.">
+<meta name="author" content="Lemmuel Turaya">
+<meta name="keywords" content="Lemmuel Turaya, Full-Stack Developer, Mobile App Developer, Flutter Developer, Vue.js, Laravel, PHP, MySQL, REST API, JavaScript, TypeScript, Nuxt.js, Vuetify, Claude AI, AI-Assisted Development, Remote Developer, Philippines, Software Engineer">
+<style>
+  /*  ATS-FRIENDLY RESUME STYLESHEET
+   *  - Single column layout (no multi-column flex/grid for content)
+   *  - System fonts only (no web fonts that can fail in some parsers)
+   *  - All semantic HTML headings (h1 > h2 > h3) in correct order
+   *  - No images of text; no SVG icons replacing text
+   *  - Print/PDF margins set via @page
+   *  - Text remains selectable in PDF
+   */
+  @page {
+    size: Letter;
+    margin: 0.5in 0.6in 0.5in 0.6in;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: Calibri, "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.40;
+  }
+  body {
+    max-width: 7.2in;
+    margin: 0 auto;
+    padding: 0.35in 0.1in 0.35in;
+  }
+  h1, h2, h3, h4 { font-family: inherit; color: #111111; }
+
+  /* Header / contact block */
+  .name {
+    font-size: 22pt;
+    font-weight: 700;
+    margin: 0 0 2pt;
+    letter-spacing: 0.4pt;
+    color: #0d2238;
+  }
+  .title {
+    font-size: 12pt;
+    font-weight: 600;
+    margin: 0 0 6pt;
+    color: #1c4068;
+  }
+  .contact {
+    font-size: 10pt;
+    color: #333333;
+    line-height: 1.5;
+    margin: 0 0 14pt;
+  }
+  .contact .sep { color: #888888; margin: 0 6pt; }
+  .contact a { color: #1a1a1a; text-decoration: none; }
+
+  /* Section structure */
+  section { margin: 0 0 11pt; page-break-inside: avoid; }
+  h2 {
+    font-size: 11.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2pt;
+    color: #0d2238;
+    margin: 12pt 0 4pt;
+    padding-bottom: 2pt;
+    border-bottom: 1px solid #0d2238;
+  }
+
+  /* Professional Summary */
+  .summary { margin: 0; font-size: 10.5pt; }
+
+  /* Skills */
+  .skills-list { margin: 0; padding: 0; list-style: none; }
+  .skills-list li {
+    margin: 0 0 2.5pt;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+  .skills-list .skill-cat {
+    display: inline-block;
+    min-width: 140px;
+    font-weight: 700;
+    color: #0d2238;
+  }
+
+  /* Experience */
+  .job { margin: 0 0 9pt; }
+  .job-head {
+    margin: 0 0 1pt;
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0d2238;
+  }
+  .job-meta {
+    margin: 0 0 3pt;
+    font-size: 10pt;
+    color: #333333;
+  }
+  .job-meta .dates { float: right; color: #555555; }
+  .job-meta::after { content: ""; display: block; clear: both; }
+  .job-summary {
+    margin: 0 0 3pt;
+    font-size: 10pt;
+    font-style: italic;
+    color: #444444;
+  }
+  ul.bullets { margin: 0 0 0 18pt; padding: 0; }
+  ul.bullets li {
+    margin: 0 0 2pt;
+    font-size: 10pt;
+    line-height: 1.42;
+  }
+
+  /* Education */
+  .edu-head { font-weight: 700; font-size: 10.5pt; color: #0d2238; margin: 0; }
+  .edu-meta { font-size: 10pt; color: #444444; margin: 1pt 0 2pt; }
+  .edu-courses { font-size: 9.5pt; color: #555555; margin: 0; }
+
+  /* Projects */
+  .project { margin: 0 0 6pt; }
+  .project-head { font-weight: 700; font-size: 10.5pt; color: #0d2238; margin: 0; }
+  .project-desc { font-size: 10pt; margin: 1pt 0 2pt; }
+
+  /* Languages + References */
+  .inline-list { margin: 0; padding: 0; list-style: none; font-size: 10pt; }
+  .inline-list li { display: inline-block; margin-right: 14pt; }
+
+  /* ATS hidden keywords — black on white, normal text, just packed
+   * into a single paragraph at the bottom. Real keywords, not hidden,
+   * just compactly listed for parser-friendliness. */
+  .keyword-strip {
+    font-size: 8.5pt;
+    color: #555555;
+    margin: 6pt 0 0;
+    line-height: 1.4;
+  }
+
+  /* Print rules */
+  @media print {
+    body { padding: 0; }
+    a { color: #1a1a1a; text-decoration: none; }
+    h2 { page-break-after: avoid; }
+    .job, .project { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="name">Lemmuel Turaya</h1>
+  <p class="title">Full-Stack and Mobile App Developer</p>
+  <p class="contact">
+    Biñan, Laguna, Philippines
+    <span class="sep">·</span>
+    <a href="mailto:turayalemmuel@gmail.com">turayalemmuel@gmail.com</a>
+    <span class="sep">·</span>
+    +63 922 778 6152
+    <br>
+    Portfolio: <a href="https://kon2raya.netlify.app">kon2raya.netlify.app</a>
+    <span class="sep">·</span>
+    LinkedIn: <a href="https://www.linkedin.com/in/lemmuel-turaya/">linkedin.com/in/lemmuel-turaya</a>
+    <span class="sep">·</span>
+    GitHub: <a href="https://github.com/kon2raya24">github.com/kon2raya24</a>
+  </p>
+</header>
+
+<section>
+  <h2>Professional Summary</h2>
+  <p class="summary">
+    Full-Stack and Mobile App Developer with 6+ years of experience designing, building, and shipping
+    production web and mobile applications across logistics, real estate, marketing, education, and
+    finance. Specialized in <strong>Vue.js</strong>, <strong>Nuxt.js</strong>, and
+    <strong>Laravel</strong> on the web, <strong>Flutter</strong> on mobile, and clean
+    <strong>REST API</strong> design to integrate systems end-to-end. Experienced with multi-tier
+    role-based access control, OU-scoped permissions, offline-first mobile sync, Bluetooth ESC/POS
+    label printing, SAP integration, and AI-assisted delivery (Claude AI / Claude Code). Comfortable
+    owning features from requirements through architecture, implementation, testing, and deployment.
+    Open to remote, hybrid, or onsite roles worldwide.
+  </p>
+</section>
+
+<section>
+  <h2>Technical Skills</h2>
+  <ul class="skills-list">
+    <li><span class="skill-cat">Frontend:</span> Vue.js, Nuxt.js, Vuetify, JavaScript, TypeScript, HTML5, CSS3, SCSS, Bootstrap, jQuery, AG Grid Enterprise, ApexCharts, Chart.js, Pinia, Vuex</li>
+    <li><span class="skill-cat">Backend:</span> Laravel (11 / 12), PHP 8.2+, Node.js, MySQL, REST API design, JWT, Sanctum, SilverStripe, Statamic, WordPress</li>
+    <li><span class="skill-cat">Mobile:</span> Flutter, Dart, Hive, Firebase, Android Studio, mobile_scanner, Bluetooth ESC/POS, Connectivity Plus, dio, http</li>
+    <li><span class="skill-cat">AI &amp; Automation:</span> Claude AI, Claude Code, GitHub Copilot, OpenAI API, n8n, Zapier, Make.com, AI-Assisted Delivery, prompt engineering, workflow automation</li>
+    <li><span class="skill-cat">Integrations:</span> SAP API, XML / SFTP pipelines, Xero, Eversign, ABN Lookup, Google Maps API, FAREYE API, SurveyJS, jsPDF, Ag-Grid Enterprise</li>
+    <li><span class="skill-cat">DevOps &amp; Tooling:</span> Git, GitHub, GitHub Actions, Jenkins, Buddy CI, Docker, Linux, Nginx, Composer, npm, Vite, Webpack, Postman, VS Code, Storybook, Playwright</li>
+    <li><span class="skill-cat">Architecture:</span> Multi-tier RBAC, OU-scoped permissions, MySQL advisory locks (GET_LOCK), offline-first sync, write-through retry queues, dual-input scanning abstraction</li>
+    <li><span class="skill-cat">Design &amp; SEO:</span> Figma, Adobe Photoshop, Adobe Illustrator, UI/UX, Search Engine Optimization (SEO), SEMrush, Ahrefs, Branding, Typography</li>
+    <li><span class="skill-cat">Languages:</span> English (Professional), Filipino (Native)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Work Experience</h2>
+
+  <article class="job">
+    <h3 class="job-head">Application Developer — AAI Worldwide Logistics</h3>
+    <p class="job-meta">Philippines<span class="dates">November 2024 — Present</span></p>
+    <p class="job-summary">Owns the Flutter Warehouse Management System mobile app end-to-end and ships features across the company's Financial Management System (FMS), CRM, and Transport Management System (TMS), integrating SAP and third-party services with internal applications.</p>
+    <ul class="bullets">
+      <li>Designed, built, and shipped a Flutter Warehouse Management System (WMS) mobile app from concept to production with 13 feature modules, 108 build releases, Bluetooth ESC/POS thermal label printing on Epson TM-P80II, and dual-input scanning (camera + hardware keyboard-wedge for Zebra / Honeywell scanners).</li>
+      <li>Built an offline-first sync layer with Hive-backed FIFO replay queue, ensuring zero lost confirms during warehouse Wi-Fi drops; integrated Cloudflare Turnstile re-authentication with eager WebView platform initialization to prevent pigeon channel-error race conditions.</li>
+      <li>Adopted AI-assisted delivery (Claude AI / Claude Code) to compress prototyping and refactoring cycles, with engineering judgment, code review, and tests preserved in every commit.</li>
+      <li>Designed and implemented FMS modules: journal voucher creation, sundry expense invoice processing, inventory management, and advanced reports using Ag-Grid Enterprise and jsPDF.</li>
+      <li>Built the SAP-to-WMS order integration by converting SAP XML payloads to JSON, generating return XML files, and managing secure SFTP transfers for downstream validation.</li>
+      <li>Built CRM maintenance modules for Airline Rates, IATA Rates, and associated charges; created customizable customer-service forms using SurveyJS.</li>
+      <li>Developed the Trucking Rates module in the TMS using Vuetify on the frontend and Laravel on the backend.</li>
+    </ul>
+  </article>
+
+  <article class="job">
+    <h3 class="job-head">Software Developer — Octal Philippines Inc. (Assigned to AAI Worldwide Logistics)</h3>
+    <p class="job-meta">Philippines<span class="dates">October 2022 — October 2024</span></p>
+    <p class="job-summary">Two years of continuous delivery across the AAI core systems — FMS, CRM, TMS, and WMS.</p>
+    <ul class="bullets">
+      <li>Developed the Trucking Rates module in the TMS using Vuetify (frontend) and Laravel (backend) — covering rate cards, contract pricing, and surcharges.</li>
+      <li>Built a TMS dashboard for the transport team to monitor truck availability, deployed-truck counts, and booking frequencies, with integrated charts, filters, and data-visualization tools.</li>
+      <li>Enhanced the Logistics Execution System (LES) UI using Vue.js for dynamic interactions, Ag-Grid Enterprise for flexible data presentation, and jsPDF for report generation.</li>
+      <li>Integrated the FAREYE API for real-time package status updates from third-party providers and shipped a single-page package tracker for end-user delivery monitoring.</li>
+      <li>Optimized MySQL queries and Eloquent eager-loading to keep large data tables responsive across multiple branches.</li>
+    </ul>
+  </article>
+
+  <article class="job">
+    <h3 class="job-head">Full-Stack Developer — Uratex Philippines</h3>
+    <p class="job-meta">Philippines<span class="dates">March 2022 — October 2022</span></p>
+    <p class="job-summary">Internal tools, surveys, and brand landing pages supporting operations and marketing teams.</p>
+    <ul class="bullets">
+      <li>Designed and developed customer-facing and internal surveys in Laravel with detailed reporting to analyze demographics and survey response patterns.</li>
+      <li>Created a Trip Management System for scheduling and booking company vehicles, improving resource management and accessibility for the operations team.</li>
+      <li>Collaborated with cross-functional teams to design and develop the corporate landing page, aligning visual design with brand objectives.</li>
+      <li>Shipped a dynamic landing page for the company's basketball association featuring a live countdown timer, built on the Statamic CMS for content-team self-service updates.</li>
+    </ul>
+  </article>
+
+  <article class="job">
+    <h3 class="job-head">Marketing Staff (Full-Stack Developer) — Lumina Homes, Inc.</h3>
+    <p class="job-meta">Philippines<span class="dates">March 2021 — March 2022</span></p>
+    <p class="job-summary">Hybrid role combining full-stack development with digital marketing — built the technology and SEO that powered the marketing team's lead pipeline.</p>
+    <ul class="bullets">
+      <li>Developed, maintained, and optimized websites, landing pages, and applications supporting marketing campaigns and demand generation.</li>
+      <li>Enhanced the property-listing loan calculator to allow public users to compute amortization details and receive results via email — increasing lead-capture conversion.</li>
+      <li>Optimized and maintained the real-estate website on SilverStripe, ensuring a seamless user experience across desktop and mobile.</li>
+      <li>Implemented Search Engine Optimization (SEO) best practices using SEMrush and Ahrefs to manage and improve site visibility and organic traffic.</li>
+      <li>Continuously evaluated emerging technologies and marketing tools and recommended solutions aligned with business goals.</li>
+    </ul>
+  </article>
+
+  <article class="job">
+    <h3 class="job-head">Junior Web Developer — Switch Connect Pty Ltd</h3>
+    <p class="job-meta">Australia (Remote)<span class="dates">August 2019 — September 2020</span></p>
+    <p class="job-summary">Contributed to the company's ERP system, integrating multiple third-party APIs to streamline accounting, validation, and document workflows.</p>
+    <ul class="bullets">
+      <li>Developed ERP modules that enhanced functionality and optimized day-to-day business processes for accounting and operations teams.</li>
+      <li>Integrated the Google Maps API for address validation in user accounts, ensuring accurate location data and reducing manual correction overhead.</li>
+      <li>Implemented ABN Lookup for verifying Australian-based companies through an authorized government API.</li>
+      <li>Integrated Xero for financial management — receipt generation and order monitoring — and Eversign for multi-party digital document signing.</li>
+    </ul>
+  </article>
+
+  <article class="job">
+    <h3 class="job-head">Graphic Designer — Trimex Colleges</h3>
+    <p class="job-meta">Philippines<span class="dates">January 2019 — December 2019</span></p>
+    <p class="job-summary">Visual collateral for institutional campaigns, events, and publications.</p>
+    <ul class="bullets">
+      <li>Designed posters, banners, social-media creatives, and event branding on tight deadlines using the Adobe Suite (Photoshop, Illustrator).</li>
+      <li>Refined design fundamentals (typography, layout, hierarchy) that still inform current UI and UX work.</li>
+    </ul>
+  </article>
+</section>
+
+<section>
+  <h2>Selected Projects</h2>
+
+  <article class="project">
+    <h3 class="project-head">WMS Mobile App (Flutter) — Enterprise Logistics Operator</h3>
+    <p class="project-desc">Cross-platform Flutter mobile app running scan-driven receiving, picking (three iterations: base, enhanced, v3), dispatch, validation, count-sheets, and stock movement with Bluetooth ESC/POS label printing on Epson TM-P80II. 13 feature modules, 108 build releases, offline-first replay queue, dual-input scanning. Companion Nuxt admin and Laravel REST API with ~251 Eloquent models, ~103 controllers, ~315 migrations. Case study: kon2raya.netlify.app/case-studies/wms.html</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">Real-Estate Developer Portal — Confidential Client</h3>
+    <p class="project-desc">Full-stack platform that runs a real-estate developer end-to-end: projects, units, reservations, sales (equity + amortization), in-house financing, commission ledgers, collection receipts, sales returns, assumed units, with a 5-tier seller hierarchy (Directors → Managers → Unit Managers → Team Leaders → Salespersons / Brokers) and OU-scoped CASL role-based access control. Vue 3 + Bootstrap Vue 3 + AG Grid Enterprise, Laravel 11 + MySQL + JWT auth. ~65 Eloquent models, ~67 controllers, ~99 migrations, ~102 Vue views.</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">Brokerage Commission System — Confidential Client</h3>
+    <p class="project-desc">Full-stack platform powering an entire real-estate brokerage: multi-tier commission engine (CommissionTransaction → CommissionShare → CommissionRelease) with approver workflow, multi-OU RBAC, sales pipeline, expenses, and HR-lite (payslips, leaves, memos). 52 Eloquent models, ~100 migrations, ~640 combined commits across the API + UI repositories over 22 months. Vue.js + Velzon admin theme + Laravel + MySQL.</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">Enterprise HRIS — Confidential Client (under NDA)</h3>
+    <p class="project-desc">Modern HRIS covering the complete employee lifecycle — records, organizational units, time and attendance, leave, payroll (with government contribution tables, tax tables, 13th-month records), memos with concurrency-safe sequential numbering via MySQL GET_LOCK advisory locks, performance evaluations, official-business / overtime / offset request flows — under OU-scoped RBAC with TOTP 2FA (Google Authenticator). Laravel 12 + Sanctum + DomPDF on the API; Vue 3 + Vite + Pinia + TypeScript + Vuestic Admin + AG Grid Enterprise + Storybook + Playwright e2e on the frontend. CI/CD on both Jenkins and Buddy. ~54 models, ~41 controllers, ~57 migrations, ~95 Vue pages.</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">PH Dev Utils — Open-Source Library</h3>
+    <p class="project-desc">Open-source utility library for Filipino developers — peso currency formatting, government ID validators (TIN, SSS, PhilHealth, Pag-IBIG), Philippine phone helpers, and Philippine address data — published as both npm (@ph-dev-utils/core) and Composer (phdevutils/core) packages from a single monorepo. MIT licensed. github.com/kon2raya24/ph-dev-utils</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">Personal Portfolio — kon2raya.netlify.app</h3>
+    <p class="project-desc">Hand-crafted HTML, CSS, and vanilla JavaScript portfolio with light/dark theme toggle, interactive dev terminal (real commands), command palette (Ctrl+K), live visitor counter, GitHub activity graph, recent-repos panel, and a published changelog + JSON Resume + /now page + RSS feed + machine-readable /api/availability.json endpoint. Zero frontend frameworks on the cyber-themed layer. Deployed on Netlify.</p>
+  </article>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <p class="edu-head">Bachelor of Science in Information Technology</p>
+  <p class="edu-meta">Trimex Colleges, Philippines · June 2015 — April 2019 · GPA 1.50 (Dean's Honor scale)</p>
+  <p class="edu-courses">Relevant coursework: Web Development, Database Management, Programming (multiple paradigms), Software Engineering, Computer Networking.</p>
+</section>
+
+<section>
+  <h2>Languages</h2>
+  <ul class="inline-list">
+    <li><strong>English</strong> — Professional working proficiency</li>
+    <li><strong>Filipino</strong> — Native</li>
+  </ul>
+</section>
+
+<section>
+  <h2>References</h2>
+  <p style="margin:0; font-size:10pt;">Professional references available on request. Contact <a href="mailto:turayalemmuel@gmail.com">turayalemmuel@gmail.com</a>.</p>
+</section>
+
+<!-- Compact keyword strip for ATS keyword density. Real, relevant terms only.
+     Not hidden — just compactly listed so a parser sees them once more. -->
+<p class="keyword-strip">
+  Keywords: full-stack developer, full stack developer, mobile app developer, software engineer,
+  Flutter developer, Vue.js developer, Laravel developer, PHP developer, JavaScript developer,
+  TypeScript, Nuxt.js, Vuetify, Pinia, Vuex, REST API, RESTful services, JSON, Sanctum, JWT
+  authentication, OAuth, MySQL, SQL, database design, Eloquent ORM, Hive, offline-first,
+  Bluetooth ESC/POS, barcode scanning, SAP integration, XML, SFTP, ETL, Claude AI, AI-assisted
+  development, prompt engineering, n8n, Zapier, Workflow automation, Docker, Linux, Git, GitHub,
+  GitHub Actions, Jenkins, Buddy CI, CI/CD, Vite, Webpack, Storybook, Playwright, unit testing,
+  end-to-end testing, agile, scrum, multi-tier RBAC, role-based access control, OU-scoped
+  permissions, two-factor authentication, TOTP, Google Authenticator, AG Grid Enterprise,
+  jsPDF, DomPDF, ApexCharts, Vue Leaflet, CASL, SilverStripe, Statamic, WordPress, SEO,
+  SEMrush, Ahrefs, Figma, UI design, UX design, remote work, Philippines, GMT+8, English
+  professional, Bachelor of Science in Information Technology.
+</p>
+
+</body>
+</html>
