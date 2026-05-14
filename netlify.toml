@@ -1,0 +1,17 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Clean URL alias so the admin page hits /api/messages
+# instead of /.netlify/functions/messages-list
+[[redirects]]
+  from = "/api/messages"
+  to = "/.netlify/functions/messages-list"
+  status = 200
+
+# /admin/* lives at the root path — keep robots out of it
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"

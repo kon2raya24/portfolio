@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin · Messages — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050814">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+
+<style>
+  /* Admin-specific bits on top of case-study.css */
+  .admin-stat {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cyan);
+    text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    margin-bottom: 16px;
+  }
+  .admin-stat::before {
+    content: '$ ';
+    color: var(--brand);
+  }
+  .admin-tablewrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(10, 16, 36, 0.55);
+    overflow-x: auto;
+  }
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #e6f3ff;
+    min-width: 800px;
+  }
+  .admin-table th {
+    text-align: left;
+    color: var(--cyan);
+    text-transform: lowercase;
+    letter-spacing: 1.5px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 14px 14px;
+    border-bottom: 1px solid var(--line-strong);
+    white-space: nowrap;
+    background: rgba(0, 229, 255, 0.04);
+  }
+  .admin-table td {
+    padding: 14px;
+    border-bottom: 1px dashed var(--line);
+    vertical-align: top;
+  }
+  .admin-table tr:last-child td { border-bottom: 0; }
+  .admin-table tr:hover td { background: rgba(0, 229, 255, 0.04); }
+  .admin-when {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .admin-name { color: #fff; font-weight: 600; }
+  .admin-email a { color: var(--cyan); text-decoration: none; }
+  .admin-email a:hover { text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); }
+  .admin-email a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 2px; }
+  .admin-msg {
+    white-space: pre-wrap;
+    max-width: 360px;
+    line-height: 1.55;
+    color: rgba(230, 243, 255, 0.92);
+  }
+  .admin-tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    color: rgba(230, 243, 255, 0.7);
+    margin-right: 4px;
+  }
+  .admin-tag--spam {
+    color: #ff8a8a;
+    border-color: rgba(255, 107, 107, 0.5);
+    background: rgba(255, 107, 107, 0.08);
+  }
+  .admin-loading,
+  .admin-empty,
+  .admin-error {
+    padding: 48px 24px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .admin-loading { color: rgba(230, 243, 255, 0.55); }
+  .admin-empty { color: rgba(230, 243, 255, 0.55); }
+  .admin-error { color: #ff8a8a; border: 1px solid rgba(255, 107, 107, 0.4); border-radius: 8px; background: rgba(255, 107, 107, 0.04); }
+  .admin-actions {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0 12px;
+    flex-wrap: wrap;
+  }
+  .admin-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid var(--line);
+    color: var(--cyan);
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.18s;
+  }
+  .admin-btn:hover {
+    background: rgba(0, 229, 255, 0.14);
+    border-color: var(--line-strong);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+  }
+  .admin-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  @media (max-width: 768px) {
+    .admin-msg { max-width: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="cs-nav">
+  <a class="cs-nav__brand" href="../">Back to portfolio</a>
+  <span class="cs-nav__breadcrumb">admin / <span class="active">messages.log</span></span>
+</nav>
+
+<main class="cs-wrap">
+  <header class="cs-hero">
+    <div class="cs-hero__label">// admin · authenticated session</div>
+    <h1>Contact messages<br><span style="font-size:18px;letter-spacing:1.5px;color:var(--cyan)">from the portfolio /api/messages endpoint</span></h1>
+    <p class="cs-hero__tagline">
+      Submissions from the portfolio contact form. Pulled live from the Netlify Forms API.
+      Auth: HTTP Basic against the <code style="color:var(--cyan)">ADMIN_PASSWORD</code> env var.
+      Spam-flagged rows are tagged so you can ignore them.
+    </p>
+  </header>
+
+  <div class="admin-stat" id="admin-stat">loading...</div>
+
+  <div class="admin-actions">
+    <button type="button" class="admin-btn" id="admin-refresh">↻ refresh</button>
+    <button type="button" class="admin-btn" id="admin-toggle-spam" data-show="false">show spam</button>
+  </div>
+
+  <div id="admin-content">
+    <div class="admin-loading">$ fetching from /api/messages ...</div>
+  </div>
+</main>
+
+<script>
+(function () {
+  const stat = document.getElementById('admin-stat');
+  const content = document.getElementById('admin-content');
+  const refreshBtn = document.getElementById('admin-refresh');
+  const spamBtn = document.getElementById('admin-toggle-spam');
+  let allMessages = [];
+
+  function escape(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString(undefined, {
+        year: 'numeric', month: 'short', day: '2-digit',
+        hour: '2-digit', minute: '2-digit'
+      });
+    } catch (_) { return iso; }
+  }
+
+  function render() {
+    const showSpam = spamBtn.getAttribute('data-show') === 'true';
+    const visible = allMessages.filter(m => showSpam || !m.is_spam);
+    const spamCount = allMessages.filter(m => m.is_spam).length;
+
+    stat.textContent = visible.length + ' message' + (visible.length === 1 ? '' : 's')
+      + (spamCount ? ' · ' + spamCount + ' spam ' + (showSpam ? 'shown' : 'hidden') : '')
+      + ' · sorted newest first';
+
+    if (visible.length === 0) {
+      content.innerHTML = '<div class="admin-empty">No messages' + (spamCount && !showSpam ? ' (excluding ' + spamCount + ' spam)' : '') + '. The form is wired up and waiting.</div>';
+      return;
+    }
+
+    const rows = visible.map(function (m) {
+      const tags = m.is_spam ? '<span class="admin-tag admin-tag--spam">SPAM</span>' : '';
+      const type = m.opportunity_type ? '<span class="admin-tag">' + escape(m.opportunity_type) + '</span>' : '';
+      return '<tr>'
+        + '<td class="admin-when">' + escape(fmtDate(m.created_at)) + '</td>'
+        + '<td><span class="admin-name">' + escape(m.name || '—') + '</span> ' + tags + '</td>'
+        + '<td class="admin-email">' + (m.email ? '<a href="mailto:' + escape(m.email) + '">' + escape(m.email) + '</a>' : '—') + '</td>'
+        + '<td>' + escape(m.company || '—') + '</td>'
+        + '<td>' + (type || '—') + '</td>'
+        + '<td class="admin-msg">' + escape(m.message || '—') + '</td>'
+        + '</tr>';
+    }).join('');
+
+    content.innerHTML =
+      '<div class="admin-tablewrap"><table class="admin-table">'
+      + '<thead><tr>'
+      + '<th>when</th><th>name</th><th>email</th><th>company</th><th>type</th><th>message</th>'
+      + '</tr></thead>'
+      + '<tbody>' + rows + '</tbody>'
+      + '</table></div>';
+  }
+
+  async function load() {
+    stat.textContent = 'loading...';
+    content.innerHTML = '<div class="admin-loading">$ fetching from /api/messages ...</div>';
+
+    let resp;
+    try {
+      resp = await fetch('/api/messages', { credentials: 'include', cache: 'no-store' });
+    } catch (e) {
+      content.innerHTML = '<div class="admin-error">Network error: ' + escape(e.message) + '</div>';
+      stat.textContent = 'network error';
+      return;
+    }
+
+    if (resp.status === 401) {
+      // Browser will have shown the Basic Auth prompt already; if user
+      // cancelled, this is the result.
+      content.innerHTML = '<div class="admin-error">Authentication required. Reload to retry.</div>';
+      stat.textContent = 'unauthenticated';
+      return;
+    }
+
+    if (!resp.ok) {
+      let detail = '';
+      try { detail = (await resp.text()).slice(0, 400); } catch (_) {}
+      content.innerHTML = '<div class="admin-error">Error ' + resp.status + (detail ? ': ' + escape(detail) : '') + '</div>';
+      stat.textContent = 'server error';
+      return;
+    }
+
+    let data;
+    try { data = await resp.json(); }
+    catch (e) {
+      content.innerHTML = '<div class="admin-error">Bad JSON from server: ' + escape(e.message) + '</div>';
+      return;
+    }
+
+    allMessages = Array.isArray(data.messages) ? data.messages : [];
+    render();
+  }
+
+  refreshBtn.addEventListener('click', load);
+  spamBtn.addEventListener('click', function () {
+    const showing = spamBtn.getAttribute('data-show') === 'true';
+    spamBtn.setAttribute('data-show', showing ? 'false' : 'true');
+    spamBtn.textContent = showing ? 'show spam' : 'hide spam';
+    render();
+  });
+
+  load();
+})();
+</script>
+
+</body>
+</html>
