@@ -6259,6 +6259,91 @@ body.theme-sunset {
 }
 
 /* =======================================================
+ *  Chip sheen — single sweep across .exp-chip on hover.
+ *  Doesn't touch .tech-chip (already uses ::before / ::after
+ *  for the < /> markers); .cs-chip variant lives in
+ *  case-study.css (same component, different stylesheet load).
+ * ======================================================= */
+.exp-chip {
+  overflow: hidden;
+}
+.exp-chip::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.45) 50%,
+    transparent 100%);
+  transform: translateX(-200%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.exp-chip:hover::after {
+  animation: chip-sheen 0.85s ease-out forwards;
+}
+.exp-chip--featured:hover::after,
+.exp-chip--ai:hover::after {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 144, 0, 0.5) 50%,
+    transparent 100%);
+}
+@keyframes chip-sheen {
+  from { transform: translateX(-200%); }
+  to   { transform: translateX(350%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .exp-chip::after { display: none; }
+}
+
+/* Work-tree case-name links: always-on slow holographic shimmer
+   to draw the eye to the 8 case-study entries. */
+.case-name--link {
+  background-image: linear-gradient(
+    90deg,
+    var(--cyan) 0%,
+    var(--cyan) 35%,
+    #ffffff 50%,
+    var(--cyan) 65%,
+    var(--cyan) 100%
+  );
+  background-size: 280% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  animation: case-name-shimmer 9s ease-in-out infinite;
+}
+.case-name--link:hover {
+  animation-duration: 1.8s; /* speed up the shimmer on hover */
+}
+@keyframes case-name-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+:root[data-theme="light"] .case-name--link {
+  background-image: linear-gradient(
+    90deg,
+    #007a90 0%,
+    #007a90 35%,
+    #1a1a1a 50%,
+    #007a90 65%,
+    #007a90 100%
+  ) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-name--link {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
+/* =======================================================
  *  Viewport HUD — 4 fixed L-bracket frames pinned to the
  *  corners of the viewport (not the content). Looks like
  *  the visor of an alien-tech cockpit, frames everything.

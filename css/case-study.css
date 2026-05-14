@@ -168,6 +168,45 @@ body::before {
   color: rgba(230, 243, 255, 0.8);
   padding: 4px 9px;
   border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s;
+}
+.cs-chip:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-1px);
+}
+.cs-chip::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.45) 50%,
+    transparent 100%);
+  transform: translateX(-200%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.cs-chip:hover::after {
+  animation: cs-chip-sheen 0.85s ease-out forwards;
+}
+.cs-chip--ai:hover::after {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 144, 0, 0.55) 50%,
+    transparent 100%);
+}
+@keyframes cs-chip-sheen {
+  from { transform: translateX(-200%); }
+  to   { transform: translateX(350%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-chip::after { display: none; }
+  .cs-chip:hover { transform: none; }
 }
 .cs-chip--ai {
   background: linear-gradient(135deg, rgba(255, 144, 0, 0.12), rgba(255, 43, 214, 0.1));
