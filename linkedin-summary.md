@@ -6,44 +6,53 @@ Drop each section directly into the matching LinkedIn field. Edit anything in **
 
 ## 1) Headline (max 220 characters)
 
-> Full-Stack & Mobile App Developer · Vue · Laravel · Flutter · AI-Assisted Delivery with Claude · Open to remote roles · GMT+8
+> Full-Stack & Mobile App Developer · AI Engineer · Vue · Laravel · Flutter · Multi-LLM agent pipelines (Claude · Gemini · OpenAI) · Open to remote roles · GMT+8
 
 *Variants depending on what you're optimizing for:*
 
 - **Hiring-funnel focused:**
-  > Full-Stack Developer building Vue + Laravel platforms and Flutter mobile apps · Open to remote / hybrid · GMT+8 · 6+ yrs
+  > Full-Stack & AI Engineer · Vue + Laravel + Flutter + Claude/Gemini/OpenAI agent pipelines · 6+ yrs · Open to remote/hybrid · GMT+8
 
 - **Specialist:**
-  > Full-Stack Engineer @ AAI Worldwide Logistics · Vue · Laravel · Flutter · Claude AI
+  > Application Developer @ AAI Worldwide Logistics · Built a production multi-LLM autonomous AI engineer · Vue · Laravel · Flutter
 
 - **Punchier:**
-  > Shipping web + mobile production software with AI-assisted workflows · Vue / Laravel / Flutter · open to opportunities
+  > I ship full-stack + mobile production software, and I build autonomous AI engineers that ship alongside the human team
+
+- **AI-engineering forward:**
+  > AI Engineer + Full-Stack Developer · Multi-LLM orchestration (Claude / Gemini / OpenAI / OpenRouter / Qwen) · Vue · Laravel · Flutter
 
 ---
 
 ## 2) About / Summary (max ~2,600 characters)
 
 ```
-Full-stack developer with 6+ years designing and shipping production web and mobile applications across logistics, real estate, marketing, and education.
+Full-Stack and Mobile App Developer (with growing AI Engineering focus) — 6+ years shipping production platforms across logistics, real estate, marketing, education, and finance.
 
-I work end-to-end — from requirements and architecture through implementation, testing, and deployment — and pair daily with Claude AI to compress delivery timelines without sacrificing code quality.
+I work end-to-end — requirements, architecture, implementation, testing, deployment — and I build autonomous AI-engineer pipelines that ship alongside the human team, not just chat with it.
 
 — Specializations —
-• Vue.js, Nuxt.js, Vuetify on the front-end
-• Laravel + MySQL on the back-end
-• Flutter + Dart on mobile
-• Clean REST API design + third-party integrations (SAP, XERO, Eversign, ABN Lookup, FAREYE, Google Maps)
-• Reporting & dashboards with Ag-Grid + jsPDF
-• Workflow automation with n8n, Zapier, Make.com
-• AI-assisted delivery (Claude AI, GitHub Copilot)
+• Vue.js / Nuxt.js / TypeScript on the front-end
+• Laravel + MySQL + REST API design on the back-end
+• Flutter + Dart on mobile, with hardware integrations (Bluetooth ESC/POS, barcode scanning)
+• Multi-LLM orchestration — Claude, Gemini, OpenAI, OpenRouter, Qwen — behind a single agent-service interface
+• LLM-friendly documentation (Karpathy-style Obsidian wikis with YAML frontmatter so AI agents and humans share the same context)
+• Multi-tier RBAC, OU-scoped permissions, CASL, Spatie Laravel-Permission
+• Offline-first mobile sync (Hive replay queue) for warehouse-floor reliability
+• Reporting & dashboards with AG Grid Enterprise + jsPDF + DomPDF
+• Workflow automation (n8n, Zapier, Make.com)
+• CI/CD on Jenkins + Buddy, with PHPStan/ESLint rules that encode architecture
 
-— Current —
-Application Developer at AAI Worldwide Logistics, where I’m shipping a Flutter-based Warehouse Management System mobile app and contributing to the company’s Financial Management System (FMS), CRM, and Trucking Management System.
+— Recent shipped —
+• An autonomous AI Engineer wired into a real ticketing system: `php artisan ai:work {ref}` picks up ASSIGNED tickets, auto-detects the target repo, dispatches to the chosen LLM, persists chat memory per ticket, and an independent verifier runs the real PHPUnit suite before any merge
+• WMS v2 rewrite onto Laravel 12 + Vue 3 with a single canonical V3DataTable + BaseCrud pattern, CI-enforced guardrails, and online schema migrations
+• Hardware-integrated Flutter WMS mobile app with 13 feature modules, Bluetooth ESC/POS label printing, and 108 build releases shipped
 
 — What I bring to a team —
 • End-to-end ownership of features, web and mobile
 • Bias for shipping with engineering discipline
 • Strong UX and API design instincts
+• AI-assisted delivery without sacrificing code review, tests, or judgment
 • A habit of leaving the codebase healthier than I found it
 
 — Open to —
@@ -57,13 +66,25 @@ Portfolio: https://kon2raya.netlify.app
 
 ## 3) Featured section — links to pin
 
-Pin these in order:
+Pin in this order (LinkedIn shows up to 6 nicely on the desktop layout):
 
-1. **Portfolio site** — `https://kon2raya.netlify.app` (image: og-cover.png)
-2. **Case study — WMS Mobile App** — `https://kon2raya.netlify.app/case-studies/wms.html`
-3. **Case study — Pamanaland RMS** — `https://kon2raya.netlify.app/case-studies/pamanaland.html`
-4. **GitHub — `kon2raya24`** — `https://github.com/kon2raya24`
-5. **PH Dev Utils (open source)** — `https://github.com/kon2raya24/ph-dev-utils`
+1. **Portfolio site** — `https://kon2raya.netlify.app`
+   *One-liner:* Cyber-themed hand-built portfolio with case studies, JSON Resume, /now, /uses, RSS, and live GitHub stats.
+
+2. **Case study — Autonomous AI Engineer** — `https://kon2raya.netlify.app/case-studies/ai-engineer.html`
+   *One-liner:* Multi-LLM agent pipeline (Claude / Gemini / OpenAI / OpenRouter / Qwen) inside a production ticketing system. Security-gated, independently verified by real PHPUnit, audit-logged.
+
+3. **Case study — LLM-Friendly Wiki (Karpathy-style)** — `https://kon2raya.netlify.app/case-studies/llm-wiki.html`
+   *One-liner:* Hand-maintained Obsidian vault with YAML frontmatter so AI coding agents and humans share the same context for a complex enterprise codebase.
+
+4. **Case study — WMS v2 Inventory Rewrite** — `https://kon2raya.netlify.app/case-studies/wms-v2.html`
+   *One-liner:* Active rewrite of a legacy enterprise WMS onto Laravel 12 + Vue 3 with a canonical V3 pattern, CI-enforced guardrails, and online schema migrations.
+
+5. **Case study — WMS Mobile App (Flutter)** — `https://kon2raya.netlify.app/case-studies/wms.html`
+   *One-liner:* Hardware-integrated Flutter WMS with Bluetooth ESC/POS label printing on Epson TM-P80II, dual-input scanning, offline replay queue. 108 build releases.
+
+6. **GitHub — `kon2raya24`** — `https://github.com/kon2raya24`
+   *One-liner:* Public repos including the open-source `ph-dev-utils` library (peso formatting, PH government-ID validators) for both JS and PHP.
 
 ---
 
@@ -72,16 +93,17 @@ Pin these in order:
 ### AAI Worldwide Logistics — Application Developer · Nov 2024 – Present
 
 ```
-Contribute to the development and enhancement of the company’s Financial Management System and connected logistics platforms, integrating SAP and third-party services with internal applications.
+Owning end-to-end work across the company’s Financial Management System (FMS), Warehouse Management System (WMS) — mobile and web — Transport Management System (TMS), CRM, and an autonomous AI-engineer pipeline that ships alongside the human team. Heavy integration with SAP and third-party services.
 
-• Designing and shipping a Flutter-based Warehouse Management System (WMS) mobile app from concept to production — real-time inventory, receiving, and pick/pack on the warehouse floor.
-• Adopted Vibe Coding — AI-assisted delivery with Claude AI — to compress prototyping and refactoring cycles without sacrificing code quality.
-• Designed and implemented key FMS features (journal voucher creation, sundry expense invoice processing, inventory management) with Ag-Grid for visualization and jsPDF for reports.
-• Facilitated SAP-to-WMS order integration: converted XML payloads to JSON, generated updated XML files, and managed secure SFTP transfers for SAP validation.
-• Built CRM maintenance modules for Airline Rates, IATA Rates, and associated charges; created customizable forms with SurveyJS for Customer Service Representatives.
-• Developed a Trucking Rates module in the TMS using Vuetify and Laravel.
+• Shipped a hardware-integrated Flutter WMS mobile app — 13 feature modules, 108 build releases — with Bluetooth ESC/POS label printing on Epson TM-P80II, dual-input scanning (camera + keyboard-wedge), Hive-backed offline replay queue, Cloudflare Turnstile re-auth.
+• Built a production multi-LLM autonomous AI engineer wired into the ticketing system: `php artisan ai:work {ref}` picks up ASSIGNED tickets, dispatches to Claude / Gemini / OpenAI / OpenRouter / Qwen, persists chat memory, and an independent verifier runs PHPUnit before merge.
+• Authoring a Karpathy-style LLM-friendly Obsidian wiki that gives both human engineers and AI agents the same context for a complex codebase (frontmatter-tagged pages, per-folder _INDEX.md, same-turn-update discipline).
+• Leading the WMS v2 rewrite onto Laravel 12 + Vue 3 — canonical V3 list-page pattern, BaseCrudController + ModuleSchemaInterface foundation, CI-enforced guardrails (ESLint + PHPStan), online schema migrations.
+• Designed and implemented key FMS features — journal vouchers, sundry expenses, inventory, AG Grid-driven reports, jsPDF / DomPDF document generation.
+• Facilitated SAP-to-WMS order integration via XML → JSON conversion + secure SFTP pipelines.
+• Built CRM maintenance modules (Airline Rates, IATA Rates, charges) with SurveyJS customer-service forms.
 
-Stack: Flutter, Dart, PHP, Laravel, Nuxt.js, Vuetify, Vue.js, MySQL, Claude AI.
+Stack: Laravel 11/12, Flutter, Dart, Vue 3, Nuxt, MySQL, Claude / Gemini / OpenAI / OpenRouter / Qwen, Sanctum, Spatie Permissions, AG Grid Enterprise, Bluetooth ESC/POS.
 ```
 
 ### Octal Philippines Inc. — Software Developer · Oct 2022 – Oct 2024
@@ -156,15 +178,30 @@ Earned a 1.50 GPA with coursework focused on web development, database managemen
 
 ## 6) Skills (Top 50 to add — LinkedIn lets you list up to 50)
 
-**Pin these as your “Top 5” skills:**
-1. Vue.js
-2. Laravel
-3. Flutter
-4. Full-Stack Development
-5. REST APIs
+**Pin these as your “Top 5” skills** *(LinkedIn shows the top 3 prominently on the profile)*:
+1. Full-Stack Development
+2. AI Engineering
+3. Vue.js
+4. Laravel
+5. Flutter
 
-**Add the rest:**
-PHP, JavaScript, Node.js, Dart, TypeScript, HTML5, CSS3, Nuxt.js, Vuetify, Bootstrap, jQuery, MySQL, SQL, Statamic, SilverStripe, WordPress, Firebase, Android Studio, Git, GitHub, Docker, Linux, VS Code, Figma, Postman, Composer, npm, Vite, Webhooks, OAuth, JWT, Ag-Grid, jsPDF, SurveyJS, Claude AI, GitHub Copilot, OpenAI API, n8n, Zapier, Make.com, Workflow Automation, AI-Assisted Development, SEO, SEMrush, Ahrefs, Agile Methodology.
+**Add the rest, grouped by category:**
+
+*Frontend:* Vue 3, Nuxt.js, Vuetify, Bootstrap Vue 3, TypeScript, JavaScript, HTML5, CSS3, SCSS, Pinia, Vuex, AG Grid Enterprise, jQuery.
+
+*Backend:* PHP, Laravel 11 / 12, Node.js, MySQL, SQL, REST API Design, Sanctum, JWT, OAuth, SilverStripe, Statamic, WordPress.
+
+*Mobile:* Flutter, Dart, Hive, Firebase, Android Studio, Bluetooth ESC/POS, Barcode Scanning, Offline-First Sync.
+
+*AI & Automation:* Claude AI, Claude Code, Gemini, OpenAI API, OpenRouter, Qwen, GitHub Copilot, Multi-LLM Orchestration, Autonomous Agents, AI Harness / Agent Services, LLM-Friendly Documentation, Prompt Engineering, n8n, Zapier, Make.com, Workflow Automation.
+
+*DevOps & Tooling:* Git, GitHub, GitHub Actions, Jenkins, Buddy CI, Docker, Linux, Nginx, Vite, Webpack, Composer, npm, Yarn, VS Code, Postman, Storybook, Playwright, PHPStan, ESLint.
+
+*Architecture & Practices:* Multi-tier RBAC, OU-Scoped Permissions, Spatie Laravel-Permission, CASL, Online Schema Migrations, BaseCrudController pattern, ModuleSchemaInterface, Canonical Pattern Design, Karpathy Guidelines.
+
+*Integrations:* SAP, XML/SFTP pipelines, Xero, Eversign, ABN Lookup, Google Maps API, FAREYE API, SurveyJS, DomPDF, jsPDF.
+
+*Design & SEO:* Figma, Adobe Photoshop, Adobe Illustrator, SEO, SEMrush, Ahrefs.
 
 ---
 
@@ -172,7 +209,7 @@ PHP, JavaScript, Node.js, Dart, TypeScript, HTML5, CSS3, Nuxt.js, Vuetify, Boots
 
 When you toggle the *Open to work* badge on LinkedIn, set:
 
-- **Job titles:** Full-Stack Developer, Software Engineer, Mobile App Developer, Flutter Developer, Backend Developer, Web Developer
+- **Job titles:** Full-Stack Developer, AI Engineer, Software Engineer, Mobile App Developer, Flutter Developer, Backend Developer, Web Developer, Senior Software Engineer, Platform Engineer
 - **Locations:** Remote · Hybrid · Onsite (Philippines)
 - **Start date:** Available with {30-day} notice
 - **Job types:** Full-time · Contract
@@ -201,12 +238,12 @@ A great recommendation talks about *behavior* (how you work) more than *output* 
 
 ## 10) Quick checklist before going live
 
-- [ ] Headline updated
-- [ ] About section pasted in
-- [ ] Each experience role updated with new bullets
-- [ ] Featured section: portfolio + 2 case studies + GitHub + ph-dev-utils
-- [ ] Top 5 skills set to Vue.js / Laravel / Flutter / Full-Stack / REST
-- [ ] “Open to work” badge enabled (recruiter visibility)
+- [ ] Headline updated (AI Engineer + multi-LLM angle)
+- [ ] About section pasted in (mentions autonomous AI engineer + WMS v2 + LLM wiki + 6+ years)
+- [ ] Current role (AAI) bullets refreshed with AI Engineer + WMS v2 + LLM wiki
+- [ ] Featured section: 5 case studies + GitHub (AI Engineer + LLM Wiki pinned highest)
+- [ ] Top 5 skills set to Full-Stack / AI Engineering / Vue.js / Laravel / Flutter
+- [ ] “Open to work” badge enabled (recruiter visibility; titles include AI Engineer)
 - [ ] Profile + cover photo refreshed
 - [ ] Custom URL: `linkedin.com/in/lemmuel-turaya/` ✓ (already set)
-- [ ] Asked 1–2 people for recommendations
+- [ ] Asked 1–2 people for recommendations referencing AI Engineer or WMS v2 work
