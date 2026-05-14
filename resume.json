@@ -3,7 +3,7 @@
   "meta": {
     "version": "1.0.0",
     "canonical": "https://kon2raya.netlify.app/resume.json",
-    "lastModified": "2026-05-15-b"
+    "lastModified": "2026-05-14-c"
   },
   "basics": {
     "name": "Lemmuel Turaya",
@@ -12,7 +12,7 @@
     "email": "turayalemmuel@gmail.com",
     "phone": "+63 922 778 6152",
     "url": "https://kon2raya.netlify.app",
-    "summary": "Full-stack and mobile developer with 6+ years shipping production platforms across logistics, real estate, marketing, and education. Specializes in Vue.js / Nuxt.js + Laravel on the web, Flutter on mobile, and clean REST API design. Also builds autonomous AI-engineer pipelines — a production multi-LLM agent system (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a real ticketing workflow with security gates and independent test verification. Open to remote, hybrid, or onsite roles.",
+    "summary": "Full-stack and mobile developer with 6+ years shipping production platforms across logistics, real estate, marketing, and education — 8 published case studies on the portfolio. Specializes in Vue.js / Nuxt.js + Laravel on the web, Flutter on mobile, and clean REST API design. Pairs daily with Claude Code in a Karpathy-style AI-augmented workflow — prototyping, refactoring, and shipping faster without compromising code review or tests. Also builds autonomous AI-engineer pipelines — a production multi-LLM agent system (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a real ticketing workflow with security gates and independent test verification. Open to remote, hybrid, or onsite roles.",
     "location": {
       "address": "Biñan",
       "postalCode": "4024",
