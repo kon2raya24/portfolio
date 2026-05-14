@@ -3,7 +3,7 @@
   "meta": {
     "version": "1.0.0",
     "canonical": "https://kon2raya.netlify.app/resume.json",
-    "lastModified": "2026-05-15"
+    "lastModified": "2026-05-15-b"
   },
   "basics": {
     "name": "Lemmuel Turaya",
@@ -206,6 +206,40 @@
     { "name": "Design", "keywords": ["UI/UX", "Vexel art", "branding"] }
   ],
   "projects": [
+    {
+      "name": "LLM-Friendly Wiki (Karpathy-style Obsidian Vault)",
+      "description": "Hand-maintained Markdown knowledge base documenting a large enterprise WMS codebase, designed so both human engineers and AI coding agents (Claude Code, Cursor, Cline) share the same context. Every page has YAML frontmatter (source_paths, db_connection, related, tags, last_verified); per-folder _INDEX.md cuts agent token cost; same-turn-update discipline keeps the vault from rotting. Inspired by Andrej Karpathy's thesis that the most valuable artifact for AI-assisted coding is a well-structured wiki of your own code.",
+      "highlights": [
+        "~20 top-level folders: Architecture, Backend, Database, Decisions, Examples, Frontend, Integrations, Modules, Modules-v2, Rules, Runbooks, Tags, Tutorials, Workflows, plus Glossary / STYLE / Paths-and-Patterns / TechDebt",
+        "7-field frontmatter contract: title, domain, source_paths, db_connection, related, tags, last_verified",
+        "Per-folder _INDEX.md so agents grep an index, not the full body",
+        "Explicit source -> wiki mapping declared in each repo's CLAUDE.md",
+        "Karpathy coding guidelines bundled into the agent guide"
+      ],
+      "keywords": ["Obsidian", "Markdown", "YAML frontmatter", "LLM context", "Karpathy", "Claude Code", "Cursor", "AI-friendly documentation"],
+      "startDate": "2026-01-01",
+      "url": "https://kon2raya.netlify.app/case-studies/llm-wiki.html",
+      "roles": ["Author", "Maintainer"],
+      "type": "documentation"
+    },
+    {
+      "name": "WMS v2 — Inventory Rewrite (Laravel 12 + Vue 3, canonical V3 pattern)",
+      "description": "Active modernization of a multi-warehouse, multi-tenant inventory + WMS platform — replacing a Laravel 8 / Nuxt 2 legacy with Laravel 12 / Vue 3 organized around a single canonical V3 list-page pattern, BaseCrudController + BaseCrudService foundation, online schema migrations (ALGORITHM=INPLACE LOCK=NONE), and CI-enforced architectural guardrails.",
+      "highlights": [
+        "Five binding requirements: parity, flexibility, maintainability, scalability, performance",
+        "Canonical V3DataTable + BaseCrud pattern with ModuleSchemaInterface — new module = wiring, not design",
+        "CI guardrails encode architecture: ESLint rules (wms/no-inline-grid-columns, wms/no-axios-in-views), PHPStan rules (wms.controller.no-inline-query, wms.reports.no-get, wms.no-direct-audit-write), migration linter",
+        "Online schema migrations only — ALGORITHM=INPLACE LOCK=NONE, EXPLAIN snapshot per new index",
+        "~103 models, ~76 controllers, ~121 migrations, ~130 pages on the rewrite",
+        "Playwright e2e workspace with per-module artifact bucketing",
+        "Karpathy coding guidelines in the agent guide"
+      ],
+      "keywords": ["Laravel 12", "Vue 3", "Spatie Laravel-Permission", "AG Grid Enterprise", "PHPStan", "ESLint", "Playwright", "MySQL online DDL", "BaseCrudController", "ModuleSchemaInterface"],
+      "startDate": "2025-09-01",
+      "url": "https://kon2raya.netlify.app/case-studies/wms-v2.html",
+      "roles": ["Full-Stack Developer", "Architecture Lead"],
+      "type": "application"
+    },
     {
       "name": "Autonomous AI Engineer (Ticketing)",
       "description": "Multi-LLM autonomous AI agent pipeline wired into a production ticketing system. `php artisan ai:work {ref}` picks up ASSIGNED tickets, auto-detects the target repository, dispatches to the operator-chosen brain (Claude / Gemini / OpenAI / OpenRouter / Qwen), persists per-ticket chat memory, and a separate `ai:verify` command runs the real PHPUnit suite before any merge.",

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · LLM-Friendly Wiki for an Enterprise WMS — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Karpathy-style LLM wiki for an enterprise WMS — an Obsidian knowledge base where every page has YAML frontmatter (source_paths, db_connection, related, tags, last_verified) so AI coding agents and humans share the same context. Hand-maintained alongside the code." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/llm-wiki.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · LLM-Friendly Wiki for an Enterprise WMS — Lemmuel Turaya" />
+<meta property="og:description" content="A Karpathy-style LLM wiki — Obsidian markdown vault with frontmatter-driven cross-links between source files and docs — that gives both humans and AI agents the same context when working in a complex enterprise WMS." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/llm-wiki.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-llm-wiki.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme = (stored === 'light' || stored === 'dark') ? stored
+				: ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">llm-wiki</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>LLM-Friendly Wiki for an Enterprise WMS<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">A Karpathy-inspired Obsidian vault for human + AI context</span></h1>
+		<p class="cs-hero__tagline">
+			A hand-maintained Obsidian wiki documenting a large enterprise WMS &mdash;
+			built so that both a human engineer and an LLM coding agent can land on the
+			same page and immediately know <em>what file maps to what doc, what depends
+			on what, what was decided, and when it was last verified</em>. Inspired by
+			<a href="https://karpathy.ai/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">Andrej Karpathy&rsquo;s</a>
+			repeated point that the most useful artifact you can give an LLM is a
+			high-quality, frontmatter-tagged wiki of your own code.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">client</span>
+				<span class="cs-meta__v">Confidential &middot; logistics operator under NDA</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Author / Maintainer</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v">2026 &mdash; Present</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v">Hand-maintained &middot; in active use</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">format</span>
+				<span class="cs-meta__v">Obsidian-compatible Markdown vault</span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">Obsidian</span>
+			<span class="cs-chip">Markdown</span>
+			<span class="cs-chip">YAML frontmatter</span>
+			<span class="cs-chip cs-chip--ai">LLM-friendly</span>
+			<span class="cs-chip cs-chip--ai">Claude Code context</span>
+			<span class="cs-chip">Karpathy guidelines</span>
+		</div>
+	</header>
+
+	<section class="cs-section">
+		<div class="cs-section__label">tl;dr</div>
+		<h2>What it is</h2>
+		<p>
+			A separate Markdown vault that sits next to the WMS source tree
+			(<code>aai-wms-api</code> / <code>aaiwms</code>). Every page has YAML
+			frontmatter that names the source paths it documents
+			(<code>aai-wms-api/app/Http/Controllers</code>, <code>aaiwms/pages</code>),
+			the database connection it touches, related wiki pages, a tag list, and a
+			<code>last_verified</code> date. When a Claude Code or other AI agent opens
+			a session on the repo, the agent&rsquo;s <code>CLAUDE.md</code> points it
+			at the wiki and tells it: <em>edit a controller, update the matching wiki
+			page in the same turn, bump the timestamp</em>.
+		</p>
+		<p>
+			Structure: ~20 top-level folders (Architecture, Backend, Database,
+			Decisions, Examples, Frontend, Integrations, Modules, Modules-v2, Rules,
+			Runbooks, Tags, Tutorials, Workflows, plus Glossary, STYLE,
+			Paths-and-Patterns, TechDebt). Every folder has an
+			<code>_INDEX.md</code> that lists its pages so a single grep gives you the
+			catalog without reading the full tree.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">problem</div>
+		<h2>The bottleneck</h2>
+		<p>
+			The WMS is a real codebase &mdash; <strong>251 Eloquent models,
+			103 controllers, 315 migrations on the API; 130 Vue pages on the web admin;
+			13 feature modules in the Flutter app</strong>. A human onboarding to a
+			single module takes days, and an LLM agent asked to make a non-trivial
+			change burns most of its context window just locating the right files.
+			Specific pain:
+		</p>
+		<ul>
+			<li>Onboarding a new dev (or a new agent session) starts with
+				&ldquo;where does X live?&rdquo; &mdash; not &ldquo;what should X do?&rdquo;</li>
+			<li>The same file is referenced by multiple controllers / multiple Vue
+				views; tracing dependencies by reading code alone is slow.</li>
+			<li>Migration history, design decisions, and runbook procedures live in
+				Slack threads + commit messages &mdash; ephemeral, ungrepable, lost.</li>
+			<li>When an AI agent asked &ldquo;why is this column nullable?&rdquo;
+				the truthful answer was &ldquo;a decision from six months ago that
+				nobody remembers&rdquo; &mdash; so the agent over-engineered around it.</li>
+			<li>External integrations (SAP, YLEO, BBraun, BIPC, Epson) each have their
+				own auth, payload shape, and quirks &mdash; rediscovering them per
+				incident is expensive.</li>
+		</ul>
+		<p>
+			The ask: <strong>a single artifact, hand-maintained, that both humans and
+			LLM agents can read</strong>, with enough structure that an agent can
+			navigate it deterministically (frontmatter + <code>_INDEX.md</code> per
+			folder) and enough discipline that pages stay current (every edit to source
+			triggers a wiki update in the same commit).
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">approach</div>
+		<h2>How I broke it down</h2>
+		<ul>
+			<li><strong>Obsidian vault, not a static-site generator.</strong> Editing
+				is plain Markdown in any editor; Obsidian gives the graph view + tags +
+				backlinks for the human reader. No build step, no broken-link runtime.</li>
+			<li><strong>YAML frontmatter as the contract.</strong> Every page has
+				<code>title</code>, <code>domain</code>, <code>source_paths[]</code>,
+				<code>db_connection</code>, <code>related[]</code>, <code>tags[]</code>,
+				and <code>last_verified</code>. Agents are told to grep frontmatter
+				first, body second &mdash; the structured fields answer 80% of routing
+				questions.</li>
+			<li><strong>Folder-per-_INDEX.md pattern.</strong> Each top-level folder
+				ships an <code>_INDEX.md</code> that names every page in the folder with
+				a one-line description. Grep the index, not the full file body. This
+				cuts token cost dramatically on agent sessions.</li>
+			<li><strong>Explicit source &rarr; wiki mapping in the
+				<code>CLAUDE.md</code></strong> of each source repo:
+				<code>app/Http/Controllers/*Controller.php &rarr; Backend/Controllers/</code>,
+				<code>app/Models/*.php &rarr; Backend/Models/</code>, etc. So the agent
+				never has to guess where to write.</li>
+			<li><strong>Same-turn updates as the rule.</strong> Every commit to source
+				must bump <code>last_verified</code> on the matching wiki page in the
+				same turn. Documented in <code>STYLE.md</code>; enforced by review.</li>
+			<li><strong>Decisions folder for the &ldquo;why.&rdquo;</strong> Architectural
+				decisions, schema choices, integration quirks all live as dated entries
+				in <code>Decisions/</code>. When an agent finds an unusual choice in the
+				code, the wiki has the receipt.</li>
+			<li><strong>Runbooks for the &ldquo;how.&rdquo;</strong> Step-by-step
+				procedures (recover a stuck SAP batch, replay a failed dispatch, rebuild
+				the YLEO index) live in <code>Runbooks/</code> &mdash; agent-readable in
+				crisis, human-readable in calm.</li>
+			<li><strong>Karpathy coding guidelines inside the
+				<code>CLAUDE.md</code>.</strong> The same guidance Karpathy publishes
+				(think before coding, simplicity first, surgical changes, goal-driven
+				execution) is mirrored into the project agent guide. Agents read it
+				before touching anything.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">solution</div>
+		<h2>What I built</h2>
+
+		<p><strong>Vault structure shipped:</strong></p>
+		<ul>
+			<li><strong><code>00-SYSTEM-OVERVIEW.md</code></strong> &mdash; one-page
+				architecture diagram, tech stack, key databases, external integrations.
+				First file an agent reads.</li>
+			<li><strong><code>Architecture/</code></strong> &mdash; the
+				higher-level pieces: multi-tenant model, queue topology, scheduler,
+				auth strategy.</li>
+			<li><strong><code>Backend/</code></strong> with subfolders for
+				<code>Controllers/</code>, <code>Models/</code>, <code>Services/</code>,
+				<code>Jobs/</code>, <code>Observers/</code>, <code>Middleware/</code>,
+				<code>Traits/</code> &mdash; mirrors the Laravel app folder one-to-one.</li>
+			<li><strong><code>Frontend/</code></strong> with <code>Pages/</code>,
+				<code>Components/</code>, <code>Store/</code> &mdash; mirrors the Nuxt
+				app.</li>
+			<li><strong><code>Database/</code></strong> &mdash; per-table docs:
+				columns, indexes, FK relationships, migration history, gotchas.</li>
+			<li><strong><code>Modules/</code></strong> and <strong><code>Modules-v2/</code></strong>
+				&mdash; vertical slices (Receiving, Picking, Dispatch, Validator,
+				Countsheet, Stock Movement, Audit Trail) with end-to-end flow per
+				module.</li>
+			<li><strong><code>Workflows/</code></strong> &mdash; cross-cutting
+				flows (a full picking cycle, a complete dispatch turnaround,
+				SAP-to-WMS document ingestion).</li>
+			<li><strong><code>Integrations/</code></strong> &mdash; one page per
+				external system (SAP, YLEO, BBraun, BIPC, Epson) with auth, payload
+				shape, sample request/response, known quirks.</li>
+			<li><strong><code>Decisions/</code></strong> &mdash; dated ADRs explaining
+				why a choice was made and what alternatives were rejected.</li>
+			<li><strong><code>Runbooks/</code></strong> &mdash; ops procedures for
+				on-call.</li>
+			<li><strong><code>Tutorials/</code></strong> &mdash; opinionated
+				how-to-add-a-new-module / how-to-add-a-new-table walkthroughs.</li>
+			<li><strong><code>Examples/</code></strong> &mdash; canonical
+				code patterns extracted from the codebase, with frontmatter linking back
+				to the source file.</li>
+			<li><strong><code>Rules/</code></strong> &mdash; permission rules,
+				validation rules, RBAC matrix.</li>
+			<li><strong><code>Glossary.md</code></strong>, <strong><code>STYLE.md</code></strong>,
+				<strong><code>Paths-and-Patterns.md</code></strong>,
+				<strong><code>TechDebt.md</code></strong>, <strong><code>Tags/</code></strong>
+				&mdash; cross-cutting reference.</li>
+			<li><strong><code>scripts/</code></strong> &mdash; small helper scripts
+				(generate a fresh <code>_INDEX.md</code>, validate frontmatter, list
+				pages with stale <code>last_verified</code> dates).</li>
+		</ul>
+
+		<p><strong>Example: the frontmatter shape every page follows</strong> &mdash;
+			this is what makes the vault LLM-readable:</p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">~/WMS Obsidian Memory/<span class="active">Backend/Controllers/ReceivingController.md</span></span>
+			</header>
+<pre><span class="tk-punct">---</span>
+<span class="tk-key">title</span><span class="tk-punct">:</span> <span class="tk-str">ReceivingController · inbound API</span>
+<span class="tk-key">domain</span><span class="tk-punct">:</span> <span class="tk-str">backend.controllers</span>
+<span class="tk-key">source_paths</span><span class="tk-punct">:</span>
+  <span class="tk-punct">-</span> <span class="tk-str">aai-wms-api/app/Http/Controllers/ReceivingController.php</span>
+  <span class="tk-punct">-</span> <span class="tk-str">aai-wms-api/app/Services/ReceivingService.php</span>
+  <span class="tk-punct">-</span> <span class="tk-str">aai-wms-api/routes/api.php</span>
+<span class="tk-key">db_connection</span><span class="tk-punct">:</span> <span class="tk-str">mysql</span>
+<span class="tk-key">related</span><span class="tk-punct">:</span>
+  <span class="tk-punct">-</span> <span class="tk-str">Backend/Models/AppReceiving.md</span>
+  <span class="tk-punct">-</span> <span class="tk-str">Workflows/inbound-receiving-flow.md</span>
+  <span class="tk-punct">-</span> <span class="tk-str">Integrations/sap-to-wms-bridge.md</span>
+  <span class="tk-punct">-</span> <span class="tk-str">Decisions/2026-02-12_serial-grouping-strategy.md</span>
+<span class="tk-key">tags</span><span class="tk-punct">:</span> <span class="tk-punct">[</span><span class="tk-str">controller</span><span class="tk-punct">,</span> <span class="tk-str">receiving</span><span class="tk-punct">,</span> <span class="tk-str">sap-integration</span><span class="tk-punct">,</span> <span class="tk-str">api</span><span class="tk-punct">]</span>
+<span class="tk-key">last_verified</span><span class="tk-punct">:</span> <span class="tk-str">2026-05-09</span>
+<span class="tk-punct">---</span>
+
+<span class="tk-cmt"># ReceivingController · inbound API</span>
+
+<span class="tk-cmt">## Purpose</span>
+Owns the inbound-shipment endpoint surface — accepts SAP-bridged documents,
+validates against the master item / location tables, stages serials …</pre>
+		</div>
+
+		<figure class="cs-shot-real">
+			<img src="../images/shot-llm-wiki.png" alt="Obsidian graph + folder tree mock showing the LLM wiki structure — frontmatter-tagged pages, cross-links between Controllers / Models / Workflows / Decisions, _INDEX.md per folder, last_verified stamps." loading="lazy" decoding="async">
+			<figcaption><span class="tag">MOCK</span>Vault overview &middot; folder tree on the left (Architecture, Backend, Database, Decisions, Modules, Workflows&hellip;), an open page showing the YAML frontmatter contract, and a graph fragment showing wiki cross-links. Source file paths anonymized.</figcaption>
+		</figure>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">stack</div>
+		<h2>Tech</h2>
+		<ul>
+			<li><strong>Format:</strong> Markdown with YAML frontmatter; Obsidian as
+				the human editor; any text editor for ad-hoc updates.</li>
+			<li><strong>Conventions:</strong> Per-folder <code>_INDEX.md</code>, fixed
+				frontmatter schema, <code>last_verified</code> stamps,
+				source &rarr; wiki mapping declared in each repo&rsquo;s
+				<code>CLAUDE.md</code>.</li>
+			<li><strong>Integration with AI agents:</strong> The agent guide
+				(<code>CLAUDE.md</code>) tells Claude Code / Cursor / Cline / etc. to
+				grep <code>_INDEX.md</code> first, frontmatter second, body last; to
+				edit the matching wiki page in the same turn as the source; to bump
+				<code>last_verified</code> on every edit.</li>
+			<li><strong>Quality scripts:</strong> small Bash / PHP scripts under
+				<code>scripts/</code> that list stale pages, validate frontmatter
+				shape, regenerate <code>_INDEX.md</code> from current folder contents.</li>
+			<li><strong>Inspiration:</strong> Andrej Karpathy&rsquo;s ongoing thesis
+				that the most valuable artifact for AI-assisted coding is a
+				well-structured wiki of your own code (not a chat history, not a vector
+				database, not a prompt library &mdash; a wiki).</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">outcome</div>
+		<h2>Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k">top-level folders</div>
+				<div class="cs-metric__v">~20</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">frontmatter fields</div>
+				<div class="cs-metric__v">7</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">source repos covered</div>
+				<div class="cs-metric__v">2</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">human + agent readable</div>
+				<div class="cs-metric__v">✓</div>
+			</div>
+		</div>
+
+		<p>
+			Agent sessions that previously burned half their context window locating
+			the right file now read the relevant <code>_INDEX.md</code> + page
+			frontmatter and land on the right spot in seconds. New human team members
+			start with the <code>00-SYSTEM-OVERVIEW.md</code> and a path through
+			<code>Tutorials/</code> instead of guided tours. Architectural decisions
+			survive past Slack-thread amnesia; runbook procedures don&rsquo;t need to
+			be reconstructed during incidents.
+		</p>
+		<p>
+			This case study is itself the philosophy &mdash; the wiki is the proof of
+			work, not a metric on a chart.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">lessons</div>
+		<h2>What I&rsquo;d do again — and differently</h2>
+		<p><strong>Worked well:</strong></p>
+		<ul>
+			<li><strong>Frontmatter discipline.</strong> Seven fields, every page,
+				no exceptions. The schema is more important than the prose.</li>
+			<li><strong>_INDEX.md per folder.</strong> Cuts agent token cost
+				dramatically vs. forcing the agent to enumerate folders.</li>
+			<li><strong>Same-turn-update rule.</strong> &ldquo;Edit source, update wiki
+				in the same commit&rdquo; is the only rule that keeps a hand-maintained
+				vault from rotting.</li>
+			<li><strong>Decisions folder.</strong> Capturing the
+				&ldquo;why&rdquo; once, dated, has paid for itself many times when an
+				agent asks about an unusual choice.</li>
+			<li><strong>Bundling Karpathy guidelines into the agent guide.</strong>
+				Reduced the &ldquo;LLM does too much&rdquo; / &ldquo;LLM
+				over-refactors&rdquo; failure mode meaningfully.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Lint frontmatter in CI.</strong> Currently
+				<code>scripts/</code> can flag bad frontmatter on demand &mdash; making
+				it a pre-commit hook would close the drift window further.</li>
+			<li><strong>Auto-stamp <code>last_verified</code>.</strong> A small git
+				hook that bumps the date on any wiki page touched in a commit would
+				remove one manual step.</li>
+			<li><strong>Cross-link audit.</strong> Some <code>related:</code> entries
+				now point at moved or renamed pages; a script to validate every
+				<code>related</code> target exists would be cheap to write.</li>
+			<li><strong>Per-page TTL.</strong> Some pages need re-verification quarterly
+				(integration auth flows), others survive years (architectural
+				overviews). A <code>verify_interval</code> field in frontmatter would
+				let a script flag the right pages at the right cadence.</li>
+		</ul>
+	</section>
+
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I build LLM-friendly knowledge bases for codebases that have grown faster than their documentation can keep up. If your team is feeding Claude / Cursor / Cline a chaotic context window every session, let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>

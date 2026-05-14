@@ -32,6 +32,27 @@
   </item>
 
   <item>
+    <title>v4.8 — Two more case studies: LLM-Friendly Wiki + WMS v2 Inventory Rewrite</title>
+    <link>https://kon2raya.netlify.app/case-studies/</link>
+    <guid isPermaLink="false">portfolio-v4.8-2026-05-15</guid>
+    <pubDate>Fri, 15 May 2026 05:00:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      Two more case studies, hero stat bumped 6 → 8. (1) LLM-Friendly Wiki — a
+      hand-maintained Obsidian Markdown vault with YAML frontmatter (source_paths,
+      related, last_verified) inspired by Karpathy's thesis that the best AI-coding
+      artifact is a well-structured wiki of your own code. Per-folder _INDEX.md
+      pattern, same-turn updates as the rule, Decisions/Runbooks/Examples sub-vaults.
+      (2) WMS v2 — active rewrite of a legacy enterprise warehouse + inventory
+      system onto Laravel 12 + Vue 3 with a canonical V3DataTable + BaseCrud
+      pattern, ModuleSchemaInterface, CI-enforced guardrails (ESLint + PHPStan +
+      migration linter), online schema migrations (ALGORITHM=INPLACE LOCK=NONE),
+      parity-first rollout. ~103 models, ~76 controllers, ~121 migrations,
+      ~130 pages. Karpathy coding guidelines bundled into the agent guide.
+    ]]></description>
+  </item>
+
+  <item>
     <title>v4.7 — Two new case studies: Transport Mgmt System + Autonomous AI Engineer</title>
     <link>https://kon2raya.netlify.app/case-studies/</link>
     <guid isPermaLink="false">portfolio-v4.7-2026-05-15</guid>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · WMS v2 — Inventory Rewrite with Canonical V3 Pattern — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="WMS v2 — active rewrite of a legacy enterprise warehouse / inventory system onto Laravel 12 + Vue 3, with a canonical V3DataTable + BaseCrud pattern, CI-enforced guardrails, parity-first data migration, and Karpathy coding guidelines baked into the agent guide." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/wms-v2.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · WMS v2 — Inventory Rewrite with Canonical V3 Pattern — Lemmuel Turaya" />
+<meta property="og:description" content="Active rewrite of a legacy WMS / inventory system onto Laravel 12 + Vue 3. Canonical V3DataTable + BaseCrudController pattern, CI guardrails, online migrations, parity-first rollout." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/wms-v2.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-wms-v2.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme = (stored === 'light' || stored === 'dark') ? stored
+				: ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">wms-v2</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>WMS v2 · Inventory Rewrite<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Laravel 12 + Vue 3 rewrite of a legacy enterprise warehouse system</span></h1>
+		<p class="cs-hero__tagline">
+			Active modernization of a multi-warehouse, multi-tenant inventory + WMS
+			platform &mdash; replacing a Laravel 8 / Nuxt 2 legacy with a Laravel 12 /
+			Vue 3 architecture organized around a single canonical V3 list-page
+			pattern (<code>receiving.vue</code>), a <code>BaseCrudController</code> +
+			<code>BaseCrudService</code> backend foundation, online schema migrations,
+			and CI-enforced quality gates.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">client</span>
+				<span class="cs-meta__v">Confidential &middot; logistics operator under NDA</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Full-Stack Developer / Architecture Lead</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v">2025 &mdash; Present</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v">Active rewrite &middot; parity rollout in progress</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">scope</span>
+				<span class="cs-meta__v">~103 models &middot; ~76 controllers &middot; ~121 migrations &middot; ~130 pages</span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">Laravel 12</span>
+			<span class="cs-chip">Vue 3</span>
+			<span class="cs-chip">Spatie Permissions</span>
+			<span class="cs-chip">AG Grid Enterprise (V3)</span>
+			<span class="cs-chip">Playwright</span>
+			<span class="cs-chip">PHPStan</span>
+			<span class="cs-chip">ESLint</span>
+			<span class="cs-chip">MySQL online DDL</span>
+			<span class="cs-chip cs-chip--ai">Karpathy guidelines</span>
+		</div>
+	</header>
+
+	<section class="cs-section">
+		<div class="cs-section__label">tl;dr</div>
+		<h2>What it is</h2>
+		<p>
+			A ground-up rewrite of an enterprise WMS that handles receiving, picking,
+			packing, dispatch, validation, count-sheets, stock movement, and audit
+			trails across multiple warehouses and tenants. The rewrite replaces a
+			~113-controller Laravel 8 backend and a ~130-page Nuxt 2 frontend with
+			Laravel 12 + Vue 3, organized around <strong>one canonical pattern
+			per layer</strong> &mdash; mirror that pattern, don&rsquo;t reinvent.
+		</p>
+		<p>
+			Five binding requirements drive every decision: <strong>parity</strong>
+			(every legacy capability replicated), <strong>flexibility</strong>
+			(schema- and config-driven, not hardcoded), <strong>maintainability</strong>
+			(single canonical pattern), <strong>scalability</strong> (DB + API + FE
+			ready for 10&times; data without redesign), and <strong>performance</strong>
+			(fast first paint and page interaction at scale). Plus the operational
+			constraint that all migrations run online
+			(<code>ALGORITHM=INPLACE, LOCK=NONE</code>) and ship an EXPLAIN snapshot
+			in the docblock.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">problem</div>
+		<h2>The bottleneck</h2>
+		<p>
+			The legacy WMS works &mdash; in production daily, handling real
+			multi-warehouse traffic &mdash; but it&rsquo;s carrying compounding cost:
+		</p>
+		<ul>
+			<li><strong>~113 controllers</strong> on Laravel 8 with no shared
+				CRUD foundation; every endpoint reinvents pagination, validation,
+				filtering, audit logging.</li>
+			<li><strong>~130 Vue 2 pages</strong> with at least three competing list-grid
+				patterns; small UX changes ship inconsistently across modules.</li>
+			<li>Vue 2 LTS ended; Nuxt 2 ended; PHP 7.x baseline limits backend
+				options.</li>
+			<li>Adding a new module requires touching ~15 files spread across the
+				codebase; the &ldquo;happy path&rdquo; for a new feature isn&rsquo;t
+				codified anywhere.</li>
+			<li>The team uses AI agents (Claude Code, Cursor) heavily, but the
+				inconsistent patterns confuse the agents &mdash; each session produces
+				slightly different code shapes.</li>
+			<li>Data volumes have grown ~5&times; since the system shipped; some
+				reports scan the full table because they were written
+				<code>->get()</code> before <code>cursor()</code> was an option.</li>
+		</ul>
+		<p>
+			The ask: <strong>same workflows, modern stack, one canonical pattern</strong>.
+			A rewrite the team can both maintain by hand and let AI agents extend
+			confidently &mdash; without breaking production during the transition.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">approach</div>
+		<h2>How I broke it down</h2>
+		<ul>
+			<li><strong>One canonical list-page UI.</strong>
+				<code>wms_v2/src/views/inbound/receiving.vue</code> is the template
+				every list view mirrors: <code>&lt;Layout&gt;</code> &rarr;
+				<code>div.v3-page.v3-view-inner</code> &rarr; <code>div.ph</code>
+				(header with <code>ph-left</code> / <code>ph-actions</code>) &rarr;
+				<code>&lt;WmsStatCards&gt;</code> &rarr; <code>div.v3-card</code>
+				containing <code>div.toolbar</code> + <code>&lt;WmsFilterPanel&gt;</code>
+				+ <code>&lt;V3DataTable :flat="true"&gt;</code>. Driven by
+				<code>useV3ListPage()</code> + <code>buildV3Datasource()</code>. New
+				module = copy this shape, don&rsquo;t invent another one.</li>
+			<li><strong><code>BaseCrudController</code> +
+				<code>BaseCrudService</code>.</strong> Generic
+				index / show / store / update / destroy + actions / bulk operations.
+				Each module subclasses; cross-cutting behavior (audit logging,
+				validation hooks, soft-delete handling) lives in the base. Direct audit
+				writes are forbidden by a PHPStan rule.</li>
+			<li><strong><code>ModuleSchemaInterface</code>.</strong> Each module
+				declares its <code>module</code> code, <code>rowKey</code>,
+				<code>grid</code> columns, <code>form</code> shape, <code>filters</code>,
+				<code>statCards</code>, <code>workflow</code>, and <code>enums</code>
+				&mdash; one interface, one place. The Vue side calls
+				<code>useModuleSchema()</code> to consume it.</li>
+			<li><strong>Status workflow &amp; permission registry.</strong>
+				<code>StatusWorkflow</code> and
+				<code>PermissionRegistry::permissionsFor()</code> generate per-module
+				board states + permission strings &mdash; no hand-curated permission
+				constants drifting across modules.</li>
+			<li><strong>Composables on the frontend.</strong>
+				<code>useV3ListPage</code>, <code>useModuleSchema</code>,
+				<code>useLookup</code>, <code>usePermissions</code> &mdash; the page
+				code reads as orchestration; the work happens in the composables.</li>
+			<li><strong>CI guardrails encode the architecture.</strong> An ESLint
+				rule rejects inline <code>columnDefs</code> in
+				<code>views/*.vue</code>; another rejects raw <code>axios</code>
+				imports in views. A PHPStan rule rejects inline
+				<code>where()</code> chains in controllers (force them into services);
+				another forbids <code>get()</code> inside reports (require
+				<code>cursor()</code>). A migration linter requires every new index to
+				ship with an EXPLAIN snapshot in the docblock and to use
+				<code>ALGORITHM=INPLACE, LOCK=NONE</code>.</li>
+			<li><strong>Parity matrix as the rollout source-of-truth.</strong>
+				<code>docs/parity/feature-matrix.md</code> lists every legacy capability
+				with its v2 implementation status: <em>planned / in-progress /
+				shipped / verified</em>. Rollout proceeds module by module behind a
+				toggle; the legacy system remains the fallback until parity is
+				verified.</li>
+			<li><strong>Karpathy coding guidelines in the agent guide.</strong> The
+				<code>CLAUDE.md</code> bundles Karpathy&rsquo;s rules (think before
+				coding, simplicity first, surgical changes, goal-driven execution) so
+				the agent doesn&rsquo;t over-refactor or speculatively abstract.
+				Project rules win where they conflict.</li>
+			<li><strong>Online schema migrations.</strong> Every new index is
+				additive and online (<code>ALGORITHM=INPLACE, LOCK=NONE</code>); blocking
+				migrations are reviewed manually and run during a defined window.</li>
+			<li><strong>Playwright e2e per module.</strong> Separate
+				<code>e2e/</code> workspace with per-module artifact bucketing so a
+				broken receiving test doesn&rsquo;t hide a broken picking regression.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">solution</div>
+		<h2>What I built</h2>
+
+		<p><strong>Foundation in place (Phase 0):</strong></p>
+		<ul>
+			<li><code>BaseCrudController</code> + <code>BaseCrudService</code> with
+				hooks; writes <code>wms_audit_logs</code> via the service layer only.</li>
+			<li><code>ModuleSchemaInterface</code> defining the module/rowKey/grid/
+				form/filters/statCards/workflow/enums contract.</li>
+			<li><code>StatusWorkflow</code>, <code>PermissionRegistry</code> support
+				classes.</li>
+			<li>Frontend composables: <code>useV3ListPage</code>,
+				<code>useModuleSchema</code>, <code>useLookup</code>,
+				<code>usePermissions</code>.</li>
+			<li>Reusable Vue components: <code>V3DataTable</code> (replaces legacy
+				<code>WmsAgGrid</code> + <code>useGridDefaults</code> /
+				<code>buildDatasource</code>, removed 2026-05-09),
+				<code>WmsFilterPanel</code>, <code>WmsStatCards</code>,
+				<code>WmsWorkflowButtons</code>, <code>WmsForm</code>,
+				<code>WmsFormField</code>.</li>
+			<li><code>buildV3Datasource()</code> utility &mdash; returns a
+				<code>computed</code> (not a method) that feeds
+				<code>V3DataTable</code>&rsquo;s datasource prop with
+				<code>{page, perPage, sort, filters} =&gt; {rows, total}</code>.</li>
+		</ul>
+
+		<p><strong>Modules in the rewrite</strong> (each follows the canonical
+			pattern):</p>
+		<ul>
+			<li><strong>Inbound &middot; Receiving</strong> &mdash;
+				<code>AppReceiving</code>, <code>AppReceivingItem</code>,
+				<code>AppReceivingSerial</code>; SAP-bridged document ingestion;
+				canonical view for the entire rewrite.</li>
+			<li><strong>Validation</strong> &mdash; <code>AppValidator</code>,
+				<code>AppValidatorItem</code>, <code>AppValidatorPallet</code>,
+				<code>AppValidatorSerial</code>.</li>
+			<li><strong>Adjustments</strong> &mdash; <code>Adjustment</code>,
+				<code>AdjustmentDetail</code>; gated by approver workflow.</li>
+			<li><strong>Bookings &amp; charges</strong> &mdash; <code>Booking</code>,
+				<code>BookingDetail</code>, <code>ChargeHeader</code>,
+				<code>ChargeDetail</code>, <code>ChargesGroup</code>.</li>
+			<li><strong>Master data</strong> &mdash; <code>Brand</code>,
+				<code>Company</code>, <code>Account</code>, <code>BoxSeries</code>,
+				<code>Attachment</code>.</li>
+			<li><strong>Audit trail</strong> &mdash; <code>AuditLog</code> writes
+				exclusively through <code>BaseCrudService</code>; no direct
+				<code>create()</code> calls allowed (PHPStan rule enforces).</li>
+		</ul>
+
+		<p><strong>The canonical receiving view &mdash; the template every list page mirrors:</strong></p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">~/wms_v2/<span class="active">src/views/inbound/receiving.vue</span></span>
+			</header>
+<pre><span class="tk-punct">&lt;</span><span class="tk-key">template</span><span class="tk-punct">&gt;</span>
+  <span class="tk-punct">&lt;</span>Layout<span class="tk-punct">&gt;</span>
+    <span class="tk-punct">&lt;</span>div <span class="tk-key">class</span><span class="tk-punct">=</span><span class="tk-str">"v3-page v3-view-inner"</span><span class="tk-punct">&gt;</span>
+      <span class="tk-punct">&lt;</span>div <span class="tk-key">class</span><span class="tk-punct">=</span><span class="tk-str">"ph"</span><span class="tk-punct">&gt;</span>
+        <span class="tk-punct">&lt;</span>div <span class="tk-key">class</span><span class="tk-punct">=</span><span class="tk-str">"ph-left"</span><span class="tk-punct">&gt;{{</span> title <span class="tk-punct">}}&lt;/</span>div<span class="tk-punct">&gt;</span>
+        <span class="tk-punct">&lt;</span>div <span class="tk-key">class</span><span class="tk-punct">=</span><span class="tk-str">"ph-actions"</span><span class="tk-punct">&gt;&lt;</span>WmsWorkflowButtons <span class="tk-punct">:</span>workflow<span class="tk-punct">=</span><span class="tk-str">"schema.workflow"</span><span class="tk-punct">/&gt;&lt;/</span>div<span class="tk-punct">&gt;</span>
+      <span class="tk-punct">&lt;/</span>div<span class="tk-punct">&gt;</span>
+
+      <span class="tk-punct">&lt;</span>WmsStatCards <span class="tk-punct">:</span>cards<span class="tk-punct">=</span><span class="tk-str">"schema.statCards"</span> <span class="tk-punct">:</span>summary<span class="tk-punct">=</span><span class="tk-str">"summary"</span> <span class="tk-punct">/&gt;</span>
+
+      <span class="tk-punct">&lt;</span>div <span class="tk-key">class</span><span class="tk-punct">=</span><span class="tk-str">"v3-card"</span><span class="tk-punct">&gt;</span>
+        <span class="tk-punct">&lt;</span>div <span class="tk-key">class</span><span class="tk-punct">=</span><span class="tk-str">"toolbar"</span><span class="tk-punct">&gt;&lt;/</span>div<span class="tk-punct">&gt;</span>
+        <span class="tk-punct">&lt;</span>WmsFilterPanel <span class="tk-punct">:</span>filters<span class="tk-punct">=</span><span class="tk-str">"schema.filters"</span> <span class="tk-key">v-model</span><span class="tk-punct">:</span>value<span class="tk-punct">=</span><span class="tk-str">"filters"</span> <span class="tk-punct">/&gt;</span>
+        <span class="tk-punct">&lt;</span>V3DataTable
+          <span class="tk-punct">:</span>flat<span class="tk-punct">=</span><span class="tk-str">"true"</span>
+          <span class="tk-punct">:</span>columns<span class="tk-punct">=</span><span class="tk-str">"schema.grid"</span>
+          <span class="tk-punct">:</span>datasource<span class="tk-punct">=</span><span class="tk-str">"datasource"</span>
+          <span class="tk-punct">:</span>permissions<span class="tk-punct">=</span><span class="tk-str">"perms"</span>
+        <span class="tk-punct">/&gt;</span>
+      <span class="tk-punct">&lt;/</span>div<span class="tk-punct">&gt;</span>
+    <span class="tk-punct">&lt;/</span>div<span class="tk-punct">&gt;</span>
+  <span class="tk-punct">&lt;/</span>Layout<span class="tk-punct">&gt;</span>
+<span class="tk-punct">&lt;/</span><span class="tk-key">template</span><span class="tk-punct">&gt;</span>
+
+<span class="tk-punct">&lt;</span><span class="tk-key">script</span> setup<span class="tk-punct">&gt;</span>
+<span class="tk-key">const</span> schema      <span class="tk-punct">=</span> <span class="tk-fn">useModuleSchema</span><span class="tk-punct">(</span><span class="tk-str">'receiving'</span><span class="tk-punct">)</span>
+<span class="tk-key">const</span> <span class="tk-punct">{</span> rows<span class="tk-punct">,</span> total<span class="tk-punct">,</span> filters<span class="tk-punct">,</span> summary <span class="tk-punct">}</span> <span class="tk-punct">=</span> <span class="tk-fn">useV3ListPage</span><span class="tk-punct">(</span>schema<span class="tk-punct">)</span>
+<span class="tk-key">const</span> datasource  <span class="tk-punct">=</span> <span class="tk-fn">computed</span><span class="tk-punct">(()</span> <span class="tk-punct">=&gt;</span> <span class="tk-fn">buildV3Datasource</span><span class="tk-punct">({</span> module<span class="tk-punct">:</span> <span class="tk-str">'receiving'</span><span class="tk-punct">,</span> filters <span class="tk-punct">}))</span>
+<span class="tk-key">const</span> perms       <span class="tk-punct">=</span> <span class="tk-fn">usePermissions</span><span class="tk-punct">(</span><span class="tk-str">'receiving'</span><span class="tk-punct">)</span>
+<span class="tk-punct">&lt;/</span><span class="tk-key">script</span><span class="tk-punct">&gt;</span></pre>
+		</div>
+
+		<p>That&rsquo;s the entire shape for a new module: a schema, a list page, a
+			datasource. The work happens in the composables and the backend; the view
+			stays declarative.</p>
+
+		<figure class="cs-shot-real">
+			<img src="../images/shot-wms-v2.png" alt="WMS v2 receiving view mock — header with workflow buttons, four stat cards, filter panel, and a V3DataTable showing anonymized receiving records with status pills, serial counts, and per-row actions." loading="lazy" decoding="async">
+			<figcaption><span class="tag">MOCK</span>Canonical receiving view &middot; <code>ph</code> header with workflow actions, four stat cards (Inbound today / Open / Validated / Posted), filter panel, and the V3DataTable showing anonymized receiving records. Inventory volumes illustrative.</figcaption>
+		</figure>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">stack</div>
+		<h2>Tech</h2>
+		<ul>
+			<li><strong>Backend:</strong> Laravel 12 (PHP 8.2+), MySQL, Eloquent,
+				Sanctum, Spatie Laravel-Permission, DomPDF, maatwebsite/excel, Carbon,
+				Telescope, Pint, PHPStan. ~103 Eloquent models, ~76 controllers,
+				~121 migrations.</li>
+			<li><strong>Frontend:</strong> Vue 3 on Vue CLI (not Vite &mdash; rollout
+				constraint), AG Grid Enterprise inside <code>V3DataTable</code>,
+				Vue Router, Vuex modules, ESLint with project-specific rules
+				(<code>wms/no-inline-grid-columns</code>,
+				<code>wms/no-axios-in-views</code>). ~130 Vue pages.</li>
+			<li><strong>Testing:</strong> PHPUnit on the API; Playwright in a separate
+				<code>e2e/</code> workspace with per-module artifact bucketing.</li>
+			<li><strong>CI guardrails:</strong> ESLint + PHPStan rules encode the
+				architecture; a migration linter validates online DDL + EXPLAIN
+				snapshots; pre-commit hooks block drift.</li>
+			<li><strong>Companion knowledge base:</strong> the
+				<a href="llm-wiki.html" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">LLM-friendly wiki</a>
+				with frontmatter-tagged pages covering every controller, model, table,
+				module, and workflow. Updated in the same commit as code changes.</li>
+			<li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Git &middot; Composer &middot; npm.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">outcome</div>
+		<h2>Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k">domain models</div>
+				<div class="cs-metric__v">~103</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">migrations</div>
+				<div class="cs-metric__v">~121</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">ui pages</div>
+				<div class="cs-metric__v">~130</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">canonical pattern</div>
+				<div class="cs-metric__v">v3 receiving</div>
+			</div>
+		</div>
+
+		<p>
+			A new module on v2 now takes a fraction of the time the legacy code
+			required &mdash; the agent (human or AI) reads the canonical
+			<code>receiving.vue</code> + <code>ReceivingController</code> +
+			<code>ReceivingService</code>, copies the shape, points the schema at a new
+			table. The CI guardrails catch &ldquo;helpful&rdquo; inline column
+			defs or raw axios calls before they hit the repo. Migrations ship online,
+			so the team can extend schema during business hours without windows.
+		</p>
+		<p>
+			Parity rollout is module-by-module behind a toggle; the legacy system
+			remains the fallback per module until v2 verification ticks the parity
+			matrix to <em>verified</em>. Specific rollout dates and business figures
+			stay with the client;
+			<a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">lessons</div>
+		<h2>What I&rsquo;d do again — and differently</h2>
+		<p><strong>Worked well:</strong></p>
+		<ul>
+			<li><strong>One canonical pattern, mirrored everywhere.</strong>
+				The single biggest wins for both human and AI productivity. New
+				modules don&rsquo;t need design; they need wiring.</li>
+			<li><strong>CI rules that encode the architecture.</strong> ESLint and
+				PHPStan rules turn architectural intent into mechanical checks &mdash;
+				agents stop accidentally re-introducing the patterns the rewrite
+				exists to remove.</li>
+			<li><strong>Parity matrix over a big-bang cutover.</strong>
+				Module-by-module rollout with a fallback toggle let production keep
+				running while v2 caught up.</li>
+			<li><strong>Online migrations only.</strong>
+				<code>ALGORITHM=INPLACE, LOCK=NONE</code> + EXPLAIN snapshots removed
+				the &ldquo;wait for the maintenance window&rdquo; bottleneck and gave
+				us schema agility.</li>
+			<li><strong>Bundling Karpathy coding guidelines into the agent guide.</strong>
+				Reduced the &ldquo;LLM speculatively abstracts&rdquo; failure mode that
+				cost us hours of cleanup in the legacy codebase.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Move from Vue CLI to Vite earlier.</strong> Compatibility with
+				the rollout strategy pinned us to Vue CLI for now; future projects (and
+				the late phases of this one) target Vite for the rebuild speed at
+				scale.</li>
+			<li><strong>Schema-driven forms before list grids.</strong> We invested in
+				the V3 list pattern first; if we&rsquo;d landed
+				<code>ModuleSchemaInterface</code>-driven forms (<code>WmsForm</code> +
+				<code>WmsFormField</code>) at the same time, the per-module ship cost
+				would have dropped further.</li>
+			<li><strong>Audit-log query patterns earlier.</strong> The
+				<code>wms_audit_logs</code> table is exhaustive; we needed targeted
+				indexes + cursor-based exports earlier than we shipped them.</li>
+			<li><strong>Per-module e2e templates.</strong> The Playwright workspace
+				is well-bucketed but the &ldquo;copy this test, change these selectors&rdquo;
+				template wasn&rsquo;t documented until module 5; documenting it before
+				module 1 would&rsquo;ve made test coverage more uniform.</li>
+		</ul>
+	</section>
+
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I lead rewrites that have to ship parity, online, while production keeps running. If your legacy system is faster to extend by writing a new system than by editing the old one, let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>

@@ -192,7 +192,7 @@
     <li><span class="skill-cat">Frontend:</span> Vue.js, Nuxt.js, Vuetify, JavaScript, TypeScript, HTML5, CSS3, SCSS, Bootstrap, jQuery, AG Grid Enterprise, ApexCharts, Chart.js, Pinia, Vuex</li>
     <li><span class="skill-cat">Backend:</span> Laravel (11 / 12), PHP 8.2+, Node.js, MySQL, REST API design, JWT, Sanctum, SilverStripe, Statamic, WordPress</li>
     <li><span class="skill-cat">Mobile:</span> Flutter, Dart, Hive, Firebase, Android Studio, mobile_scanner, Bluetooth ESC/POS, Connectivity Plus, dio, http</li>
-    <li><span class="skill-cat">AI &amp; Automation:</span> Claude AI, Claude Code, Gemini, OpenAI API, OpenRouter, Qwen, GitHub Copilot, autonomous agents, multi-LLM orchestration, AI harness / agent service architecture, prompt engineering, n8n, Zapier, Make.com, AI-Assisted Delivery, workflow automation</li>
+    <li><span class="skill-cat">AI &amp; Automation:</span> Claude AI, Claude Code, Gemini, OpenAI API, OpenRouter, Qwen, GitHub Copilot, autonomous agents, multi-LLM orchestration, AI harness / agent service architecture, LLM-friendly documentation (Karpathy-style Obsidian wikis), prompt engineering, n8n, Zapier, Make.com, AI-Assisted Delivery, workflow automation</li>
     <li><span class="skill-cat">Integrations:</span> SAP API, XML / SFTP pipelines, Xero, Eversign, ABN Lookup, Google Maps API, FAREYE API, SurveyJS, jsPDF, Ag-Grid Enterprise</li>
     <li><span class="skill-cat">DevOps &amp; Tooling:</span> Git, GitHub, GitHub Actions, Jenkins, Buddy CI, Docker, Linux, Nginx, Composer, npm, Vite, Webpack, Postman, VS Code, Storybook, Playwright</li>
     <li><span class="skill-cat">Architecture:</span> Multi-tier RBAC, OU-scoped permissions, MySQL advisory locks (GET_LOCK), offline-first sync, write-through retry queues, dual-input scanning abstraction</li>
@@ -284,6 +284,16 @@
   <h2>Selected Projects</h2>
 
   <article class="project">
+    <h3 class="project-head">LLM-Friendly Wiki (Karpathy-style Obsidian Vault) — Enterprise WMS Codebase</h3>
+    <p class="project-desc">Hand-maintained Markdown knowledge base documenting a large enterprise WMS codebase, designed so human engineers and AI coding agents share the same context. Every page has YAML frontmatter (source_paths, db_connection, related, tags, last_verified). Per-folder _INDEX.md cuts agent token cost; same-turn-update rule (edit source → update wiki in same commit) keeps the vault current. Folders: Architecture, Backend (Controllers / Models / Services / Jobs), Frontend (Pages / Components / Store), Database, Decisions (ADRs), Runbooks, Modules, Workflows, Integrations, Examples, Rules, Tutorials. Inspired by Andrej Karpathy's thesis that the most valuable artifact for AI-assisted coding is a well-structured wiki of your own code. Case study: kon2raya.netlify.app/case-studies/llm-wiki.html</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">WMS v2 Inventory Rewrite (Laravel 12 + Vue 3) — Enterprise Logistics Operator</h3>
+    <p class="project-desc">Active rewrite of a legacy enterprise warehouse / inventory system onto Laravel 12 + Vue 3, organized around a single canonical V3 list-page pattern (`receiving.vue`), a BaseCrudController + BaseCrudService foundation, and a ModuleSchemaInterface that drives module/rowKey/grid/form/filters/statCards/workflow/enums. CI-enforced architectural guardrails via ESLint (`wms/no-inline-grid-columns`, `wms/no-axios-in-views`) + PHPStan (`wms.controller.no-inline-query`, `wms.reports.no-get`, `wms.no-direct-audit-write`) + a migration linter requiring online DDL (`ALGORITHM=INPLACE, LOCK=NONE`) and EXPLAIN snapshots. ~103 Eloquent models, ~76 controllers, ~121 migrations, ~130 Vue pages. Parity-first rollout module-by-module behind a toggle. Karpathy coding guidelines in the agent guide. Case study: kon2raya.netlify.app/case-studies/wms-v2.html</p>
+  </article>
+
+  <article class="project">
     <h3 class="project-head">Autonomous AI Engineer (Multi-LLM Agent Pipeline) — Enterprise Ticketing</h3>
     <p class="project-desc">Production multi-LLM autonomous AI engineer wired into a real Laravel 11 ticketing system. <code>php artisan ai:work {ref}</code> picks up tickets in ASSIGNED board status, auto-detects the target repository from a systems mapping table, dispatches to the operator-chosen brain (Claude, Gemini, OpenAI, OpenRouter, Qwen), persists per-ticket conversation in AIChatMemory, and writes a session record. A separate <code>ai:verify</code> command runs the real PHPUnit suite against the candidate change and logs pass / fail to the ticket comment thread before any human merge. <code>tickets:auto-close</code> nightly closes tickets in deployed status untouched for 72+ hours. Five interchangeable agent service classes behind one AiHarnessService — adding a new LLM brain is a one-class change. Case study: kon2raya.netlify.app/case-studies/ai-engineer.html</p>
   </article>
@@ -353,7 +363,9 @@
   TypeScript, Nuxt.js, Vuetify, Pinia, Vuex, REST API, RESTful services, JSON, Sanctum, JWT
   authentication, OAuth, MySQL, SQL, database design, Eloquent ORM, Hive, offline-first,
   Bluetooth ESC/POS, barcode scanning, SAP integration, XML, SFTP, ETL, Claude, Gemini, OpenAI,
-  OpenRouter, Qwen, prompt engineering, AI-assisted development, n8n, Zapier, Workflow automation,
+  OpenRouter, Qwen, prompt engineering, AI-assisted development, LLM-friendly documentation,
+  Karpathy guidelines, Obsidian wiki, agentic workflows, ModuleSchemaInterface, canonical patterns,
+  online schema migrations, n8n, Zapier, Workflow automation,
   Docker, Linux, Git, GitHub, GitHub Actions, Jenkins, Buddy CI, CI/CD, Vite, Webpack, Storybook,
   Playwright, PHPUnit, unit testing, end-to-end testing, agile, scrum, multi-tier RBAC,
   role-based access control, OU-scoped permissions, Spatie Laravel-Permission, two-factor
