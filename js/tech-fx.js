@@ -1050,6 +1050,8 @@
       { id: 'fh5co-features', label: 'services' },
       { id: 'fh5co-skills',   label: 'skills' },
       { id: 'fh5co-work',     label: 'projects' },
+      { id: 'fh5co-blog',     label: 'case_studies' },
+      { id: 'fh5co-praise',   label: 'impact' },
       { id: 'fh5co-started',  label: 'contact' }
     ];
     var nav = document.createElement('nav');

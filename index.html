@@ -1980,71 +1980,7 @@
 		}
 	</script>
 
-	<!-- Right-side section dot-nav — quick jump between sections -->
-	<nav class="dot-nav" aria-label="Page section navigation">
-		<a class="dot-nav__item" href="#fh5co-header">
-			<span class="dot-nav__label">Top</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-about">
-			<span class="dot-nav__label">About</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-resume">
-			<span class="dot-nav__label">Resume</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-features">
-			<span class="dot-nav__label">Services</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-skills">
-			<span class="dot-nav__label">Skills</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-work">
-			<span class="dot-nav__label">Work</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-blog">
-			<span class="dot-nav__label">Case Studies</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-praise">
-			<span class="dot-nav__label">Impact</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-		<a class="dot-nav__item" href="#fh5co-started">
-			<span class="dot-nav__label">Hire Me</span>
-			<span class="dot-nav__dot" aria-hidden="true"></span>
-		</a>
-	</nav>
-	<script>
-		// Track which section is in view; mark its dot as active.
-		(function () {
-			if (!('IntersectionObserver' in window)) return;
-			var items = document.querySelectorAll('.dot-nav__item');
-			if (!items.length) return;
-			var byId = {};
-			items.forEach(function (it) {
-				var h = it.getAttribute('href');
-				if (h && h.charAt(0) === '#') byId[h.slice(1)] = it;
-			});
-			var obs = new IntersectionObserver(function (entries) {
-				entries.forEach(function (e) {
-					if (e.isIntersecting) {
-						items.forEach(function (it) { it.classList.remove('is-active'); });
-						var hit = byId[e.target.id];
-						if (hit) hit.classList.add('is-active');
-					}
-				});
-			}, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
-			Object.keys(byId).forEach(function (id) {
-				var sec = document.getElementById(id);
-				if (sec) obs.observe(sec);
-			});
-		})();
-	</script>
+	<!-- Right-side section nav is auto-built by tech-fx.js (.siderail) -->
 
 	<!-- Viewport HUD — decorative corner brackets, fixed to viewport -->
 	<div class="viewport-hud" aria-hidden="true">
