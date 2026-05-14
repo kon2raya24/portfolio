@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Case Study · WMS Mobile App — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Designing and shipping a Flutter-based Warehouse Management System mobile app from concept to production at AAI Worldwide Logistics." />
+<meta name="description" content="Designing and shipping a hardware-integrated Flutter WMS — barcode scanning, Bluetooth ESC/POS label printing on Epson TM-P80II, offline-first sync — production at AAI Worldwide Logistics. 108 builds and counting." />
 <meta name="theme-color" content="#050814">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/case-studies/wms.html" />
@@ -35,11 +35,12 @@
   <!-- Hero -->
   <header class="cs-hero">
     <div class="cs-hero__label">// case-study.md</div>
-    <h1>WMS Mobile App<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Warehouse Management on Flutter</span></h1>
+    <h1>WMS Mobile App<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Hardware-integrated Warehouse Management on Flutter</span></h1>
     <p class="cs-hero__tagline">
-      Designing and shipping a cross-platform mobile app that brings real-time inventory,
-      receiving, and pick/pack operations to the warehouse floor — built end-to-end in Flutter
-      with a Laravel REST backend.
+      A Flutter mobile app paired with an existing Nuxt admin and Laravel REST API to run
+      AAI Worldwide Logistics&rsquo; warehouse floor &mdash; scan-driven receiving, picking,
+      dispatch, validation, count-sheets, and stock movement, with Bluetooth ESC/POS label
+      printing on Epson TM-P80II and offline-first sync over flaky warehouse Wi-Fi.
     </p>
 
     <div class="cs-meta">
@@ -60,20 +61,27 @@
         <span class="cs-meta__v">In production</span>
       </div>
       <div class="cs-meta__item">
+        <span class="cs-meta__k">app version</span>
+        <span class="cs-meta__v">1.4.27 (build 108)</span>
+      </div>
+      <div class="cs-meta__item">
         <span class="cs-meta__k">team</span>
-        <span class="cs-meta__v">Application Developer · in-house</span>
+        <span class="cs-meta__v">Application Developer &middot; in-house</span>
       </div>
     </div>
 
     <div class="cs-hero__chips">
       <span class="cs-chip">Flutter</span>
       <span class="cs-chip">Dart</span>
+      <span class="cs-chip">Hive</span>
+      <span class="cs-chip">Bluetooth ESC/POS</span>
+      <span class="cs-chip">Nuxt</span>
       <span class="cs-chip">Laravel</span>
-      <span class="cs-chip">REST</span>
       <span class="cs-chip">MySQL</span>
+      <span class="cs-chip">SAP integration</span>
       <span class="cs-chip">Android</span>
-      <span class="cs-chip cs-chip--ai">Claude AI</span>
-      <span class="cs-chip cs-chip--ai">Vibe Coding</span>
+      <span class="cs-chip cs-chip--ai">Claude Code</span>
+      <span class="cs-chip cs-chip--ai">AI-Assisted Dev</span>
     </div>
   </header>
 
@@ -83,14 +91,18 @@
     <h2>What it is</h2>
     <p>
       A Flutter mobile app that <strong>replaces paper-based and laptop-bound warehouse
-      operations</strong> with a single device a forwarder/picker can carry on the floor —
-      scanning, receiving, picking, packing, and stock-checks, all syncing live to the
-      central WMS over a Laravel REST API.
+      operations</strong> with a single device a forwarder/picker carries on the floor.
+      <strong>13 feature modules</strong> &mdash; receiving, picking (three variants:
+      base, enhanced, v3), dispatch, validator, count-sheets, stock movement, audit
+      trail &mdash; all syncing to a Laravel REST API that fronts <strong>~250 Eloquent
+      models</strong> and <strong>~315 migrations</strong>.
     </p>
     <p>
-      Built in-house, pair-programmed with Claude AI to accelerate UI scaffolding and
-      targeted refactors. Currently in active rollout to the operations team
-      <span class="cs-pending">timeline details on request</span>.
+      Talks Bluetooth ESC/POS to <strong>Epson TM-P80II</strong> thermal printers, supports
+      both <strong>camera scanning</strong> (mobile_scanner) and <strong>hardware
+      keyboard-wedge scanners</strong> (Zebra / Honeywell), and pairs with the existing
+      Nuxt admin UI. Built in-house, pair-programmed with Claude Code throughout
+      &mdash; <strong>108 build releases</strong> shipped to date.
     </p>
   </section>
 
@@ -125,17 +137,32 @@
     <div class="cs-section__label">approach</div>
     <h2>How I broke it down</h2>
     <ul>
-      <li><strong>Flutter for a single codebase</strong> — Android-first for the rugged
-        warehouse devices, with iOS parity available for ops managers.</li>
-      <li><strong>Laravel REST API</strong> mirroring the existing WMS endpoints — no
-        separate "mobile backend." One source of truth, one set of business rules.</li>
-      <li><strong>Offline-first reads</strong> — cached lookups for SKUs, locations, and
-        recent transactions so a temporary Wi-Fi drop doesn't stop a pick.</li>
-      <li><strong>Write-through with retry queues</strong> — every scan/confirm is queued
-        locally and replayed on reconnect, so the database always converges.</li>
-      <li><strong>AI-assisted velocity</strong> — used Claude AI to scaffold widget trees,
-        generate test fixtures, and run targeted refactors. Human review and engineering
-        judgment stayed in the loop for every commit.</li>
+      <li><strong>Flutter for a single codebase</strong> &mdash; Android-first for the
+        rugged warehouse devices, with iOS parity available for ops managers.</li>
+      <li><strong>Laravel REST API as the single source of truth</strong> &mdash; the
+        mobile app uses the <em>same</em> endpoints as the existing Nuxt web admin. No
+        separate &ldquo;mobile backend&rdquo;, no divergent business rules.</li>
+      <li><strong>Feature-module architecture</strong> &mdash;
+        <code>lib/features/{auth, scanning, picking, picking_enhanced, picking_v3,
+        dispatch, validator, stock_movement, countsheet, audit_trail, audit_logs, home,
+        splash}/</code>. Each module owns its controllers, models, screens, services.</li>
+      <li><strong>Dual-input scanning abstraction</strong> &mdash; the same screens accept
+        scans from either the device camera (<code>mobile_scanner</code>) or a hardware
+        scanner in keyboard-wedge mode. Operators on rugged Zebra/Honeywell devices and
+        operators on plain Android phones get the same UX.</li>
+      <li><strong>Offline-first reads + write-through queue</strong> &mdash; cached
+        lookups in Hive for SKUs, locations, recent transactions. Every
+        scan/confirm/print is enqueued locally and replayed FIFO on reconnect.</li>
+      <li><strong>Bluetooth ESC/POS printing</strong> &mdash; integrated
+        <code>bluetooth_print_plus</code> to drive Epson TM-P80II thermal printers
+        directly from the picker&rsquo;s phone for box-label print-on-pick.</li>
+      <li><strong>Cloudflare Turnstile re-auth</strong> &mdash; CAPTCHA-gated session
+        renewal to keep operators logged in safely without exposing the API to
+        credential-stuffing.</li>
+      <li><strong>AI-assisted velocity</strong> &mdash; pair-programmed every commit with
+        Claude Code. Used it heavily for widget-tree scaffolds, controller refactors,
+        test fixtures, and the backend bug-investigation cycle. Human review + engineering
+        judgment stayed in the loop on every PR.</li>
     </ul>
   </section>
 
@@ -144,17 +171,32 @@
     <div class="cs-section__label">solution</div>
     <h2>What I built</h2>
 
-    <p><strong>Core flows shipped:</strong></p>
+    <p><strong>Core mobile flows shipped:</strong></p>
     <ul>
       <li><strong>Receiving</strong> &mdash; scan inbound shipments against SAP-bridged
-        documents, with line-item validation and discrepancy capture.</li>
-      <li><strong>Pick &amp; Pack</strong> &mdash; one-handed scan-confirm flow with
-        batch support; designed for fast repetition on the warehouse floor.</li>
-      <li><strong>Stock Check &amp; Transfer</strong> &mdash; on-floor inventory counts
-        and bin-to-bin movements with audit trails.</li>
-      <li><strong>SKU lookup</strong> &mdash; cached search across products, locations,
-        and recent transactions for offline use.</li>
+        documents, with line-item validation, discrepancy capture, and auto-print box
+        labels via Bluetooth.</li>
+      <li><strong>Picking &mdash; three generations</strong>: base, <em>Enhanced</em>
+        (Quick-Pick mode for high-velocity pickers), and <em>v3</em> (current; lessons
+        learned from the first two). The same Laravel endpoints, different operator UX.</li>
+      <li><strong>Dispatch</strong> &mdash; shipment verification before the truck leaves,
+        with serial-level confirmation.</li>
+      <li><strong>Validator</strong> &mdash; pre-dispatch validation pass that catches
+        mis-picks before they hit the truck.</li>
+      <li><strong>Count Sheet</strong> &mdash; on-floor cycle counts with master-vs-serial
+        reconciliation.</li>
+      <li><strong>Stock Movement</strong> &mdash; bin-to-bin transfers with audit trails
+        and serial tracking.</li>
+      <li><strong>Audit Trail</strong> &mdash; per-operator activity log surfaced inside
+        the app for self-review.</li>
+      <li><strong>Bluetooth ESC/POS printing</strong> &mdash; one-tap box-label printing
+        from a picker&rsquo;s phone to an Epson TM-P80II clipped to their belt.</li>
     </ul>
+
+    <p>The web admin (<code>aaiwms</code>, Nuxt + CoreUI) keeps its existing role &mdash;
+      dashboards, reports, master data, customer-specific portals (BBraun, BIPC, etc.).
+      The mobile app intentionally <em>does not</em> duplicate those screens; it owns the
+      scan-driven floor operations.</p>
 
     <div class="cs-shot--coming">
       <span class="cs-shot__title">Screenshots coming with the final writeup</span>
@@ -216,14 +258,26 @@
     <div class="cs-section__label">stack</div>
     <h2>Tech</h2>
     <ul>
-      <li><strong>Mobile:</strong> Flutter / Dart, Hive (local DB), Connectivity Plus,
-        mobile_scanner</li>
-      <li><strong>Backend:</strong> Laravel 10, MySQL, REST (JSON), Sanctum tokens</li>
+      <li><strong>Mobile:</strong> Flutter SDK 3.x / Dart, Hive (offline KV store),
+        Connectivity Plus, mobile_scanner, dio + http, bluetooth_print_plus (ESC/POS),
+        cloudflare_turnstile (re-auth), shared_preferences, permission_handler,
+        flutter_dotenv, package_info_plus, intl, logger.</li>
+      <li><strong>Web companion:</strong> Nuxt.js (CoreUI Free Admin template), Vue,
+        SCSS &mdash; for dashboards, reports, master data, customer portals.</li>
+      <li><strong>Backend:</strong> Laravel + MySQL, Sanctum personal-access tokens,
+        REST (JSON) responses in <code>{ status, data, message }</code> shape. Python
+        helpers for select integrations. Nginx + Procfile-based deploy.</li>
+      <li><strong>Hardware:</strong> Epson TM-P80II thermal printers over Bluetooth;
+        Zebra / Honeywell barcode scanners in keyboard-wedge mode; rugged Android
+        devices as the primary picker hardware.</li>
       <li><strong>Integrations:</strong> SAP-bridged inbound documents (XML / SFTP),
-        existing WMS web app</li>
-      <li><strong>Tooling:</strong> VS Code · Claude Code · Postman · Git · GitHub</li>
-      <li><strong>Deployment:</strong> internal distribution via signed APK; build pipeline
-        details <span class="cs-pending">available on request</span>.</li>
+        BBraun and BIPC customer portals, existing aaiwms Nuxt admin, audit-log streams.</li>
+      <li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Postman &middot; Git &middot; GitHub Actions.</li>
+      <li><strong>Distribution:</strong> internal signed APK with an in-app OTA-update
+        flow gated by <code>API_BASE_URL</code> &mdash; pickers see an &ldquo;update
+        available&rdquo; banner without going through the Play Store.</li>
+      <li><strong>Codebase scale:</strong> ~251 Eloquent models &middot; ~103 controllers &middot;
+        ~315 migrations on the API; 13 feature modules on mobile.</li>
     </ul>
   </section>
 
@@ -234,16 +288,16 @@
 
     <div class="cs-metrics">
       <div class="cs-metric">
-        <div class="cs-metric__k">scan-to-confirm</div>
-        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">measuring in production</div>
+        <div class="cs-metric__k">build releases</div>
+        <div class="cs-metric__v">108</div>
       </div>
       <div class="cs-metric">
-        <div class="cs-metric__k">active operators</div>
-        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">in rollout</div>
+        <div class="cs-metric__k">feature modules</div>
+        <div class="cs-metric__v">13</div>
       </div>
       <div class="cs-metric">
-        <div class="cs-metric__k">throughput</div>
-        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">measuring</div>
+        <div class="cs-metric__k">picking iterations</div>
+        <div class="cs-metric__v">v1 &middot; v2 &middot; v3</div>
       </div>
       <div class="cs-metric">
         <div class="cs-metric__k">offline resilience</div>
@@ -252,9 +306,16 @@
     </div>
 
     <p>
-      Specific metrics &mdash; pick-time, error rate, end-of-day reconciliation effort,
-      onboarding time for new operators &mdash; are being measured live as the rollout
-      expands. Full numbers will be published with the final writeup;
+      The app went from concept to production in active rollout, with <strong>108 build
+      releases</strong> shipped to operators as flows hardened. Picker workflows were
+      iterated three times (<code>picking</code> &rarr; <code>picking_enhanced</code>
+      &rarr; <code>picking_v3</code>) based on real floor feedback. Bluetooth label
+      printing eliminated the trip back to a workstation between picks for high-velocity
+      lanes.
+    </p>
+    <p>
+      Specific business figures (pick-time, error rate, end-of-day reconciliation effort,
+      onboarding time for new operators) stay with the operations team;
       <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to share what we&rsquo;re seeing in detail on request</a>.
     </p>
   </section>
@@ -262,23 +323,49 @@
   <!-- Lessons -->
   <section class="cs-section">
     <div class="cs-section__label">lessons</div>
-    <h2>What I'd do again — and differently</h2>
+    <h2>What I&rsquo;d do again — and differently</h2>
     <p><strong>Worked well:</strong></p>
     <ul>
-      <li>Treating the existing WMS REST API as the source of truth and resisting the urge
-        to invent a "mobile API." Less divergence, simpler ops.</li>
-      <li>Offline-first writes with a replay queue — the warehouse Wi-Fi <em>will</em> drop;
-        the question is just how gracefully you handle it.</li>
-      <li>AI-assisted refactors saved meaningful hours, especially when iterating UI states
-        and adapting to operator feedback.</li>
+      <li><strong>Same REST API as the source of truth.</strong> The mobile app calls the
+        exact endpoints the Nuxt web admin calls. No divergent &ldquo;mobile DTOs&rdquo;,
+        no parallel business rules to drift over time.</li>
+      <li><strong>Feature-module folder layout.</strong> Each module
+        (<code>features/picking/</code>, <code>features/dispatch/</code>, &hellip;) owns
+        its own controllers, models, screens, services. Easy to onboard new modules
+        without touching shared core.</li>
+      <li><strong>Offline-first writes with a replay queue.</strong> Warehouse Wi-Fi
+        <em>will</em> drop; the question is how gracefully you handle it. Hive-backed
+        FIFO queue meant operators never lost a confirm.</li>
+      <li><strong>Hardware abstraction over scanner input.</strong> The same screens
+        accept camera scans <em>or</em> hardware keyboard-wedge input. One UX, two
+        device classes &mdash; no code fork.</li>
+      <li><strong>AI-assisted iteration.</strong> Pair-programmed with Claude Code through
+        every commit &mdash; widget scaffolds, controller refactors, race-condition
+        chase-downs (e.g. the picking observer race), backend log-format alignment.</li>
     </ul>
     <p><strong>Would tighten:</strong></p>
     <ul>
-      <li>Lock in an automated-test suite earlier in the rollout &mdash; especially around
-        the offline queue replay, where edge cases are easy to miss until production traffic
-        finds them.</li>
-      <li>Smaller-cohort rollouts: introduce screens to one zone or shift first, gather
-        feedback, then expand &mdash; instead of pushing a multi-flow update broadly at once.</li>
+      <li><strong>Extract picking earlier.</strong> Three picker generations
+        (<code>picking</code>, <code>picking_enhanced</code>, <code>picking_v3</code>)
+        means the shared core grew implicitly across versions. A clean shared abstraction
+        in v1 would have made v2/v3 cheaper.</li>
+      <li><strong>Lock in an automated test suite earlier.</strong> The offline-queue
+        replay path has subtle edge cases (concurrent enqueue + drain, partial-batch
+        failure, retry on auth-refresh) that only production traffic surfaced. Tests for
+        those after-the-fact were expensive.</li>
+      <li><strong>Bluetooth pairing UX is a feature.</strong> The first version assumed
+        the printer was already paired at the OS level; in practice operators rotate
+        printers. Surfacing pairing status, signal strength, and a one-tap re-pair flow
+        in v2 cut support tickets significantly.</li>
+      <li><strong>WebView platform pre-init.</strong> Cloudflare Turnstile (which mounts
+        a WebView) raced plugin registration on cold start &mdash; manifested as a
+        cryptic <em>pigeon channel-error</em>. Promoting <code>webview_flutter_android</code>
+        from transitive to direct + eager-init in <code>main.dart</code> fixed it.
+        Worth doing upfront on any Turnstile-gated Flutter app.</li>
+      <li><strong>Smaller-cohort rollouts.</strong> Introduce big flow changes to one
+        zone or shift first, gather feedback for a week, then expand. The few times a
+        broad rollout went out with a regression hurt more than the few times a slower
+        rollout took longer.</li>
     </ul>
   </section>
 

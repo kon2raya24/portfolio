@@ -4,15 +4,14 @@
 <meta charset="utf-8">
 <title>Case Study · JBC Commission System — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="JBC Commission System — a Vue + Laravel platform automating commission calculation and payout workflows." />
+<meta name="description" content="JBC Commission System — a full-stack real-estate brokerage operations platform on Vue + Laravel: commission engine, multi-OU RBAC, sales pipeline, expenses, payslips." />
 <meta name="theme-color" content="#050814">
-<!-- TODO: when content is final, flip to "index, follow" and add to sitemap.xml -->
-<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/case-studies/jbc.html" />
 
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Case Study · JBC Commission System — Lemmuel Turaya" />
-<meta property="og:description" content="A Vue + Laravel platform automating commission calculation and payout workflows." />
+<meta property="og:description" content="A Vue + Laravel platform powering an entire real-estate brokerage: sales, commission engine with multi-tier shares + approver workflow, multi-OU RBAC, expenses, and HR-lite." />
 <meta property="og:url" content="https://kon2raya.netlify.app/case-studies/jbc.html" />
 <meta property="og:image" content="https://kon2raya.netlify.app/images/og-jbc.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -51,29 +50,21 @@
 
 <main class="cs-wrap">
 
-	<aside class="cs-draft" role="note">
-		<span class="cs-draft__badge">DRAFT</span>
-		<p class="cs-draft__txt">
-			<strong>Work in progress.</strong> Polishing in public &mdash; the structure is here,
-			content fills in as I write the writeup. For the full picture today,
-			<a href="mailto:turayalemmuel@gmail.com">email me</a> or
-			<a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener">book a call</a>.
-		</p>
-	</aside>
-
 	<!-- Hero -->
 	<header class="cs-hero">
 		<div class="cs-hero__label">// case-study.md</div>
-		<h1>JBC Commission System<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Commission &amp; payout automation on Vue + Laravel</span></h1>
+		<h1>JBC Commission System<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Brokerage operations on Vue + Laravel</span></h1>
 		<p class="cs-hero__tagline">
-			A web platform that replaces manual commission calculation spreadsheets with rule-based
-			automation &mdash; tracking sales, agents, tiers, and payouts in one auditable workflow.
+			A full-stack platform that runs a real-estate brokerage end-to-end &mdash;
+			sales pipeline, multi-tier commission engine with approver workflow, multi-OU
+			RBAC, expenses, and HR-lite &mdash; replacing a tangle of spreadsheets with one
+			auditable source of truth.
 		</p>
 
 		<div class="cs-meta">
 			<div class="cs-meta__item">
 				<span class="cs-meta__k">company</span>
-				<span class="cs-meta__v">JBC <!-- TODO: confirm full client name --></span>
+				<span class="cs-meta__v">JBC Realty</span>
 			</div>
 			<div class="cs-meta__item">
 				<span class="cs-meta__k">role</span>
@@ -81,15 +72,19 @@
 			</div>
 			<div class="cs-meta__item">
 				<span class="cs-meta__k">period</span>
-				<span class="cs-meta__v"><!-- TODO: YYYY — YYYY --></span>
+				<span class="cs-meta__v">2023 &mdash; Present</span>
 			</div>
 			<div class="cs-meta__item">
 				<span class="cs-meta__k">status</span>
-				<span class="cs-meta__v"><!-- TODO: In production / In rollout --></span>
+				<span class="cs-meta__v">In production</span>
 			</div>
 			<div class="cs-meta__item">
-				<span class="cs-meta__k">team</span>
-				<span class="cs-meta__v"><!-- TODO: solo / pair / team size --></span>
+				<span class="cs-meta__k">repos</span>
+				<span class="cs-meta__v">
+					<a href="https://github.com/kon2raya24/commission_management_api" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">api</a>
+					&middot;
+					<a href="https://github.com/kon2raya24/commission_management_ui" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">ui</a>
+				</span>
 			</div>
 		</div>
 
@@ -98,6 +93,8 @@
 			<span class="cs-chip">Laravel</span>
 			<span class="cs-chip">MySQL</span>
 			<span class="cs-chip">REST</span>
+			<span class="cs-chip">Sanctum</span>
+			<span class="cs-chip">RBAC</span>
 		</div>
 	</header>
 
@@ -106,8 +103,17 @@
 		<div class="cs-section__label">tl;dr</div>
 		<h2>What it is</h2>
 		<p>
-			<!-- TODO: 2-3 sentence summary of what the system does, who uses it, and the
-			     primary outcome. Mirror the pamanaland.html / wms.html opening. -->
+			A platform that runs the day-to-day operations of a real-estate brokerage:
+			<strong>property catalog</strong>, <strong>sales pipeline</strong>,
+			<strong>multi-tier commission engine</strong> with approver workflow,
+			<strong>multi-OU</strong> (multiple branches / sister brokerages) role-based
+			access, plus expenses, cash advances, and HR-lite for payslips and memos.
+		</p>
+		<p>
+			Built as a Vue.js admin frontend on the Velzon theme, talking to a Laravel
+			REST API with Sanctum auth. Around <strong>50+ Eloquent models</strong>,
+			<strong>~100 migrations</strong>, and <strong>~640 combined commits</strong>
+			across <em>~22 months</em> of iteration with the operations team.
 		</p>
 	</section>
 
@@ -116,13 +122,30 @@
 		<div class="cs-section__label">problem</div>
 		<h2>The bottleneck</h2>
 		<p>
-			<!-- TODO: What was broken before this system existed? -->
+			Real-estate brokerage commissions are unusually messy. A single sale can split
+			payouts across multiple agents, sales teams, and the brokerage itself, with
+			releases happening over many periods as the buyer pays installments &mdash; and
+			JBC operates several organizational units (OUs) that need their own data
+			boundaries while sharing the same platform.
 		</p>
 		<ul>
-			<li><!-- TODO: specific pain point --></li>
-			<li><!-- TODO: specific pain point --></li>
-			<li><!-- TODO: specific pain point --></li>
+			<li>Commission shares tracked in spreadsheets, with no single source of truth
+				when a buyer&rsquo;s payment schedule slipped.</li>
+			<li>No clear approval trail when a release was authorized &mdash; signoffs lived
+				in email and printed forms.</li>
+			<li>Sales records, statements of account, and collection records lived in
+				separate workbooks that drifted apart.</li>
+			<li>Access control was &ldquo;send the whole file to whoever needs a view&rdquo;,
+				which doesn&rsquo;t scale to multiple OUs with overlapping but distinct roles.</li>
+			<li>Expenses, cash advances, and payslips were a parallel manual workflow with
+				its own spreadsheets.</li>
 		</ul>
+		<p>
+			The operations team needed <strong>one platform</strong> that owns sales,
+			commissions, releases, collections, expenses, and HR-lite, with
+			<strong>per-OU role-based access</strong> and an <strong>auditable approval
+			workflow</strong> on the releases that actually move money.
+		</p>
 	</section>
 
 	<!-- Approach -->
@@ -130,9 +153,21 @@
 		<div class="cs-section__label">approach</div>
 		<h2>How I broke it down</h2>
 		<ul>
-			<li><strong><!-- TODO: heading --></strong> &mdash; <!-- TODO: explanation --></li>
-			<li><strong><!-- TODO: heading --></strong> &mdash; <!-- TODO: explanation --></li>
-			<li><strong><!-- TODO: heading --></strong> &mdash; <!-- TODO: explanation --></li>
+			<li><strong>Domain modelling first.</strong> Talked through the commission
+				lifecycle with real users before writing schema &mdash; sales record &rarr;
+				commission transaction &rarr; commission shares (per payee) &rarr;
+				commission releases (per period) with an approver chain.</li>
+			<li><strong>Vue + Laravel monolith API.</strong> Single deployment, single
+				team. No microservices theater for a brokerage-sized product.</li>
+			<li><strong>RBAC scoped per organizational unit.</strong> Built from scratch:
+				roles, permissions, role-to-OU bindings, per-user menu access. Avoided a
+				one-size-fits-all admin/agent split because the real org has more shades.</li>
+			<li><strong>Velzon admin theme as the UI foundation.</strong> Bought the
+				accelerator on UI primitives (tables, forms, modals, dashboards) so I could
+				spend the time on the commission-specific workflows instead.</li>
+			<li><strong>Iterative schema evolution.</strong> ~100 migrations over 22 months
+				&mdash; many of them <em>add_column</em> follow-ups as new edge cases
+				surfaced in production.</li>
 		</ul>
 	</section>
 
@@ -141,21 +176,81 @@
 		<div class="cs-section__label">solution</div>
 		<h2>What I built</h2>
 
-		<p><strong>Modules shipped:</strong></p>
+		<p><strong>Domain modules:</strong></p>
 		<ul>
-			<li><strong><!-- TODO: Module name --></strong> &mdash; <!-- TODO: description --></li>
-			<li><strong><!-- TODO: Module name --></strong> &mdash; <!-- TODO: description --></li>
-			<li><strong><!-- TODO: Module name --></strong> &mdash; <!-- TODO: description --></li>
+			<li><strong>Property &amp; project catalog</strong> &mdash;
+				<code>Project</code>, <code>Developer</code>, <code>PropertyListing</code>,
+				<code>HouseModel</code>, <code>UnitType</code>, <code>SubUnitType</code>,
+				<code>PropertyImage</code>. Photos, pricing, ownership history.</li>
+			<li><strong>Sales pipeline</strong> &mdash; <code>Prospect</code>,
+				<code>ProspectStatus</code>, <code>MasterList</code>, <code>Sales</code>,
+				<code>SalesRecord</code>, <code>SalesTeam</code>. From lead to closed deal,
+				with team attribution.</li>
+			<li><strong>Statement of Accounts</strong> &mdash;
+				<code>StatementOfAccount</code> + <code>GenerateSoa</code> job. Per-buyer
+				ledger tied to the unit and the sale.</li>
+			<li><strong>Collection tracking</strong> &mdash; <code>CollectionRecord</code>
+				and <code>Bank</code> reconciliation against expected installments.</li>
+			<li><strong>Commission engine</strong> &mdash;
+				<code>CommissionTransaction</code>, <code>CommissionShare</code>,
+				<code>CommissionRelease</code> (with a <code>V2</code> rewrite once the
+				first model bumped into edge cases), <code>RealtyCommission</code>,
+				<code>Release</code> + <code>ReleaseAgent</code>, gated by
+				<code>Approver</code>.</li>
+			<li><strong>Cash advance system</strong> &mdash; <code>CashAdvance</code> with
+				<code>CashAdvancePayTerm</code> deduction schedules tied to upcoming
+				releases.</li>
+			<li><strong>Expense management</strong> &mdash; <code>Expense</code>,
+				<code>ExpenseCategory</code>, <code>ExpenseParticular</code>,
+				<code>Payee</code>. Per-OU expense ledger with payee-aware particulars.</li>
+			<li><strong>HR-lite</strong> &mdash; <code>EmployeePayslip</code>,
+				<code>EmployeeLeave</code>, <code>EmployeeMemo</code>,
+				<code>EmployeeDownloadableForm</code>, <code>DownloadableForm</code>,
+				<code>Memo</code>.</li>
+			<li><strong>RBAC + multi-OU</strong> &mdash; <code>User</code>,
+				<code>Role</code>, <code>CommonPermission</code>,
+				<code>CommonRolePermission</code>, <code>CommonRoleOU</code>,
+				<code>CommonUserRoles</code>, <code>UserMenuAccess</code>,
+				<code>Module</code>, <code>Menu</code>, <code>OU</code>. Granular access per
+				module per branch.</li>
+			<li><strong>Multi-language UI</strong> &mdash; <code>i18n.js</code> +
+				<code>lang/</code> bundles for translated views.</li>
 		</ul>
 
 		<div class="cs-shot--coming">
-			<span class="cs-shot__title">Production screens</span>
+			<span class="cs-shot__title">Live screens behind a tenant login</span>
 			<span class="cs-shot__sub">sanitized walkthrough available on request</span>
 		</div>
 
-		<!-- Optional: code sample using the existing cs-code pattern (see pamanaland.html
-		     lines 157-175 for a working example). Drop in a representative snippet from
-		     the codebase to anchor the technical claim. -->
+		<p><strong>Example: commission share computation</strong> &mdash; the heart of the
+			engine, because rules vary by sale agreement, agent tier, and OU policy:</p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">~/app/<span class="active">Services/CommissionShareService.php</span></span>
+			</header>
+<pre><span class="tk-key">class</span> <span class="tk-fn">CommissionShareService</span>
+<span class="tk-punct">{</span>
+    <span class="tk-key">public function</span> <span class="tk-fn">distribute</span><span class="tk-punct">(</span>SalesRecord <span class="tk-num">$sale</span><span class="tk-punct">):</span> Collection
+    <span class="tk-punct">{</span>
+        <span class="tk-key">return</span> <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>commissionTransactions
+            <span class="tk-punct">-&gt;</span><span class="tk-fn">flatMap</span><span class="tk-punct">(</span><span class="tk-key">fn</span> <span class="tk-punct">(</span>CommissionTransaction <span class="tk-num">$tx</span><span class="tk-punct">)</span> =&gt; <span class="tk-num">$tx</span><span class="tk-punct">-&gt;</span>shares
+                <span class="tk-punct">-&gt;</span><span class="tk-fn">map</span><span class="tk-punct">(</span><span class="tk-key">fn</span> <span class="tk-punct">(</span>CommissionShare <span class="tk-num">$s</span><span class="tk-punct">)</span> =&gt; <span class="tk-punct">[</span>
+                    <span class="tk-str">'payee_id'</span> =&gt; <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>payee_id<span class="tk-punct">,</span>
+                    <span class="tk-str">'ou_code'</span>  =&gt; <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>ou_code<span class="tk-punct">,</span>
+                    <span class="tk-str">'amount'</span>   =&gt; <span class="tk-fn">round</span><span class="tk-punct">(</span><span class="tk-num">$tx</span><span class="tk-punct">-&gt;</span>amount * <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>percent / <span class="tk-num">100</span><span class="tk-punct">,</span> <span class="tk-num">2</span><span class="tk-punct">),</span>
+                    <span class="tk-str">'period'</span>   =&gt; <span class="tk-num">$tx</span><span class="tk-punct">-&gt;</span>period<span class="tk-punct">,</span>
+                    <span class="tk-str">'release_id'</span> =&gt; <span class="tk-key">null</span><span class="tk-punct">,</span> <span class="tk-cmt">// set when approver releases</span>
+                <span class="tk-punct">]));</span>
+    <span class="tk-punct">}</span>
+<span class="tk-punct">}</span></pre>
+		</div>
+
+		<div class="cs-shot--coming">
+			<span class="cs-shot__title">Release approval flow + agent payout view</span>
+			<span class="cs-shot__sub">redacted captures coming with the next writeup pass</span>
+		</div>
 	</section>
 
 	<!-- Stack -->
@@ -163,10 +258,18 @@
 		<div class="cs-section__label">stack</div>
 		<h2>Tech</h2>
 		<ul>
-			<li><strong>Frontend:</strong> Vue.js, <!-- TODO: Vuetify? Ag-Grid? --></li>
-			<li><strong>Backend:</strong> Laravel, MySQL, REST API</li>
-			<li><strong>Tooling:</strong> VS Code &middot; Git &middot; GitHub</li>
-			<li><strong>Hosting:</strong> <span class="cs-pending">details on request</span></li>
+			<li><strong>Frontend:</strong> Vue.js (Vue CLI), Vue Router, state/ store,
+				Vue i18n, Velzon admin theme, SCSS</li>
+			<li><strong>Backend:</strong> Laravel, MySQL, Eloquent, Sanctum personal-access
+				tokens, REST API</li>
+			<li><strong>Domain layer:</strong> 52 Eloquent models, ~100 migrations,
+				per-OU policy services, approver workflow</li>
+			<li><strong>Tooling:</strong> VS Code &middot; Git &middot; GitHub &middot; Composer &middot; Yarn &middot; Postman</li>
+			<li><strong>Source:</strong>
+				<a href="https://github.com/kon2raya24/commission_management_api" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">commission_management_api</a>
+				&middot;
+				<a href="https://github.com/kon2raya24/commission_management_ui" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">commission_management_ui</a>
+			</li>
 		</ul>
 	</section>
 
@@ -177,26 +280,33 @@
 
 		<div class="cs-metrics">
 			<div class="cs-metric">
-				<div class="cs-metric__k"><!-- TODO: metric key --></div>
-				<div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;"><!-- TODO: value --></div>
+				<div class="cs-metric__k">domain models</div>
+				<div class="cs-metric__v">52</div>
 			</div>
 			<div class="cs-metric">
-				<div class="cs-metric__k"><!-- TODO: metric key --></div>
-				<div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;"><!-- TODO: value --></div>
+				<div class="cs-metric__k">migrations</div>
+				<div class="cs-metric__v">~100</div>
 			</div>
 			<div class="cs-metric">
-				<div class="cs-metric__k"><!-- TODO: metric key --></div>
-				<div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;"><!-- TODO: value --></div>
+				<div class="cs-metric__k">combined commits</div>
+				<div class="cs-metric__v">~640</div>
 			</div>
 			<div class="cs-metric">
-				<div class="cs-metric__k">automation</div>
+				<div class="cs-metric__k">multi-OU</div>
 				<div class="cs-metric__v">✓</div>
 			</div>
 		</div>
 
 		<p>
-			<!-- TODO: 2-3 sentence summary of business impact. End with the
-			     "happy to discuss specifics on request" CTA used in the other two case studies. -->
+			The brokerage replaced its multi-workbook commission process with a single
+			platform where a sale, its installments, its approver chain, and its agent
+			payouts all live in one auditable ledger &mdash; with role-based views per
+			organizational unit. Cash advances now reconcile against upcoming releases
+			automatically. Expenses, payslips, leaves, and memos run on the same backbone
+			instead of parallel spreadsheets.
+		</p>
+		<p>
+			Specific business figures stay with the client;
 			<a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
 		</p>
 	</section>
@@ -205,10 +315,35 @@
 	<section class="cs-section">
 		<div class="cs-section__label">lessons</div>
 		<h2>What I&rsquo;d do again — and differently</h2>
+		<p><strong>Worked well:</strong></p>
 		<ul>
-			<li><strong><!-- TODO: lesson --></strong> <!-- TODO: explanation --></li>
-			<li><strong><!-- TODO: lesson --></strong> <!-- TODO: explanation --></li>
-			<li><strong><!-- TODO: lesson --></strong> <!-- TODO: explanation --></li>
+			<li><strong>Modeling the commission lifecycle as four explicit nouns</strong>
+				&mdash; transaction, share, release, approver &mdash; instead of cramming it
+				into one &ldquo;commission&rdquo; table. Every edge case that landed in
+				production had a place to live.</li>
+			<li><strong>Buying the UI foundation</strong> (Velzon) instead of designing
+				from scratch &mdash; let me ship the operations-team value faster while
+				keeping a consistent admin look.</li>
+			<li><strong>Iterative migrations.</strong> ~100 of them, many small. The team
+				never had a multi-week schema-rewrite outage &mdash; just continuous small
+				changes deployed alongside the features that needed them.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Use a battle-tested RBAC package next time.</strong> Building roles
+				+ permissions + OU bindings + menu access from scratch was thorough but
+				expensive. Spatie&rsquo;s Laravel-Permission would have covered ~80% in a
+				day, leaving only the OU-scoping to write.</li>
+			<li><strong>CommissionRelease v1 &rarr; v2 cost a refactor.</strong> The first
+				release model didn&rsquo;t separate &ldquo;computed share&rdquo; from
+				&ldquo;released amount&rdquo; cleanly &mdash; once the second version made
+				that distinction explicit, downstream reports got simpler. I&rsquo;d invest
+				in that separation upfront.</li>
+			<li><strong>Migrate to Vite earlier.</strong> The Vue CLI build still works but
+				the rebuild loop is slow at this scale &mdash; new projects start on Vite.</li>
+			<li><strong>Tag the migration log.</strong> ~100 migrations means many small
+				<em>add_column</em> follow-ups; a clearer naming convention would have made
+				the history readable.</li>
 		</ul>
 	</section>
 

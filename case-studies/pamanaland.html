@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Case Study · Pamanaland RMS — Lemmuel Turaya</title>
+<title>Case Study · Pamanaland Developer Portal — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Pamanaland Realty Management System — a Vue + Laravel platform for managing property listings, agents, and commissions." />
+<meta name="description" content="Pamanaland Developer Portal — a Vue 3 + Laravel 11 platform running a real-estate developer end-to-end: reservations, sales, equity, amortization, in-house financing, commission, collection, sales returns, and a multi-tier seller hierarchy." />
 <meta name="theme-color" content="#050814">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/case-studies/pamanaland.html" />
 
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Case Study · Pamanaland Realty MS — Lemmuel Turaya" />
-<meta property="og:description" content="A full-stack realty management platform on Vue + Laravel — replacing spreadsheet-driven operations with one auditable source of truth." />
+<meta property="og:title" content="Case Study · Pamanaland Developer Portal — Lemmuel Turaya" />
+<meta property="og:description" content="A Vue 3 + Laravel 11 platform powering an entire real-estate developer: reservation → sales → equity → amortization → financing → commission → collection lifecycle, with multi-tier seller hierarchy and OU-scoped RBAC." />
 <meta property="og:url" content="https://kon2raya.netlify.app/case-studies/pamanaland.html" />
 <meta property="og:image" content="https://kon2raya.netlify.app/images/og-pamanaland.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -34,11 +34,13 @@
 
   <header class="cs-hero">
     <div class="cs-hero__label">// case-study.md</div>
-    <h1>Pamanaland RMS<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Realty Management on Vue + Laravel</span></h1>
+    <h1>Pamanaland Developer Portal<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Real-estate developer operations on Vue 3 + Laravel 11</span></h1>
     <p class="cs-hero__tagline">
-      A full-stack platform for managing property inventory, agent assignments, and
-      commission tracking &mdash; replacing the brokerage's spreadsheet-driven workflow
-      with a clean web app the team actually wants to use.
+      A full-stack platform that runs a real-estate <em>developer</em> &mdash; projects,
+      units, reservations, sales (equity + amortization), in-house financing, commission,
+      collection, sales returns, assumed units &mdash; with a hierarchical seller force
+      (Directors &rarr; Managers &rarr; Unit Managers &rarr; Team Leaders &rarr; Salespersons / Brokers)
+      and OU-scoped role-based access.
     </p>
 
     <div class="cs-meta">
@@ -52,7 +54,7 @@
       </div>
       <div class="cs-meta__item">
         <span class="cs-meta__k">period</span>
-        <span class="cs-meta__v">2023 &mdash; 2024</span>
+        <span class="cs-meta__v">2023 &mdash; Present</span>
       </div>
       <div class="cs-meta__item">
         <span class="cs-meta__k">status</span>
@@ -62,15 +64,22 @@
         <span class="cs-meta__k">live</span>
         <span class="cs-meta__v"><a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">portal.pamanaland.com</a></span>
       </div>
+      <div class="cs-meta__item">
+        <span class="cs-meta__k">scope</span>
+        <span class="cs-meta__v">~65 models &middot; ~67 controllers &middot; ~99 migrations</span>
+      </div>
     </div>
 
     <div class="cs-hero__chips">
-      <span class="cs-chip">Vue.js</span>
-      <span class="cs-chip">Laravel</span>
+      <span class="cs-chip">Vue 3</span>
+      <span class="cs-chip">Laravel 11</span>
+      <span class="cs-chip">JWT</span>
+      <span class="cs-chip">CASL RBAC</span>
+      <span class="cs-chip">AG Grid Enterprise</span>
+      <span class="cs-chip">Vuex</span>
+      <span class="cs-chip">Bootstrap Vue 3</span>
       <span class="cs-chip">MySQL</span>
       <span class="cs-chip">REST</span>
-      <span class="cs-chip">Vuetify</span>
-      <span class="cs-chip">Ag-Grid</span>
     </div>
   </header>
 
@@ -78,10 +87,20 @@
     <div class="cs-section__label">tl;dr</div>
     <h2>What it is</h2>
     <p>
-      A web portal where Pamanaland's team manages <strong>property listings</strong>,
-      <strong>agent assignments</strong>, and <strong>commission records</strong> in one
-      place &mdash; with role-aware access for admins, managers, and agents, and reports
-      they can export when month-end rolls around.
+      A web portal that runs the full Pamanaland developer lifecycle &mdash; from
+      <strong>reservation</strong> through <strong>sales</strong>, <strong>equity</strong>,
+      <strong>amortization</strong> (including <strong>in-house financing</strong>),
+      <strong>commission ledgers + receipts + releases</strong>,
+      <strong>collection receipts</strong>, and <strong>final SOA generation</strong> &mdash;
+      with a multi-tier seller hierarchy, project management with title + COO monitoring,
+      and operations tooling for time logs, leaves, memos, payslips, and expenses.
+    </p>
+    <p>
+      Live at <a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;">portal.pamanaland.com</a>.
+      Vue 3 (Vue CLI) + Bootstrap Vue 3 + AG Grid Enterprise on the frontend, Laravel 11 +
+      MySQL + JWT (<code>tymon/jwt-auth</code>) on the backend. <strong>~65 Eloquent
+      models</strong>, <strong>~67 controllers</strong>, <strong>~99 migrations</strong>,
+      and <strong>~102 Vue views</strong> organized by domain.
     </p>
   </section>
 
@@ -89,17 +108,25 @@
     <div class="cs-section__label">problem</div>
     <h2>The bottleneck</h2>
     <p>
-      Before the RMS, day-to-day operations ran on a tangle of:
+      Before the portal, Pamanaland&rsquo;s day-to-day ran on a tangle of:
     </p>
     <ul>
-      <li>Shared Excel files for inventory &mdash; with stale rows nobody owned.</li>
-      <li>Email threads for assigning leads to agents.</li>
-      <li>Month-end commission calculations done by hand.</li>
-      <li>No single dashboard for management to see live pipeline state.</li>
+      <li>Shared Excel files for inventory and pricing &mdash; with stale rows nobody owned.</li>
+      <li>Email threads for assigning leads, escalating approvals, and chasing collections.</li>
+      <li>Manual commission computations across a multi-tier sales hierarchy that varied
+        per project and per agreement.</li>
+      <li>In-house amortization schedules tracked separately from the sale and the SOA, so
+        reconciliation was a manual cross-reference.</li>
+      <li>No single dashboard for management to see <em>which</em> reservations are about
+        to expire, <em>which</em> equity payments are overdue, or <em>which</em> titles
+        are still pending transfer.</li>
+      <li>Payment reminders and notices of cancellation generated by hand from templates.</li>
     </ul>
     <p>
-      The team needed <strong>one source of truth</strong> they trusted, role-based access
-      so agents only saw what was theirs, and reports they could pull without bothering IT.
+      The team needed <strong>one source of truth</strong> for every stage of the unit
+      lifecycle, with <strong>role-aware access</strong> down to the salesperson level,
+      and a way to <strong>generate reminders, notices, and SOAs</strong> programmatically
+      instead of from Excel macros.
     </p>
   </section>
 
@@ -108,14 +135,31 @@
     <h2>How I broke it down</h2>
     <ul>
       <li><strong>Domain modelling first.</strong> Talked through real workflows with the
-        team before writing schema &mdash; properties, units, agents, assignments,
-        commissions, payouts.</li>
-      <li><strong>Vue + Laravel monolith.</strong> Single deployment, single team, single
-        repo. No microservices theater for a brokerage-sized product.</li>
-      <li><strong>Role-aware UI.</strong> One Vue app, gated views per role. No "admin
-        portal" / "agent portal" duplication.</li>
-      <li><strong>Reports as a first-class feature.</strong> Filterable, paginated tables
-        with CSV / PDF export rather than ad-hoc Excel dumps.</li>
+        team before writing schema &mdash; reservation rules, equity vs. amortization,
+        in-house financing terms, commission tiers per seller level, sales returns,
+        assumed-unit transfers, title and COO monitoring workflow.</li>
+      <li><strong>Subdomain folder layout on both sides.</strong> Models grouped under
+        <code>app/Models/{Sales, Collection, Commission, Financing, Reservation,
+        SellerManagement, ProjectManagement, AssumedUnit, SalesReturn, Files,
+        Maintenance, Expense, Incentive, ...}</code>. Vue views mirror it
+        (<code>src/views/{sales, collection, commission, financing, &hellip;}</code>) so
+        backend and frontend stay readable side by side.</li>
+      <li><strong>CASL on the frontend, OU-scoped permissions on the backend.</strong>
+        Permissions defined in <code>src/helpers/abilities.js</code>, loaded from the API
+        per user, cached in Vuex + localStorage, and re-checked on every route guard.
+        Multiple <code>beforeEach</code> hooks validate session, refresh permissions,
+        and apply OU access.</li>
+      <li><strong>AG Grid Enterprise for tables.</strong> Filterable, server-side
+        paginated, exportable. Same look across every domain &mdash; no re-inventing the
+        wheel for each view.</li>
+      <li><strong>Background reminders + cron-driven nudges.</strong> Payment-reminder and
+        clock-out-reminder jobs run from Laravel&rsquo;s scheduler with production
+        runbooks (the project ships dedicated
+        <code>PAYMENT_REMINDER_PRODUCTION_SETUP.md</code> and
+        <code>CLOCK_OUT_REMINDER_IMPLEMENTATION.md</code> next to the code).</li>
+      <li><strong>JWT auth + Vuex-persisted state.</strong> Bearer tokens stored in
+        localStorage, refreshed transparently, and state hydrated on reload for seamless
+        page-jump UX.</li>
     </ul>
   </section>
 
@@ -123,51 +167,81 @@
     <div class="cs-section__label">solution</div>
     <h2>What I built</h2>
 
-    <p><strong>Modules shipped:</strong></p>
+    <p><strong>Domain modules shipped:</strong></p>
     <ul>
-      <li><strong>Property &amp; Unit management</strong> &mdash; inventory CRUD, status,
-        pricing, ownership history.</li>
-      <li><strong>Agent management</strong> &mdash; profiles, assignments, performance
-        view.</li>
-      <li><strong>Commission tracking</strong> &mdash; auto-calculated from agreement type
-        and unit value, exportable per agent and per period.</li>
-      <li><strong>Role-based dashboards</strong> &mdash; admin sees the brokerage state;
-        agents see their own pipeline; managers see their team.</li>
-      <li><strong>Reports &amp; exports</strong> &mdash; filterable, paginated tables with
-        CSV and PDF output for month-end review.</li>
+      <li><strong>Files / Master Data</strong> &mdash; projects, units, customers, agents,
+        realty firms, payment schemes, collectors. The canonical entities every other
+        module references.</li>
+      <li><strong>Reservation</strong> &mdash; reserve a unit for a customer, with
+        expiration windows and price-adjustment handling.</li>
+      <li><strong>Sales</strong> &mdash; convert reservation to sale; track equity and
+        amortization on the same record (<code>Sales/Amortization</code>,
+        <code>Sales/Equity</code>, <code>Sales/Receivable</code>).</li>
+      <li><strong>Financing</strong> &mdash; in-house financing terms +
+        <code>InhouseAmortization</code> schedules tied to the sale.</li>
+      <li><strong>Collection</strong> &mdash; collection receipts, customer ledgers,
+        final SOA generation, automated <code>PaymentReminderLog</code>, and
+        <code>NoticeOfCancellation</code> when terms slip.</li>
+      <li><strong>Commission</strong> &mdash; ledgers, receipts, releases. Calculation
+        tiered by seller level and agreement type.</li>
+      <li><strong>Seller Management</strong> &mdash; the five-tier hierarchy: Directors
+        &rarr; Managers &rarr; Unit Managers &rarr; Team Leaders &rarr; Salespersons /
+        Brokers.</li>
+      <li><strong>Project Management</strong> &mdash; gatekeepers, title-monitoring, COO
+        monitoring with workflow state.</li>
+      <li><strong>Sales Return + Assumed Unit</strong> &mdash; unit buybacks and
+        contract-of-sale transfers between buyers.</li>
+      <li><strong>Incentive</strong> &mdash; incentive management and ledgers on top of
+        the commission engine.</li>
+      <li><strong>Expense</strong> &mdash; per-OU expense tracking with categories,
+        particulars, and payee linkage.</li>
+      <li><strong>HR-lite</strong> &mdash; time logs (with clock-out reminders), leave
+        requests, memos, payslips, downloadable forms.</li>
+      <li><strong>Maintenance</strong> &mdash; banks, designations, positions,
+        departments, provinces, unit types, land types, expense categories, payees,
+        price-adjustment handlers, property placements, email recipients. The
+        &ldquo;configure the system&rdquo; surface.</li>
+      <li><strong>User Management + RBAC</strong> &mdash; users, roles, modules, menus,
+        per-OU access control, CASL abilities, dynamic menu rendering per permission.</li>
     </ul>
 
     <div class="cs-shot--coming">
-      <span class="cs-shot__title">Live screens at portal.pamanaland.com</span>
+      <span class="cs-shot__title">Live at portal.pamanaland.com</span>
       <span class="cs-shot__sub">portal is access-gated &mdash; sanitized walkthrough available on request</span>
     </div>
 
-    <p><strong>Example: commission calculation</strong> &mdash; one of the harder pieces
-      since rules vary by agreement type:</p>
+    <p><strong>Example: commission release on a sale</strong> &mdash; one of the harder
+      pieces because the seller hierarchy means a single sale generates entries for
+      every tier above the closing salesperson, each with its own percent and ledger
+      destination:</p>
 
     <div class="cs-code">
       <header class="cs-code__chrome">
         <span class="cs-code__dots"><i></i><i></i><i></i></span>
-        <span class="cs-code__file">~/app/<span class="active">Services/CommissionService.php</span></span>
+        <span class="cs-code__file">~/app/<span class="active">Services/CommissionReleaseService.php</span></span>
       </header>
-<pre><span class="tk-key">class</span> <span class="tk-fn">CommissionService</span>
+<pre><span class="tk-key">class</span> <span class="tk-fn">CommissionReleaseService</span>
 <span class="tk-punct">{</span>
-    <span class="tk-key">public function</span> <span class="tk-fn">compute</span><span class="tk-punct">(</span>Sale <span class="tk-num">$sale</span><span class="tk-punct">):</span> Collection
+    <span class="tk-key">public function</span> <span class="tk-fn">release</span><span class="tk-punct">(</span>Sales <span class="tk-num">$sale</span><span class="tk-punct">,</span> CollectionReceipt <span class="tk-num">$receipt</span><span class="tk-punct">):</span> Collection
     <span class="tk-punct">{</span>
-        <span class="tk-key">return</span> <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>agreement<span class="tk-punct">-&gt;</span>rules
-            <span class="tk-punct">-&gt;</span><span class="tk-fn">map</span><span class="tk-punct">(</span><span class="tk-key">fn</span> <span class="tk-punct">(</span>Rule <span class="tk-num">$r</span><span class="tk-punct">)</span> =&gt; <span class="tk-punct">[</span>
-                <span class="tk-str">'payee_id'</span> =&gt; <span class="tk-num">$r</span><span class="tk-punct">-&gt;</span>agent_id<span class="tk-punct">,</span>
-                <span class="tk-str">'amount'</span>   =&gt; <span class="tk-fn">round</span><span class="tk-punct">(</span><span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>price * <span class="tk-num">$r</span><span class="tk-punct">-&gt;</span>percent / <span class="tk-num">100</span><span class="tk-punct">,</span> <span class="tk-num">2</span><span class="tk-punct">),</span>
-                <span class="tk-str">'tier'</span>     =&gt; <span class="tk-num">$r</span><span class="tk-punct">-&gt;</span>tier<span class="tk-punct">,</span>
-                <span class="tk-str">'period'</span>   =&gt; <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>closed_at<span class="tk-punct">-&gt;</span><span class="tk-fn">format</span><span class="tk-punct">(</span><span class="tk-str">'Y-m'</span><span class="tk-punct">),</span>
-            <span class="tk-punct">]);</span>
+        <span class="tk-key">return</span> <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>sellerHierarchy<span class="tk-punct">()-&gt;</span><span class="tk-fn">withTiers</span><span class="tk-punct">()-&gt;</span><span class="tk-fn">get</span><span class="tk-punct">()</span>
+            <span class="tk-punct">-&gt;</span><span class="tk-fn">map</span><span class="tk-punct">(</span><span class="tk-key">fn</span> <span class="tk-punct">(</span>Seller <span class="tk-num">$s</span><span class="tk-punct">)</span> =&gt; CommissionReceipt<span class="tk-punct">::</span><span class="tk-fn">create</span><span class="tk-punct">([</span>
+                <span class="tk-str">'sales_id'</span>     =&gt; <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>id<span class="tk-punct">,</span>
+                <span class="tk-str">'receipt_id'</span>   =&gt; <span class="tk-num">$receipt</span><span class="tk-punct">-&gt;</span>id<span class="tk-punct">,</span>
+                <span class="tk-str">'seller_id'</span>    =&gt; <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>id<span class="tk-punct">,</span>
+                <span class="tk-str">'tier'</span>         =&gt; <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>tier<span class="tk-punct">,</span>      <span class="tk-cmt">// director | manager | unit_mgr | team_leader | seller</span>
+                <span class="tk-str">'percent'</span>      =&gt; <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>commission_percent<span class="tk-punct">,</span>
+                <span class="tk-str">'amount'</span>       =&gt; <span class="tk-fn">round</span><span class="tk-punct">(</span><span class="tk-num">$receipt</span><span class="tk-punct">-&gt;</span>amount * <span class="tk-num">$s</span><span class="tk-punct">-&gt;</span>commission_percent / <span class="tk-num">100</span><span class="tk-punct">,</span> <span class="tk-num">2</span><span class="tk-punct">),</span>
+                <span class="tk-str">'ou_id'</span>        =&gt; <span class="tk-num">$sale</span><span class="tk-punct">-&gt;</span>ou_id<span class="tk-punct">,</span>
+                <span class="tk-str">'released_at'</span>  =&gt; <span class="tk-key">null</span><span class="tk-punct">,</span> <span class="tk-cmt">// stamped by ReleaseController when approved</span>
+            <span class="tk-punct">]));</span>
     <span class="tk-punct">}</span>
 <span class="tk-punct">}</span></pre>
     </div>
 
     <div class="cs-shot--coming">
-      <span class="cs-shot__title">Commission report &amp; agent dashboard</span>
-      <span class="cs-shot__sub">redacted captures coming with the final writeup</span>
+      <span class="cs-shot__title">Reservation &rarr; sale &rarr; equity &rarr; release flow</span>
+      <span class="cs-shot__sub">redacted captures coming on request</span>
     </div>
   </section>
 
@@ -175,10 +249,21 @@
     <div class="cs-section__label">stack</div>
     <h2>Tech</h2>
     <ul>
-      <li><strong>Frontend:</strong> Vue.js, Vuetify, Ag-Grid for tables, jsPDF for exports</li>
-      <li><strong>Backend:</strong> Laravel, MySQL, Sanctum for auth, REST API</li>
-      <li><strong>Tooling:</strong> VS Code · Git · GitHub · Postman</li>
-      <li><strong>Hosting:</strong> production deployment <span class="cs-pending">details on request</span></li>
+      <li><strong>Frontend:</strong> Vue 3 (Vue CLI), Bootstrap Vue 3, Vue Router, Vuex 4
+        (persisted to localStorage), CASL for RBAC, AG Grid Enterprise, Flatpickr,
+        @vueform/multiselect, ApexCharts + ECharts, FullCalendar, Vue-Leaflet maps,
+        CKEditor, FilePond, file-saver, AOS, Vuelidate, axios.</li>
+      <li><strong>Backend:</strong> Laravel 11, MySQL, JWT auth (<code>tymon/jwt-auth</code>),
+        Laravel Pint for formatting. Background jobs for payment reminders + clock-out
+        reminders via Laravel scheduler.</li>
+      <li><strong>Database tooling:</strong>
+        <code>kitloong/laravel-migrations-generator</code> for generating migrations from
+        an existing schema, <code>orangehill/iseed</code> for seeding from existing data.</li>
+      <li><strong>Domain scope:</strong> ~65 Eloquent models &middot; ~67 controllers &middot;
+        ~99 migrations on the API; ~102 Vue views across 19 domain folders on the UI.</li>
+      <li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Git &middot; Postman &middot; Yarn &middot; Composer.</li>
+      <li><strong>Deployed at:</strong>
+        <a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;">portal.pamanaland.com</a>.</li>
     </ul>
   </section>
 
@@ -188,45 +273,74 @@
 
     <div class="cs-metrics">
       <div class="cs-metric">
-        <div class="cs-metric__k">spreadsheets retired</div>
-        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">multiple</div>
+        <div class="cs-metric__k">domain models</div>
+        <div class="cs-metric__v">~65</div>
       </div>
       <div class="cs-metric">
-        <div class="cs-metric__k">role coverage</div>
-        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">admin · mgr · agent</div>
+        <div class="cs-metric__k">migrations</div>
+        <div class="cs-metric__v">~99</div>
       </div>
       <div class="cs-metric">
-        <div class="cs-metric__k">month-end reporting</div>
-        <div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;">faster &middot; auditable</div>
+        <div class="cs-metric__k">UI views</div>
+        <div class="cs-metric__v">~102</div>
       </div>
       <div class="cs-metric">
-        <div class="cs-metric__k">source of truth</div>
-        <div class="cs-metric__v">✓</div>
+        <div class="cs-metric__k">seller tiers</div>
+        <div class="cs-metric__v">5</div>
       </div>
     </div>
 
     <p>
-      The platform replaced a tangle of spreadsheets and email threads with a single
-      auditable source of truth, with month-end reporting that now runs as a self-service
-      export instead of a manual reconciliation. Quantified figures will be published with
-      the final writeup;
+      The platform replaced a tangle of spreadsheets and email threads with one auditable
+      source of truth covering the entire developer lifecycle &mdash; from a reservation
+      coming in to the final SOA going out, with commission, financing, and collection all
+      living on the same ledger. Payment reminders and notices of cancellation now
+      generate from the data instead of being typed up. The seller hierarchy means every
+      sale automatically populates commission entries for the five tiers above the
+      closing salesperson, with per-receipt release tracking.
+    </p>
+    <p>
+      Live in production at
+      <a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;">portal.pamanaland.com</a>.
+      Specific business figures (volumes, days-saved, error reduction) stay with the
+      client;
       <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
     </p>
   </section>
 
   <section class="cs-section">
     <div class="cs-section__label">lessons</div>
-    <h2>What I'd do again — and differently</h2>
+    <h2>What I&rsquo;d do again — and differently</h2>
+    <p><strong>Worked well:</strong></p>
     <ul>
-      <li><strong>Talk to the actual users first.</strong> The commission rules were more
-        nuanced than the brief suggested &mdash; only field interviews surfaced the edge
-        cases.</li>
-      <li><strong>Ag-Grid was worth it.</strong> Sortable, filterable, exportable tables
-        out of the box meant I didn't reinvent that for every screen.</li>
-      <li>Invest in seed data and a staging environment earlier &mdash; the team caught
-        edge cases faster when they could try flows on realistic data without fear.</li>
-      <li>Bake more &ldquo;sanity-check&rdquo; queries into the admin dashboard from day
-        one &mdash; cheap to add upfront, expensive to retrofit once reports are live.</li>
+      <li><strong>Modelling the full unit lifecycle as explicit nouns</strong> (Reservation
+        &rarr; Sales &rarr; Equity &rarr; Amortization &rarr; CollectionReceipt &rarr;
+        CommissionReceipt &rarr; Release) instead of cramming it into one mega-table.
+        Every edge case had a place to live, and reports built themselves out of joins.</li>
+      <li><strong>AG Grid Enterprise paid for itself.</strong> Sortable, filterable,
+        server-paginated, exportable tables &mdash; same UX across all 102 views &mdash;
+        meant the team learned <em>one</em> table interaction model.</li>
+      <li><strong>CASL on the frontend + OU permissions on the backend.</strong> Dynamic
+        menus and route guards driven by the same permission set the backend enforces.
+        No drift between &ldquo;what the UI shows&rdquo; and &ldquo;what the API allows&rdquo;.</li>
+      <li><strong>Reminders and notices as scheduled jobs.</strong> Letting Laravel&rsquo;s
+        scheduler send out payment reminders, clock-out nudges, and cancellation notices
+        means the operations team stopped maintaining a manual cadence.</li>
+    </ul>
+    <p><strong>Would tighten:</strong></p>
+    <ul>
+      <li><strong>Use a battle-tested RBAC package next time.</strong> Building the
+        permission &middot; role &middot; OU &middot; menu-access matrix from scratch was thorough but
+        expensive. Spatie&rsquo;s Laravel-Permission would have covered 80% in a day,
+        leaving only the OU-scoping to write.</li>
+      <li><strong>Seed data + staging earlier.</strong> The commission and amortization
+        rules have many edge cases that only surface with realistic data. Invest in seed
+        data + a staging environment before the first feature ships, not after.</li>
+      <li><strong>Sanity-check queries on the admin dashboard from day one.</strong>
+        Cheap to add upfront, expensive to retrofit once reports are live and people
+        have started trusting the numbers.</li>
+      <li><strong>Vue CLI &rarr; Vite migration.</strong> The Velzon template ships on
+        Vue CLI; the rebuild loop is slow at 102+ views. Future projects start on Vite.</li>
     </ul>
   </section>
 

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · JBC Marketing HRIS — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="JBC Marketing HRIS — a Laravel 12 API + Vuestic Admin (Vite + Pinia + TypeScript) frontend covering employees, OUs, time + attendance, leave, payroll, memos, performance, 2FA, and OU-scoped RBAC." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/hris.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · JBC Marketing HRIS — Lemmuel Turaya" />
+<meta property="og:description" content="Enterprise HRIS on Laravel 12 + Vuestic Admin Vite — full employee lifecycle, time/attendance, leave, payroll, memos, performance, 2FA. CI/CD with Jenkins + Buddy. Storybook + Playwright e2e." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/hris.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-hris.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Theme bootstrap: applies stored/preferred theme before paint to prevent FOUC -->
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme;
+			if (stored === 'light' || stored === 'dark') {
+				theme = stored;
+			} else {
+				theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+			}
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		}
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">hris</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<!-- Hero -->
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>JBC Marketing HRIS<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Enterprise HRIS on Laravel 12 + Vuestic Admin (Vite)</span></h1>
+		<p class="cs-hero__tagline">
+			A full HR information system covering the entire employee lifecycle &mdash;
+			organizational units, employee records, time + attendance, leave, payroll,
+			memos with workflow, performance evaluations, official business / overtime
+			/ offset requests, and a granular OU-scoped RBAC. Modern stack: Laravel 12
+			API with TOTP 2FA, Vuestic Admin frontend on Vite + Pinia + TypeScript,
+			AG Grid Enterprise tables, CI/CD on Jenkins + Buddy.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">company</span>
+				<span class="cs-meta__v">JBC Marketing</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Full-Stack Developer</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v">2024 &mdash; Present</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v">In production</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">scope</span>
+				<span class="cs-meta__v">~54 models &middot; ~41 controllers &middot; ~57 migrations &middot; ~95 pages</span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">Laravel 12</span>
+			<span class="cs-chip">Vue 3</span>
+			<span class="cs-chip">Vite</span>
+			<span class="cs-chip">Pinia</span>
+			<span class="cs-chip">TypeScript</span>
+			<span class="cs-chip">Vuestic Admin</span>
+			<span class="cs-chip">AG Grid Enterprise</span>
+			<span class="cs-chip">Sanctum</span>
+			<span class="cs-chip">TOTP 2FA</span>
+			<span class="cs-chip">Storybook</span>
+			<span class="cs-chip">Playwright</span>
+		</div>
+	</header>
+
+	<!-- TL;DR -->
+	<section class="cs-section">
+		<div class="cs-section__label">tl;dr</div>
+		<h2>What it is</h2>
+		<p>
+			A modern HRIS used by JBC Marketing&rsquo;s HR and operations teams to run the
+			complete employee lifecycle &mdash; from hire (records, contacts, documents,
+			certifications, training history) through daily ops (attendance, leave,
+			official-business, overtime, offset, memos) to payroll (periods, records,
+			government contributions, tax tables, 13th-month) and performance
+			evaluations &mdash; under <strong>OU-scoped RBAC</strong> with
+			<strong>TOTP 2FA</strong>.
+		</p>
+		<p>
+			Built on Laravel 12 (PHP 8.2+) with Sanctum auth and Google Authenticator
+			2FA (<code>pragmarx/google2fa-laravel</code> + QR codes via
+			<code>bacon/bacon-qr-code</code>). Frontend is <strong>Vuestic Admin</strong>
+			on Vite, Vue 3 + TypeScript, Pinia state, Vue Router, Vue i18n, AG Grid
+			Enterprise. Ships with Storybook for design-system discipline, a Playwright
+			e2e workspace, and CI/CD on both Jenkins and Buddy.
+		</p>
+	</section>
+
+	<!-- Problem -->
+	<section class="cs-section">
+		<div class="cs-section__label">problem</div>
+		<h2>The bottleneck</h2>
+		<p>
+			HR ran on spreadsheets and standalone tools per process &mdash; a payroll
+			workbook, a leave-tracker, a time-sheet exporter, a Word-template memo flow,
+			a separate sheet for offsets. Nothing talked to anything. Specific friction:
+		</p>
+		<ul>
+			<li>Memo numbering collisions when two people drafted simultaneously, and no
+				audit trail for who saw what.</li>
+			<li>Leave balances drifted between the spreadsheet and the actual payroll
+				deduction.</li>
+			<li>Attendance from biometric exports had to be hand-reconciled against
+				schedules, shift assignments, and approved overtime / official-business
+				slips.</li>
+			<li>No clear OU-scoped view &mdash; a Manila supervisor could accidentally
+				see another branch&rsquo;s payslips.</li>
+			<li>2FA was &ldquo;send the same password over chat&rdquo; &mdash; auth
+				security was a real concern as the platform consolidated payroll data.</li>
+		</ul>
+		<p>
+			HR needed <strong>one platform</strong> where the time logs, the schedule,
+			the approvals, the payroll record, and the audit trail all live on the same
+			row of the same table &mdash; with <strong>per-OU access</strong> and
+			<strong>real auth security</strong>.
+		</p>
+	</section>
+
+	<!-- Approach -->
+	<section class="cs-section">
+		<div class="cs-section__label">approach</div>
+		<h2>How I broke it down</h2>
+		<ul>
+			<li><strong>Modern stack from day one.</strong> Laravel 12 + Vue 3 + Vite +
+				Pinia + TypeScript. Took advantage of Laravel 12&rsquo;s slimmer kernel
+				and Vite&rsquo;s rebuild speed instead of inheriting the slower Vue CLI
+				toolchain from earlier projects.</li>
+			<li><strong>Domain modelling per HR concept.</strong> 54 explicit models,
+				one concern each &mdash; <code>Employee</code> +
+				<code>EmployeePersonalInfo</code> + <code>EmployeeContact</code> +
+				<code>EmployeeDocument</code> + <code>EmployeeAllowance</code> +
+				<code>EmployeeDeduction</code> + <code>EmployeeCertification</code> +
+				<code>EmployeeTraining</code> + <code>EmploymentHistory</code> &mdash;
+				instead of one fat &ldquo;employee&rdquo; row.</li>
+			<li><strong>OU-scoped RBAC as a first-class concern.</strong>
+				<code>OrganizationalUnit</code> + <code>Role</code> +
+				<code>Permission</code> + <code>RolePermission</code> +
+				<code>RoleOrganizationalUnit</code>. A role can be assigned per OU, and
+				every payroll / employee / memo query checks both role permission AND OU
+				scope.</li>
+			<li><strong>TOTP 2FA built in.</strong>
+				<code>pragmarx/google2fa-laravel</code> for the algorithm,
+				<code>bacon/bacon-qr-code</code> to render the QR for enrollment in
+				Google Authenticator / Authy. <code>LoginAttempt</code> model tracks
+				every attempt for anomaly review.</li>
+			<li><strong>Concurrency-safe memo numbering.</strong> Memo numbers must be
+				strictly sequential per OU per year, so allocation uses MySQL
+				<code>GET_LOCK</code> advisory locks &mdash; two simultaneous drafts
+				can&rsquo;t collide on the same number.</li>
+			<li><strong>Dynamic menu system.</strong>
+				<code>Module</code> + <code>Menu</code> + <code>RolePermission</code>
+				drives the sidebar at runtime &mdash; pages a user can&rsquo;t access
+				simply don&rsquo;t appear. Documented in <code>DYNAMIC_MENU_SYSTEM.md</code>
+				at the repo root.</li>
+			<li><strong>Storybook + Playwright for UI discipline.</strong> Components
+				get stories; flows get e2e tests in the <code>e2e/</code> workspace.</li>
+			<li><strong>CI/CD on two pipelines.</strong> Jenkinsfile for on-prem builds,
+				<code>buddy.yml</code> for cloud-driven deploys. Same build target,
+				different triggers.</li>
+		</ul>
+	</section>
+
+	<!-- Solution -->
+	<section class="cs-section">
+		<div class="cs-section__label">solution</div>
+		<h2>What I built</h2>
+
+		<p><strong>Domain modules shipped:</strong></p>
+		<ul>
+			<li><strong>Employee records</strong> &mdash;
+				<code>Employee</code>, <code>EmployeePersonalInfo</code>,
+				<code>EmployeeContact</code>, <code>EmployeeDocument</code>,
+				<code>EmployeeAllowance</code>, <code>EmployeeDeduction</code>,
+				<code>EmployeeCertification</code>, <code>EmployeeTraining</code>,
+				<code>EmploymentHistory</code>. A full HR jacket per person.</li>
+			<li><strong>Organizational units</strong> &mdash;
+				<code>OrganizationalUnit</code> tree with org-chart visualization
+				(<code>pages/org-chart</code>), per-OU role bindings, and OU scoping
+				baked into every list query.</li>
+			<li><strong>Time &amp; attendance</strong> &mdash;
+				<code>TimeLog</code>, <code>AttendanceRecord</code>, <code>Shift</code>,
+				<code>ShiftAssignment</code>, <code>WorkSchedule</code>,
+				<code>WorkScheduleAssignment</code>, <code>Holiday</code>. Reconciles
+				biometric input against the schedule and approved exceptions.</li>
+			<li><strong>Leave</strong> &mdash;
+				<code>LeaveType</code>, <code>LeaveBalance</code>,
+				<code>LeaveEntitlementTier</code>, <code>LeaveRequest</code>. Tier-driven
+				entitlements with balance tracking that the payroll module reads from.</li>
+			<li><strong>Official Business &middot; Overtime &middot; Offset</strong> &mdash;
+				<code>OfficialBusinessRequest</code>, <code>OvertimeRequest</code>,
+				<code>OffsetRequest</code>, <code>OffsetEarning</code>,
+				<code>OffsetBalance</code>. Approval-routed exception forms that flow
+				back into attendance + payroll.</li>
+			<li><strong>Payroll</strong> &mdash;
+				<code>PayrollPeriod</code>, <code>PayrollRecord</code>,
+				<code>PayrollSetting</code>, <code>SalaryGrade</code>,
+				<code>AllowanceType</code>, <code>DeductionType</code>,
+				<code>GovernmentContributionTable</code>, <code>TaxTable</code>,
+				<code>ThirteenthMonthRecord</code>. Run a period; emit payslips with
+				DomPDF (<code>barryvdh/laravel-dompdf</code>).</li>
+			<li><strong>Memos</strong> &mdash;
+				<code>EmployeeMemo</code>, <code>MemoRecipient</code>,
+				<code>MemoReminderLog</code>, <code>MemoTemplate</code>. Recipient types
+				(all employees / OU / specific employees), draft/publish/approval
+				workflow, multipart-upload attachments, concurrency-safe numbering.</li>
+			<li><strong>Performance evaluation</strong> &mdash;
+				<code>PerformanceCriteria</code>, <code>PerformanceEvaluation</code>,
+				<code>PerformanceScore</code>. Criteria-driven scoring for review cycles.</li>
+			<li><strong>RBAC + access surface</strong> &mdash; <code>User</code>,
+				<code>Role</code>, <code>Permission</code>, <code>RolePermission</code>,
+				<code>RoleOrganizationalUnit</code>, <code>Module</code>,
+				<code>Menu</code>. The dynamic menu and OU-scoped access live here.</li>
+			<li><strong>Auth security</strong> &mdash; Sanctum bearer tokens,
+				Google2FA TOTP enrollment with QR, <code>LoginAttempt</code> ledger,
+				password-reset flow with throttling.</li>
+			<li><strong>Audit log</strong> &mdash; <code>AuditLog</code> model captures
+				CRUD on sensitive entities (payroll runs, memo publishes, role changes).</li>
+		</ul>
+
+		<div class="cs-shot--coming">
+			<span class="cs-shot__title">Vuestic Admin frontend &middot; AG Grid Enterprise tables</span>
+			<span class="cs-shot__sub">sanitized walkthrough available on request</span>
+		</div>
+
+		<p><strong>Example: memo-number allocation</strong> &mdash; the kind of subtle
+			concurrency problem that bites in production. Two HR officers click
+			&ldquo;publish&rdquo; on draft memos in the same OU at the same instant; both
+			need a sequential number; the database must hand out exactly one per request:</p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">~/app/<span class="active">Services/MemoNumberService.php</span></span>
+			</header>
+<pre><span class="tk-key">class</span> <span class="tk-fn">MemoNumberService</span>
+<span class="tk-punct">{</span>
+    <span class="tk-key">public function</span> <span class="tk-fn">allocate</span><span class="tk-punct">(</span>OrganizationalUnit <span class="tk-num">$ou</span><span class="tk-punct">,</span> <span class="tk-key">int</span> <span class="tk-num">$year</span><span class="tk-punct">):</span> <span class="tk-key">string</span>
+    <span class="tk-punct">{</span>
+        <span class="tk-num">$lockKey</span> = <span class="tk-str">"memo_seq:{$ou->code}:{$year}"</span><span class="tk-punct">;</span>
+
+        <span class="tk-cmt">// MySQL advisory lock — guarantees no two requests share a number,</span>
+        <span class="tk-cmt">// even across web nodes. Times out after 5s rather than hang.</span>
+        DB<span class="tk-punct">::</span><span class="tk-fn">selectOne</span><span class="tk-punct">(</span><span class="tk-str">"SELECT GET_LOCK(?, 5) AS got"</span><span class="tk-punct">,</span> <span class="tk-punct">[</span><span class="tk-num">$lockKey</span><span class="tk-punct">]);</span>
+
+        <span class="tk-key">try</span> <span class="tk-punct">{</span>
+            <span class="tk-num">$next</span> = EmployeeMemo<span class="tk-punct">::</span><span class="tk-fn">where</span><span class="tk-punct">(</span><span class="tk-str">'ou_id'</span><span class="tk-punct">,</span> <span class="tk-num">$ou</span><span class="tk-punct">-&gt;</span>id<span class="tk-punct">)</span>
+                <span class="tk-punct">-&gt;</span><span class="tk-fn">whereYear</span><span class="tk-punct">(</span><span class="tk-str">'published_at'</span><span class="tk-punct">,</span> <span class="tk-num">$year</span><span class="tk-punct">)</span>
+                <span class="tk-punct">-&gt;</span><span class="tk-fn">max</span><span class="tk-punct">(</span><span class="tk-str">'sequence'</span><span class="tk-punct">)</span> + <span class="tk-num">1</span><span class="tk-punct">;</span>
+
+            <span class="tk-key">return</span> <span class="tk-fn">sprintf</span><span class="tk-punct">(</span><span class="tk-str">'%s-%d-%04d'</span><span class="tk-punct">,</span> <span class="tk-num">$ou</span><span class="tk-punct">-&gt;</span>code<span class="tk-punct">,</span> <span class="tk-num">$year</span><span class="tk-punct">,</span> <span class="tk-num">$next</span><span class="tk-punct">);</span>
+        <span class="tk-punct">}</span> <span class="tk-key">finally</span> <span class="tk-punct">{</span>
+            DB<span class="tk-punct">::</span><span class="tk-fn">selectOne</span><span class="tk-punct">(</span><span class="tk-str">"SELECT RELEASE_LOCK(?)"</span><span class="tk-punct">,</span> <span class="tk-punct">[</span><span class="tk-num">$lockKey</span><span class="tk-punct">]);</span>
+        <span class="tk-punct">}</span>
+    <span class="tk-punct">}</span>
+<span class="tk-punct">}</span></pre>
+		</div>
+
+		<div class="cs-shot--coming">
+			<span class="cs-shot__title">Payroll run &middot; dynamic menus &middot; org chart</span>
+			<span class="cs-shot__sub">screen captures on request</span>
+		</div>
+	</section>
+
+	<!-- Stack -->
+	<section class="cs-section">
+		<div class="cs-section__label">stack</div>
+		<h2>Tech</h2>
+		<ul>
+			<li><strong>Backend:</strong> Laravel 12 (PHP 8.2+), MySQL, Sanctum,
+				<code>pragmarx/google2fa-laravel</code> (TOTP 2FA),
+				<code>bacon/bacon-qr-code</code> (QR enrollment),
+				<code>barryvdh/laravel-dompdf</code> (payslip PDFs),
+				Laravel Pail (log tail), Pint, PHPUnit 11.</li>
+			<li><strong>Frontend:</strong> Vue 3 + TypeScript, Vite,
+				<strong>Vuestic Admin</strong> (vuestic-ui), Pinia, Vue Router,
+				Vue i18n, AG Grid Enterprise, Chart.js + vue-chartjs +
+				chartjs-chart-geo, driver.js (onboarding tours), medium-editor,
+				epic-spinners, flag-icons.</li>
+			<li><strong>Quality &amp; DX:</strong> Storybook (component stories),
+				Playwright (e2e workspace), ESLint + Prettier, Husky + lint-staged,
+				register-service-worker (PWA-ready).</li>
+			<li><strong>CI/CD:</strong> Jenkinsfile (on-prem) and <code>buddy.yml</code>
+				(cloud). Build = <code>npm run lint &amp;&amp; vue-tsc --noEmit &amp;&amp; vite build</code>.</li>
+			<li><strong>Domain scope:</strong> ~54 Eloquent models &middot; ~41
+				controllers (under <code>app/Http/Controllers/API</code>) &middot; ~57
+				migrations &middot; ~95 Vue pages across 30 domain folders on the UI.</li>
+			<li><strong>Concurrency primitives:</strong> MySQL <code>GET_LOCK</code> for
+				memo numbering, request-throttling middleware on auth + password reset.</li>
+		</ul>
+	</section>
+
+	<!-- Outcome -->
+	<section class="cs-section">
+		<div class="cs-section__label">outcome</div>
+		<h2>Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k">domain models</div>
+				<div class="cs-metric__v">~54</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">api controllers</div>
+				<div class="cs-metric__v">~41</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">ui pages</div>
+				<div class="cs-metric__v">~95</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">2FA</div>
+				<div class="cs-metric__v">TOTP ✓</div>
+			</div>
+		</div>
+
+		<p>
+			The HRIS replaced a patchwork of spreadsheets, Word templates, and biometric
+			exports with one platform where time logs, schedules, approved exceptions,
+			payroll records, and the audit trail share the same row of the same table.
+			Memo numbering is concurrency-safe, payroll PDFs generate on demand,
+			authentication is gated by TOTP 2FA enrolled via QR. Built on a modern
+			toolchain (Vite + TypeScript + Pinia + Storybook + Playwright) with two CI/CD
+			pipelines wired up.
+		</p>
+		<p>
+			Specific business figures (employee count, payroll volumes, days-saved per
+			HR cycle) stay with the client;
+			<a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
+		</p>
+	</section>
+
+	<!-- Lessons -->
+	<section class="cs-section">
+		<div class="cs-section__label">lessons</div>
+		<h2>What I&rsquo;d do again — and differently</h2>
+		<p><strong>Worked well:</strong></p>
+		<ul>
+			<li><strong>Modern stack from day one.</strong> Laravel 12 + Vite + Pinia +
+				TypeScript shipped faster than the Vue CLI projects that came before
+				it &mdash; rebuild loop, type safety, and Pinia&rsquo;s ergonomics paid
+				back the first-week learning curve quickly.</li>
+			<li><strong>One concern per model.</strong> Splitting
+				<code>Employee</code> into 9+ related models (PersonalInfo, Contact,
+				Document, &hellip;) made forms easier to compose and migrations smaller.
+				Eloquent eager-loading kept it performant.</li>
+			<li><strong>MySQL advisory locks for sequence allocation.</strong>
+				<code>GET_LOCK</code> for memo numbering &mdash; correct under load, no
+				retry storms, no app-level lock manager to maintain.</li>
+			<li><strong>Storybook + Playwright + ESLint + Prettier + Husky upfront.</strong>
+				Felt like overkill on day three; paid off by month three when the page
+				count crossed 50.</li>
+			<li><strong>Built-in 2FA from the start.</strong> Easier to make 2FA the
+				default than retrofit it after a payroll module is already live.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Consolidate the two CI pipelines.</strong> Jenkinsfile +
+				buddy.yml made sense early when on-prem vs cloud was uncertain. Now I
+				would pick one and delete the other &mdash; double maintenance has a
+				cost.</li>
+			<li><strong>Type the API contract end-to-end.</strong> The frontend has
+				TypeScript but the API responses are still untyped on the wire. Codegen
+				from OpenAPI (or a Laravel Data resource + Spectator) would close that
+				loop.</li>
+			<li><strong>Move the documentation closer to the code.</strong> 20+
+				root-level <code>.md</code> files made for great context during
+				development but they drift fast. Future projects: rule is &ldquo;if it
+				lives outside <code>/docs</code> it ages out within 3 months.&rdquo;</li>
+		</ul>
+	</section>
+
+	<!-- CTA -->
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I build internal platforms like this for HR, ops, real estate, and logistics teams. Let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>

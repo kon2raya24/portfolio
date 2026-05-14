@@ -14,6 +14,72 @@
   <ttl>1440</ttl>
 
   <item>
+    <title>v4.4 — Fourth case study published: JBC Marketing HRIS</title>
+    <link>https://kon2raya.netlify.app/case-studies/hris.html</link>
+    <guid isPermaLink="false">portfolio-v4.4-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 22:00:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      JBC Marketing HRIS is live as the fourth published case study. Modern stack:
+      Laravel 12 + Sanctum + TOTP 2FA (Google2FA + bacon-qr-code) on the API; Vue 3 +
+      Vite + Pinia + TypeScript + Vuestic Admin on the UI. ~54 models, ~41 controllers,
+      ~57 migrations, ~95 Vue pages across 30 domain folders. Full HR lifecycle —
+      employees, OUs, time & attendance, leave, payroll (with DomPDF payslips),
+      memos with concurrency-safe numbering via GET_LOCK, performance evaluations,
+      OU-scoped RBAC, Storybook + Playwright, dual CI/CD (Jenkins + Buddy). Hero stat
+      bumped from "3 case studies" to "4".
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v4.3 — Pamanaland case study polished from real codebase</title>
+    <link>https://kon2raya.netlify.app/case-studies/pamanaland.html</link>
+    <guid isPermaLink="false">portfolio-v4.3-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 20:00:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      Pulled real numbers from C:/xampp/htdocs/developer-api (Laravel 11) and
+      developer-ui (Vue 3 + Velzon). Reframed Pamanaland as a real-estate *developer*
+      operations platform — not a brokerage — covering the full reservation → sales →
+      equity → amortization → in-house financing → commission → collection lifecycle.
+      ~65 models, ~67 controllers, ~99 migrations, ~102 Vue views, AG Grid Enterprise,
+      JWT auth, CASL RBAC, OU scoping, 5-tier seller hierarchy. Live at
+      portal.pamanaland.com.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v4.2 — WMS case study polished from real project files</title>
+    <link>https://kon2raya.netlify.app/case-studies/wms.html</link>
+    <guid isPermaLink="false">portfolio-v4.2-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 18:00:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      Pulled real metrics from the aai_scanner_epson Flutter app, aai-wms-api Laravel
+      backend, and aaiwms Nuxt admin to enrich the WMS writeup with concrete scope:
+      13 feature modules, three picking generations (base / enhanced / v3), Bluetooth
+      ESC/POS label printing on Epson TM-P80II, dual-input scanning (camera +
+      keyboard-wedge), Cloudflare Turnstile re-auth, 108 build releases, ~251 Eloquent
+      models / ~103 controllers / ~315 migrations on the API.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v4.1 — Third case study published: JBC Commission System</title>
+    <link>https://kon2raya.netlify.app/case-studies/jbc.html</link>
+    <guid isPermaLink="false">portfolio-v4.1-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 16:00:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      JBC Commission System is now live as the third published case study. A full-stack
+      real-estate brokerage operations platform on Vue + Laravel — commission engine with
+      multi-tier shares + approver workflow, multi-OU RBAC, sales pipeline, expenses,
+      HR-lite. ~22 months of iteration, 52 Eloquent models, ~100 migrations, ~640 commits
+      across the api + ui repos. Hero stat bumped from "2 case studies" to "3".
+    ]]></description>
+  </item>
+
+  <item>
     <title>v4.0 — Round 2: polish, proof, performance</title>
     <link>https://kon2raya.netlify.app/changelog.html#v4-0</link>
     <guid isPermaLink="false">portfolio-v4.0-2026-05-14</guid>
