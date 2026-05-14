@@ -173,15 +173,16 @@
 <section>
   <h2>Professional Summary</h2>
   <p class="summary">
-    Full-Stack and Mobile App Developer with 6+ years of experience designing, building, and shipping
-    production web and mobile applications across logistics, real estate, marketing, education, and
-    finance. Specialized in <strong>Vue.js</strong>, <strong>Nuxt.js</strong>, and
+    Full-Stack and Mobile App Developer (with growing AI Engineering focus) — 6+ years designing,
+    building, and shipping production platforms across logistics, real estate, marketing, education,
+    and finance. Specialized in <strong>Vue.js</strong> / <strong>Nuxt.js</strong> and
     <strong>Laravel</strong> on the web, <strong>Flutter</strong> on mobile, and clean
-    <strong>REST API</strong> design to integrate systems end-to-end. Experienced with multi-tier
-    role-based access control, OU-scoped permissions, offline-first mobile sync, Bluetooth ESC/POS
-    label printing, SAP integration, and AI-assisted delivery (Claude AI / Claude Code). Comfortable
-    owning features from requirements through architecture, implementation, testing, and deployment.
-    Open to remote, hybrid, or onsite roles worldwide.
+    <strong>REST API</strong> design. Built a production <strong>autonomous AI engineer pipeline</strong>
+    (multi-LLM orchestration with <strong>Claude</strong>, <strong>Gemini</strong>,
+    <strong>OpenAI</strong>, <strong>OpenRouter</strong>, and <strong>Qwen</strong>) wired into a real
+    ticketing workflow with security gates, persistent chat memory, and independent test verification.
+    Comfortable owning features from requirements through architecture, implementation, testing, and
+    deployment. Open to remote, hybrid, or onsite roles worldwide.
   </p>
 </section>
 
@@ -191,7 +192,7 @@
     <li><span class="skill-cat">Frontend:</span> Vue.js, Nuxt.js, Vuetify, JavaScript, TypeScript, HTML5, CSS3, SCSS, Bootstrap, jQuery, AG Grid Enterprise, ApexCharts, Chart.js, Pinia, Vuex</li>
     <li><span class="skill-cat">Backend:</span> Laravel (11 / 12), PHP 8.2+, Node.js, MySQL, REST API design, JWT, Sanctum, SilverStripe, Statamic, WordPress</li>
     <li><span class="skill-cat">Mobile:</span> Flutter, Dart, Hive, Firebase, Android Studio, mobile_scanner, Bluetooth ESC/POS, Connectivity Plus, dio, http</li>
-    <li><span class="skill-cat">AI &amp; Automation:</span> Claude AI, Claude Code, GitHub Copilot, OpenAI API, n8n, Zapier, Make.com, AI-Assisted Delivery, prompt engineering, workflow automation</li>
+    <li><span class="skill-cat">AI &amp; Automation:</span> Claude AI, Claude Code, Gemini, OpenAI API, OpenRouter, Qwen, GitHub Copilot, autonomous agents, multi-LLM orchestration, AI harness / agent service architecture, prompt engineering, n8n, Zapier, Make.com, AI-Assisted Delivery, workflow automation</li>
     <li><span class="skill-cat">Integrations:</span> SAP API, XML / SFTP pipelines, Xero, Eversign, ABN Lookup, Google Maps API, FAREYE API, SurveyJS, jsPDF, Ag-Grid Enterprise</li>
     <li><span class="skill-cat">DevOps &amp; Tooling:</span> Git, GitHub, GitHub Actions, Jenkins, Buddy CI, Docker, Linux, Nginx, Composer, npm, Vite, Webpack, Postman, VS Code, Storybook, Playwright</li>
     <li><span class="skill-cat">Architecture:</span> Multi-tier RBAC, OU-scoped permissions, MySQL advisory locks (GET_LOCK), offline-first sync, write-through retry queues, dual-input scanning abstraction</li>
@@ -283,6 +284,16 @@
   <h2>Selected Projects</h2>
 
   <article class="project">
+    <h3 class="project-head">Autonomous AI Engineer (Multi-LLM Agent Pipeline) — Enterprise Ticketing</h3>
+    <p class="project-desc">Production multi-LLM autonomous AI engineer wired into a real Laravel 11 ticketing system. <code>php artisan ai:work {ref}</code> picks up tickets in ASSIGNED board status, auto-detects the target repository from a systems mapping table, dispatches to the operator-chosen brain (Claude, Gemini, OpenAI, OpenRouter, Qwen), persists per-ticket conversation in AIChatMemory, and writes a session record. A separate <code>ai:verify</code> command runs the real PHPUnit suite against the candidate change and logs pass / fail to the ticket comment thread before any human merge. <code>tickets:auto-close</code> nightly closes tickets in deployed status untouched for 72+ hours. Five interchangeable agent service classes behind one AiHarnessService — adding a new LLM brain is a one-class change. Case study: kon2raya.netlify.app/case-studies/ai-engineer.html</p>
+  </article>
+
+  <article class="project">
+    <h3 class="project-head">Transport Management System (Vue 3 + Laravel 11) — Enterprise Logistics Operator</h3>
+    <p class="project-desc">Full-stack TMS that runs an enterprise logistics operator&rsquo;s transport arm end-to-end — bookings → dispatch → live GPS → costing → incidents → maintenance → invoice. Spatie Laravel-Permission for fine-grained RBAC, ChangesApproval + DataRestriction for sensitive-edit gating, trucker partner registry with rate cards / suspensions / compliance docs, fleet checklists, and a live-GPS dashboard. ~68 Eloquent models, ~99 controllers, ~98 migrations, ~324 Vue pages across 20+ domain folders. Velzon admin theme, AG Grid Enterprise tables, DomPDF documents, Excel bulk import/export via maatwebsite/excel + mavinoo/laravel-batch. Case study: kon2raya.netlify.app/case-studies/tms.html</p>
+  </article>
+
+  <article class="project">
     <h3 class="project-head">WMS Mobile App (Flutter) — Enterprise Logistics Operator</h3>
     <p class="project-desc">Cross-platform Flutter mobile app running scan-driven receiving, picking (three iterations: base, enhanced, v3), dispatch, validation, count-sheets, and stock movement with Bluetooth ESC/POS label printing on Epson TM-P80II. 13 feature modules, 108 build releases, offline-first replay queue, dual-input scanning. Companion Nuxt admin and Laravel REST API with ~251 Eloquent models, ~103 controllers, ~315 migrations. Case study: kon2raya.netlify.app/case-studies/wms.html</p>
   </article>
@@ -337,17 +348,19 @@
      Not hidden — just compactly listed so a parser sees them once more. -->
 <p class="keyword-strip">
   Keywords: full-stack developer, full stack developer, mobile app developer, software engineer,
+  AI engineer, autonomous AI engineer, multi-LLM orchestration, agent pipeline, AI harness,
   Flutter developer, Vue.js developer, Laravel developer, PHP developer, JavaScript developer,
   TypeScript, Nuxt.js, Vuetify, Pinia, Vuex, REST API, RESTful services, JSON, Sanctum, JWT
   authentication, OAuth, MySQL, SQL, database design, Eloquent ORM, Hive, offline-first,
-  Bluetooth ESC/POS, barcode scanning, SAP integration, XML, SFTP, ETL, Claude AI, AI-assisted
-  development, prompt engineering, n8n, Zapier, Workflow automation, Docker, Linux, Git, GitHub,
-  GitHub Actions, Jenkins, Buddy CI, CI/CD, Vite, Webpack, Storybook, Playwright, unit testing,
-  end-to-end testing, agile, scrum, multi-tier RBAC, role-based access control, OU-scoped
-  permissions, two-factor authentication, TOTP, Google Authenticator, AG Grid Enterprise,
-  jsPDF, DomPDF, ApexCharts, Vue Leaflet, CASL, SilverStripe, Statamic, WordPress, SEO,
-  SEMrush, Ahrefs, Figma, UI design, UX design, remote work, Philippines, GMT+8, English
-  professional, Bachelor of Science in Information Technology.
+  Bluetooth ESC/POS, barcode scanning, SAP integration, XML, SFTP, ETL, Claude, Gemini, OpenAI,
+  OpenRouter, Qwen, prompt engineering, AI-assisted development, n8n, Zapier, Workflow automation,
+  Docker, Linux, Git, GitHub, GitHub Actions, Jenkins, Buddy CI, CI/CD, Vite, Webpack, Storybook,
+  Playwright, PHPUnit, unit testing, end-to-end testing, agile, scrum, multi-tier RBAC,
+  role-based access control, OU-scoped permissions, Spatie Laravel-Permission, two-factor
+  authentication, TOTP, Google Authenticator, AG Grid Enterprise, jsPDF, DomPDF, ApexCharts,
+  Vue Leaflet, CASL, SilverStripe, Statamic, WordPress, SEO, SEMrush, Ahrefs, Figma, UI design,
+  UX design, remote work, Philippines, GMT+8, English professional, Bachelor of Science in
+  Information Technology.
 </p>
 
 </body>

@@ -3,7 +3,7 @@
   "meta": {
     "version": "1.0.0",
     "canonical": "https://kon2raya.netlify.app/resume.json",
-    "lastModified": "2026-05-13"
+    "lastModified": "2026-05-15"
   },
   "basics": {
     "name": "Lemmuel Turaya",
@@ -12,7 +12,7 @@
     "email": "turayalemmuel@gmail.com",
     "phone": "+63 922 778 6152",
     "url": "https://kon2raya.netlify.app",
-    "summary": "Full-stack developer with 6+ years designing and shipping production web and mobile applications across logistics, real estate, marketing, and education. Specializes in Vue.js + Laravel on the web, Flutter on mobile, and clean REST API design. Pairs daily with Claude AI to accelerate delivery without sacrificing code quality. Open to remote, hybrid, or onsite roles.",
+    "summary": "Full-stack and mobile developer with 6+ years shipping production platforms across logistics, real estate, marketing, and education. Specializes in Vue.js / Nuxt.js + Laravel on the web, Flutter on mobile, and clean REST API design. Also builds autonomous AI-engineer pipelines — a production multi-LLM agent system (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a real ticketing workflow with security gates and independent test verification. Open to remote, hybrid, or onsite roles.",
     "location": {
       "address": "Biñan",
       "postalCode": "4024",
@@ -178,7 +178,7 @@
     {
       "name": "AI & Automation",
       "level": "Proficient",
-      "keywords": ["Claude AI", "Claude Code", "GitHub Copilot", "OpenAI API", "n8n", "Zapier", "Make.com", "Workflow Automation", "AI-Assisted Delivery"]
+      "keywords": ["Claude AI", "Claude Code", "Gemini", "OpenAI API", "OpenRouter", "Qwen", "GitHub Copilot", "Autonomous Agents", "Multi-LLM Orchestration", "AI Harness / Agent Services", "Prompt Engineering", "n8n", "Zapier", "Make.com", "Workflow Automation", "AI-Assisted Delivery"]
     },
     {
       "name": "Libraries & Integrations",
@@ -206,6 +206,55 @@
     { "name": "Design", "keywords": ["UI/UX", "Vexel art", "branding"] }
   ],
   "projects": [
+    {
+      "name": "Autonomous AI Engineer (Ticketing)",
+      "description": "Multi-LLM autonomous AI agent pipeline wired into a production ticketing system. `php artisan ai:work {ref}` picks up ASSIGNED tickets, auto-detects the target repository, dispatches to the operator-chosen brain (Claude / Gemini / OpenAI / OpenRouter / Qwen), persists per-ticket chat memory, and a separate `ai:verify` command runs the real PHPUnit suite before any merge.",
+      "highlights": [
+        "5 LLM brains wired in behind one AiHarnessService — Claude, Gemini, OpenAI, OpenRouter, Qwen",
+        "Security gate at command boundary — only ASSIGNED-status tickets are pickable",
+        "Auto repo detection from the systems table — no cross-repo drift",
+        "AIChatMemory Eloquent model persists per-ticket conversation history",
+        "Independent verifier runs `php artisan test` (or custom --cmd), logs pass/fail to the ticket comment thread",
+        "tickets:auto-close cron closes deployed tickets after 72 hours"
+      ],
+      "keywords": ["Claude", "Gemini", "OpenAI", "OpenRouter", "Qwen", "Laravel 11", "Multi-LLM", "Autonomous Agents", "PHPUnit", "Spatie Permissions"],
+      "startDate": "2025-06-01",
+      "url": "https://kon2raya.netlify.app/case-studies/ai-engineer.html",
+      "roles": ["Full-Stack Developer", "AI Engineer"],
+      "type": "platform"
+    },
+    {
+      "name": "Transport Management System (TMS)",
+      "description": "Enterprise logistics TMS on Vue 3 + Laravel 11. Full booking → dispatch → live-GPS → costing → invoice lifecycle, with trucker partner registry, vehicle maintenance, and Spatie Permission RBAC. Companion to the WMS mobile app and the customer-service CRM.",
+      "highlights": [
+        "~68 Eloquent models, ~99 controllers, ~98 migrations, ~324 Vue pages across 20+ domain folders",
+        "Velzon admin theme on Vue CLI; AG Grid Enterprise tables; Sanctum bearer auth",
+        "Costing engine: Costing → CostingCost → CostingDetails → CostingTariffs",
+        "Live GPS map view with truck-position cards + fleet utilization tiles",
+        "Excel bulk import / export via maatwebsite/excel + mavinoo/laravel-batch"
+      ],
+      "keywords": ["Vue 3", "Laravel 11", "Sanctum", "Spatie Laravel-Permission", "AG Grid Enterprise", "DomPDF", "MySQL", "Live GPS"],
+      "startDate": "2024-11-01",
+      "url": "https://kon2raya.netlify.app/case-studies/tms.html",
+      "roles": ["Full-Stack Developer"],
+      "type": "application"
+    },
+    {
+      "name": "Enterprise HRIS",
+      "description": "Modern HRIS on Laravel 12 + Vue 3 + Vite + Pinia + TypeScript + Vuestic Admin covering the complete employee lifecycle: records, organizational units, time and attendance, leave, payroll (with government contribution tables, tax tables, 13th-month), memos with concurrency-safe sequential numbering via MySQL GET_LOCK advisory locks, performance evaluations, and TOTP 2FA.",
+      "highlights": [
+        "~54 Eloquent models, ~41 controllers, ~57 migrations, ~95 Vue pages across 30 domain folders",
+        "TOTP 2FA via pragmarx/google2fa-laravel + bacon/bacon-qr-code QR enrollment",
+        "OU-scoped RBAC with Role + Permission + RolePermission + RoleOrganizationalUnit",
+        "Storybook for component stories, Playwright e2e workspace, dual CI/CD on Jenkins + Buddy",
+        "Concurrency-safe memo numbering via MySQL GET_LOCK advisory locks"
+      ],
+      "keywords": ["Laravel 12", "Vue 3", "Vite", "Pinia", "TypeScript", "Vuestic Admin", "TOTP 2FA", "AG Grid Enterprise", "Storybook", "Playwright"],
+      "startDate": "2024-08-01",
+      "url": "https://kon2raya.netlify.app/case-studies/hris.html",
+      "roles": ["Full-Stack Developer"],
+      "type": "platform"
+    },
     {
       "name": "PH Dev Utils",
       "description": "Open-source utilities for Filipino developers — peso formatting, government ID validators, PH phone helpers, and address data — for both JavaScript/TypeScript and PHP.",
