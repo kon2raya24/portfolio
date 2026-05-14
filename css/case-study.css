@@ -1252,43 +1252,72 @@ body::before {
   0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4)); }
   50%      { opacity: 0.85; filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.7)); }
 }
-.viewport-hud__readout {
-  position: absolute;
+/* (viewport-hud__readout removed; the existing .hud widget on index
+   already covers system info. Case studies use the standalone
+   motion-toggle below instead.) */
+
+.motion-toggle--standalone {
+  position: fixed;
   top: 60px;
   right: 22px;
+  z-index: 65;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 1.2px;
-  color: rgba(0, 229, 255, 0.62);
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.25);
-  text-align: right;
-  line-height: 1.65;
   text-transform: uppercase;
-  user-select: none;
+  color: rgba(0, 229, 255, 0.7);
+  background: rgba(8, 12, 28, 0.85);
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  border-radius: 3px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.viewport-hud__readout-row { display: block; }
-.viewport-hud__readout-row--online {
-  color: rgba(124, 255, 140, 0.85);
-  text-shadow: 0 0 6px rgba(124, 255, 140, 0.3);
+.motion-toggle--standalone:hover {
+  border-color: var(--line-strong);
+  color: var(--cyan);
 }
-.viewport-hud__pulse {
+.motion-toggle--standalone:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.motion-toggle--standalone[aria-pressed="true"] {
+  border-color: rgba(255, 144, 0, 0.45);
+  color: var(--brand);
+}
+.motion-toggle__dot {
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #7cff8c;
-  box-shadow: 0 0 8px #7cff8c;
-  margin-right: 5px;
-  vertical-align: middle;
-  animation: hud-pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 6px #7cff8c;
 }
-@keyframes hud-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.45; transform: scale(0.65); }
+.motion-toggle[aria-pressed="true"] .motion-toggle__dot {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: none;
 }
+@media (max-width: 640px) {
+  .motion-toggle--standalone { display: none; }
+}
+
+/* NUCLEAR REDUCED-MOTION — when data-motion="reduced" is set on the
+   root (toggled by motion-toggle, persisted to localStorage),
+   disable all animations everywhere. Transitions stay alive so
+   hover effects still feel responsive. */
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .viewport-hud__corner { animation: none; }
-  .viewport-hud__pulse { animation: none; }
 }
 @media (max-width: 640px) {
   .viewport-hud { display: none; }

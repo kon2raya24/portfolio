@@ -2,11 +2,67 @@
  *  Tech FX — dev-by-dev futuristic interactions
  *  Pure vanilla JS, no dependencies.
  * ======================================================= */
+/* Calm-mode toggle — apply saved preference BEFORE any motion can
+   play. Same logic as case-study.js, duplicated so index works too.
+   The button itself is injected after DOMContentLoaded below. */
+try {
+  var __motionPref = localStorage.getItem('portfolio.motion');
+  if (__motionPref === 'reduced') {
+    document.documentElement.setAttribute('data-motion', 'reduced');
+  }
+} catch (e) { /* private mode / storage disabled */ }
+
 (function () {
   'use strict';
 
   var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isTouch = matchMedia('(hover: none)').matches || window.innerWidth < 1025;
+
+  /* ---------- Calm-mode toggle (injected into the existing .hud) ---------- */
+  (function motionToggle() {
+    var STORAGE_KEY = 'portfolio.motion';
+    function paint(btn, reduced) {
+      btn.setAttribute('aria-pressed', reduced ? 'true' : 'false');
+      btn.querySelector('.motion-toggle__label').textContent = 'motion: ' + (reduced ? 'off' : 'on');
+    }
+    function inject() {
+      var hud = document.querySelector('.hud');
+      if (!hud) return;
+      if (hud.querySelector('.motion-toggle')) return;
+      var isReduced = document.documentElement.getAttribute('data-motion') === 'reduced';
+
+      // Build as a hud-row so it visually slots into the existing list
+      var row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'hud__row motion-toggle';
+      row.setAttribute('aria-pressed', isReduced ? 'true' : 'false');
+      row.setAttribute('aria-label', 'Toggle reduced motion');
+      row.innerHTML =
+        '<span class="hud__label">motion</span>' +
+        '<span class="hud__val motion-toggle__label">' + (isReduced ? 'off' : 'on') + '</span>';
+      row.addEventListener('click', function () {
+        var nowReduced = document.documentElement.getAttribute('data-motion') !== 'reduced';
+        if (nowReduced) document.documentElement.setAttribute('data-motion', 'reduced');
+        else document.documentElement.removeAttribute('data-motion');
+        paint(row, nowReduced);
+        try { localStorage.setItem(STORAGE_KEY, nowReduced ? 'reduced' : 'full'); } catch (e) {}
+      });
+
+      // Insert before the .hud__now block so it sits with the data rows
+      var nowEl = hud.querySelector('.hud__now');
+      if (nowEl) hud.insertBefore(row, nowEl);
+      else hud.appendChild(row);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', inject);
+    } else {
+      // Slight defer because the .hud is built inside the same IIFE later
+      setTimeout(inject, 0);
+    }
+    // Also retry once after a small delay because the .hud is created
+    // by another IIFE below — order isn't guaranteed during initial load
+    setTimeout(inject, 250);
+  })();
 
   /* ---------- Console welcome (dev-by-dev) ---------- */
   try {

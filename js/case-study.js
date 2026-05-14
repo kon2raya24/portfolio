@@ -140,6 +140,72 @@
 })();
 
 // =======================================================
+//  Calm-mode toggle
+//
+//  Injects a "MOTION: ON" / "MOTION: OFF" button into the
+//  viewport-HUD readout. Click toggles
+//  data-motion="reduced" on <html>; CSS kills all animations
+//  when that attribute is set. Preference persists to
+//  localStorage.
+//
+//  Duplicated in tech-fx.js so the toggle works on both
+//  index.html (which loads tech-fx.js) and case studies
+//  (which load case-study.js). Each guards against
+//  double-injection.
+// =======================================================
+(function () {
+  'use strict';
+  var STORAGE_KEY = 'portfolio.motion';
+
+  // Apply saved preference BEFORE any motion can play. Safe to run
+  // before DOMContentLoaded because we only touch <html>'s attribute.
+  try {
+    var pref = localStorage.getItem(STORAGE_KEY);
+    if (pref === 'reduced') {
+      document.documentElement.setAttribute('data-motion', 'reduced');
+    }
+  } catch (e) { /* private mode / storage disabled */ }
+
+  function inject() {
+    if (document.querySelector('.motion-toggle')) return;
+
+    var isReduced = document.documentElement.getAttribute('data-motion') === 'reduced';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'motion-toggle motion-toggle--standalone';
+    btn.setAttribute('aria-pressed', isReduced ? 'true' : 'false');
+    btn.setAttribute('aria-label', 'Toggle reduced motion');
+    btn.innerHTML =
+      '<span class="motion-toggle__dot" aria-hidden="true"></span>' +
+      '<span class="motion-toggle__label">motion: ' + (isReduced ? 'off' : 'on') + '</span>';
+
+    btn.addEventListener('click', function () {
+      var nowReduced = document.documentElement.getAttribute('data-motion') !== 'reduced';
+      if (nowReduced) {
+        document.documentElement.setAttribute('data-motion', 'reduced');
+      } else {
+        document.documentElement.removeAttribute('data-motion');
+      }
+      btn.setAttribute('aria-pressed', nowReduced ? 'true' : 'false');
+      btn.querySelector('.motion-toggle__label').textContent = 'motion: ' + (nowReduced ? 'off' : 'on');
+      try {
+        localStorage.setItem(STORAGE_KEY, nowReduced ? 'reduced' : 'full');
+      } catch (e) {}
+    });
+
+    // Standalone position — fixed at top-right where my readout used to be.
+    // (Case studies don't have the .hud widget that tech-fx.js builds.)
+    document.body.appendChild(btn);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+})();
+
+// =======================================================
 //  Reading progress bar — thin gradient strip at top:0 of
 //  viewport that fills as you scroll the document. Cheap
 //  feedback for long writeups (wms-v2, ai-engineer, hris).

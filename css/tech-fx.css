@@ -6695,51 +6695,111 @@ body.theme-sunset {
   .viewport-hud__corner { animation: none; }
 }
 
-/* Viewport HUD readout — fixed TOP-right (mission-control style).
-   Was bottom-right but that collided with the .gototop scroll button. */
-.viewport-hud__readout {
-  position: absolute;
-  top: 60px; /* just below the top-right corner bracket (14 + 38 + 8) */
+/* (Viewport-HUD readout removed — the existing .hud widget built by
+   tech-fx.js already displays sys/time/fps/scroll/section/views/now,
+   making the lat/lon readout redundant.) */
+
+/* Calm-mode motion toggle — two flavors:
+   1. As a .hud__row inside the existing .hud widget on index
+   2. As a standalone fixed button on case studies
+   Both share the .motion-toggle class. */
+.motion-toggle {
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+.hud .motion-toggle {
+  /* When inside .hud, mimic existing .hud__row layout — already done
+     by the .hud__row class added in the JS markup. Just add hover hint. */
+  border-top: 1px dashed rgba(0, 229, 255, 0.18);
+  margin-top: 6px;
+  padding-top: 8px;
+}
+.hud .motion-toggle:hover .motion-toggle__label {
+  color: #fff;
+  text-shadow: 0 0 8px var(--cyan);
+}
+.hud .motion-toggle:focus-visible {
+  outline: 1px solid var(--cyan);
+  outline-offset: 2px;
+}
+.motion-toggle[aria-pressed="true"] .motion-toggle__label {
+  color: var(--brand);
+  text-shadow: 0 0 6px rgba(255, 144, 0, 0.5);
+}
+
+/* Standalone variant — used on case studies (no .hud widget there) */
+.motion-toggle--standalone {
+  position: fixed;
+  top: 60px;
   right: 22px;
+  z-index: 65;
+  width: auto;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 1.2px;
-  color: rgba(0, 229, 255, 0.62);
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.25);
-  text-align: right;
-  line-height: 1.65;
   text-transform: uppercase;
-  user-select: none;
+  color: rgba(0, 229, 255, 0.7);
+  background: rgba(8, 12, 28, 0.85);
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  border-radius: 3px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  gap: 6px;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
 }
-.viewport-hud__readout-row { display: block; }
-.viewport-hud__readout-row--online {
-  color: rgba(124, 255, 140, 0.85);
-  text-shadow: 0 0 6px rgba(124, 255, 140, 0.3);
+.motion-toggle--standalone:hover {
+  border-color: var(--line-strong);
+  color: var(--cyan);
 }
-.viewport-hud__pulse {
+.motion-toggle--standalone:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.motion-toggle--standalone[aria-pressed="true"] {
+  border-color: rgba(255, 144, 0, 0.45);
+  color: var(--brand);
+}
+.motion-toggle__dot {
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #7cff8c;
-  box-shadow: 0 0 8px #7cff8c;
-  margin-right: 5px;
-  vertical-align: middle;
-  animation: hud-pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 6px #7cff8c;
 }
-@keyframes hud-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.45; transform: scale(0.65); }
+.motion-toggle[aria-pressed="true"] .motion-toggle__dot {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: none;
 }
-:root[data-theme="light"] .viewport-hud__readout {
-  color: rgba(0, 102, 122, 0.78) !important;
-  text-shadow: none !important;
+@media (max-width: 640px) {
+  .motion-toggle--standalone { display: none; }
 }
-:root[data-theme="light"] .viewport-hud__readout-row--online {
-  color: #1f8a3e !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  .viewport-hud__pulse { animation: none; }
+
+/* =======================================================
+   NUCLEAR REDUCED-MOTION RULE
+   When the user toggles the motion-toggle (or saved
+   preference loads), <html data-motion="reduced"> turns
+   off all animations site-wide. Transitions on hover etc
+   stay intact so the site still feels responsive — just
+   no more idle loops chewing CPU + attention.
+   ======================================================= */
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation: none !important;
 }
 
 /* Hide on mobile (≤640px) — corners eat scarce visual real estate
