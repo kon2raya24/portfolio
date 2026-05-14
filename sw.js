@@ -4,7 +4,7 @@
      - same-origin HTML pages: stale-while-revalidate (cap), falls back to cached index
      - cross-origin api calls (github/counterapi): network-only, no caching
 */
-const VERSION = 'pf-v12-2026-05-14';
+const VERSION = 'pf-v13-2026-05-14';
 const STATIC_CACHE = 'pf-static-' + VERSION;
 const PAGE_CACHE   = 'pf-pages-'  + VERSION;
 
@@ -16,8 +16,10 @@ const STATIC_PRECACHE = [
   '/css/animate.css',
   '/css/icomoon.css',
   '/css/bootstrap.css',
+  '/css/case-study.css',
   '/js/main.js',
   '/js/tech-fx.js',
+  '/js/case-study.js',
   '/images/logo.png',
   '/images/logo-192.png',
   '/manifest.json'

@@ -47,12 +47,15 @@ Required body structure (in order):
    - `.cs-hero__label` (always `// case-study.md`)
    - `<h1>` with subtitle in cyan span
    - `.cs-hero__tagline` — 2–3 sentences positioning the work
-   - `.cs-meta` block with **client** (NDA-framed), **role**, **period**, **status**, **scope** (counts)
+   - `.cs-meta` block with **client** (NDA-framed), **role**, **period**, **status**, **scope** (counts), and a **last touched** item: `<time class="cs-last-touched" data-cs-slug="{slug}" data-loading="true">fetching...</time>` — the JS at `/js/case-study.js` paints this from the GitHub commits API.
    - `.cs-hero__chips` — 6–10 tech chips, use `cs-chip--ai` for AI/LLM ones
-3. Sections in this order: `tl;dr` → `problem` → `approach` → `solution` (with code sample + `<figure class="cs-shot-real">`) → `stack` → `outcome` (4 metric tiles) → `lessons` (worked well + would tighten). Give each `<section class="cs-section">` an `id` matching its label slug (`id="tldr"`, `id="problem"`, etc.) so the on-page TOC anchors land cleanly even for short writeups.
-4. **Sticky on-page TOC** (`<aside class="cs-toc">`) between the `</header>` close and the first `<section>`, only if the writeup is long (6+ sections; ai-engineer, wms-v2, hris are the precedent). Pattern: 7 anchor links pointing to the section IDs above. Skip the TOC for short studies — it adds chrome without value.
-5. `<aside class="cs-cta">` close-out
-6. **Prev/next pager** (`<nav class="cs-pager">`) before `</main>`. Canonical order matches the work-tree on `index.html`: wms → pamanaland → jbc → hris → tms → ai-engineer → wms-v2 → llm-wiki → **new study goes at the end**. The new study gets `<span class="cs-pager__placeholder">` on the `next` side; the previously-last study (currently llm-wiki) needs its `next` placeholder replaced with a link to the new study. **Don't forget this chain update or readers hit a dead end.**
+3. **Top-of-page TL;DR metric grid** (`<div class="cs-metrics cs-metrics--top">`) right after `</header>` (before the TOC if present). 4 metric tiles in the same shape as the bottom outcome grid — pick the most-impactful numbers from the body so a 30-second scanner sees the receipts up front. The bottom outcome grid stays — same shape, different angle (top = headline metrics, bottom = full outcome breakdown).
+4. Sections in this order: `tl;dr` → `problem` → `approach` → `solution` (with code sample + `<figure class="cs-shot-real">`) → `stack` → `outcome` (4 metric tiles) → `lessons` (worked well + would tighten). Give each `<section class="cs-section">` an `id` matching its label slug (`id="tldr"`, `id="problem"`, etc.) so the on-page TOC anchors land cleanly even for short writeups.
+5. **Sticky on-page TOC** (`<aside class="cs-toc">`) between the top metric grid and the first `<section>`, only if the writeup is long (6+ sections; ai-engineer, wms-v2, hris are the precedent). Pattern: 7 anchor links pointing to the section IDs above. Skip the TOC for short studies — it adds chrome without value.
+6. `<aside class="cs-cta">` close-out
+7. **Inline OG-card preview** (`<aside class="cs-og-preview">`) right before the prev/next pager. Embeds `../images/og-{slug}.png` in a dashed-border card with a "// when shared on LinkedIn / X / Slack:" label. Self-aware signal that the social-share story is intentional. Hidden in print stylesheet.
+8. **Prev/next pager** (`<nav class="cs-pager">`) before `</main>`. Canonical order matches the work-tree on `index.html`: wms → pamanaland → jbc → hris → tms → ai-engineer → wms-v2 → llm-wiki → **new study goes at the end**. The new study gets `<span class="cs-pager__placeholder">` on the `next` side; the previously-last study (currently llm-wiki) needs its `next` placeholder replaced with a link to the new study. **Don't forget this chain update or readers hit a dead end.**
+9. **Script tag**: `<script src="../js/case-study.js"></script>` immediately before `</body>`. This powers the last-touched stamp (and any future per-case-study client-side polish like reading progress bars).
 
 ### Anonymization rules (always)
 
@@ -221,6 +224,11 @@ After steps 1–7 are complete, invoke the **`update-resume`** skill (defined at
 ## Verification checklist before commit
 
 - [ ] HTML opens cleanly in a browser; theme toggle works on the page; no console errors.
+- [ ] Top-of-page `.cs-metrics--top` grid renders 4 headline metrics under the hero, sourced from the writeup body. Bottom outcome grid remains, with the FULL set of outcome metrics.
+- [ ] `.cs-last-touched` time element in the hero meta block has `data-cs-slug="{slug}"` and reads its commit time from GitHub API on load (visible after ~1s on fresh visit, instant on cached visit).
+- [ ] `.cs-og-preview` aside renders the OG image and is hidden in the print preview.
+- [ ] `js/case-study.js` is linked at the bottom of `<body>`.
+- [ ] Print preview (Ctrl+P) shows a clean Georgia-serif version without sticky chrome, TOC, pager, or OG preview.
 - [ ] OG image renders correctly (open it directly to eyeball — 1200×630, accent color matches family).
 - [ ] Mock screenshot has the `// case-study mock` watermark visible.
 - [ ] Article + BreadcrumbList JSON-LD parses on https://search.google.com/test/rich-results (no errors).
