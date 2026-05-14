@@ -138,3 +138,49 @@
     init();
   }
 })();
+
+// =======================================================
+//  Section-heading reveal — IntersectionObserver toggles
+//  .is-revealed on every .cs-section h2 once it enters the
+//  viewport. CSS in case-study.css handles the draw animation.
+// =======================================================
+(function () {
+  'use strict';
+
+  function reveal(el) {
+    el.classList.add('is-revealed');
+  }
+
+  function init() {
+    var headings = document.querySelectorAll('.cs-section h2');
+    if (!headings.length) return;
+
+    // No IntersectionObserver? Reveal everything immediately.
+    if (!('IntersectionObserver' in window)) {
+      headings.forEach(reveal);
+      return;
+    }
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          reveal(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.4,
+      // Slight bottom margin so the underline doesn't draw the instant the
+      // heading peeks in — wait until it's actually being read.
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    headings.forEach(function (h) { obs.observe(h); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
