@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>/now — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What I'm working on right now — current focus, what I'm learning, and availability. Updated regularly." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/now.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="/now — Lemmuel Turaya" />
+<meta property="og:description" content="Current focus, what I'm learning, and availability. Updated regularly." />
+<meta property="og:url" content="https://kon2raya.netlify.app/now.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/1615352107595.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Theme bootstrap: applies stored/preferred theme before paint to prevent FOUC -->
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme;
+			if (stored === 'light' || stored === 'dark') {
+				theme = stored;
+			} else {
+				theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+			}
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		}
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/case-study.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+	/* Page-specific tweaks layered on top of case-study.css */
+	.now-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 18px;
+		margin: 28px 0 16px;
+	}
+	@media (max-width: 640px) {
+		.now-grid { grid-template-columns: 1fr; }
+	}
+	.now-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 14px;
+		border-radius: 999px;
+		background: rgba(120, 255, 140, 0.10);
+		border: 1px solid rgba(120, 255, 140, 0.55);
+		color: #7cff8c;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 12px;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		text-shadow: 0 0 6px rgba(120, 255, 140, 0.35);
+	}
+	.now-status::before {
+		content: "";
+		width: 7px; height: 7px;
+		border-radius: 50%;
+		background: #7cff8c;
+		box-shadow: 0 0 8px #7cff8c;
+		animation: now-pulse 1.6s ease-in-out infinite;
+	}
+	@keyframes now-pulse {
+		0%, 100% { opacity: 1; }
+		50%      { opacity: 0.4; }
+	}
+	.now-meta {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 12px;
+		color: rgba(255, 255, 255, 0.55);
+		margin: 8px 0 0;
+	}
+	.now-stamp {
+		display: inline-block;
+		margin-top: 6px;
+		padding: 4px 10px;
+		border-radius: 4px;
+		background: rgba(0, 229, 255, 0.06);
+		border: 1px solid rgba(0, 229, 255, 0.25);
+		color: var(--cyan);
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 11px;
+		letter-spacing: 1px;
+	}
+</style>
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="./">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">~/<span class="active">now</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<header class="cs-hero">
+		<div class="cs-hero__label">// now.md</div>
+		<h1>What I&rsquo;m up to <span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">right now</span></h1>
+		<p class="cs-hero__tagline">
+			A snapshot of current focus, what I&rsquo;m learning, and how to reach me &mdash;
+			updated whenever things shift. Inspired by Derek Sivers&rsquo;
+			<a href="https://nownownow.com/about" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;">/now page</a> movement.
+		</p>
+
+		<div class="now-status" role="status" aria-live="polite">open to opportunities · 2026</div>
+		<p class="now-meta"><span class="now-stamp">last updated · 2026-05-14</span></p>
+	</header>
+
+	<section class="cs-section">
+		<div class="cs-section__label">building</div>
+		<h2>Currently shipping</h2>
+		<ul>
+			<li><strong>WMS Mobile App</strong> &mdash; Flutter warehouse management, in active rollout at AAI Worldwide Logistics. Tightening the offline replay queue and operator-feedback loop.</li>
+			<li><strong>This portfolio</strong> &mdash; iterating on case studies, hire funnel UX, and the dark/light theme system. Polishing in public.</li>
+			<li><strong>Side experiments</strong> &mdash; pairing with Claude on small tools and refactors; pushing the AI-assisted workflow further into real production code.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">learning</div>
+		<h2>Sharpening on</h2>
+		<ul>
+			<li><strong>Flutter testing patterns</strong> &mdash; widget tests, golden tests, and integration tests against a real Laravel backend.</li>
+			<li><strong>Observability</strong> &mdash; structured logging and tracing on the WMS backend so production behavior stops being a guessing game.</li>
+			<li><strong>Design systems</strong> &mdash; formalizing the cyberpunk tokens used here into a small, reusable kit.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">availability</div>
+		<h2>How to reach me</h2>
+		<p>
+			Currently full-time at <strong>AAI Worldwide Logistics</strong> as an Application
+			Developer. Open to:
+		</p>
+		<ul>
+			<li><strong>Full-time roles</strong> &mdash; remote-first, GMT+8 base, good async overlap to APAC / EU mornings / US evenings. 30-day notice.</li>
+			<li><strong>Contract / freelance</strong> &mdash; short-to-medium engagements on the side, especially full-stack web (Vue + Laravel) and mobile (Flutter).</li>
+			<li><strong>Just chatting</strong> &mdash; happy to talk shop, AI-assisted dev workflows, or trade notes on shipping at small teams.</li>
+		</ul>
+		<p style="margin-top:18px;">
+			Fastest path: <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;padding-bottom:1px;">turayalemmuel@gmail.com</a>
+			&middot; or <a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;padding-bottom:1px;">book a 15-min intro call</a>.
+		</p>
+	</section>
+
+	<aside class="cs-cta">
+		<h3>See the work behind this</h3>
+		<p>Two production case studies live on the site &mdash; full-stack realty platform and a Flutter warehouse app.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="case-studies/pamanaland.html">Pamanaland RMS &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="case-studies/wms.html">WMS Mobile App &rarr;</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>

@@ -1842,6 +1842,261 @@
     }
   })();
 
+  /* ---------- Footer git-log: recent commits to portfolio repo ---------- */
+  (function gitLog() {
+    var list = document.querySelector('[data-git-log-list]');
+    if (!list) return;
+
+    var REPO = 'kon2raya24/portfolio';
+    var URL = 'https://api.github.com/repos/' + REPO + '/commits?per_page=5';
+    var CACHE_KEY = 'portfolio.gitLog.cache';
+    var CACHE_TTL = 30 * 60 * 1000; // 30 min
+
+    function escape(s) {
+      return String(s || '').replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function shortDate(iso) {
+      try {
+        var d = new Date(iso);
+        return d.toISOString().slice(0, 10);
+      } catch (e) { return ''; }
+    }
+
+    function render(commits) {
+      if (!commits || !commits.length) {
+        list.innerHTML = '<li class="git-log__empty">$ no commits cached &mdash; check back later</li>';
+        return;
+      }
+      var html = commits.slice(0, 5).map(function (c) {
+        var sha = (c.sha || '').slice(0, 7);
+        var msg = (c.commit && c.commit.message || '').split('\n')[0];
+        var date = shortDate(c.commit && c.commit.author && c.commit.author.date);
+        var url = c.html_url || ('https://github.com/' + REPO + '/commit/' + (c.sha || ''));
+        return '<li class="git-log__entry">' +
+                 '<a class="git-log__sha" href="' + escape(url) + '" target="_blank" rel="noopener">' + escape(sha) + '</a>' +
+                 '<span class="git-log__msg">' + escape(msg) + '</span>' +
+                 '<span class="git-log__date">' + escape(date) + '</span>' +
+               '</li>';
+      }).join('');
+      list.innerHTML = html;
+    }
+
+    function readCache() {
+      try {
+        var raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        if (Date.now() - parsed.at > CACHE_TTL) return parsed; // still usable as fallback
+        return parsed;
+      } catch (e) { return null; }
+    }
+    function writeCache(commits) {
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), commits: commits })); } catch (e) {}
+    }
+
+    var cached = readCache();
+    if (cached && cached.commits) render(cached.commits);
+
+    var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 5000);
+
+    fetch(URL, ctrl ? { signal: ctrl.signal } : undefined)
+      .then(function (r) {
+        clearTimeout(timer);
+        if (r.status === 403) {
+          if (!cached) list.innerHTML = '<li class="git-log__empty">$ github rate-limited &middot; retry later</li>';
+          return null;
+        }
+        if (!r.ok) return null;
+        return r.json();
+      })
+      .then(function (data) {
+        if (!data || !data.length) return;
+        render(data);
+        writeCache(data);
+      })
+      .catch(function () {
+        if (!cached) list.innerHTML = '<li class="git-log__empty">$ offline &middot; could not fetch commits</li>';
+      });
+  })();
+
+  /* ---------- Footer 'last shipped' stamp ---------- */
+  (function lastShipped() {
+    var el = document.querySelector('[data-last-shipped]');
+    if (!el) return;
+    var d;
+    try { d = new Date(document.lastModified); } catch (e) { d = new Date(); }
+    if (isNaN(d.getTime())) d = new Date();
+    var iso = d.getFullYear() + '-' +
+              String(d.getMonth() + 1).padStart(2, '0') + '-' +
+              String(d.getDate()).padStart(2, '0');
+    el.textContent = 'last shipped · ' + iso;
+  })();
+
+  /* ---------- Work portfolio filter chips ---------- */
+  (function workFilter() {
+    var container = document.querySelector('.work-filters');
+    var grid = document.getElementById('work-grid');
+    if (!container || !grid) return;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-tags]'));
+    if (!cards.length) return;
+
+    // Count tags across all cards
+    var counts = {};
+    cards.forEach(function (card) {
+      (card.getAttribute('data-tags') || '').split(',').forEach(function (t) {
+        t = t.trim();
+        if (!t) return;
+        counts[t] = (counts[t] || 0) + 1;
+      });
+    });
+
+    // Sort tags by count desc, then alpha
+    var tags = Object.keys(counts).sort(function (a, b) {
+      return counts[b] - counts[a] || a.localeCompare(b);
+    }).slice(0, 7);
+
+    // Build chip nodes: [all] + top tags
+    var chips = [{ tag: 'all', count: cards.length }].concat(
+      tags.map(function (t) { return { tag: t, count: counts[t] }; })
+    );
+
+    container.innerHTML = '';
+    chips.forEach(function (c) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'work-filter';
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('data-filter', c.tag);
+      btn.setAttribute('aria-selected', c.tag === 'all' ? 'true' : 'false');
+      btn.innerHTML = '<span class="work-filter__tag">' + c.tag + '</span>' +
+                      '<span class="work-filter__count">' + c.count + '</span>';
+      container.appendChild(btn);
+    });
+
+    function applyFilter(tag) {
+      cards.forEach(function (card) {
+        var cardTags = (card.getAttribute('data-tags') || '').split(',').map(function (t) { return t.trim(); });
+        var match = tag === 'all' || cardTags.indexOf(tag) !== -1;
+        card.classList.toggle('is-hidden', !match);
+      });
+      container.querySelectorAll('.work-filter').forEach(function (b) {
+        var active = b.getAttribute('data-filter') === tag;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      try { localStorage.setItem('portfolio.workFilter', tag); } catch (e) {}
+    }
+
+    container.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-filter]');
+      if (b) applyFilter(b.getAttribute('data-filter'));
+    });
+
+    // Restore prior selection
+    var saved;
+    try { saved = localStorage.getItem('portfolio.workFilter'); } catch (e) {}
+    if (saved && counts[saved]) applyFilter(saved);
+    else applyFilter('all');
+  })();
+
+  /* ---------- Theme toggle (dark <-> light) ---------- */
+  (function themeToggle() {
+    var buttons = document.querySelectorAll('[data-theme-toggle]');
+    if (!buttons.length) return;
+
+    function currentTheme() {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      try { localStorage.setItem('portfolio.theme', theme); } catch (e) {}
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', theme === 'light' ? '#f6f4ee' : '#050814');
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-label', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme');
+        b.setAttribute('title', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme');
+      });
+      // Neutralize inline background-image on hero in light mode
+      // (set inline so it always wins over CSS specificity battles)
+      var hero = document.getElementById('fh5co-header');
+      if (hero) {
+        if (theme === 'light') {
+          if (!hero.dataset.origBg) hero.dataset.origBg = hero.style.backgroundImage || '';
+          hero.style.backgroundImage = 'none';
+        } else if (hero.dataset.origBg !== undefined) {
+          hero.style.backgroundImage = hero.dataset.origBg;
+        }
+      }
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        applyTheme(currentTheme() === 'light' ? 'dark' : 'light');
+      });
+    });
+
+    // Initialize button state to match the theme set by the FOUC bootstrap
+    applyTheme(currentTheme());
+  })();
+
+  /* ---------- Hire CTA: Hiring/Client track toggle ---------- */
+  (function ctaTrack() {
+    var tabs = document.querySelectorAll('[data-cta-track]');
+    if (!tabs.length) return;
+
+    var form     = document.querySelector('form[name="contact"]');
+    var typeSel  = form ? form.querySelector('select[name="opportunity_type"]') : null;
+    var msgArea  = form ? form.querySelector('textarea[name="message"]') : null;
+
+    var presets = {
+      hiring: {
+        opportunity: 'Full-time role',
+        placeholder: 'A few lines about the role, team, and what success looks like in the first 90 days…'
+      },
+      client:  {
+        opportunity: 'Contract / Freelance',
+        placeholder: 'A few lines about the project, timeline, and the outcome you need…'
+      }
+    };
+
+    function setTrack(track) {
+      tabs.forEach(function (t) {
+        var active = t.getAttribute('data-cta-track') === track;
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      var preset = presets[track];
+      if (!preset) return;
+      if (typeSel) {
+        for (var i = 0; i < typeSel.options.length; i++) {
+          if (typeSel.options[i].text === preset.opportunity) {
+            typeSel.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      if (msgArea && !msgArea.value) {
+        msgArea.setAttribute('placeholder', preset.placeholder);
+      }
+      try { localStorage.setItem('portfolio.ctaTrack', track); } catch (e) {}
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        setTrack(t.getAttribute('data-cta-track'));
+      });
+    });
+
+    var saved;
+    try { saved = localStorage.getItem('portfolio.ctaTrack'); } catch (e) {}
+    if (saved && presets[saved]) setTrack(saved);
+  })();
+
   /* ---------- Konami code easter egg ---------- */
   (function konami() {
     var seq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];

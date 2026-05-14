@@ -1,0 +1,62 @@
+{
+  "$schema": "https://kon2raya.netlify.app/api/availability.schema.json",
+  "name": "Lemmuel Turaya",
+  "role": "Full-Stack & Mobile App Developer",
+  "open": true,
+  "lastUpdated": "2026-05-14",
+  "engagementTypes": [
+    "full-time",
+    "contract",
+    "freelance",
+    "short-project",
+    "chat"
+  ],
+  "workModes": ["remote", "hybrid", "onsite"],
+  "noticePeriod": "30 days",
+  "earliestStart": "30-45 days from signed offer",
+  "rate": {
+    "currency": "USD",
+    "model": "negotiable",
+    "notes": "Rate varies by scope and engagement type. Happy to share specifics on a call once the role is clear."
+  },
+  "location": {
+    "city": "Biñan",
+    "region": "Laguna",
+    "country": "PH",
+    "timezone": "Asia/Manila",
+    "utcOffset": "+08:00",
+    "overlapHours": {
+      "apac": "full",
+      "eu": "mornings",
+      "us": "evenings"
+    }
+  },
+  "stack": {
+    "web": ["Vue.js", "Nuxt.js", "Laravel", "PHP", "MySQL", "REST APIs"],
+    "mobile": ["Flutter", "Dart", "Firebase"],
+    "ai": ["Claude AI", "Claude Code", "OpenAI API", "n8n", "Zapier"],
+    "design": ["Figma", "Adobe Suite"],
+    "tooling": ["VS Code", "Git", "GitHub", "Docker", "Linux"]
+  },
+  "links": {
+    "site": "https://kon2raya.netlify.app",
+    "email": "mailto:turayalemmuel@gmail.com",
+    "resume": "https://kon2raya.netlify.app/resume.pdf",
+    "resumeJson": "https://kon2raya.netlify.app/resume.json",
+    "linkedin": "https://www.linkedin.com/in/lemmuel-turaya/",
+    "github": "https://github.com/kon2raya24",
+    "cal": "https://cal.com/lemmuel-turaya/intro",
+    "now": "https://kon2raya.netlify.app/now.html",
+    "uses": "https://kon2raya.netlify.app/uses.html",
+    "changelog": "https://kon2raya.netlify.app/changelog.html",
+    "feed": "https://kon2raya.netlify.app/feed.xml"
+  },
+  "preferredRoles": [
+    "Full-Stack Engineer",
+    "Mobile App Developer (Flutter)",
+    "Product Engineer",
+    "Application Developer"
+  ],
+  "_curl": "curl -s https://kon2raya.netlify.app/api/availability.json | jq .",
+  "_humanRedirect": "If a recruiter wants a friendlier view, see /now.html or /changelog.html."
+}

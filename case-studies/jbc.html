@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · JBC Commission System — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="JBC Commission System — a Vue + Laravel platform automating commission calculation and payout workflows." />
+<meta name="theme-color" content="#050814">
+<!-- TODO: when content is final, flip to "index, follow" and add to sitemap.xml -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/jbc.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · JBC Commission System — Lemmuel Turaya" />
+<meta property="og:description" content="A Vue + Laravel platform automating commission calculation and payout workflows." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/jbc.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-jbc.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Theme bootstrap: applies stored/preferred theme before paint to prevent FOUC -->
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme;
+			if (stored === 'light' || stored === 'dark') {
+				theme = stored;
+			} else {
+				theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+			}
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		}
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">jbc-commission-system</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<aside class="cs-draft" role="note">
+		<span class="cs-draft__badge">DRAFT</span>
+		<p class="cs-draft__txt">
+			<strong>Work in progress.</strong> Polishing in public &mdash; the structure is here,
+			content fills in as I write the writeup. For the full picture today,
+			<a href="mailto:turayalemmuel@gmail.com">email me</a> or
+			<a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener">book a call</a>.
+		</p>
+	</aside>
+
+	<!-- Hero -->
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>JBC Commission System<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Commission &amp; payout automation on Vue + Laravel</span></h1>
+		<p class="cs-hero__tagline">
+			A web platform that replaces manual commission calculation spreadsheets with rule-based
+			automation &mdash; tracking sales, agents, tiers, and payouts in one auditable workflow.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">company</span>
+				<span class="cs-meta__v">JBC <!-- TODO: confirm full client name --></span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Full-Stack Developer</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v"><!-- TODO: YYYY — YYYY --></span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v"><!-- TODO: In production / In rollout --></span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">team</span>
+				<span class="cs-meta__v"><!-- TODO: solo / pair / team size --></span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">Vue.js</span>
+			<span class="cs-chip">Laravel</span>
+			<span class="cs-chip">MySQL</span>
+			<span class="cs-chip">REST</span>
+		</div>
+	</header>
+
+	<!-- TL;DR -->
+	<section class="cs-section">
+		<div class="cs-section__label">tl;dr</div>
+		<h2>What it is</h2>
+		<p>
+			<!-- TODO: 2-3 sentence summary of what the system does, who uses it, and the
+			     primary outcome. Mirror the pamanaland.html / wms.html opening. -->
+		</p>
+	</section>
+
+	<!-- Problem -->
+	<section class="cs-section">
+		<div class="cs-section__label">problem</div>
+		<h2>The bottleneck</h2>
+		<p>
+			<!-- TODO: What was broken before this system existed? -->
+		</p>
+		<ul>
+			<li><!-- TODO: specific pain point --></li>
+			<li><!-- TODO: specific pain point --></li>
+			<li><!-- TODO: specific pain point --></li>
+		</ul>
+	</section>
+
+	<!-- Approach -->
+	<section class="cs-section">
+		<div class="cs-section__label">approach</div>
+		<h2>How I broke it down</h2>
+		<ul>
+			<li><strong><!-- TODO: heading --></strong> &mdash; <!-- TODO: explanation --></li>
+			<li><strong><!-- TODO: heading --></strong> &mdash; <!-- TODO: explanation --></li>
+			<li><strong><!-- TODO: heading --></strong> &mdash; <!-- TODO: explanation --></li>
+		</ul>
+	</section>
+
+	<!-- Solution -->
+	<section class="cs-section">
+		<div class="cs-section__label">solution</div>
+		<h2>What I built</h2>
+
+		<p><strong>Modules shipped:</strong></p>
+		<ul>
+			<li><strong><!-- TODO: Module name --></strong> &mdash; <!-- TODO: description --></li>
+			<li><strong><!-- TODO: Module name --></strong> &mdash; <!-- TODO: description --></li>
+			<li><strong><!-- TODO: Module name --></strong> &mdash; <!-- TODO: description --></li>
+		</ul>
+
+		<div class="cs-shot--coming">
+			<span class="cs-shot__title">Production screens</span>
+			<span class="cs-shot__sub">sanitized walkthrough available on request</span>
+		</div>
+
+		<!-- Optional: code sample using the existing cs-code pattern (see pamanaland.html
+		     lines 157-175 for a working example). Drop in a representative snippet from
+		     the codebase to anchor the technical claim. -->
+	</section>
+
+	<!-- Stack -->
+	<section class="cs-section">
+		<div class="cs-section__label">stack</div>
+		<h2>Tech</h2>
+		<ul>
+			<li><strong>Frontend:</strong> Vue.js, <!-- TODO: Vuetify? Ag-Grid? --></li>
+			<li><strong>Backend:</strong> Laravel, MySQL, REST API</li>
+			<li><strong>Tooling:</strong> VS Code &middot; Git &middot; GitHub</li>
+			<li><strong>Hosting:</strong> <span class="cs-pending">details on request</span></li>
+		</ul>
+	</section>
+
+	<!-- Outcome -->
+	<section class="cs-section">
+		<div class="cs-section__label">outcome</div>
+		<h2>Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k"><!-- TODO: metric key --></div>
+				<div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;"><!-- TODO: value --></div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k"><!-- TODO: metric key --></div>
+				<div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;"><!-- TODO: value --></div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k"><!-- TODO: metric key --></div>
+				<div class="cs-metric__v" style="font-size:14px;letter-spacing:0.5px;"><!-- TODO: value --></div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">automation</div>
+				<div class="cs-metric__v">✓</div>
+			</div>
+		</div>
+
+		<p>
+			<!-- TODO: 2-3 sentence summary of business impact. End with the
+			     "happy to discuss specifics on request" CTA used in the other two case studies. -->
+			<a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
+		</p>
+	</section>
+
+	<!-- Lessons -->
+	<section class="cs-section">
+		<div class="cs-section__label">lessons</div>
+		<h2>What I&rsquo;d do again — and differently</h2>
+		<ul>
+			<li><strong><!-- TODO: lesson --></strong> <!-- TODO: explanation --></li>
+			<li><strong><!-- TODO: lesson --></strong> <!-- TODO: explanation --></li>
+			<li><strong><!-- TODO: lesson --></strong> <!-- TODO: explanation --></li>
+		</ul>
+	</section>
+
+	<!-- CTA -->
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I build commission/payout systems and internal platforms for sales-driven teams. Let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>

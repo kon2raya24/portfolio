@@ -1406,18 +1406,21 @@ body.theme-sunset {
   background: rgba(5, 8, 20, 0.95);
   border: 1px solid var(--line-strong);
   border-radius: 6px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.6px;
+  line-height: 1.5;
   color: #e6f3ff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 229, 255, 0.25);
   opacity: 0;
   transform: translate(-50%, calc(-100% - 12px)) scale(0.96);
   transition: opacity 0.14s, transform 0.14s;
   pointer-events: none;
-  white-space: nowrap;
-  max-width: 280px;
+  white-space: normal;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 24px));
+  text-align: center;
 }
 .tech-tip::after {
   content: '';
@@ -2716,6 +2719,133 @@ body.theme-sunset {
   color: var(--bg-dark);
   box-shadow: 0 0 12px var(--cyan);
 }
+.case-status--live {
+  background: rgba(120, 255, 140, 0.10);
+  border: 1px solid rgba(120, 255, 140, 0.55);
+  color: #7cff8c;
+  text-decoration: none;
+  transition: 0.22s;
+  text-shadow: 0 0 6px rgba(120, 255, 140, 0.35);
+}
+.case-status--live::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #7cff8c;
+  box-shadow: 0 0 8px #7cff8c;
+  vertical-align: middle;
+  animation: case-live-pulse 1.8s ease-in-out infinite;
+}
+.case-status--live:hover {
+  background: #7cff8c;
+  color: var(--bg-dark);
+  box-shadow: 0 0 12px rgba(120, 255, 140, 0.7);
+}
+.case-status--live:hover::before {
+  background: var(--bg-dark);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+@keyframes case-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+/* ==========================================================================
+   WORK FILTER CHIPS (#fh5co-work > .work-filters)
+   ========================================================================== */
+.work-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 32px;
+  padding: 12px 8px;
+}
+.work-filters:empty { display: none; }
+
+.work-filter {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  color: rgba(230, 243, 255, 0.7);
+  cursor: pointer;
+  transition: 0.22s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: lowercase;
+}
+.work-filter:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+.work-filter__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 10px;
+  font-size: 10px;
+  color: rgba(0, 229, 255, 0.85);
+}
+.work-filter.is-active {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+.work-filter.is-active .work-filter__count {
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border-color: var(--cyan);
+}
+.work-filter:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.work-grid > .col-padding.is-hidden {
+  display: none !important;
+}
+
+/* Light theme overrides for filter chips */
+:root[data-theme="light"] .work-filter {
+  color: rgba(10, 30, 60, 0.65) !important;
+  border-color: rgba(10, 30, 60, 0.2) !important;
+}
+:root[data-theme="light"] .work-filter:hover {
+  color: #007a90 !important;
+  border-color: #007a90 !important;
+  box-shadow: 0 0 10px rgba(0, 122, 144, 0.18);
+}
+:root[data-theme="light"] .work-filter__count {
+  background: rgba(0, 122, 144, 0.08) !important;
+  color: #007a90 !important;
+  border-color: rgba(0, 122, 144, 0.25) !important;
+}
+:root[data-theme="light"] .work-filter.is-active {
+  background: rgba(0, 122, 144, 0.10) !important;
+  border-color: #007a90 !important;
+  color: #007a90 !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .work-filter.is-active .work-filter__count {
+  background: #007a90 !important;
+  color: #ffffff !important;
+  border-color: #007a90 !important;
+}
 .case-name--link {
   text-decoration: none;
   border-bottom: 1px dashed transparent;
@@ -2857,6 +2987,165 @@ body.theme-sunset {
   margin: 0 auto;
 }
 .cta-card__lead strong { color: var(--cyan); font-weight: 500; }
+
+/* ---- Engagement flow (what happens next) ---- */
+.cta-flow {
+  margin: 26px auto 18px;
+  max-width: 760px;
+}
+.cta-flow__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 2.5px;
+  color: var(--cyan-dim);
+  margin: 0 0 14px;
+  text-align: center;
+  opacity: 0.85;
+}
+.cta-flow__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  position: relative;
+}
+.cta-flow__steps::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.35) 12%, rgba(0,229,255,0.35) 88%, transparent 100%);
+  pointer-events: none;
+}
+.cta-flow__step {
+  position: relative;
+  background: linear-gradient(180deg, #0a1024 0%, #070a18 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  transition: 0.22s;
+}
+.cta-flow__step:hover {
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 18px rgba(0, 229, 255, 0.1);
+  transform: translateY(-2px);
+}
+.cta-flow__num {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.55);
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  position: relative;
+  z-index: 2;
+}
+.cta-flow__step:hover .cta-flow__num {
+  background: var(--cyan);
+  color: var(--bg-dark);
+  box-shadow: 0 0 12px var(--cyan);
+}
+.cta-flow__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+.cta-flow__head {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #fff;
+  letter-spacing: 0.4px;
+}
+.cta-flow__sub {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+  line-height: 1.45;
+}
+
+/* ---- Track toggle (Hiring vs Client) ---- */
+.cta-track {
+  display: inline-flex;
+  margin: 6px auto 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+  align-self: center;
+}
+.cta-card__body { display: block; }
+.cta-card__body > .cta-track { display: inline-flex; }
+/* center the track via wrapper */
+.cta-track-wrap { display: flex; justify-content: center; }
+.cta-track__tab {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: lowercase;
+  transition: 0.18s;
+}
+.cta-track__tab:hover { color: rgba(255, 255, 255, 0.85); }
+.cta-track__icon {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: 0.18s;
+}
+.cta-track__tab.is-active {
+  background: rgba(0, 229, 255, 0.12);
+  color: var(--cyan);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+.cta-track__tab.is-active .cta-track__icon {
+  color: var(--cyan);
+  text-shadow: 0 0 6px var(--cyan);
+}
+.cta-track__tab[data-cta-track="client"].is-active {
+  background: rgba(120, 255, 140, 0.12);
+  color: #7cff8c;
+  text-shadow: 0 0 6px rgba(120, 255, 140, 0.4);
+}
+.cta-track__tab[data-cta-track="client"].is-active .cta-track__icon {
+  color: #7cff8c;
+  text-shadow: 0 0 6px #7cff8c;
+}
+
+@media (max-width: 720px) {
+  .cta-flow__steps { grid-template-columns: repeat(2, 1fr); }
+  .cta-flow__steps::before { display: none; }
+}
+@media (max-width: 420px) {
+  .cta-flow__steps { grid-template-columns: 1fr; }
+  .cta-track { flex-direction: column; border-radius: 8px; }
+  .cta-track__tab { border-radius: 6px; justify-content: center; }
+}
 
 .cta-email {
   display: flex;
@@ -3246,6 +3535,160 @@ body.theme-sunset {
   color: rgba(255, 255, 255, 0.2);
   margin: 0 2px;
 }
+.footer-stamp {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.35);
+}
+.footer-stamp__label {
+  color: rgba(120, 255, 140, 0.55);
+  margin-right: 4px;
+}
+.footer-stamp__val {
+  color: rgba(0, 229, 255, 0.72);
+}
+
+/* =======================================================
+   Footer git-log panel (recent commits, live from GitHub)
+   ======================================================= */
+.git-log {
+  background: linear-gradient(180deg, #0b1226 0%, #070a18 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 0 auto 28px;
+  max-width: 720px;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 229, 255, 0.08);
+  overflow: hidden;
+}
+.git-log__chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, #0d1430 0%, #0a1024 100%);
+  border-bottom: 1px solid var(--line);
+}
+.git-log__dots { display: inline-flex; gap: 6px; }
+.git-log__dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.git-log__dots i:nth-child(1) { background: #ff5f57; }
+.git-log__dots i:nth-child(2) { background: #febc2e; }
+.git-log__dots i:nth-child(3) { background: #28c840; }
+.git-log__path {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  margin-left: 6px;
+}
+.git-log__path .tab-active {
+  color: var(--cyan);
+  border-bottom: 1px solid var(--cyan);
+  padding-bottom: 1px;
+}
+.git-log__cmd {
+  margin-left: auto;
+  color: rgba(120, 255, 140, 0.7);
+  font-size: 11px;
+  letter-spacing: 0.6px;
+}
+.git-log__list {
+  list-style: none;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.git-log__entry {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 4px 0;
+  color: rgba(230, 243, 255, 0.85);
+}
+.git-log__entry + .git-log__entry { border-top: 1px dashed rgba(0, 229, 255, 0.08); }
+.git-log__sha {
+  color: var(--cyan);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: 0.18s;
+  letter-spacing: 0.5px;
+}
+.git-log__sha:hover { border-bottom-color: var(--cyan); text-shadow: 0 0 6px rgba(0, 229, 255, 0.4); }
+.git-log__msg {
+  color: rgba(230, 243, 255, 0.92);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.git-log__date {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.git-log__loading,
+.git-log__empty {
+  color: rgba(255, 255, 255, 0.45);
+  padding: 6px 0;
+  font-size: 12px;
+}
+.git-log__foot {
+  padding: 8px 14px 10px;
+  border-top: 1px dashed rgba(0, 229, 255, 0.1);
+  font-size: 11px;
+  text-align: right;
+}
+.git-log__foot a {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: 0.18s;
+  letter-spacing: 0.5px;
+}
+.git-log__foot a:hover { border-bottom-color: var(--cyan); text-shadow: 0 0 6px rgba(0, 229, 255, 0.4); }
+
+@media (max-width: 560px) {
+  .git-log__entry { grid-template-columns: 72px 1fr; }
+  .git-log__date { grid-column: 2; color: rgba(255, 255, 255, 0.35); font-size: 10px; }
+  .git-log__chrome { flex-wrap: wrap; gap: 6px; padding: 8px 12px; }
+  .git-log__cmd { margin-left: 0; font-size: 10px; }
+}
+
+/* Light theme variant — match profile-config / code-card paneling */
+:root[data-theme="light"] .git-log {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border-color: rgba(10, 30, 60, 0.12) !important;
+  box-shadow: 0 12px 32px rgba(10, 30, 60, 0.08), 0 0 0 1px rgba(0, 122, 144, 0.08) !important;
+}
+:root[data-theme="light"] .git-log__chrome {
+  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
+  border-bottom-color: rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .git-log__path { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .git-log__path .tab-active { color: #00667a !important; border-bottom-color: #00667a !important; }
+:root[data-theme="light"] .git-log__cmd { color: #1f8a3e !important; }
+:root[data-theme="light"] .git-log__entry { color: #1a1f2e !important; border-top-color: rgba(10, 30, 60, 0.08) !important; }
+:root[data-theme="light"] .git-log__sha { color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .git-log__sha:hover { border-bottom-color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .git-log__msg { color: #1a1f2e !important; }
+:root[data-theme="light"] .git-log__date { color: rgba(10, 30, 60, 0.5) !important; }
+:root[data-theme="light"] .git-log__loading,
+:root[data-theme="light"] .git-log__empty { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .git-log__foot { border-top-color: rgba(0, 122, 144, 0.18) !important; }
+:root[data-theme="light"] .git-log__foot a { color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .git-log__foot a:hover { border-bottom-color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .footer-stamp { color: rgba(10, 30, 60, 0.45) !important; }
+:root[data-theme="light"] .footer-stamp__label { color: #1f8a3e !important; }
+:root[data-theme="light"] .footer-stamp__val { color: #007a90 !important; }
 
 /* =======================================================
  *  Live visitor stats (footer)
@@ -3847,9 +4290,1629 @@ body.theme-sunset {
   .commit-cell { width: 9px; height: 9px; }
 }
 
+/* =========================================================================
+   PRAISE / SHIPPED-IMPACT SECTION (#fh5co-praise)
+   Terminal-paned grid that sits between case-studies and the hire CTA.
+   Reuses the cta-card chrome vocabulary so it feels native.
+   ========================================================================= */
+#fh5co-praise {
+  position: relative;
+  padding: 80px 0 70px;
+  background: linear-gradient(180deg, #050814 0%, #07091a 60%, #050814 100%);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+#fh5co-praise > .overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 10%, rgba(0, 229, 255, 0.06), transparent 55%),
+    radial-gradient(ellipse at 10% 90%, rgba(255, 144, 0, 0.04), transparent 60%);
+  pointer-events: none;
+}
+#fh5co-praise > .container { position: relative; z-index: 2; }
+
+.praise {
+  background: linear-gradient(180deg, #0b1226 0%, #070a18 100%);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 60px rgba(0, 229, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+.praise__chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: linear-gradient(180deg, #0d1430 0%, #0a1024 100%);
+  border-bottom: 1px solid var(--line);
+  font-family: 'JetBrains Mono', monospace;
+}
+.praise__dots { display: inline-flex; gap: 6px; }
+.praise__dots i {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.praise__dots i:nth-child(1) { background: #ff5f57; }
+.praise__dots i:nth-child(2) { background: #febc2e; }
+.praise__dots i:nth-child(3) { background: #28c840; }
+.praise__path {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-left: 6px;
+}
+.praise__path .tab-active {
+  color: var(--cyan);
+  border-bottom: 1px solid var(--cyan);
+  padding-bottom: 1px;
+}
+.praise__cmd {
+  margin-left: auto;
+  color: rgba(120, 255, 140, 0.65);
+  font-size: 11.5px;
+  letter-spacing: 1px;
+}
+
+.praise__body { padding: 36px 38px 34px; }
+.praise__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  color: var(--cyan-dim);
+  margin-bottom: 8px;
+  text-align: center;
+}
+.praise__title {
+  font-family: 'Orbitron', monospace !important;
+  font-size: 28px !important;
+  letter-spacing: 4px !important;
+  margin: 0 0 12px !important;
+  color: #fff !important;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(0, 229, 255, 0.25);
+}
+.praise__lead {
+  color: rgba(230, 243, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 620px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.praise__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.praise-card {
+  position: relative;
+  background: linear-gradient(180deg, #0a1024 0%, #070a18 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 22px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: 0.22s;
+}
+.praise-card:hover {
+  border-color: rgba(0, 229, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 229, 255, 0.08);
+  transform: translateY(-2px);
+}
+.praise-card__mark {
+  position: absolute;
+  top: 4px;
+  left: 14px;
+  font-family: 'Orbitron', monospace;
+  font-size: 56px;
+  line-height: 1;
+  color: rgba(0, 229, 255, 0.18);
+  pointer-events: none;
+  user-select: none;
+}
+.praise-card__quote {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: rgba(230, 243, 255, 0.88);
+  margin: 22px 0 0;
+  flex: 1;
+}
+.praise-card__attrib {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+.praise-card__avatar {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+.praise-card__who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.praise-card__name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: #fff;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.praise-card__role {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 1px;
+  text-transform: lowercase;
+}
+.praise-card__link {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  text-decoration: none;
+  padding: 6px;
+  border-radius: 4px;
+  transition: 0.18s;
+  line-height: 1;
+}
+.praise-card__link:hover {
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.08);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+
+.praise__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(0, 229, 255, 0.04);
+  border: 1px dashed rgba(0, 229, 255, 0.2);
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: rgba(230, 243, 255, 0.72);
+  flex-wrap: wrap;
+}
+.praise-prompt { color: var(--cyan); font-weight: 700; }
+.praise__foot a {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(0, 229, 255, 0.4);
+  padding-bottom: 1px;
+}
+.praise__foot a:hover { border-bottom-style: solid; }
+
+@media (max-width: 900px) {
+  .praise__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .praise__body { padding: 26px 22px 24px; }
+  .praise__grid { grid-template-columns: 1fr; gap: 14px; }
+  .praise__title { font-size: 22px !important; letter-spacing: 3px !important; }
+  .praise-card { padding: 20px 18px 16px; }
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .glitch::before, .glitch::after { animation: none; }
   .matrix-canvas, .particles-canvas { display: none; }
   body.konami-on { animation: none; }
+  .praise-card:hover { transform: none; }
+  .case-status--live::before { animation: none; }
+}
+
+/* ==========================================================================
+   THEME TOGGLE BUTTON (nav)
+   ========================================================================== */
+.fh5co-nav-extra {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.theme-toggle {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  width: 38px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--cyan);
+  font-size: 15px;
+  line-height: 1;
+  transition: 0.22s;
+  position: relative;
+}
+.theme-toggle:hover {
+  background: rgba(0, 229, 255, 0.18);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+.theme-toggle__icon { display: inline-flex; transition: opacity 0.2s; pointer-events: none; }
+.theme-toggle__icon--sun { display: none; }
+:root[data-theme="light"] .theme-toggle__icon--moon { display: none; }
+:root[data-theme="light"] .theme-toggle__icon--sun  { display: inline-flex; }
+
+/* ==========================================================================
+   LIGHT THEME OVERRIDES — surfaces + text, accents preserved
+   Engaged only when <html data-theme="light">. Dark stays the default.
+   ========================================================================== */
+:root[data-theme="light"] {
+  --bg-deep:  #f6f4ee;
+  --bg-dark:  #efece4;
+  --surface:  #ffffff;
+  --line:         rgba(10, 40, 80, 0.10);
+  --line-strong:  rgba(10, 40, 80, 0.22);
+  --cyan-dim: #007a90;
+}
+
+:root[data-theme="light"] body {
+  background: #f6f4ee !important;
+  color: #1a1f2e !important;
+}
+
+/* Disable heavy fx in light mode — the brand stays via accents, not effects */
+:root[data-theme="light"] .matrix-canvas,
+:root[data-theme="light"] .particles-canvas { display: none !important; }
+:root[data-theme="light"] .glitch::before,
+:root[data-theme="light"] .glitch::after { display: none !important; }
+
+/* Nav */
+:root[data-theme="light"] #fh5co-nav {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(10, 40, 80, 0.1);
+  box-shadow: 0 2px 14px rgba(10, 30, 60, 0.06) !important;
+}
+:root[data-theme="light"] .fh5co-nav-brand {
+  color: var(--brand) !important;
+  text-shadow: none;
+}
+:root[data-theme="light"] .fh5co-nav-links li a {
+  color: rgba(10, 30, 60, 0.78) !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .fh5co-nav-links li a:hover { color: var(--brand) !important; }
+:root[data-theme="light"] .theme-toggle {
+  background: rgba(10, 30, 60, 0.06);
+  border-color: rgba(10, 30, 60, 0.2);
+  color: var(--brand);
+}
+:root[data-theme="light"] .theme-toggle:hover {
+  background: rgba(255, 144, 0, 0.12);
+  box-shadow: 0 0 10px rgba(255, 144, 0, 0.35);
+}
+
+/* Hero */
+:root[data-theme="light"] #fh5co-header {
+  background: linear-gradient(180deg, #f6f4ee 0%, #efece4 100%) !important;
+  color: #1a1f2e;
+}
+:root[data-theme="light"] #fh5co-header .display-t,
+:root[data-theme="light"] #fh5co-header .display-tc { color: #1a1f2e; }
+:root[data-theme="light"] #fh5co-header h1,
+:root[data-theme="light"] #fh5co-header h2 { color: #1a1f2e !important; }
+:root[data-theme="light"] #fh5co-header h2,
+:root[data-theme="light"] #fh5co-header p { color: rgba(20, 30, 50, 0.78) !important; }
+
+/* Sections — flatten dark gradients onto paper */
+:root[data-theme="light"] #fh5co-about,
+:root[data-theme="light"] #fh5co-resume,
+:root[data-theme="light"] #fh5co-features,
+:root[data-theme="light"] #fh5co-skills,
+:root[data-theme="light"] #fh5co-work,
+:root[data-theme="light"] #fh5co-blog,
+:root[data-theme="light"] #fh5co-started,
+:root[data-theme="light"] #fh5co-praise,
+:root[data-theme="light"] #fh5co-counter,
+:root[data-theme="light"] #fh5co-services {
+  background: #f6f4ee !important;
+  color: #1a1f2e;
+}
+:root[data-theme="light"] .fh5co-bg-dark,
+:root[data-theme="light"] .fh5co-bg-color { background: #f6f4ee !important; }
+
+/* Generic text adjustments inside sections */
+:root[data-theme="light"] body,
+:root[data-theme="light"] p,
+:root[data-theme="light"] li,
+:root[data-theme="light"] .fh5co-heading h2,
+:root[data-theme="light"] section h2,
+:root[data-theme="light"] section h3 { color: #1a1f2e; }
+:root[data-theme="light"] .fh5co-heading h2 {
+  text-shadow: none !important;
+}
+
+/* Card panes — flip to warm paper */
+:root[data-theme="light"] .cta-card,
+:root[data-theme="light"] .praise,
+:root[data-theme="light"] .case-studies,
+:root[data-theme="light"] .px-card,
+:root[data-theme="light"] .exp-card,
+:root[data-theme="light"] .cs-section,
+:root[data-theme="light"] .proj-card,
+:root[data-theme="light"] .live-stats {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border: 1px solid rgba(10, 30, 60, 0.12) !important;
+  box-shadow: 0 12px 32px rgba(10, 30, 60, 0.08), 0 0 24px rgba(255, 144, 0, 0.04) !important;
+  color: #1a1f2e !important;
+}
+
+/* Pane chromes (terminal bars) — light variant */
+:root[data-theme="light"] .cta-card__chrome,
+:root[data-theme="light"] .praise__chrome,
+:root[data-theme="light"] .case-studies__chrome,
+:root[data-theme="light"] .px-card__chrome {
+  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
+  border-bottom: 1px solid rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .cta-card__path,
+:root[data-theme="light"] .praise__path,
+:root[data-theme="light"] .case-studies__path,
+:root[data-theme="light"] .px-card__path { color: rgba(10, 30, 60, 0.6) !important; }
+
+/* Praise cards inside the section */
+:root[data-theme="light"] .praise-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border-color: rgba(10, 30, 60, 0.1) !important;
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .praise-card__quote { color: rgba(20, 30, 50, 0.88) !important; }
+:root[data-theme="light"] .praise-card__attrib { border-top-color: rgba(10, 30, 60, 0.1) !important; }
+:root[data-theme="light"] .praise-card__name { color: #1a1f2e !important; }
+:root[data-theme="light"] .praise-card__role { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .praise-card__avatar { color: #007a90 !important; background: rgba(0, 122, 144, 0.08) !important; border-color: rgba(0, 122, 144, 0.4) !important; text-shadow: none !important; }
+:root[data-theme="light"] .praise__lead { color: rgba(20, 30, 50, 0.7) !important; }
+:root[data-theme="light"] .praise__title { color: #1a1f2e !important; text-shadow: none !important; }
+
+/* CTA card inner: flow + tabs */
+:root[data-theme="light"] .cta-card__title { color: #1a1f2e !important; text-shadow: none !important; }
+:root[data-theme="light"] .cta-card__lead { color: rgba(20, 30, 50, 0.78) !important; }
+:root[data-theme="light"] .cta-card__lead strong { color: #007a90 !important; }
+:root[data-theme="light"] .cta-flow__step {
+  background: linear-gradient(180deg, #fdfaf2 0%, #f6f2e6 100%) !important;
+  border-color: rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .cta-flow__head { color: #1a1f2e !important; }
+:root[data-theme="light"] .cta-flow__sub  { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .cta-track {
+  background: rgba(10, 30, 60, 0.04);
+  border-color: rgba(10, 30, 60, 0.12);
+}
+:root[data-theme="light"] .cta-track__tab { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .cta-track__tab:hover { color: #1a1f2e !important; }
+
+/* Live stats + footer */
+:root[data-theme="light"] #fh5co-footer { background: #efece4 !important; color: #1a1f2e !important; }
+:root[data-theme="light"] #fh5co-footer p { color: rgba(20, 30, 50, 0.75) !important; }
+:root[data-theme="light"] .live-stats {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(10, 30, 60, 0.12) !important;
+}
+:root[data-theme="light"] .live-stats__label { color: rgba(10, 30, 60, 0.6) !important; }
+:root[data-theme="light"] .live-stats__val   { color: #007a90 !important; text-shadow: none !important; }
+
+/* Scroll progress bar accent stays */
+/* Custom cursor visibility tweak handled in JS isTouch branch; leave as-is */
+
+/* Code panes & sample code */
+:root[data-theme="light"] pre,
+:root[data-theme="light"] .cs-code pre {
+  background: #1c2233 !important;
+  color: #e6f3ff !important;
+}
+
+/* Cyan-on-white contrast: darken cyan-tinted text in light mode */
+:root[data-theme="light"] .cta-status,
+:root[data-theme="light"] .cta-email__addr,
+:root[data-theme="light"] .case-status--live,
+:root[data-theme="light"] .praise__foot,
+:root[data-theme="light"] .case-studies__foot {
+  background: rgba(0, 122, 144, 0.04);
+}
+:root[data-theme="light"] .cs-section__label,
+:root[data-theme="light"] .praise__label,
+:root[data-theme="light"] .cta-card__label,
+:root[data-theme="light"] .cta-flow__label { color: #007a90 !important; }
+
+/* Inputs */
+:root[data-theme="light"] .cta-form__field input,
+:root[data-theme="light"] .cta-form__field select,
+:root[data-theme="light"] .cta-form__field textarea {
+  background: #ffffff !important;
+  color: #1a1f2e !important;
+  border-color: rgba(10, 30, 60, 0.18) !important;
+}
+:root[data-theme="light"] .cta-form__field input::placeholder,
+:root[data-theme="light"] .cta-form__field textarea::placeholder { color: rgba(10, 30, 60, 0.4) !important; }
+:root[data-theme="light"] .cta-form__label { color: rgba(10, 30, 60, 0.6) !important; }
+
+/* ---- Phase D: round-2 light-theme overrides for remaining components ---- */
+
+/* px-card / exp-card body content */
+:root[data-theme="light"] .px-card,
+:root[data-theme="light"] .exp-card {
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .px-card *,
+:root[data-theme="light"] .exp-card * {
+  color: inherit;
+}
+:root[data-theme="light"] .px-card__path,
+:root[data-theme="light"] .exp-card__path { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .px-card__badge,
+:root[data-theme="light"] .exp-card__badge {
+  background: rgba(0, 122, 144, 0.08) !important;
+  color: #007a90 !important;
+  border-color: rgba(0, 122, 144, 0.35) !important;
+}
+:root[data-theme="light"] .px-principles__num,
+:root[data-theme="light"] .exp-item__dot {
+  color: var(--brand) !important;
+}
+:root[data-theme="light"] .px-faq summary,
+:root[data-theme="light"] .px-faq__q { color: #1a1f2e !important; }
+:root[data-theme="light"] .px-faq__a { color: rgba(20, 30, 50, 0.78) !important; }
+:root[data-theme="light"] .exp-group::before {
+  background: rgba(0, 122, 144, 0.35) !important;
+}
+
+/* proj-card */
+:root[data-theme="light"] .proj-card {
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .proj-card__body { color: #1a1f2e !important; }
+:root[data-theme="light"] .proj-card__title { color: #1a1f2e !important; text-shadow: none !important; }
+:root[data-theme="light"] .proj-card__meta { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .proj-card__path { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .proj-card__chip {
+  background: rgba(0, 122, 144, 0.08) !important;
+  color: #007a90 !important;
+  border-color: rgba(0, 122, 144, 0.35) !important;
+}
+
+/* case-studies inline list */
+:root[data-theme="light"] .case-studies__lead { color: rgba(10, 30, 60, 0.7) !important; }
+:root[data-theme="light"] .case-tree { color: rgba(10, 30, 60, 0.45) !important; }
+:root[data-theme="light"] .case-name,
+:root[data-theme="light"] .case-name--link { color: #007a90 !important; text-shadow: none !important; }
+:root[data-theme="light"] .case-studies__foot { color: rgba(10, 30, 60, 0.7) !important; }
+:root[data-theme="light"] .case-studies__foot a { color: #007a90 !important; }
+:root[data-theme="light"] .case-prompt { color: var(--brand) !important; }
+
+/* Hero stats tiles */
+:root[data-theme="light"] .hero-stats .stat {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(10, 30, 60, 0.12) !important;
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .hero-stats .stat strong {
+  color: var(--brand) !important;
+  text-shadow: none !important;
+}
+
+/* Hero header inner */
+:root[data-theme="light"] #fh5co-header {
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] #fh5co-header h1,
+:root[data-theme="light"] #fh5co-header h2,
+:root[data-theme="light"] #fh5co-header p,
+:root[data-theme="light"] #fh5co-header .tech-chip { color: #1a1f2e !important; }
+:root[data-theme="light"] #fh5co-header .tech-chip {
+  background: rgba(255, 144, 0, 0.08) !important;
+  border-color: rgba(255, 144, 0, 0.4) !important;
+  color: var(--brand) !important;
+}
+:root[data-theme="light"] #fh5co-header .fh5co-social-icons a {
+  color: rgba(10, 30, 60, 0.55) !important;
+}
+:root[data-theme="light"] #fh5co-header .fh5co-social-icons a:hover { color: var(--brand) !important; }
+
+/* Section headings */
+:root[data-theme="light"] .fh5co-heading h2,
+:root[data-theme="light"] section h2,
+:root[data-theme="light"] .fh5co-heading h3 {
+  color: #1a1f2e !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .fh5co-heading > p,
+:root[data-theme="light"] .work-intro { color: rgba(10, 30, 60, 0.7) !important; }
+
+/* Skills bars / progress */
+:root[data-theme="light"] .progress {
+  background: rgba(10, 30, 60, 0.08) !important;
+}
+:root[data-theme="light"] .progress-bar { color: #fff !important; }
+:root[data-theme="light"] .progress + p,
+:root[data-theme="light"] .pgb-text { color: #1a1f2e !important; }
+
+/* Services / features */
+:root[data-theme="light"] .feature-left,
+:root[data-theme="light"] .feature-center {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border: 1px solid rgba(10, 30, 60, 0.1) !important;
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .feature-left h3,
+:root[data-theme="light"] .feature-center h3 { color: #1a1f2e !important; }
+:root[data-theme="light"] .feature-left p,
+:root[data-theme="light"] .feature-center p { color: rgba(10, 30, 60, 0.75) !important; }
+:root[data-theme="light"] .feature-left .icon,
+:root[data-theme="light"] .feature-center .icon { color: var(--brand) !important; }
+
+/* CTA buttons within sections */
+:root[data-theme="light"] .cta-btn {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(10, 30, 60, 0.18) !important;
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .cta-btn:hover {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 18px rgba(255, 144, 0, 0.2) !important;
+}
+:root[data-theme="light"] .cta-btn__caption { color: #1a1f2e !important; }
+:root[data-theme="light"] .cta-btn__sub { color: rgba(10, 30, 60, 0.5) !important; }
+:root[data-theme="light"] .cta-btn--primary {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+:root[data-theme="light"] .cta-btn--primary .cta-btn__caption,
+:root[data-theme="light"] .cta-btn--primary .cta-btn__sub { color: #fff !important; }
+
+/* Hire button in nav */
+:root[data-theme="light"] .hire-btn {
+  background: var(--brand) !important;
+  color: #fff !important;
+}
+
+/* GitHub commit graph cells */
+:root[data-theme="light"] .commit-cell { border-color: rgba(10, 30, 60, 0.1) !important; }
+
+/* Recent repos card content */
+:root[data-theme="light"] .px-repos li { color: #1a1f2e !important; }
+:root[data-theme="light"] .px-repos__loading { color: rgba(10, 30, 60, 0.5) !important; }
+:root[data-theme="light"] .px-repos__foot a { color: #007a90 !important; }
+
+/* Cover photo overlay */
+:root[data-theme="light"] #fh5co-header.fh5co-cover::before,
+:root[data-theme="light"] #fh5co-header.fh5co-cover::after { display: none !important; }
+:root[data-theme="light"] #fh5co-header.fh5co-cover { background-image: none !important; }
+
+/* ============================================================
+   FOCUS-VISIBLE rings (a11y) — applies in both themes
+   ============================================================ */
+.theme-toggle:focus-visible,
+.cta-track__tab:focus-visible,
+[data-cta-track]:focus-visible,
+.work-filter:focus-visible,
+.case-status:focus-visible,
+.case-name--link:focus-visible,
+.cs-btn:focus-visible,
+.cta-btn:focus-visible,
+.cta-form__submit:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:root[data-theme="light"] .theme-toggle:focus-visible,
+:root[data-theme="light"] .cta-track__tab:focus-visible,
+:root[data-theme="light"] .work-filter:focus-visible,
+:root[data-theme="light"] .cta-btn:focus-visible,
+:root[data-theme="light"] .cs-btn:focus-visible {
+  outline-color: var(--brand);
+}
+.fh5co-nav-links li a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+:root[data-theme="light"] .fh5co-nav-links li a:focus-visible {
+  outline-color: #007a90;
+}
+
+/* ============================================================
+   Light theme — contrast fixes for syntax-highlight tinted text
+   These spans use bright "code editor" tints meant for dark bg.
+   On paper bg they're invisible (yellow / pale cyan on cream).
+   ============================================================ */
+
+/* Code syntax tokens — adapt to a "light editor" palette */
+:root[data-theme="light"] .tk-key   { color: #b16fc6 !important; }   /* purple */
+:root[data-theme="light"] .tk-str   { color: #8a6f00 !important; }   /* mustard (was light yellow) */
+:root[data-theme="light"] .tk-num   { color: #c66a00 !important; }   /* deep brand orange */
+:root[data-theme="light"] .tk-fn    { color: #00667a !important; }   /* deep cyan */
+:root[data-theme="light"] .tk-cmt   { color: rgba(10, 30, 60, 0.45) !important; }
+:root[data-theme="light"] .tk-punct { color: rgba(10, 30, 60, 0.6) !important; }
+
+/* Config card values (about section JSON-style block) */
+:root[data-theme="light"] .cfg-key       { color: #b16fc6 !important; }
+:root[data-theme="light"] .cfg-val       { color: rgba(10, 30, 60, 0.85) !important; }
+:root[data-theme="light"] .cfg-val--str  { color: #8a6f00 !important; }
+:root[data-theme="light"] .cfg-val--arr  { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .cfg-val--arr .cfg-val--str { color: #8a6f00 !important; }
+:root[data-theme="light"] .cfg-link      { color: #00667a !important; }
+:root[data-theme="light"] .cfg-link:hover { color: #c66a00 !important; }
+
+/* Skill / experience chips */
+:root[data-theme="light"] .exp-chip {
+  background: rgba(0, 122, 144, 0.06) !important;
+  border-color: rgba(0, 122, 144, 0.35) !important;
+  color: #00667a !important;
+}
+:root[data-theme="light"] .exp-chip:hover {
+  background: rgba(0, 122, 144, 0.14) !important;
+  border-color: #00667a !important;
+  color: #003f4a !important;
+  box-shadow: 0 0 8px rgba(0, 122, 144, 0.25);
+}
+:root[data-theme="light"] .exp-chip--ai {
+  background: linear-gradient(135deg, rgba(255, 144, 0, 0.12), rgba(255, 43, 214, 0.1)) !important;
+  border-color: rgba(255, 144, 0, 0.5) !important;
+  color: #b85c00 !important;
+}
+
+/* Resume background (forced via !important in dark — needs explicit light override) */
+:root[data-theme="light"] #fh5co-resume {
+  background: linear-gradient(180deg, #f6f4ee 0%, #efece4 100%) !important;
+}
+
+/* Anywhere using var(--cyan) directly as primary text — too bright on white.
+   Replace high-saturation cyan with deep teal in light mode via inherited
+   tokens where possible. Specific surface fixes: */
+:root[data-theme="light"] .cs-chip,
+:root[data-theme="light"] .cs-meta__v {
+  color: #00667a !important;
+}
+:root[data-theme="light"] .cs-section__label {
+  color: #00667a !important;
+}
+
+/* Hero subtitle "tagline / tech chips" — make sure they read on cover */
+:root[data-theme="light"] #fh5co-header h2 small,
+:root[data-theme="light"] #fh5co-header .tagline { color: rgba(10, 30, 60, 0.78) !important; }
+
+/* Live stats footer values */
+:root[data-theme="light"] [data-live="total"],
+:root[data-theme="light"] [data-live="session"],
+:root[data-theme="light"] [data-live="refresh"] { color: #00667a !important; }
+
+/* ============================================================
+   Round-2.5 hotfix — remaining light-mode contrast bugs
+   Sweep of all elements that still inherit dark-theme tints.
+   ============================================================ */
+
+/* Skills section */
+:root[data-theme="light"] .skill-name { color: #1a1f2e !important; }
+:root[data-theme="light"] .skill-level,
+:root[data-theme="light"] .skill-meta { color: rgba(10, 30, 60, 0.6) !important; }
+
+/* Services / services-card */
+:root[data-theme="light"] .svc-card__cmd { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .svc-card__title { color: #1a1f2e !important; text-shadow: none !important; }
+:root[data-theme="light"] .svc-card__desc,
+:root[data-theme="light"] .svc-card__body { color: rgba(20, 30, 50, 0.78) !important; }
+:root[data-theme="light"] .svc-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border-color: rgba(10, 30, 60, 0.12) !important;
+  color: #1a1f2e !important;
+}
+
+/* Project card CTA */
+:root[data-theme="light"] .proj-card__cta { color: #00667a !important; }
+:root[data-theme="light"] .proj-card:hover .proj-card__cta { color: var(--brand) !important; }
+
+/* Custom right-click context menu */
+:root[data-theme="light"] .ctx-menu {
+  background: #ffffff !important;
+  border-color: rgba(10, 30, 60, 0.15) !important;
+  box-shadow: 0 14px 36px rgba(10, 30, 60, 0.14) !important;
+}
+:root[data-theme="light"] .ctx-menu__item { color: #1a1f2e !important; }
+:root[data-theme="light"] .ctx-menu__item:hover { background: rgba(0, 122, 144, 0.08) !important; color: #00667a !important; }
+
+/* Experience card role + period */
+:root[data-theme="light"] .exp-card__role { color: #1a1f2e !important; text-shadow: none !important; }
+:root[data-theme="light"] .exp-card__sub { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .exp-card__period { color: rgba(10, 30, 60, 0.6) !important; }
+:root[data-theme="light"] .exp-card__co { color: #00667a !important; }
+:root[data-theme="light"] .exp-card__loc { color: rgba(10, 30, 60, 0.5) !important; }
+:root[data-theme="light"] .exp-card__bullets { color: rgba(20, 30, 50, 0.82) !important; }
+:root[data-theme="light"] .exp-card__bullets strong { color: #00667a !important; }
+
+/* Tech chips in hero */
+:root[data-theme="light"] .tech-chip {
+  background: rgba(255, 144, 0, 0.08) !important;
+  border-color: rgba(255, 144, 0, 0.4) !important;
+  color: var(--brand) !important;
+}
+
+/* Boot console (initial terminal lines on cover) */
+:root[data-theme="light"] .boot-console,
+:root[data-theme="light"] .boot-line { color: #00667a !important; }
+:root[data-theme="light"] .boot-line.ok::after { color: #1f8a3e !important; }
+
+/* Tab-active terminal path highlight — keep teal but darker for white bg */
+:root[data-theme="light"] .tab-active,
+:root[data-theme="light"] .case-studies__path .tab-active,
+:root[data-theme="light"] .cta-card__path .tab-active,
+:root[data-theme="light"] .px-card__path .tab-active,
+:root[data-theme="light"] .exp-card__path .tab-active,
+:root[data-theme="light"] .proj-card__path .tab-active,
+:root[data-theme="light"] .profile-config__path .tab-active {
+  color: #00667a !important;
+  border-bottom-color: #00667a !important;
+}
+
+/* Generic <strong> inside section body — must be dark on light bg.
+   Originals often use cyan for emphasis. */
+:root[data-theme="light"] section p strong,
+:root[data-theme="light"] section li strong,
+:root[data-theme="light"] .cs-section strong { color: #00667a !important; }
+
+/* Headings inside the inner content */
+:root[data-theme="light"] section h2,
+:root[data-theme="light"] section h3 { color: #1a1f2e !important; text-shadow: none !important; }
+:root[data-theme="light"] .cs-hero h1,
+:root[data-theme="light"] .cs-section h2 { color: #1a1f2e !important; }
+
+/* Profile-config path/key (about JSON card) */
+:root[data-theme="light"] .profile-config__path { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .profile-config__cmd { color: #1f8a3e !important; }
+
+/* Code card outside pre block */
+/* ============================================================
+   Hotfix #10 — Code-card (About's developer.js editor pane)
+   Mirror the profile-config card pattern: light surface, light chrome,
+   light editor palette. Was previously kept dark which made the title
+   invisible after the chrome got overridden elsewhere.
+   ============================================================ */
+:root[data-theme="light"] .code-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border: 1px solid rgba(10, 30, 60, 0.12) !important;
+  box-shadow:
+    0 12px 32px rgba(10, 30, 60, 0.08),
+    0 0 0 1px rgba(0, 122, 144, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+:root[data-theme="light"] .code-card__chrome {
+  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
+  border-bottom: 1px solid rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .code-card__title {
+  color: rgba(10, 30, 60, 0.55) !important;
+}
+:root[data-theme="light"] .code-card__title .tab-active {
+  color: #00667a !important;
+  border-bottom-color: #00667a !important;
+}
+:root[data-theme="light"] .code-card__cmd { color: #1f8a3e !important; }
+
+/* Code-card body: light editor pane */
+:root[data-theme="light"] .code-card__gutter {
+  color: rgba(10, 30, 60, 0.32) !important;
+  background: rgba(10, 30, 60, 0.04) !important;
+  border-right: 1px solid rgba(10, 30, 60, 0.08) !important;
+}
+:root[data-theme="light"] .code-card__code {
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .code-card__code pre {
+  background: transparent !important;
+  color: #1a1f2e !important;
+}
+
+/* Syntax tokens inside the code-card use the LIGHT editor palette.
+   These selectors must beat the generic `pre .tk-*` dark-editor rules
+   I added earlier (which still apply for case-study pre blocks). */
+:root[data-theme="light"] .code-card pre .tk-key,
+:root[data-theme="light"] .code-card .tk-key   { color: #b16fc6 !important; }
+:root[data-theme="light"] .code-card pre .tk-str,
+:root[data-theme="light"] .code-card .tk-str   { color: #8a6f00 !important; }
+:root[data-theme="light"] .code-card pre .tk-num,
+:root[data-theme="light"] .code-card .tk-num   { color: #c66a00 !important; }
+:root[data-theme="light"] .code-card pre .tk-fn,
+:root[data-theme="light"] .code-card .tk-fn    { color: #00667a !important; }
+:root[data-theme="light"] .code-card pre .tk-cmt,
+:root[data-theme="light"] .code-card .tk-cmt   { color: rgba(10, 30, 60, 0.45) !important; }
+:root[data-theme="light"] .code-card pre .tk-punct,
+:root[data-theme="light"] .code-card .tk-punct { color: rgba(10, 30, 60, 0.6) !important; }
+:root[data-theme="light"] .code-card .tk-bool  { color: #c66a00 !important; }
+
+/* Code-card blinking caret indicator */
+:root[data-theme="light"] .code-card .code-caret {
+  background: #00667a !important;
+  box-shadow: 0 0 6px rgba(0, 122, 144, 0.5) !important;
+}
+
+/* "About" section paragraph + secondary */
+:root[data-theme="light"] .about-bio,
+:root[data-theme="light"] .about-bio p,
+:root[data-theme="light"] .fh5co-heading h2 + p { color: rgba(20, 30, 50, 0.82) !important; }
+
+/* ============================================================
+   Round-2.5 hotfix #2 — remaining contrast issues after first sweep
+   ============================================================ */
+
+/* Section H2 inside .fh5co-heading — style.css forces white with !important.
+   Need higher-specificity override. */
+:root[data-theme="light"] .fh5co-bg-dark .fh5co-heading h2,
+:root[data-theme="light"] .fh5co-bg-color .fh5co-heading h2,
+:root[data-theme="light"] .fh5co-heading h2,
+:root[data-theme="light"] .col-md-8.fh5co-heading h2 {
+  color: #1a1f2e !important;
+  text-shadow: none !important;
+}
+
+/* About-panel lead paragraph cyan strong tags */
+:root[data-theme="light"] .about-panel__lead strong,
+:root[data-theme="light"] .about-bio strong,
+:root[data-theme="light"] p.about-panel__lead strong { color: #00667a !important; }
+
+/* Case-study meta key/value */
+:root[data-theme="light"] .cta-meta__k,
+:root[data-theme="light"] .cs-meta__k { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .cta-meta__v,
+:root[data-theme="light"] .cs-meta__v { color: #1a1f2e !important; }
+
+/* Skill-card icon brackets */
+:root[data-theme="light"] .skill-card__icon { color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .skill-card,
+:root[data-theme="light"] .skill-card__head {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border-color: rgba(10, 30, 60, 0.12) !important;
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .skill-card__head { background: transparent !important; }
+:root[data-theme="light"] .skill-card__title { color: #1a1f2e !important; }
+
+/* Tech-chip orange on cream is poor contrast — use deeper brand tone.
+   Must beat the Phase D selector "#fh5co-header .tech-chip" which used
+   var(--brand). Adding #fh5co-header to win specificity. */
+:root[data-theme="light"] .tech-chip,
+:root[data-theme="light"] #fh5co-header .tech-chip,
+:root[data-theme="light"] .tech-stack-strip .tech-chip,
+:root[data-theme="light"] #fh5co-header .tech-stack-strip .tech-chip {
+  color: #b85c00 !important;
+  background: rgba(255, 144, 0, 0.10) !important;
+  border-color: rgba(184, 92, 0, 0.45) !important;
+}
+:root[data-theme="light"] .tech-chip::before,
+:root[data-theme="light"] .tech-chip::after { color: rgba(184, 92, 0, 0.55) !important; }
+
+/* Exp-group__count and other small inline labels */
+:root[data-theme="light"] .exp-group__count { color: rgba(10, 30, 60, 0.55) !important; }
+
+/* svc-card AI badge */
+:root[data-theme="light"] .svc-card__badge { background: rgba(0, 122, 144, 0.08) !important; color: #00667a !important; border-color: rgba(0, 122, 144, 0.4) !important; }
+:root[data-theme="light"] .svc-card__badge--ai {
+  background: linear-gradient(135deg, rgba(255, 144, 0, 0.12), rgba(255, 43, 214, 0.1)) !important;
+  border-color: rgba(255, 144, 0, 0.5) !important;
+  color: #b85c00 !important;
+}
+
+/* <em> generic */
+:root[data-theme="light"] em { color: rgba(20, 30, 50, 0.88) !important; }
+
+/* Generic <a> with no class — bare anchors. Use deep teal. */
+:root[data-theme="light"] a:not([class]),
+:root[data-theme="light"] .footer-meta a,
+:root[data-theme="light"] p a:not([class]) { color: #00667a !important; }
+
+/* about-panel CTA - the resume download button text is white on cream */
+:root[data-theme="light"] .btn.btn-primary,
+:root[data-theme="light"] .about-panel__cta .btn,
+:root[data-theme="light"] .about-panel__cta a.btn {
+  background: var(--brand) !important;
+  color: #fff !important;
+  border-color: var(--brand) !important;
+}
+:root[data-theme="light"] .btn.btn-primary:hover,
+:root[data-theme="light"] .about-panel__cta .btn:hover { background: #c66a00 !important; border-color: #c66a00 !important; }
+
+/* skip-link — currently cyan on cream when light. Improve contrast */
+:root[data-theme="light"] .skip-link {
+  background: var(--brand) !important;
+  color: #fff !important;
+}
+:root[data-theme="light"] .skip-link:focus {
+  background: var(--brand) !important;
+  color: #fff !important;
+  outline: 2px solid #1a1f2e !important;
+}
+
+/* case-status--live pulse pill - on cream needs darker green */
+:root[data-theme="light"] .case-status--live {
+  background: rgba(31, 138, 62, 0.10) !important;
+  border-color: rgba(31, 138, 62, 0.55) !important;
+  color: #1f8a3e !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .case-status--live::before { background: #1f8a3e !important; box-shadow: 0 0 8px rgba(31, 138, 62, 0.5) !important; }
+:root[data-theme="light"] .case-status--live:hover { background: #1f8a3e !important; color: #fff !important; box-shadow: 0 0 12px rgba(31, 138, 62, 0.5) !important; }
+
+/* tab-active also referenced in non-fh5co contexts — ensure all are darkened */
+:root[data-theme="light"] .tab-active { color: #00667a !important; border-bottom-color: #00667a !important; }
+
+/* IMPORTANT: tk-* token overrides EARLIER were applied globally and made
+   tokens inside dark code blocks (pre) too dark. Restore brighter tokens
+   when inside a dark pre. The pre stays dark in light theme by design. */
+:root[data-theme="light"] pre .tk-key   { color: #ff79c6 !important; }
+:root[data-theme="light"] pre .tk-str   { color: #f1fa8c !important; }
+:root[data-theme="light"] pre .tk-num   { color: var(--brand) !important; }
+:root[data-theme="light"] pre .tk-fn    { color: var(--cyan) !important; }
+:root[data-theme="light"] pre .tk-cmt   { color: rgba(255, 255, 255, 0.35) !important; }
+:root[data-theme="light"] pre .tk-punct { color: rgba(255, 255, 255, 0.6) !important; }
+
+/* ============================================================
+   Round-2.5 hotfix #3 — final sweep
+   ============================================================ */
+
+/* role-tag (hero "<Full-Stack & Mobile App Developer/>") */
+:root[data-theme="light"] .role-tag,
+:root[data-theme="light"] #fh5co-header .role-tag {
+  color: #00667a !important;
+  text-shadow: none !important;
+}
+
+/* status-badge (hero "Open to remote opportunities") */
+:root[data-theme="light"] .status-badge,
+:root[data-theme="light"] #fh5co-header .status-badge {
+  color: #1f8a3e !important;
+  background: rgba(31, 138, 62, 0.08) !important;
+  border-color: rgba(31, 138, 62, 0.4) !important;
+  text-shadow: none !important;
+}
+
+/* about-panel title and lead */
+:root[data-theme="light"] .about-panel__title { color: #1a1f2e !important; text-shadow: none !important; }
+:root[data-theme="light"] .about-panel__lead { color: rgba(20, 30, 50, 0.82) !important; }
+:root[data-theme="light"] .about-panel { background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important; border-color: rgba(10, 30, 60, 0.12) !important; }
+
+/* profile-config status */
+:root[data-theme="light"] .profile-config__status { color: #1f8a3e !important; text-shadow: none !important; }
+
+/* cfg-copy clipboard button */
+:root[data-theme="light"] .cfg-copy {
+  background: rgba(10, 30, 60, 0.06) !important;
+  border-color: rgba(10, 30, 60, 0.18) !important;
+  color: rgba(10, 30, 60, 0.7) !important;
+}
+:root[data-theme="light"] .cfg-copy:hover { background: rgba(0, 122, 144, 0.1) !important; color: #00667a !important; border-color: #00667a !important; }
+
+/* btn-ghost — used as secondary CTA */
+:root[data-theme="light"] .btn.btn-ghost,
+:root[data-theme="light"] .btn-ghost,
+:root[data-theme="light"] a.btn-ghost {
+  background: transparent !important;
+  color: #00667a !important;
+  border: 1px solid #00667a !important;
+}
+:root[data-theme="light"] .btn.btn-ghost:hover,
+:root[data-theme="light"] .btn-ghost:hover { background: rgba(0, 122, 144, 0.08) !important; color: #003f4a !important; }
+
+/* magnetic class buttons (uses transforms via JS, color overridden) */
+:root[data-theme="light"] .magnetic.btn-primary,
+:root[data-theme="light"] a.btn-primary.magnetic { background: var(--brand) !important; color: #fff !important; border-color: var(--brand) !important; }
+:root[data-theme="light"] .magnetic.btn-ghost,
+:root[data-theme="light"] a.btn-ghost.magnetic { color: #00667a !important; border-color: #00667a !important; }
+
+/* General <strong> inside any text content paragraph — final catch-all
+   for anything I missed. Cyan strong tags break on cream. */
+:root[data-theme="light"] strong { color: inherit; }
+:root[data-theme="light"] p strong,
+:root[data-theme="light"] li strong,
+:root[data-theme="light"] dd strong,
+:root[data-theme="light"] dt strong,
+:root[data-theme="light"] td strong {
+  color: #00667a !important;
+}
+/* But leave dark-bg content (code panes, terminal chrome) alone */
+:root[data-theme="light"] pre strong,
+:root[data-theme="light"] .cs-code strong,
+:root[data-theme="light"] .ctx-menu strong { color: inherit !important; }
+
+/* Generic SPAN catch — match anything still using rgba(230, 243, 255, ...) */
+:root[data-theme="light"] section span[style*="rgba(230"],
+:root[data-theme="light"] section span[style*="rgb(230"] { color: #1a1f2e !important; }
+
+/* Section H2 — original CSS has id-specificity overrides forcing white.
+   Beat them with id+attr selectors. */
+:root[data-theme="light"] #fh5co-about .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-resume .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-skills .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-blog h2,
+:root[data-theme="light"] #fh5co-blog .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-work .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-features .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-services .fh5co-heading h2,
+:root[data-theme="light"] #fh5co-started .fh5co-heading h2 {
+  color: #1a1f2e !important;
+  text-shadow: none !important;
+}
+
+/* Footer success message & dev-term welcome — strongs inside */
+:root[data-theme="light"] .cta-form__success { color: rgba(20, 30, 50, 0.85) !important; }
+:root[data-theme="light"] .cta-form__success strong { color: #1f8a3e !important; }
+:root[data-theme="light"] .dev-term__welcome,
+:root[data-theme="light"] .dev-term__welcome strong { color: rgba(20, 30, 50, 0.78) !important; }
+
+/* Services foot text — was dark on darker overlay; ensure clean light bg */
+:root[data-theme="light"] .services-foot,
+:root[data-theme="light"] .services-foot__txt {
+  background: rgba(0, 122, 144, 0.04) !important;
+  color: rgba(20, 30, 50, 0.82) !important;
+  border-color: rgba(0, 122, 144, 0.18) !important;
+}
+
+/* Terminal-tag (hero whoami / lemmuel callout) */
+:root[data-theme="light"] .terminal-tag,
+:root[data-theme="light"] .terminal-tag .term-cmd,
+:root[data-theme="light"] .terminal-tag .term-out,
+:root[data-theme="light"] .terminal-tag .term-prompt { color: #00667a !important; }
+:root[data-theme="light"] .terminal-tag { background: rgba(0, 122, 144, 0.06) !important; border-color: rgba(0, 122, 144, 0.3) !important; }
+
+/* Case studies path command (the "$ ls -la" hint) */
+:root[data-theme="light"] .case-studies__cmd,
+:root[data-theme="light"] .praise__cmd,
+:root[data-theme="light"] .cta-card__cmd { color: #1f8a3e !important; }
+
+/* case-status--draft and --planned pills */
+:root[data-theme="light"] .case-status--draft {
+  background: rgba(0, 122, 144, 0.08) !important;
+  border-color: rgba(0, 122, 144, 0.5) !important;
+  color: #00667a !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .case-status--draft:hover {
+  background: #00667a !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(0, 122, 144, 0.4) !important;
+}
+:root[data-theme="light"] .case-status--wip {
+  background: rgba(255, 144, 0, 0.10) !important;
+  border-color: rgba(184, 92, 0, 0.5) !important;
+  color: #b85c00 !important;
+}
+:root[data-theme="light"] .case-status--planned {
+  background: rgba(10, 30, 60, 0.04) !important;
+  border-color: rgba(10, 30, 60, 0.2) !important;
+  color: rgba(10, 30, 60, 0.55) !important;
+}
+
+/* Skip link: brand orange too low contrast for "Skip to content" text.
+   Switch to dark navy bg + brand-orange text underline. */
+:root[data-theme="light"] .skip-link {
+  background: #1a1f2e !important;
+  color: #fff !important;
+}
+:root[data-theme="light"] .skip-link:focus {
+  background: #1a1f2e !important;
+  color: #fff !important;
+  outline: 2px solid var(--brand) !important;
+}
+
+/* ============================================================
+   Hotfix #4 — hire CTA card internals + dev-term
+   ============================================================ */
+
+/* cta-status pill ("open to opportunities") */
+:root[data-theme="light"] .cta-status {
+  background: rgba(31, 138, 62, 0.08) !important;
+  border-color: rgba(31, 138, 62, 0.45) !important;
+  color: #1f8a3e !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .cta-status__dot {
+  background: #1f8a3e !important;
+  box-shadow: 0 0 8px #1f8a3e !important;
+}
+
+/* cta-email pill */
+:root[data-theme="light"] .cta-email {
+  background: rgba(0, 122, 144, 0.05) !important;
+  border-color: rgba(0, 122, 144, 0.35) !important;
+}
+:root[data-theme="light"] .cta-email__icon { color: var(--brand) !important; }
+:root[data-theme="light"] .cta-email__addr { color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .cta-email__addr:hover { color: #003f4a !important; }
+:root[data-theme="light"] .cta-email__copy {
+  background: rgba(0, 122, 144, 0.06) !important;
+  border-color: rgba(0, 122, 144, 0.3) !important;
+  color: #00667a !important;
+}
+:root[data-theme="light"] .cta-email__copy:hover { background: #00667a !important; color: #fff !important; }
+
+/* cta-btn caption / sub already covered for non-primary; ensure primary
+   cta-btn__sub is readable too */
+:root[data-theme="light"] .cta-btn--primary .cta-btn__caption { color: #fff !important; }
+:root[data-theme="light"] .cta-btn--primary .cta-btn__sub { color: rgba(255, 255, 255, 0.78) !important; }
+:root[data-theme="light"] .cta-btn--primary {
+  background: #c66a00 !important;
+  border-color: #c66a00 !important;
+}
+:root[data-theme="light"] .cta-btn--primary:hover { background: #a35800 !important; border-color: #a35800 !important; }
+:root[data-theme="light"] .cta-btn--cal { color: #1a1f2e !important; }
+
+/* cta-form toggle + hint */
+:root[data-theme="light"] .cta-form-toggle__txt { color: #00667a !important; }
+:root[data-theme="light"] .cta-form-toggle__chev { color: #00667a !important; }
+:root[data-theme="light"] .cta-form__hint { color: rgba(10, 30, 60, 0.6) !important; }
+:root[data-theme="light"] .cta-form__submit {
+  background: var(--brand) !important;
+  color: #fff !important;
+  border-color: var(--brand) !important;
+}
+:root[data-theme="light"] .cta-form__submit:hover { background: #c66a00 !important; border-color: #c66a00 !important; }
+
+/* dev-term (terminal hero callout below resume? — a chrome-style box) */
+:root[data-theme="light"] .dev-term {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border-color: rgba(10, 30, 60, 0.12) !important;
+}
+:root[data-theme="light"] .dev-term__chrome {
+  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
+  border-color: rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .dev-term__path { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .dev-term__body { color: rgba(20, 30, 50, 0.82) !important; }
+:root[data-theme="light"] .dev-term__line { color: rgba(20, 30, 50, 0.82) !important; }
+:root[data-theme="light"] .dev-term__user,
+:root[data-theme="light"] .user { color: #00667a !important; }
+:root[data-theme="light"] .dev-term__prompt { color: #1f8a3e !important; }
+:root[data-theme="light"] .dev-term__cmd { color: #b16fc6 !important; }
+:root[data-theme="light"] .dev-term__output { color: rgba(20, 30, 50, 0.78) !important; }
+
+/* ============================================================
+   Hotfix #5 — commit graph meta + praise foot spans + btn-ghost.magnetic
+   ============================================================ */
+
+/* GitHub commit graph meta line ("9 repos · 0 followers · 0 following") */
+:root[data-theme="light"] .commit-graph-meta,
+:root[data-theme="light"] .commit-graph-meta span,
+:root[data-theme="light"] .commit-graph-meta a {
+  color: rgba(10, 30, 60, 0.7) !important;
+}
+
+/* Praise foot raw text (the line outside <a> elements) */
+:root[data-theme="light"] .praise__foot,
+:root[data-theme="light"] .praise__foot > span:not(.praise-prompt) {
+  color: rgba(20, 30, 50, 0.78) !important;
+}
+
+/* btn-ghost.magnetic combo — magnetic class adds another class which slightly
+   increases specificity; ensure ghost styling wins. */
+:root[data-theme="light"] a.btn.btn-ghost.magnetic,
+:root[data-theme="light"] a.btn-ghost.magnetic,
+:root[data-theme="light"] button.btn.btn-ghost.magnetic {
+  background: transparent !important;
+  color: #00667a !important;
+  border: 1px solid #00667a !important;
+}
+:root[data-theme="light"] a.btn.btn-ghost.magnetic:hover { background: rgba(0, 122, 144, 0.08) !important; color: #003f4a !important; }
+
+/* "live" badge inside commit-graph meta (proj-card or other) */
+:root[data-theme="light"] .proj-card__status--live {
+  background: rgba(31, 138, 62, 0.10) !important;
+  border-color: rgba(31, 138, 62, 0.55) !important;
+  color: #1f8a3e !important;
+  text-shadow: none !important;
+}
+
+/* commit-graph-label badge ("live") */
+:root[data-theme="light"] .commit-graph-label,
+:root[data-theme="light"] .commit-graph-label span {
+  color: #1f8a3e !important;
+  background: rgba(31, 138, 62, 0.08) !important;
+  border-color: rgba(31, 138, 62, 0.4) !important;
+}
+
+/* hero-stats strong numerals: darken from brand orange for AA contrast */
+:root[data-theme="light"] .hero-stats .stat strong {
+  color: #c66a00 !important;
+  text-shadow: none !important;
+}
+
+/* ============================================================
+   Hotfix #6 — HUD floating widget (top-right diagnostic panel)
+   ============================================================ */
+:root[data-theme="light"] .hud {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(10, 30, 60, 0.18) !important;
+  box-shadow: 0 10px 30px rgba(10, 30, 60, 0.12) !important;
+  color: #1a1f2e !important;
+  -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
+  backdrop-filter: blur(8px) saturate(140%) !important;
+}
+:root[data-theme="light"] .hud__head,
+:root[data-theme="light"] .hud__row { color: #1a1f2e !important; }
+:root[data-theme="light"] .hud__label { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .hud__val { color: #00667a !important; text-shadow: none !important; }
+:root[data-theme="light"] .hud__val--online { color: #1f8a3e !important; }
+:root[data-theme="light"] .hud__val--warn,
+:root[data-theme="light"] .hud__val--fps { color: #c66a00 !important; }
+:root[data-theme="light"] .hud__dot {
+  background: var(--brand) !important;
+}
+:root[data-theme="light"] .hud__bar {
+  background: rgba(10, 30, 60, 0.08) !important;
+}
+:root[data-theme="light"] .hud__bar-fill {
+  background: linear-gradient(90deg, var(--brand), #c66a00) !important;
+}
+:root[data-theme="light"] .hud__foot,
+:root[data-theme="light"] .hud__now {
+  color: rgba(10, 30, 60, 0.7) !important;
+  border-top-color: rgba(10, 30, 60, 0.08) !important;
+}
+:root[data-theme="light"] .hud__now-label { color: #1f8a3e !important; }
+:root[data-theme="light"] .hud__now-pulse { background: #1f8a3e !important; box-shadow: 0 0 6px #1f8a3e !important; }
+
+/* Scroll-indicator dots on right edge */
+:root[data-theme="light"] .scroll-indicator__dot {
+  background: rgba(10, 30, 60, 0.15) !important;
+  border-color: rgba(10, 30, 60, 0.25) !important;
+}
+:root[data-theme="light"] .scroll-indicator__dot.is-active,
+:root[data-theme="light"] .scroll-indicator__dot:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 8px rgba(255, 144, 0, 0.5) !important;
+}
+:root[data-theme="light"] .scroll-indicator__label {
+  background: #1a1f2e !important;
+  color: #fff !important;
+}
+
+/* Top scroll-progress bar (the colored bar at very top) */
+:root[data-theme="light"] .scroll-progress {
+  background: rgba(10, 30, 60, 0.08) !important;
+}
+:root[data-theme="light"] .scroll-progress__fill {
+  background: linear-gradient(90deg, var(--brand), #c66a00, #ff2bd6) !important;
+}
+
+/* Floating "scroll to top" button */
+:root[data-theme="light"] .gototop a,
+:root[data-theme="light"] .js-gotop {
+  background: #1a1f2e !important;
+  color: var(--brand) !important;
+  border-color: var(--brand) !important;
+  box-shadow: 0 6px 18px rgba(10, 30, 60, 0.25) !important;
+}
+:root[data-theme="light"] .gototop a:hover { background: var(--brand) !important; color: #fff !important; }
+
+/* Hero cover image: hide on light (CSS fallback in case JS doesn't fire) */
+:root[data-theme="light"] #fh5co-header,
+:root[data-theme="light"] #fh5co-header.fh5co-cover {
+  background-image: none !important;
+  background: linear-gradient(180deg, #f6f4ee 0%, #efece4 100%) !important;
+}
+
+/* Hero overlay sub-layers — `.overlay` is a solid 90% orange wash that
+   gives the dark theme its sunset look but turns the whole hero brown on
+   light. Make it nearly transparent so the warm-paper bg shows through. */
+:root[data-theme="light"] #fh5co-header .overlay,
+:root[data-theme="light"] .fh5co-cover .overlay {
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(0, 122, 144, 0.08), transparent 55%),
+    radial-gradient(ellipse at 20% 90%, rgba(255, 144, 0, 0.06), transparent 60%),
+    transparent !important;
+}
+
+/* Cyan grid drift behind the hero — keep but soften */
+:root[data-theme="light"] #fh5co-header .tech-grid {
+  background-image:
+    linear-gradient(rgba(0, 122, 144, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 122, 144, 0.08) 1px, transparent 1px) !important;
+  opacity: 0.6;
+}
+
+/* Scanline + cyan sweep — keep but tone down */
+:root[data-theme="light"] #fh5co-header .scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(10, 30, 60, 0.025) 0px,
+    rgba(10, 30, 60, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  ) !important;
+  mix-blend-mode: multiply !important;
+}
+:root[data-theme="light"] #fh5co-header .scanline::before {
+  background: linear-gradient(90deg, transparent, #00667a, transparent) !important;
+  opacity: 0.4 !important;
+}
+
+/* ============================================================
+   Hotfix #7 — Resume section headers (exp-group + exp-card chrome)
+   The original .exp-card kept a dark gradient even in light mode for
+   contrast against the light section bg. The CHROME header on top of
+   each card was forced to dark too — which looks fine if you keep the
+   card dark. But the "// experience.log" group label and the timeline
+   spine were tuned for dark bg and don't read on cream.
+   ============================================================ */
+
+/* Section-level: ensure #fh5co-resume background actually goes light.
+   The legacy rule at line 82 uses !important — match specificity. */
+:root[data-theme="light"] #fh5co-resume,
+:root[data-theme="light"] #fh5co-resume.fh5co-bg-color {
+  background: linear-gradient(180deg, #f6f4ee 0%, #efece4 100%) !important;
+}
+
+/* "// experience.log" / "// education.log" group label */
+:root[data-theme="light"] .exp-group__label {
+  color: #00667a !important;
+}
+:root[data-theme="light"] .exp-group__label::after {
+  background: linear-gradient(90deg, rgba(0, 122, 144, 0.4), transparent) !important;
+}
+
+/* "6 entries" / "1 entry" count pill — already styled but ensure final */
+:root[data-theme="light"] .exp-group__count {
+  background: rgba(0, 122, 144, 0.08) !important;
+  border: 1px solid rgba(0, 122, 144, 0.35) !important;
+  color: #00667a !important;
+}
+
+/* Vertical timeline spine */
+:root[data-theme="light"] .exp-group::before {
+  background: linear-gradient(180deg, #00667a 0%, var(--brand) 100%) !important;
+  box-shadow: 0 0 10px rgba(0, 122, 144, 0.25) !important;
+  opacity: 0.7 !important;
+}
+
+/* Timeline dot on each exp-item */
+:root[data-theme="light"] .exp-item__dot {
+  background: linear-gradient(135deg, #00667a, var(--brand)) !important;
+  border: 2px solid #f6f4ee !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 144, 0.3), 0 0 12px rgba(0, 122, 144, 0.4) !important;
+}
+:root[data-theme="light"] .exp-item__dot::after {
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+:root[data-theme="light"] .exp-item__dot--edu {
+  background: linear-gradient(135deg, var(--brand), #ff2bd6) !important;
+}
+:root[data-theme="light"] .exp-item:hover .exp-item__dot {
+  box-shadow: 0 0 0 3px rgba(0, 122, 144, 0.4), 0 0 18px rgba(0, 122, 144, 0.55) !important;
+}
+
+/* Card chrome: card body went light (per .exp-card override at 4519),
+   so the dark chrome bar on top now looks mismatched.
+   Make the chrome match the light palette. */
+:root[data-theme="light"] .exp-card__chrome {
+  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
+  border-bottom: 1px solid rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .exp-card__path {
+  color: rgba(10, 30, 60, 0.55) !important;
+}
+:root[data-theme="light"] .exp-card__path .tab-active {
+  color: #00667a !important;
+  border-bottom: 1px solid #00667a !important;
+}
+:root[data-theme="light"] .exp-card__period {
+  color: #c66a00 !important;
+  background: rgba(255, 144, 0, 0.08) !important;
+  border: 1px solid rgba(184, 92, 0, 0.45) !important;
+}
+
+/* Exp-card body content */
+:root[data-theme="light"] .exp-card__body { color: #1a1f2e !important; }
+:root[data-theme="light"] .exp-card__company {
+  color: #00667a !important;
+}
+:root[data-theme="light"] .exp-card--edu .exp-card__period {
+  color: #b85c00 !important;
+}
+
+/* Education section uses same group label class */
+:root[data-theme="light"] .exp-group__label--edu { color: #b85c00 !important; }
+:root[data-theme="light"] .exp-group__label--edu::after { background: linear-gradient(90deg, rgba(184, 92, 0, 0.4), transparent) !important; }
+
+/* ============================================================
+   Hotfix #8 — About Me section internals
+   ============================================================ */
+
+/* About panel (right-column bio + CTA) */
+:root[data-theme="light"] .about-panel {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border: 1px solid rgba(10, 30, 60, 0.12) !important;
+  box-shadow: 0 12px 32px rgba(10, 30, 60, 0.08) !important;
+  color: #1a1f2e !important;
+}
+:root[data-theme="light"] .about-panel__label {
+  color: #00667a !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .about-panel__title {
+  color: #1a1f2e !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .about-panel__lead,
+:root[data-theme="light"] .about-panel p { color: rgba(20, 30, 50, 0.82) !important; }
+:root[data-theme="light"] .about-panel__lead strong,
+:root[data-theme="light"] .about-panel p strong { color: #00667a !important; }
+
+/* About pillars (checkmark list) */
+:root[data-theme="light"] .about-pillars li { color: #1a1f2e !important; }
+:root[data-theme="light"] .about-pillars__k {
+  color: #1f8a3e !important;
+  text-shadow: none !important;
+}
+
+/* Profile config card (the ~/profile.config terminal pane) */
+:root[data-theme="light"] .profile-config {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border: 1px solid rgba(10, 30, 60, 0.12) !important;
+  box-shadow: 0 12px 32px rgba(10, 30, 60, 0.08), 0 0 24px rgba(0, 122, 144, 0.04) !important;
+}
+:root[data-theme="light"] .profile-config__chrome {
+  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
+  border-bottom: 1px solid rgba(10, 30, 60, 0.1) !important;
+}
+:root[data-theme="light"] .profile-config__path { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .profile-config__path .tab-active {
+  color: #00667a !important;
+  border-bottom-color: #00667a !important;
+}
+:root[data-theme="light"] .profile-config__status {
+  background: rgba(31, 138, 62, 0.08) !important;
+  border-color: rgba(31, 138, 62, 0.45) !important;
+  color: #1f8a3e !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .profile-config__pulse {
+  background: #1f8a3e !important;
+  box-shadow: 0 0 8px #1f8a3e !important;
+}
+:root[data-theme="light"] .profile-config__body { color: #1a1f2e !important; }
+
+/* cfg-row internals: key = value */
+:root[data-theme="light"] .cfg-row { border-bottom-color: rgba(10, 30, 60, 0.06) !important; }
+:root[data-theme="light"] .cfg-key { color: #b16fc6 !important; }
+:root[data-theme="light"] .cfg-op { color: rgba(10, 30, 60, 0.5) !important; }
+:root[data-theme="light"] .cfg-val { color: rgba(20, 30, 50, 0.85) !important; }
+:root[data-theme="light"] .cfg-val--str { color: #8a6f00 !important; }
+:root[data-theme="light"] .cfg-val--arr { color: rgba(10, 30, 60, 0.55) !important; }
+:root[data-theme="light"] .cfg-link { color: #00667a !important; }
+:root[data-theme="light"] .cfg-link:hover { color: #003f4a !important; border-bottom-color: #00667a !important; }
+
+/* Socials row inside profile-config */
+:root[data-theme="light"] .cfg-socials a {
+  color: rgba(10, 30, 60, 0.65) !important;
+  background: rgba(0, 122, 144, 0.04) !important;
+  border: 1px solid rgba(0, 122, 144, 0.25) !important;
+}
+:root[data-theme="light"] .cfg-socials a:hover {
+  color: #00667a !important;
+  background: rgba(0, 122, 144, 0.1) !important;
+  border-color: #00667a !important;
+  box-shadow: 0 0 10px rgba(0, 122, 144, 0.25) !important;
+}
+
+/* The about section's two inner cards row (px-card variants paired in row) */
+:root[data-theme="light"] .px-principles li {
+  color: #1a1f2e !important;
+  border-bottom-color: rgba(10, 30, 60, 0.06) !important;
+}
+:root[data-theme="light"] .px-principles__num {
+  background: rgba(0, 122, 144, 0.06) !important;
+  border-color: rgba(0, 122, 144, 0.3) !important;
+  color: #00667a !important;
+  text-shadow: none !important;
+}
+
+/* ============================================================
+   Hotfix #9 — Skills section "Tools & Stack" sub-area
+   ============================================================ */
+
+/* Skills section background (the legacy rule pins it dark) */
+:root[data-theme="light"] #fh5co-skills {
+  background: linear-gradient(180deg, #f6f4ee 0%, #efece4 100%) !important;
+}
+
+/* Tools & Stack heading "fh5co-heading-sm" variant */
+:root[data-theme="light"] #fh5co-skills .fh5co-heading.fh5co-heading-sm h2,
+:root[data-theme="light"] .fh5co-heading.fh5co-heading-sm h2 {
+  color: #1a1f2e !important;
+  text-shadow: none !important;
+}
+
+/* Stack-grid containers */
+:root[data-theme="light"] .stack-group {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
+  border: 1px solid rgba(10, 30, 60, 0.12) !important;
+}
+:root[data-theme="light"] .stack-group:hover {
+  border-color: rgba(0, 122, 144, 0.4) !important;
+  box-shadow: 0 6px 22px rgba(0, 122, 144, 0.12) !important;
+}
+:root[data-theme="light"] .stack-group__label {
+  color: #00667a !important;
+  border-bottom-color: rgba(0, 122, 144, 0.18) !important;
+}
+
+/* Tool badges — base variant (default = "tech tooling") */
+:root[data-theme="light"] .tool-badge {
+  background: rgba(0, 122, 144, 0.06) !important;
+  border: 1px solid rgba(0, 122, 144, 0.35) !important;
+  color: #00667a !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .tool-badge:hover {
+  background: #00667a !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(0, 122, 144, 0.4) !important;
+}
+:root[data-theme="light"] .tool-badge.tool-ai {
+  background: linear-gradient(135deg, rgba(255, 144, 0, 0.12), rgba(255, 43, 214, 0.10)) !important;
+  border-color: rgba(184, 92, 0, 0.5) !important;
+  color: #b85c00 !important;
+}
+:root[data-theme="light"] .tool-badge.tool-ai:hover {
+  background: linear-gradient(135deg, #c66a00, #b22299) !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px rgba(198, 106, 0, 0.4) !important;
+}
+:root[data-theme="light"] .tool-badge.tool-mobile {
+  background: rgba(255, 144, 0, 0.08) !important;
+  border-color: rgba(184, 92, 0, 0.45) !important;
+  color: #b85c00 !important;
+}
+:root[data-theme="light"] .tool-badge.tool-mobile:hover {
+  background: #c66a00 !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(198, 106, 0, 0.4) !important;
+}
+
+/* Skill cards (the cards above Tools & Stack with skill-bar lines) */
+:root[data-theme="light"] .skill-card__list li { color: #1a1f2e !important; }
+:root[data-theme="light"] .skill-bar {
+  background: rgba(10, 30, 60, 0.08) !important;
+  border-color: rgba(10, 30, 60, 0.12) !important;
+}
+:root[data-theme="light"] .skill-bar i {
+  background: linear-gradient(90deg, #00667a, var(--brand)) !important;
+  box-shadow: 0 0 6px rgba(0, 122, 144, 0.3) !important;
+}
+:root[data-theme="light"] .skill-bar i[data-color="brand"] {
+  background: linear-gradient(90deg, var(--brand), #c66a00) !important;
+}
+:root[data-theme="light"] .skill-bar i[data-color="ai"] {
+  background: linear-gradient(90deg, #c66a00, #b22299) !important;
+}
+:root[data-theme="light"] .skill-val {
+  color: #00667a !important;
+  text-shadow: none !important;
 }

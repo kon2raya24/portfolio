@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title>Lemmuel Turaya — Portfolio Changelog</title>
+  <link>https://kon2raya.netlify.app/changelog.html</link>
+  <atom:link href="https://kon2raya.netlify.app/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Versioned log of what ships on lemmuel-turaya / kon2raya portfolio — features, fixes, and content updates.</description>
+  <language>en-us</language>
+  <copyright>Lemmuel Turaya</copyright>
+  <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
+  <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
+  <generator>hand-written, no static-site generator</generator>
+  <lastBuildDate>Wed, 14 May 2026 00:00:00 +0800</lastBuildDate>
+  <ttl>1440</ttl>
+
+  <item>
+    <title>v4.0 — Round 2: polish, proof, performance</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v4-0</link>
+    <guid isPermaLink="false">portfolio-v4.0-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 10:00:00 +0800</pubDate>
+    <category>major</category>
+    <description><![CDATA[
+      Round 2 of the employer-attention pass. Wired up the work-filter chips (data-tags driven, persisted in localStorage),
+      swapped the "Coffee Cups ∞" hero stat for "Case Studies", added the "last shipped" footer stamp pulled from
+      document.lastModified, scaffolded the third case study (jbc-commission-system) with its own OG card.
+      Dropped image weight by ~3.4 MB (logo, mylogo orphan deleted, cover photo re-encoded to WebP). Light theme
+      received a sweeping contrast audit: 163 → 3 outstanding contrast issues, with hero overlay neutralized,
+      HUD widget themed, hero cover hidden in light, and the developer.js code-card now mirrors profile-config
+      as a light editor pane.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.9 — Dev-signal files</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-9</link>
+    <guid isPermaLink="false">portfolio-v3.9-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 12:00:00 +0800</pubDate>
+    <category>dev-signal</category>
+    <description><![CDATA[
+      Added humans.txt, /.well-known/security.txt, /api/availability.json (curl-able hiring status),
+      this very feed.xml (RSS for the changelog), and a real git-log footer that pulls the last
+      commits from GitHub.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.5 — Round 1 employer-attention pass</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-5</link>
+    <guid isPermaLink="false">portfolio-v3.5-2026-05-14</guid>
+    <pubDate>Wed, 14 May 2026 02:00:00 +0800</pubDate>
+    <category>major</category>
+    <description><![CDATA[
+      Unlocked + indexed both case studies, added per-case OG images, dropped DRAFT banners.
+      Added "shipped impact" section between work and hire CTA. New 4-step engagement
+      flow + Hiring/Client tab toggle in the hire card. Shipped a service worker delivering
+      on the PWA manifest. Added /now.html, footer link to /now/uses/changelog. Light theme
+      toggle in the nav with FOUC-prevention bootstrap.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.4 — Dev-credibility passes</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-4</link>
+    <guid isPermaLink="false">portfolio-v3.4-2026-05-13</guid>
+    <pubDate>Wed, 13 May 2026 00:00:00 +0800</pubDate>
+    <category>dev-signal</category>
+    <description><![CDATA[
+      Added /uses.html (editor, terminal, hardware, daily software). Added resume.json
+      in JSON Resume format. Added the /changelog page itself.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.3 — Case-study scaffolds</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-3</link>
+    <guid isPermaLink="false">portfolio-v3.3-2026-05-13</guid>
+    <pubDate>Wed, 13 May 2026 00:00:00 +0800</pubDate>
+    <category>case-studies</category>
+    <description><![CDATA[
+      Initial case-studies/wms.html and case-studies/pamanaland.html. Shared case-study.css
+      with window-chrome code blocks, metric grid, CTA cards. Draft framing pending polish.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.2 — Hire funnel</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-2</link>
+    <guid isPermaLink="false">portfolio-v3.2-2026-05-13</guid>
+    <pubDate>Wed, 13 May 2026 00:00:00 +0800</pubDate>
+    <category>hire-funnel</category>
+    <description><![CDATA[
+      Cal.com booking button in Hire Me card. Designed cover.html for the OG image.
+      Interactive dev terminal (press ` to open). UTM-aware welcome pill. LinkedIn
+      copy-paste pack with full content blocks.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.1 — Ship-readiness</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-1</link>
+    <guid isPermaLink="false">portfolio-v3.1-2026-05-13</guid>
+    <pubDate>Wed, 13 May 2026 00:00:00 +0800</pubDate>
+    <category>prod-ready</category>
+    <description><![CDATA[
+      JSON-LD Person schema, sitemap.xml, robots.txt, PWA manifest. Netlify Forms with
+      honeypot. Real-time visitor counter (counterapi.dev). Live GitHub events graph &
+      recent-repos panel. Skip-to-content, focus-visible, auto-ARIA on icon-only buttons.
+      404 in terminal style. Matrix/particles pause when offscreen.
+    ]]></description>
+  </item>
+
+  <item>
+    <title>v3.0 — Major cyber-themed redesign</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v3-0</link>
+    <guid isPermaLink="false">portfolio-v3.0-2026-05-13</guid>
+    <pubDate>Wed, 13 May 2026 00:00:00 +0800</pubDate>
+    <category>major-redesign</category>
+    <description><![CDATA[
+      Full redesign from generic template into a dev-by-dev cyber-themed portfolio.
+      Dark cyber gradient + neon grid. Reworked About, Resume, Services, Skills,
+      Tools & Stack, Work, Case Studies, and Hire Me sections end-to-end.
+    ]]></description>
+  </item>
+
+</channel>
+</rss>

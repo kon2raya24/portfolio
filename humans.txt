@@ -1,0 +1,46 @@
+/* TEAM */
+
+  Developer + Designer: Lemmuel Turaya
+  Site:                 https://kon2raya.netlify.app
+  Email:                turayalemmuel@gmail.com
+  GitHub:               https://github.com/kon2raya24
+  LinkedIn:             https://www.linkedin.com/in/lemmuel-turaya/
+  Twitter:              —
+  From:                 Biñan, Laguna · Philippines (GMT+8)
+
+
+/* THANKS */
+
+  Anthropic       — Claude, paired through every commit on this thing.
+  Wes Bos         — /uses tradition.
+  Derek Sivers    — /now movement.
+  Open source     — for everything underneath the hood.
+
+
+/* SITE */
+
+  Last update:    2026-05-14
+  Language:       English
+  Doctype:        HTML5
+  Standards:      WCAG 2.1 AA · responsive · PWA · sitemap.xml · robots.txt
+  Components:     Vanilla JS, no framework on the cyberpunk layer
+  Type-set in:    Inter, Orbitron, JetBrains Mono
+  IDE:            VS Code · Claude Code
+  Built with:     caffeine, Claude AI, and zero frameworks for the FX layer.
+
+
+/* CURRENTLY */
+
+  Status:         Open to opportunities · 2026
+  Looking for:    Full-time / contract / freelance · remote-first
+  Stack:          Vue.js · Laravel · Flutter · MySQL · Claude AI
+  Side quest:     Refining this portfolio in public (see /changelog)
+
+
+                       .--.
+                      /    \
+                     | () () |
+                      \  ^  /
+                       |||||
+                       |||||
+              ./kon2raya — say hello.

@@ -1,0 +1,22 @@
+# Security disclosure policy — Lemmuel Turaya portfolio
+# Last updated: 2026-05-14
+
+Contact: mailto:turayalemmuel@gmail.com
+Expires: 2027-05-14T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://kon2raya.netlify.app/.well-known/security.txt
+Policy: https://kon2raya.netlify.app/.well-known/security.txt
+
+# This is a personal portfolio site — no user accounts, no payment flows,
+# no PII processing beyond the Netlify Forms contact submission.
+#
+# If you find something worth reporting (XSS, content-spoofing, CSP gaps,
+# subresource integrity issues, dependency vulns, etc.) — please email.
+# I'll acknowledge within 7 days and credit you if you'd like.
+#
+# Out of scope:
+#   - Third-party services (Netlify, counterapi.dev, GitHub API, Cal.com)
+#   - Social engineering / phishing reports of the email address itself
+#   - DoS / volumetric attacks
+#
+# Thank you for keeping the small web a little safer.

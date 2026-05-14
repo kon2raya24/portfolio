@@ -14,6 +14,24 @@
 	<meta name="keywords" content="Lemmuel Turaya, Full-Stack Developer, Mobile App Developer, Flutter, Vue.js, Laravel, Claude AI, Philippines Developer, Remote Developer, Web Developer" />
 	<meta name="theme-color" content="#050814" />
 
+	<!-- Theme bootstrap: applies stored/preferred theme before paint to prevent FOUC -->
+	<script>
+		(function () {
+			try {
+				var stored = localStorage.getItem('portfolio.theme');
+				var theme;
+				if (stored === 'light' || stored === 'dark') {
+					theme = stored;
+				} else {
+					theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+				}
+				document.documentElement.setAttribute('data-theme', theme);
+			} catch (e) {
+				document.documentElement.setAttribute('data-theme', 'dark');
+			}
+		})();
+	</script>
+
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
 	<meta property="og:title" content="Lemmuel Turaya — Full-Stack &amp; Mobile App Developer" />
@@ -75,6 +93,8 @@
 	<link rel="icon" href="images/logo.png" type="image/x-icon">
 	<link rel="apple-touch-icon" href="images/logo.png">
 	<link rel="manifest" href="manifest.json">
+	<link rel="alternate" type="application/rss+xml" title="Portfolio Changelog (RSS)" href="/feed.xml">
+	<link rel="author" href="/humans.txt">
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -112,6 +132,12 @@
 						<li><a href="#fh5co-skills">Skills</a></li>
 						<li><a href="#fh5co-work">Work</a></li>
 						<li><a href="#fh5co-started" class="hire-btn">Hire Me</a></li>
+						<li class="fh5co-nav-extra">
+							<button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
+								<span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">◐</span>
+								<span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">☀</span>
+							</button>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -148,7 +174,7 @@
 								<div class="hero-stats">
 									<div class="stat"><strong data-count="6" data-suffix="+">0</strong>Years Shipping</div>
 									<div class="stat"><strong data-count="40" data-suffix="+">0</strong>Projects</div>
-									<div class="stat"><strong>∞</strong>Coffee Cups</div>
+									<div class="stat"><strong data-count="2">0</strong>Case Studies</div>
 									<div class="stat"><strong data-count="1">0</strong>Vibe Coder</div>
 								</div>
 								<ul class="fh5co-social-icons">
@@ -1276,7 +1302,7 @@
 					<div class="col-md-4 col-sm-6 col-padding animate-box" data-tags="web,vue,php">
 						<article class="proj-card">
 							<a href="https://uphdjgtmedicaluniversity.edu.ph/" target="_blank" rel="noopener noreferrer" class="proj-card__link">
-								<div class="proj-card__thumb" style="background-image: url(images/Website-cover-photos.png);">
+								<div class="proj-card__thumb" style="background-image: url(images/Website-cover-photos.jpg);">
 									<span class="proj-card__status proj-card__status--live">LIVE</span>
 								</div>
 								<div class="proj-card__body">
@@ -1448,25 +1474,25 @@
 								<span class="case-studies__cmd">$ ls -la</span>
 							</header>
 							<div class="case-studies__body">
-								<div class="case-studies__lead">More in-depth write-ups for recent projects are in progress.</div>
+								<div class="case-studies__lead">Selected deep-dives into shipped work &mdash; code, tradeoffs, and what I&rsquo;d do differently.</div>
 								<ul class="case-studies__list">
 									<li>
 										<span class="case-tree">├─</span>
 										<a class="case-name case-name--link" href="case-studies/wms.html">wms-mobile-app/</a>
 										<span class="case-tags"><span class="exp-chip">Flutter</span> <span class="exp-chip">Dart</span></span>
-										<a class="case-status case-status--draft" href="case-studies/wms.html">DRAFT &middot; read writeup &rarr;</a>
+										<a class="case-status case-status--live" href="case-studies/wms.html">LIVE &middot; read writeup &rarr;</a>
 									</li>
 									<li>
 										<span class="case-tree">├─</span>
 										<a class="case-name case-name--link" href="case-studies/pamanaland.html">pamanaland-rms/</a>
 										<span class="case-tags"><span class="exp-chip">Vue.js</span> <span class="exp-chip">Laravel</span></span>
-										<a class="case-status case-status--draft" href="case-studies/pamanaland.html">DRAFT &middot; read writeup &rarr;</a>
+										<a class="case-status case-status--live" href="case-studies/pamanaland.html">LIVE &middot; read writeup &rarr;</a>
 									</li>
 									<li>
 										<span class="case-tree">├─</span>
-										<span class="case-name">jbc-commission-system/</span>
+										<a class="case-name case-name--link" href="case-studies/jbc.html">jbc-commission-system/</a>
 										<span class="case-tags"><span class="exp-chip">Vue.js</span> <span class="exp-chip">Laravel</span></span>
-										<span class="case-status case-status--wip">WIP &middot; writeup in progress</span>
+										<a class="case-status case-status--draft" href="case-studies/jbc.html">DRAFT &middot; preview writeup &rarr;</a>
 									</li>
 									<li>
 										<span class="case-tree">└─</span>
@@ -1479,6 +1505,70 @@
 									<span class="case-prompt">&gt;</span>
 									<span>For source samples, code walkthroughs, or references &mdash; reach out directly.</span>
 									<a href="mailto:turayalemmuel@gmail.com" class="btn btn-ghost btn-sm">Request samples</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="fh5co-praise" class="fh5co-bg-dark">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row animate-box">
+					<div class="col-md-10 col-md-offset-1">
+						<div class="praise">
+							<header class="praise__chrome">
+								<span class="praise__dots"><i></i><i></i><i></i></span>
+								<span class="praise__path">~/recommendations/<span class="tab-active">peer-review.log</span></span>
+								<span class="praise__cmd">$ cat *.txt</span>
+							</header>
+							<div class="praise__body">
+								<div class="praise__label">// shipped impact</div>
+								<h2 class="praise__title">What the work delivered</h2>
+								<p class="praise__lead">Outcomes pulled from real production deployments &mdash; the receipts behind the case studies. Recommendations and references available on request.</p>
+								<ul class="praise__grid">
+									<li class="praise-card">
+										<span class="praise-card__mark">&ldquo;</span>
+										<p class="praise-card__quote">Replaced a tangle of Excel files and email threads with one auditable source of truth &mdash; role-aware UI, self-service month-end reports, no more manual reconciliation.</p>
+										<footer class="praise-card__attrib">
+											<span class="praise-card__avatar" aria-hidden="true">PR</span>
+											<span class="praise-card__who">
+												<span class="praise-card__name">Pamanaland RMS</span>
+												<span class="praise-card__role">Realty Management &middot; in production</span>
+											</span>
+											<a class="praise-card__link" href="case-studies/pamanaland.html" aria-label="Read case study"><i class="icon-arrow-right"></i></a>
+										</footer>
+									</li>
+									<li class="praise-card">
+										<span class="praise-card__mark">&ldquo;</span>
+										<p class="praise-card__quote">A Flutter mobile app shipped end-to-end &mdash; design, implementation, rollout. Offline-first scan/pick/pack that survives warehouse Wi-Fi drops via a replay queue.</p>
+										<footer class="praise-card__attrib">
+											<span class="praise-card__avatar" aria-hidden="true">WM</span>
+											<span class="praise-card__who">
+												<span class="praise-card__name">WMS Mobile App</span>
+												<span class="praise-card__role">Warehouse Ops &middot; in rollout</span>
+											</span>
+											<a class="praise-card__link" href="case-studies/wms.html" aria-label="Read case study"><i class="icon-arrow-right"></i></a>
+										</footer>
+									</li>
+									<li class="praise-card">
+										<span class="praise-card__mark">&ldquo;</span>
+										<p class="praise-card__quote">Cross-functional work across full-stack web, mobile, and design &mdash; from domain modelling through production deploy. Owns features end-to-end and ships reliably.</p>
+										<footer class="praise-card__attrib">
+											<span class="praise-card__avatar" aria-hidden="true">LT</span>
+											<span class="praise-card__who">
+												<span class="praise-card__name">Track record</span>
+												<span class="praise-card__role">3+ years shipping &middot; full-stack &amp; mobile</span>
+											</span>
+											<a class="praise-card__link" href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank" rel="noopener" aria-label="View LinkedIn"><i class="icon-linkedin2"></i></a>
+										</footer>
+									</li>
+								</ul>
+								<div class="praise__foot">
+									<span class="praise-prompt">&gt;</span>
+									<span>Recommendations live on <a href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank" rel="noopener">LinkedIn</a> &mdash; or <a href="mailto:turayalemmuel@gmail.com">email me</a> for direct references.</span>
 								</div>
 							</div>
 						</div>
@@ -1508,6 +1598,51 @@
 										or onsite. If you&rsquo;re hiring a full-stack or mobile developer who can own
 										features end-to-end and ship reliably, I&rsquo;d be glad to talk.
 									</p>
+								</div>
+
+								<div class="cta-flow" role="list" aria-label="What happens after you reach out">
+									<div class="cta-flow__label">// what-happens-next</div>
+									<ol class="cta-flow__steps">
+										<li class="cta-flow__step" role="listitem">
+											<span class="cta-flow__num">01</span>
+											<div class="cta-flow__body">
+												<span class="cta-flow__head">you reach out</span>
+												<span class="cta-flow__sub">email, form, or cal.com &middot; reply within 24h</span>
+											</div>
+										</li>
+										<li class="cta-flow__step" role="listitem">
+											<span class="cta-flow__num">02</span>
+											<div class="cta-flow__body">
+												<span class="cta-flow__head">15-min intro call</span>
+												<span class="cta-flow__sub">cal.com &middot; quick fit check, no pressure</span>
+											</div>
+										</li>
+										<li class="cta-flow__step" role="listitem">
+											<span class="cta-flow__num">03</span>
+											<div class="cta-flow__body">
+												<span class="cta-flow__head">role brief or scoping doc</span>
+												<span class="cta-flow__sub">async &middot; pinned-down expectations</span>
+											</div>
+										</li>
+										<li class="cta-flow__step" role="listitem">
+											<span class="cta-flow__num">04</span>
+											<div class="cta-flow__body">
+												<span class="cta-flow__head">trial week or offer</span>
+												<span class="cta-flow__sub">whichever fits the engagement</span>
+											</div>
+										</li>
+									</ol>
+								</div>
+
+								<div class="cta-track" role="tablist" aria-label="Who's reaching out">
+									<button type="button" class="cta-track__tab is-active" data-cta-track="hiring" role="tab" aria-selected="true">
+										<span class="cta-track__icon">●</span>
+										<span class="cta-track__txt">Hiring / Recruiter</span>
+									</button>
+									<button type="button" class="cta-track__tab" data-cta-track="client" role="tab" aria-selected="false">
+										<span class="cta-track__icon">●</span>
+										<span class="cta-track__txt">Client / Project</span>
+									</button>
 								</div>
 
 								<div class="cta-email">
@@ -1652,6 +1787,20 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
+					<div class="git-log" data-git-log aria-label="Recent commits to the portfolio repo">
+						<header class="git-log__chrome">
+							<span class="git-log__dots"><i></i><i></i><i></i></span>
+							<span class="git-log__path">~/portfolio/<span class="tab-active">main</span></span>
+							<span class="git-log__cmd">$ git log -5 --oneline</span>
+						</header>
+						<ul class="git-log__list" data-git-log-list>
+							<li class="git-log__loading">$ fetching latest commits&hellip;</li>
+						</ul>
+						<footer class="git-log__foot">
+							<a href="https://github.com/kon2raya24/portfolio/commits/main" target="_blank" rel="noopener">view full history on GitHub &rarr;</a>
+						</footer>
+					</div>
+
 					<div class="live-stats" aria-live="polite">
 						<div class="live-stats__item">
 							<span class="live-stats__pulse"></span>
@@ -1672,13 +1821,25 @@
 					<p>&copy; 2026 Lemmuel Turaya. All rights reserved.<br>
 						Designed and built from scratch. Open to opportunities worldwide.</p>
 					<p class="footer-meta">
+						<a href="now.html">/now</a>
+						<span class="footer-meta__sep">·</span>
 						<a href="uses.html">/uses</a>
 						<span class="footer-meta__sep">·</span>
 						<a href="changelog.html">/changelog</a>
 						<span class="footer-meta__sep">·</span>
 						<a href="resume.json">resume.json</a>
 						<span class="footer-meta__sep">·</span>
+						<a href="api/availability.json">availability.json</a>
+						<span class="footer-meta__sep">·</span>
+						<a href="feed.xml">rss</a>
+						<span class="footer-meta__sep">·</span>
+						<a href="humans.txt">humans</a>
+						<span class="footer-meta__sep">·</span>
 						<a href="https://github.com/kon2raya24" target="_blank" rel="noopener">source</a>
+					</p>
+					<p class="footer-stamp">
+						<span class="footer-stamp__label">$ git log -1 &middot;</span>
+						<span class="footer-stamp__val" data-last-shipped>last shipped &middot; loading&hellip;</span>
 					</p>
 				</div>
 			</div>
@@ -1705,6 +1866,17 @@
 	<script src="js/main.js"></script>
 	<!-- Tech FX -->
 	<script src="js/tech-fx.js"></script>
+
+	<!-- Service worker registration (PWA offline support) -->
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', function () {
+				navigator.serviceWorker.register('/sw.js').catch(function (err) {
+					console.warn('[pwa] sw register failed:', err);
+				});
+			});
+		}
+	</script>
 
 </body>
 
