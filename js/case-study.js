@@ -140,6 +140,49 @@
 })();
 
 // =======================================================
+//  Reading progress bar — thin gradient strip at top:0 of
+//  viewport that fills as you scroll the document. Cheap
+//  feedback for long writeups (wms-v2, ai-engineer, hris).
+//  Pure CSS bar; this just updates the --read-progress
+//  custom property on the root element.
+// =======================================================
+(function () {
+  'use strict';
+  var prefersReduced = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function init() {
+    if (document.querySelector('.cs-progress')) return; // already injected
+    var bar = document.createElement('div');
+    bar.className = 'cs-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+
+    var ticking = false;
+    function compute() {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = h > 0 ? Math.min(1, Math.max(0, window.scrollY / h)) : 0;
+      document.documentElement.style.setProperty('--read-progress', p);
+      ticking = false;
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(compute);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    compute();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+// =======================================================
 //  Share row — injects COPY LINK / LINKEDIN / X buttons
 //  just above the prev/next pager on every case study so
 //  readers can forward the page in one click. Pure JS, no

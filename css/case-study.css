@@ -800,6 +800,50 @@ body::before {
 }
 
 /* =======================================================
+ *  Reading progress bar — fixed at top:0 of viewport, fills
+ *  left-to-right as the reader scrolls. Width is driven by
+ *  the --read-progress CSS custom property set by
+ *  js/case-study.js (0 = empty, 1 = bottom of page).
+ *
+ *  Sits at z-index 70 — above .viewport-hud (60) so the
+ *  brackets don't visually clip the bar's top edge.
+ * ======================================================= */
+.cs-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 70;
+  background: rgba(0, 229, 255, 0.06);
+  pointer-events: none;
+  overflow: hidden;
+}
+.cs-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--cyan) 0%, var(--brand) 60%, var(--magenta) 100%);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+  transform-origin: left;
+  transform: scaleX(var(--read-progress, 0));
+  transition: transform 0.12s linear;
+}
+:root[data-theme="light"] .cs-progress {
+  background: rgba(10, 30, 60, 0.08);
+}
+:root[data-theme="light"] .cs-progress::after {
+  background: linear-gradient(90deg, #007a90, #c66a00, #b22299);
+  box-shadow: 0 0 8px rgba(0, 102, 122, 0.4);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-progress::after { transition: none; }
+}
+@media print {
+  .cs-progress { display: none !important; }
+}
+
+/* =======================================================
  *  Share row — injected by js/case-study.js just above the
  *  pager. Three hex-clipped buttons + a tiny "// share:" label.
  * ======================================================= */
