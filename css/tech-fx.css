@@ -5982,3 +5982,78 @@ body.theme-sunset {
   color: #00667a !important;
   text-shadow: none !important;
 }
+
+/* =======================================================
+ *  Polish pass: featured chip, outcome chip, linked stat
+ * ======================================================= */
+.exp-chip--featured {
+  background: linear-gradient(135deg, rgba(255, 144, 0, 0.18), rgba(255, 43, 214, 0.12)) !important;
+  border-color: rgba(255, 144, 0, 0.55) !important;
+  color: #ffb352 !important;
+  text-shadow: 0 0 6px rgba(255, 144, 0, 0.35);
+  font-weight: 700;
+}
+.case-outcome {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: rgba(124, 255, 140, 0.85);
+  padding: 2px 8px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+.case-outcome::before {
+  content: "─ ";
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* "1 AI-Augmented Dev" linked stat tile — looks like the sibling .stat
+   divs but is clickable and points to the strongest AI case study. */
+.hero-stats .stat--linked {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+}
+.hero-stats .stat--linked:hover {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 14px rgba(255, 144, 0, 0.45);
+}
+.stat__sub {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(255, 144, 0, 0.85);
+  margin-top: 2px;
+  text-transform: lowercase;
+}
+
+/* Light-theme overrides */
+:root[data-theme="light"] .exp-chip--featured {
+  background: linear-gradient(135deg, rgba(255, 144, 0, 0.18), rgba(198, 106, 0, 0.12)) !important;
+  border-color: #c66a00 !important;
+  color: #8a4a00 !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .case-outcome {
+  color: #1f8a3e !important;
+}
+:root[data-theme="light"] .case-outcome::before {
+  color: rgba(10, 30, 60, 0.4) !important;
+}
+:root[data-theme="light"] .stat__sub {
+  color: #c66a00 !important;
+}
+:root[data-theme="light"] .hero-stats .stat--linked:hover {
+  border-color: #c66a00 !important;
+  box-shadow: 0 0 12px rgba(198, 106, 0, 0.45) !important;
+}
+
+/* Mobile: outcome chip wraps onto its own line to avoid overflow */
+@media (max-width: 768px) {
+  .case-outcome {
+    display: block;
+    margin: 4px 0 0 22px;
+  }
+  .case-outcome::before { content: ""; }
+}
