@@ -32,6 +32,26 @@
   </item>
 
   <item>
+    <title>v4.6 — Anonymized mock screenshots wired into every case study</title>
+    <link>https://kon2raya.netlify.app/case-studies/</link>
+    <guid isPermaLink="false">portfolio-v4.6-2026-05-14</guid>
+    <pubDate>Fri, 15 May 2026 01:00:00 +0800</pubDate>
+    <category>visual</category>
+    <description><![CDATA[
+      Generated four anonymized mock screenshots (1600×900) — one per case study —
+      that mirror the real production UI without leaking client data: Real-Estate
+      Developer Portal commission releases dashboard (10 anonymized rows with tier
+      chips + status pills + approver columns), Brokerage Commission share-
+      distribution view (4-step approver stepper + 5 summary tiles + per-tier
+      shares), WMS mobile picking screen on a phone-frame mock (scan input,
+      Bluetooth-paired Epson printer indicator, recent scans, Print + Confirm),
+      and Enterprise HRIS payroll period (6 summary tiles, payroll record table
+      with 2FA badges, multi-OU scoping). Each shot has a clear "MOCK" tag in
+      its caption.
+    ]]></description>
+  </item>
+
+  <item>
     <title>v4.5 — All client names made confidential</title>
     <link>https://kon2raya.netlify.app/case-studies/</link>
     <guid isPermaLink="false">portfolio-v4.5-2026-05-14</guid>

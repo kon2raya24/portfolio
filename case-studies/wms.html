@@ -198,10 +198,10 @@
       tenants (under NDA). The mobile app intentionally <em>does not</em> duplicate
       those screens; it owns the scan-driven floor operations.</p>
 
-    <div class="cs-shot--coming">
-      <span class="cs-shot__title">Screenshots coming with the final writeup</span>
-      <span class="cs-shot__sub">live screens are part of an internal operations system &mdash; demo available on request</span>
-    </div>
+    <figure class="cs-shot-real">
+      <img src="../images/shot-wms-picking.png" alt="Mobile picking screen — phone-frame mockup with SKU + location + qty card, barcode scan input, recent scans log, Bluetooth-paired Epson TM-P80II indicator, and Print/Confirm action buttons." loading="lazy" decoding="async">
+      <figcaption><span class="tag">MOCK</span>Mobile picking flow on a paired warehouse handset &middot; dual-input scan (camera + keyboard-wedge), Hive-backed offline queue, one-tap Bluetooth ESC/POS label print to Epson TM-P80II. SKU + lot codes anonymized.</figcaption>
+    </figure>
 
     <p><strong>API contract example</strong> — every scan posts a confirm event the server
       validates against current stock and inbound documents:</p>
