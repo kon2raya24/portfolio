@@ -130,6 +130,10 @@ docs: sync resume with new <thing>
 
 Do **not** auto-push. Ask the user before pushing — they may want to review the PDF first.
 
+## Chain into update-linkedin-pack
+
+If the change touched `basics.summary`, `projects[]`, `work[]`, or `skills[]` in `resume.json` (not just `meta.lastModified`), invoke the **`update-linkedin-pack`** skill at `.claude/skills/update-linkedin-pack/SKILL.md` next. That keeps `linkedin-summary.md` (the LinkedIn copy-paste pack) in lockstep with the same resume change. Skip the chain for trivial `meta.lastModified` bumps or pure styling fixes.
+
 ## Anti-patterns
 
 - **Don't** rewrite the whole resume when a small change is enough.
