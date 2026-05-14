@@ -822,3 +822,54 @@ body::before {
 
   @page { margin: 0.6in; }
 }
+
+/* =======================================================
+ *  Viewport HUD — see /css/tech-fx.css for the canonical
+ *  definition (same component, duplicated here so case
+ *  studies don't have to pull tech-fx.css just for this).
+ * ======================================================= */
+.viewport-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+}
+.viewport-hud__corner {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--cyan);
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.55));
+  opacity: 0.62;
+  animation: viewport-hud-breathe 5.5s ease-in-out infinite;
+}
+.viewport-hud__corner--tl { top: 14px;    left: 14px;   border-right: none; border-bottom: none; }
+.viewport-hud__corner--tr { top: 14px;    right: 14px;  border-left: none;  border-bottom: none; }
+.viewport-hud__corner--bl { bottom: 14px; left: 14px;   border-right: none; border-top: none;    }
+.viewport-hud__corner--br { bottom: 14px; right: 14px;  border-left: none;  border-top: none;    }
+.viewport-hud__corner::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--cyan);
+}
+.viewport-hud__corner--tl::after { top: -4px; left: -4px; }
+.viewport-hud__corner--tr::after { top: -4px; right: -4px; }
+.viewport-hud__corner--bl::after { bottom: -4px; left: -4px; }
+.viewport-hud__corner--br::after { bottom: -4px; right: -4px; }
+@keyframes viewport-hud-breathe {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4)); }
+  50%      { opacity: 0.85; filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.7)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .viewport-hud__corner { animation: none; }
+}
+@media (max-width: 640px) {
+  .viewport-hud { display: none; }
+}
+@media print {
+  .viewport-hud { display: none !important; }
+}

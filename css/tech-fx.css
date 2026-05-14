@@ -6257,3 +6257,75 @@ body.theme-sunset {
 @media (prefers-reduced-motion: reduce) {
   #fh5co-header h1 span { animation: none; }
 }
+
+/* =======================================================
+ *  Viewport HUD — 4 fixed L-bracket frames pinned to the
+ *  corners of the viewport (not the content). Looks like
+ *  the visor of an alien-tech cockpit, frames everything.
+ *  pointer-events:none so it doesn't intercept clicks.
+ *  aria-hidden in markup. Pure decoration.
+ * ======================================================= */
+.viewport-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60; /* above .cs-nav (50), below modals */
+}
+.viewport-hud__corner {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--cyan);
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.55));
+  opacity: 0.62;
+  animation: viewport-hud-breathe 5.5s ease-in-out infinite;
+}
+.viewport-hud__corner--tl { top: 14px;    left: 14px;   border-right: none; border-bottom: none; }
+.viewport-hud__corner--tr { top: 14px;    right: 14px;  border-left: none;  border-bottom: none; }
+.viewport-hud__corner--bl { bottom: 14px; left: 14px;   border-right: none; border-top: none;    }
+.viewport-hud__corner--br { bottom: 14px; right: 14px;  border-left: none;  border-top: none;    }
+
+/* tiny radar dot at each outer corner of each bracket */
+.viewport-hud__corner::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--cyan);
+}
+.viewport-hud__corner--tl::after { top: -4px; left: -4px; }
+.viewport-hud__corner--tr::after { top: -4px; right: -4px; }
+.viewport-hud__corner--bl::after { bottom: -4px; left: -4px; }
+.viewport-hud__corner--br::after { bottom: -4px; right: -4px; }
+
+@keyframes viewport-hud-breathe {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4)); }
+  50%      { opacity: 0.85; filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.7)); }
+}
+
+/* Light-theme: swap cyan for darker hue so brackets stay visible on cream */
+:root[data-theme="light"] .viewport-hud__corner {
+  border-color: #007a90 !important;
+  filter: drop-shadow(0 0 6px rgba(0, 102, 122, 0.45)) !important;
+}
+:root[data-theme="light"] .viewport-hud__corner::after {
+  background: #007a90 !important;
+  box-shadow: 0 0 8px rgba(0, 102, 122, 0.5) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport-hud__corner { animation: none; }
+}
+
+/* Hide on mobile (≤640px) — corners eat scarce visual real estate
+   and would crowd the hero hard. Keep them on tablet+. */
+@media (max-width: 640px) {
+  .viewport-hud { display: none; }
+}
+
+/* Hide when printing */
+@media print {
+  .viewport-hud { display: none !important; }
+}
