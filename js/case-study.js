@@ -140,6 +140,85 @@
 })();
 
 // =======================================================
+//  Share row — injects COPY LINK / LINKEDIN / X buttons
+//  just above the prev/next pager on every case study so
+//  readers can forward the page in one click. Pure JS, no
+//  external scripts pulled.
+// =======================================================
+(function () {
+  'use strict';
+
+  function init() {
+    var pager = document.querySelector('.cs-pager');
+    if (!pager) return;
+    if (document.querySelector('.cs-share')) return; // already injected
+
+    var url = window.location.href.split('#')[0];
+    var title = (document.title || 'Case study').replace(/\s*—.*$/, ''); // strip "— Lemmuel Turaya"
+
+    var share = document.createElement('div');
+    share.className = 'cs-share';
+    share.setAttribute('aria-label', 'Share this case study');
+    share.innerHTML =
+      '<span class="cs-share__label">// share:</span>' +
+      '<button type="button" class="cs-share__btn cs-share__btn--copy" aria-label="Copy link to clipboard">copy link</button>' +
+      '<a class="cs-share__btn cs-share__btn--linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=' +
+        encodeURIComponent(url) +
+        '" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn">linkedin</a>' +
+      '<a class="cs-share__btn cs-share__btn--x" href="https://twitter.com/intent/tweet?text=' +
+        encodeURIComponent(title + ' — Lemmuel Turaya') +
+        '&url=' + encodeURIComponent(url) +
+        '" target="_blank" rel="noopener noreferrer" aria-label="Share on X">x</a>';
+
+    pager.parentNode.insertBefore(share, pager);
+
+    var copyBtn = share.querySelector('.cs-share__btn--copy');
+    copyBtn.addEventListener('click', function () {
+      var text = url;
+      var done = function () {
+        var original = 'copy link';
+        copyBtn.textContent = 'copied ✓';
+        copyBtn.setAttribute('data-state', 'ok');
+        clearTimeout(copyBtn._t);
+        copyBtn._t = setTimeout(function () {
+          copyBtn.textContent = original;
+          copyBtn.removeAttribute('data-state');
+        }, 1400);
+      };
+      var fail = function () {
+        copyBtn.textContent = 'failed';
+        copyBtn.setAttribute('data-state', 'fail');
+        clearTimeout(copyBtn._t);
+        copyBtn._t = setTimeout(function () {
+          copyBtn.textContent = 'copy link';
+          copyBtn.removeAttribute('data-state');
+        }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fail);
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.top = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy') ? done() : fail();
+          document.body.removeChild(ta);
+        } catch (e) { fail(); }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+// =======================================================
 //  Code-block copy buttons
 //
 //  Finds every .cs-code block, injects a small hex "COPY"

@@ -800,6 +800,91 @@ body::before {
 }
 
 /* =======================================================
+ *  Share row — injected by js/case-study.js just above the
+ *  pager. Three hex-clipped buttons + a tiny "// share:" label.
+ * ======================================================= */
+.cs-share {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 48px 0 12px;
+  padding: 14px 18px;
+  background: rgba(10, 16, 36, 0.45);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+.cs-share__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--cyan-dim);
+  text-transform: lowercase;
+  margin-right: 8px;
+}
+.cs-share__btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: rgba(0, 229, 255, 0.10);
+  color: var(--cyan);
+  border: 0;
+  padding: 6px 18px;
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 50%,
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 50%
+  );
+  cursor: pointer;
+  text-shadow: 0 0 5px rgba(0, 229, 255, 0.35);
+  transition: background 0.18s, color 0.18s, text-shadow 0.18s;
+}
+.cs-share__btn:hover {
+  background: rgba(0, 229, 255, 0.28);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+.cs-share__btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+.cs-share__btn--linkedin {
+  background: rgba(10, 102, 194, 0.18);
+  color: #6ab1ff;
+  text-shadow: 0 0 5px rgba(10, 102, 194, 0.4);
+}
+.cs-share__btn--linkedin:hover {
+  background: rgba(10, 102, 194, 0.45);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(106, 177, 255, 0.7);
+}
+.cs-share__btn--x {
+  background: rgba(255, 43, 214, 0.14);
+  color: #ff7ad0;
+  text-shadow: 0 0 5px rgba(255, 43, 214, 0.35);
+}
+.cs-share__btn--x:hover {
+  background: rgba(255, 43, 214, 0.4);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 122, 208, 0.7);
+}
+.cs-share__btn[data-state="ok"] {
+  background: rgba(120, 255, 140, 0.25) !important;
+  color: #7cff8c !important;
+  text-shadow: 0 0 6px rgba(120, 255, 140, 0.55) !important;
+}
+.cs-share__btn[data-state="fail"] {
+  background: rgba(255, 95, 87, 0.25) !important;
+  color: #ff8a8a !important;
+  text-shadow: 0 0 6px rgba(255, 95, 87, 0.55) !important;
+}
+
+/* =======================================================
  *  Pager — prev/next case study at bottom of <main>
  * ======================================================= */
 .cs-pager {
