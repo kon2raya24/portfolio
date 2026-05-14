@@ -6298,7 +6298,7 @@ body.theme-sunset {
   z-index: 55;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 22px; /* more breathing room — labels don't collide with siblings */
   margin: 0;
   padding: 0;
   list-style: none;
@@ -6308,7 +6308,7 @@ body.theme-sunset {
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 6px 0 6px 4px; /* hit area larger than the visible dot */
+  padding: 4px;
 }
 .dot-nav__item:focus { outline: none; }
 .dot-nav__item:focus-visible .dot-nav__dot {
@@ -6326,41 +6326,59 @@ body.theme-sunset {
   flex-shrink: 0;
 }
 .dot-nav__item:hover .dot-nav__dot {
-  background: rgba(0, 229, 255, 0.4);
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.55);
+  background: rgba(0, 229, 255, 0.45);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
 }
 .dot-nav__item.is-active .dot-nav__dot {
   background: var(--cyan);
   box-shadow: 0 0 12px var(--cyan), 0 0 22px rgba(0, 229, 255, 0.4);
-  transform: scale(1.25);
+  transform: scale(1.3);
 }
 
 .dot-nav__label {
   position: absolute;
-  right: calc(100% + 4px); /* sit to the LEFT of the dot */
+  right: calc(100% + 6px); /* sit to the LEFT of the dot */
   top: 50%;
   transform: translateY(-50%) translateX(8px);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 9.5px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--cyan);
-  background: rgba(8, 12, 28, 0.9);
+  background: rgba(8, 12, 28, 0.92);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  padding: 5px 11px;
+  padding: 4px 9px;
   border: 1px solid var(--line);
   border-radius: 3px;
   text-shadow: 0 0 6px rgba(0, 229, 255, 0.35);
   opacity: 0;
   pointer-events: none;
   white-space: nowrap;
-  transition: opacity 0.22s, transform 0.22s;
+  transition: opacity 0.18s, transform 0.18s;
+  z-index: 1;
 }
-.dot-nav__item:hover .dot-nav__label,
+/* Active state shows label dimly (so the reader knows where they are
+   without a noisy chip floating in the periphery) */
 .dot-nav__item.is-active .dot-nav__label {
+  opacity: 0.7;
+  transform: translateY(-50%) translateX(0);
+}
+/* Hover always wins over active — bumps z-index + full opacity + brighter
+   border so only the hovered item visually dominates */
+.dot-nav__item:hover .dot-nav__label {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
+  z-index: 3;
+  border-color: var(--line-strong);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+/* When NOT hovering anything inside the dot-nav, only the active label
+   shows. When hovering on a non-active dot, that one wins, and the
+   active label fades away so the user isn't reading two labels. */
+.dot-nav:hover .dot-nav__item.is-active:not(:hover) .dot-nav__label {
+  opacity: 0;
+  transform: translateY(-50%) translateX(8px);
 }
 
 /* Light theme — darker hues so the dots stay visible on cream */
@@ -6736,11 +6754,12 @@ body.theme-sunset {
   .viewport-hud__corner { animation: none; }
 }
 
-/* Viewport HUD readout — fixed bottom-right, coordinates + status */
+/* Viewport HUD readout — fixed TOP-right (mission-control style).
+   Was bottom-right but that collided with the .gototop scroll button. */
 .viewport-hud__readout {
   position: absolute;
-  bottom: 22px;
-  right: 60px; /* clear of the bottom-right corner bracket */
+  top: 60px; /* just below the top-right corner bracket (14 + 38 + 8) */
+  right: 22px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 1.2px;

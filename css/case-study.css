@@ -971,8 +971,8 @@ body::before {
 }
 .viewport-hud__readout {
   position: absolute;
-  bottom: 22px;
-  right: 60px;
+  top: 60px;
+  right: 22px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 1.2px;
