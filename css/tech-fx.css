@@ -6279,6 +6279,63 @@ body.theme-sunset {
 }
 
 /* =======================================================
+ *  LIVE-pill streaming highlight
+ *
+ *  .case-status--live (work-tree case studies) and
+ *  .proj-card__status--live (work grid) get a soft green
+ *  highlight that streams across the pill every ~4.5s.
+ *  Pairs with the existing pulsing dot (::before).
+ *  Reads as "live data flowing" rather than just "label."
+ * ======================================================= */
+.case-status--live,
+.proj-card__status--live {
+  position: relative;
+  overflow: hidden;
+}
+.case-status--live::after,
+.proj-card__status--live::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(120, 255, 140, 0.42) 50%,
+    transparent 100%);
+  transform: translateX(-200%);
+  animation: live-stream 4.5s linear infinite;
+  pointer-events: none;
+}
+.proj-card__status--live::after {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(40, 200, 64, 0.4) 50%,
+    transparent 100%);
+}
+@keyframes live-stream {
+  from { transform: translateX(-200%); }
+  to   { transform: translateX(380%); }
+}
+:root[data-theme="light"] .case-status--live::after {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(31, 138, 62, 0.28) 50%,
+    transparent 100%) !important;
+}
+:root[data-theme="light"] .proj-card__status--live::after {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(31, 138, 62, 0.28) 50%,
+    transparent 100%) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-status--live::after,
+  .proj-card__status--live::after { display: none; }
+}
+
+/* =======================================================
  *  Chip sheen — single sweep across .exp-chip on hover.
  *  Doesn't touch .tech-chip (already uses ::before / ::after
  *  for the < /> markers); .cs-chip variant lives in
