@@ -34,9 +34,9 @@ I work end-to-end — requirements, architecture, implementation, testing, deplo
 — Specializations —
 • Vue.js / Nuxt.js / TypeScript on the front-end
 • Laravel + MySQL + REST API design on the back-end
-• Flutter + Dart on mobile, with hardware integrations (Bluetooth ESC/POS, barcode scanning)
-• Multi-LLM orchestration — Claude, Gemini, OpenAI, OpenRouter, Qwen — behind a single agent-service interface
-• LLM-friendly documentation (Karpathy-style Obsidian wikis with YAML frontmatter so AI agents and humans share the same context)
+• Flutter + Dart on mobile, with Bluetooth ESC/POS + barcode scanning
+• Multi-LLM orchestration (Claude / Gemini / OpenAI / OpenRouter / Qwen) behind one agent-service interface
+• Karpathy-style LLM wikis (YAML-frontmatter Obsidian vaults) so agents and humans share the same code context
 • Multi-tier RBAC, OU-scoped permissions, CASL, Spatie Laravel-Permission
 • Offline-first mobile sync (Hive replay queue) for warehouse-floor reliability
 • Reporting & dashboards with AG Grid Enterprise + jsPDF + DomPDF
@@ -44,19 +44,18 @@ I work end-to-end — requirements, architecture, implementation, testing, deplo
 • CI/CD on Jenkins + Buddy, with PHPStan/ESLint rules that encode architecture
 
 — Recent shipped —
-• An autonomous AI Engineer wired into a real ticketing system: `php artisan ai:work {ref}` picks up ASSIGNED tickets, auto-detects the target repo, dispatches to the chosen LLM, persists chat memory per ticket, and an independent verifier runs the real PHPUnit suite before any merge
+• An autonomous AI Engineer in a production ticketing system — `php artisan ai:work {ref}` picks up ASSIGNED tickets, dispatches to the chosen LLM, persists per-ticket chat memory, and a separate verifier runs the real PHPUnit suite before any merge
 • WMS v2 rewrite onto Laravel 12 + Vue 3 with a single canonical V3DataTable + BaseCrud pattern, CI-enforced guardrails, and online schema migrations
-• Hardware-integrated Flutter WMS mobile app with 13 feature modules, Bluetooth ESC/POS label printing, and 108 build releases shipped
+• Hardware-integrated Flutter WMS mobile app — 13 feature modules, Bluetooth ESC/POS label printing, 108 build releases
 
 — What I bring to a team —
 • End-to-end ownership of features, web and mobile
 • Bias for shipping with engineering discipline
 • Strong UX and API design instincts
-• AI-assisted delivery without sacrificing code review, tests, or judgment
 • A habit of leaving the codebase healthier than I found it
 
 — Open to —
-Full-time, contract, or freelance · remote, hybrid, or onsite · Philippines (GMT+8) with strong overlap to APAC, EU mornings, and US evenings.
+Full-time, contract, or freelance · remote, hybrid, or onsite · Philippines (GMT+8) with strong APAC / EU-morning / US-evening overlap.
 
 Reach me directly: turayalemmuel@gmail.com
 Portfolio: https://kon2raya.netlify.app
