@@ -176,6 +176,28 @@ body::before {
   border-radius: 8px;
   font-family: 'JetBrains Mono', monospace;
   margin-bottom: 18px;
+  /* Iridescent border + outer glow that cycles through the brand
+     palette every 9s. Subtle — keeps the panel inside the brand
+     family but signals "active." Border-color and box-shadow are
+     animated together so the glow always matches the border. */
+  animation: cs-meta-hue-cycle 9s ease-in-out infinite;
+}
+@keyframes cs-meta-hue-cycle {
+  0%, 100% {
+    border-color: rgba(0, 229, 255, 0.22);
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.14), inset 0 0 6px rgba(0, 229, 255, 0.05);
+  }
+  33% {
+    border-color: rgba(255, 144, 0, 0.28);
+    box-shadow: 0 0 14px rgba(255, 144, 0, 0.14), inset 0 0 6px rgba(255, 144, 0, 0.05);
+  }
+  66% {
+    border-color: rgba(255, 43, 214, 0.24);
+    box-shadow: 0 0 14px rgba(255, 43, 214, 0.12), inset 0 0 6px rgba(255, 43, 214, 0.04);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-meta { animation: none; }
 }
 .cs-meta__item { font-size: 12px; }
 .cs-meta__k {
