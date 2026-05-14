@@ -1431,6 +1431,49 @@ try {
     });
   })();
 
+  /* ---------- Case-studies tree filter pills ---------- */
+  (function caseFilter() {
+    var list = document.querySelector('.case-studies__list');
+    var bar = document.querySelector('.case-filters');
+    if (!list || !bar) return;
+    var items = list.querySelectorAll('[data-cs-tags]');
+    if (!items.length) return;
+
+    var counts = { all: items.length };
+    items.forEach(function (it) {
+      (it.getAttribute('data-cs-tags') || '').split(',').forEach(function (tag) {
+        tag = tag.trim();
+        if (!tag) return;
+        counts[tag] = (counts[tag] || 0) + 1;
+      });
+    });
+
+    // Display order: all, ai (flagship), web, mobile, docs, design
+    var order = ['all', 'ai', 'web', 'mobile', 'docs', 'design'];
+    order = order.filter(function (k) { return counts[k]; });
+
+    order.forEach(function (tag, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'case-filter' + (i === 0 ? ' is-active' : '');
+      b.setAttribute('data-filter', tag);
+      b.innerHTML = tag + '<span class="case-filter__count">' + counts[tag] + '</span>';
+      b.addEventListener('click', function () { apply(tag); });
+      bar.appendChild(b);
+    });
+
+    function apply(tag) {
+      bar.querySelectorAll('.case-filter').forEach(function (b) {
+        b.classList.toggle('is-active', b.getAttribute('data-filter') === tag);
+      });
+      items.forEach(function (it) {
+        var tags = (it.getAttribute('data-cs-tags') || '').split(',').map(function (s) { return s.trim(); });
+        var show = tag === 'all' || tags.indexOf(tag) > -1;
+        it.classList.toggle('is-hidden', !show);
+      });
+    }
+  })();
+
   /* ---------- Project filter pills ---------- */
   (function workFilter() {
     var grid = document.getElementById('work-grid');
