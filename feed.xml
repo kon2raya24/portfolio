@@ -32,6 +32,26 @@
   </item>
 
   <item>
+    <title>v4.7 — Two new case studies: Transport Mgmt System + Autonomous AI Engineer</title>
+    <link>https://kon2raya.netlify.app/case-studies/</link>
+    <guid isPermaLink="false">portfolio-v4.7-2026-05-15</guid>
+    <pubDate>Fri, 15 May 2026 03:00:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      Added two new case studies, pushing the proof shelf from 4 to 6. (1) Transport
+      Management System on Vue 3 + Laravel 11 — ~68 models, ~99 controllers, ~98
+      migrations, ~324 Vue pages, live GPS, Spatie Permissions, full booking → dispatch
+      → costing → invoice lifecycle. (2) Autonomous AI Engineer — a multi-LLM agent
+      pipeline (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a production
+      ticketing system. `php artisan ai:work {ref}` picks up ASSIGNED tickets,
+      auto-detects the target repo from a systems table, runs the work via
+      AiHarnessService, persists per-ticket chat memory, and an independent verifier
+      (`ai:verify`) runs the real PHPUnit test suite before any merge. Every action
+      logged to the ticket comment thread. Mock screenshots + OG images generated.
+    ]]></description>
+  </item>
+
+  <item>
     <title>v4.6 — Anonymized mock screenshots wired into every case study</title>
     <link>https://kon2raya.netlify.app/case-studies/</link>
     <guid isPermaLink="false">portfolio-v4.6-2026-05-14</guid>

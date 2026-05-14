@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · Autonomous AI Engineer (Ticketing) — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Autonomous AI Engineer for an enterprise ticketing system — a multi-LLM agent pipeline (Claude, Gemini, OpenAI, OpenRouter, Qwen) that picks up assigned tickets, edits the right repo, runs independent test verification, and auto-closes deployed work. Real Laravel 11 console commands, AI chat memory persistence, security-gated workflow." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/ai-engineer.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · Autonomous AI Engineer (Ticketing) — Lemmuel Turaya" />
+<meta property="og:description" content="Multi-LLM autonomous AI engineer pipeline wired into an enterprise ticketing system. Claude / Gemini / OpenAI / OpenRouter / Qwen agents with independent verification, security gates, and persistent chat memory." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/ai-engineer.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-ai-engineer.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Theme bootstrap -->
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme = (stored === 'light' || stored === 'dark') ? stored
+				: ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">ai-engineer</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<!-- Hero -->
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>Autonomous AI Engineer<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Multi-LLM agent pipeline inside an enterprise ticketing system</span></h1>
+		<p class="cs-hero__tagline">
+			A production AI-engineer pipeline embedded in a real ticketing system: assign
+			a ticket to the &ldquo;AI Engineer&rdquo;, run <code>php artisan ai:work {ref}</code>,
+			and an LLM agent (Claude, Gemini, OpenAI, OpenRouter, or Qwen) picks up the
+			ticket context, auto-detects the target repository, makes the change, and
+			pushes a candidate fix &mdash; then an independent verifier runs the real
+			test suite before the work is allowed near production.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">client</span>
+				<span class="cs-meta__v">Confidential &middot; logistics operator under NDA</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Full-Stack Developer / AI Engineer</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v">2025 &mdash; Present</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v">In production &middot; supervised mode</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">parent system</span>
+				<span class="cs-meta__v">Ticketing &middot; ~145 models &middot; ~99 controllers &middot; ~206 migrations</span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">Laravel 11</span>
+			<span class="cs-chip">Sanctum</span>
+			<span class="cs-chip">Spatie Permissions</span>
+			<span class="cs-chip cs-chip--ai">Claude</span>
+			<span class="cs-chip cs-chip--ai">Gemini</span>
+			<span class="cs-chip cs-chip--ai">OpenAI</span>
+			<span class="cs-chip cs-chip--ai">OpenRouter</span>
+			<span class="cs-chip cs-chip--ai">Qwen</span>
+			<span class="cs-chip">PHPUnit</span>
+		</div>
+	</header>
+
+	<section class="cs-section">
+		<div class="cs-section__label">tl;dr</div>
+		<h2>What it is</h2>
+		<p>
+			Inside a production ticketing system (~145 Eloquent models, ~99 controllers,
+			~206 migrations, Kanban boards via Spatie Permission), there&rsquo;s a
+			user named <strong>&ldquo;AI Engineer&rdquo;</strong> who can be assigned
+			tickets like any other developer. When a ticket reaches the
+			<code>ASSIGNED</code> board column, an operator runs a single Laravel
+			console command:
+		</p>
+		<p>
+			<code>php artisan ai:work IN-2025-000006 --model=claude</code>
+		</p>
+		<p>
+			An <strong>autonomous LLM agent</strong> picks up the ticket, reads its
+			context from the AI Harness, auto-detects the target repository (from the
+			<code>systems</code> table), makes the proposed change, and pushes it back
+			with a session record. A separate verifier
+			(<code>php artisan ai:verify {ticket_no}</code>) then runs the real test
+			suite (<code>php artisan test</code> by default) and logs the
+			<strong>pass / fail</strong> result back to the ticket as an internal
+			comment &mdash; a human reviews before merge. A nightly
+			<code>tickets:auto-close</code> job closes tickets that have sat in
+			<em>deployed</em> for 72+ hours.
+		</p>
+		<p>
+			Five LLM brains are wired in side-by-side &mdash; <strong>Claude</strong>,
+			<strong>Gemini</strong>, <strong>OpenAI</strong>,
+			<strong>OpenRouter</strong>, and <strong>Qwen</strong> &mdash; selected per
+			ticket so the operator can pick the right tool for the job (e.g., Claude
+			for refactors, Gemini for big-context reads, Qwen for cost).
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">problem</div>
+		<h2>The bottleneck</h2>
+		<p>
+			A small dev team supporting many internal systems (WMS, TMS, CRM, Ticketing,
+			HR, Developer Portal) means a long tail of small tickets &mdash;
+			&ldquo;rename this column,&rdquo; &ldquo;add this field to the export,&rdquo;
+			&ldquo;adjust this validation,&rdquo; &ldquo;tweak the report&rdquo; &mdash;
+			that each take ~15&ndash;30 minutes of real work but hours of context-switch
+			and queue time across multiple repos. Specific pain points:
+		</p>
+		<ul>
+			<li>Developers context-switched between 8+ repositories several times a day,
+				losing flow.</li>
+			<li>Repetitive small tickets never made it to the top of the queue, leading
+				to a long stale tail.</li>
+			<li>AI-assisted ad-hoc usage (paste code into a chat window, paste the answer
+				back) was already happening informally &mdash; with <strong>no
+				audit trail, no test verification, and no permission boundary</strong>.</li>
+			<li>The team wanted to keep AI assistance but make it: traceable per ticket,
+				verifiable by real tests, gated by ticket assignment, and recorded in the
+				existing system of record.</li>
+		</ul>
+		<p>
+			The ask: <strong>make AI work look exactly like a human engineer&rsquo;s
+			work</strong> &mdash; assigned via the same Kanban board, scoped to specific
+			repos, verified by the same test suite, reviewed by a human before merge,
+			and closed through the same workflow.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">approach</div>
+		<h2>How I broke it down</h2>
+		<ul>
+			<li><strong>Treat the AI as a teammate, not a tool.</strong> A real
+				<code>User</code> row named &ldquo;AI Engineer&rdquo; that can be assigned
+				tickets exactly like a human developer. Same Kanban columns, same
+				board-status workflow, same comment thread.</li>
+			<li><strong>Security gate at assignment.</strong> The AI only works on
+				tickets in the <code>ASSIGNED</code> board status (status IDs 2 or 12).
+				Tickets in <em>Triage</em>, <em>Backlog</em>, <em>In Review</em>, or
+				<em>Done</em> are rejected at the command level &mdash; the AI
+				can&rsquo;t pick up work it hasn&rsquo;t been authorized to do.</li>
+			<li><strong>One ticket &harr; one repo.</strong> The
+				<code>systems</code> table maps each system code to its target
+				repository (e.g. <code>WMS &rarr; aai-wms-api</code>). The command
+				auto-detects the repo from <code>ticket.system</code> &mdash; no
+				cross-repo drift.</li>
+			<li><strong>Multi-LLM, single harness.</strong> An <code>AiHarnessService</code>
+				owns session context (prompts, tools, file targets), and delegates the
+				model call to one of <code>ClaudeAgentService</code>,
+				<code>GeminiAgentService</code>, <code>OpenAIAgentService</code>,
+				<code>OpenRouterAgentService</code>, or <code>QwenAgentService</code>.
+				The operator picks the brain at runtime; swapping a model takes a flag,
+				not a refactor.</li>
+			<li><strong>Persistent chat memory.</strong>
+				<code>AIChatMemory</code> Eloquent model keeps per-ticket conversation
+				history, so a follow-up <code>ai:work</code> on the same ticket continues
+				the thread instead of cold-starting.</li>
+			<li><strong>Independent verification step.</strong>
+				<code>ai:verify {ticket_no}</code> runs in a separate process from
+				<code>ai:work</code>, using <code>php artisan test</code> (or a custom
+				command via <code>--cmd</code>) against the candidate change. The
+				outcome &mdash; <strong>pass or fail</strong>, including stdout &mdash;
+				is written back to the ticket as a comment, before any human review.</li>
+			<li><strong>Auto-close after deploy.</strong>
+				<code>tickets:auto-close</code> nightly sweeps for tickets in
+				<em>deployed</em> status untouched for 72+ hours and closes them with a
+				system-user log entry. Keeps the board clean without manual triage.</li>
+			<li><strong>Audit trail everywhere.</strong>
+				<code>TicketLogger</code> trait writes a structured log entry per
+				AI action (work start, model used, repo touched, files changed,
+				verification result, auto-close) so the team can answer
+				&ldquo;what did the AI do, when, and was it tested?&rdquo; for any
+				ticket at any time.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">solution</div>
+		<h2>What I built</h2>
+
+		<p><strong>Pipeline components shipped:</strong></p>
+		<ul>
+			<li><strong><code>php artisan ai:work {ref_no} --model=&lt;brain&gt;</code></strong> &mdash;
+				interactive autonomous-work command. Validates ticket status, auto-detects
+				repo, prompts for model choice, hands off to the right agent service via
+				the harness.</li>
+			<li><strong><code>php artisan ai:verify {ticket_no} --repo --cmd</code></strong> &mdash;
+				independent verification of the candidate change against a real test
+				suite. Logs result to the ticket comment thread.</li>
+			<li><strong><code>php artisan tickets:auto-close</code></strong> &mdash;
+				nightly cleanup of stale <em>deployed</em> tickets older than 72 hours,
+				with a system-user audit entry.</li>
+			<li><strong>5 LLM agent services</strong> sharing the same interface:
+				<code>ClaudeAgentService</code>, <code>GeminiAgentService</code>,
+				<code>OpenAIAgentService</code>, <code>OpenRouterAgentService</code>,
+				<code>QwenAgentService</code>. Adding a new brain is a one-class change.</li>
+			<li><strong><code>AiHarnessService</code></strong> &mdash; the orchestrator.
+				Builds session context from <code>SystemTicket</code> + <code>System</code> +
+				<code>AIChatMemory</code>, dispatches to the chosen agent, captures the
+				response, persists the new memory entry, returns the result.</li>
+			<li><strong><code>AIChatMemory</code></strong> &mdash; Eloquent model
+				persisting per-ticket conversation history (role, content, model,
+				timestamps), so follow-up runs on the same ticket continue the thread.</li>
+			<li><strong>Board-status integration</strong> &mdash; the AI Engineer&rsquo;s
+				assigned-ticket queue is just a Kanban column. Anyone with board access
+				sees it. No separate &ldquo;AI dashboard.&rdquo;</li>
+			<li><strong>Per-system repo map</strong> &mdash; a <code>systems</code> table
+				rows the operator can maintain via the existing admin UI; each row maps
+				<code>system_code &rarr; repository name</code>, so the AI never has to
+				guess where the change should land.</li>
+		</ul>
+
+		<p><strong>The work command — security-gated, model-selectable, repo-aware:</strong></p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">~/app/<span class="active">Console/Commands/AiWorkCommand.php</span></span>
+			</header>
+<pre><span class="tk-key">class</span> <span class="tk-fn">AiWorkCommand</span> <span class="tk-key">extends</span> Command
+<span class="tk-punct">{</span>
+    <span class="tk-key">protected</span> <span class="tk-num">$signature</span> = <span class="tk-str">'ai:work {ref_no?} {--model=}'</span><span class="tk-punct">;</span>
+    <span class="tk-key">protected</span> <span class="tk-num">$description</span> = <span class="tk-str">'Starts an autonomous AI agent with interactive ticket and model selection.'</span><span class="tk-punct">;</span>
+
+    <span class="tk-key">public function</span> <span class="tk-fn">__construct</span><span class="tk-punct">(</span>
+        <span class="tk-key">private</span> AiHarnessService <span class="tk-num">$harness</span><span class="tk-punct">,</span>
+        <span class="tk-key">private</span> ClaudeAgentService <span class="tk-num">$claude</span><span class="tk-punct">,</span>
+        <span class="tk-key">private</span> GeminiAgentService <span class="tk-num">$gemini</span><span class="tk-punct">,</span>
+        <span class="tk-key">private</span> OpenAIAgentService <span class="tk-num">$openai</span><span class="tk-punct">,</span>
+        <span class="tk-key">private</span> OpenRouterAgentService <span class="tk-num">$openrouter</span><span class="tk-punct">,</span>
+        <span class="tk-key">private</span> QwenAgentService <span class="tk-num">$qwen</span>
+    <span class="tk-punct">)</span> <span class="tk-punct">{</span> <span class="tk-key">parent</span><span class="tk-punct">::</span><span class="tk-fn">__construct</span><span class="tk-punct">();</span> <span class="tk-punct">}</span>
+
+    <span class="tk-key">public function</span> <span class="tk-fn">handle</span><span class="tk-punct">()</span>
+    <span class="tk-punct">{</span>
+        <span class="tk-num">$ref</span> = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span>argument<span class="tk-punct">(</span><span class="tk-str">'ref_no'</span><span class="tk-punct">)</span>
+            ?? <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">ask</span><span class="tk-punct">(</span><span class="tk-str">'Ticket Reference Number (e.g. IN-2025-000006)'</span><span class="tk-punct">);</span>
+
+        <span class="tk-num">$ticket</span> = SystemTicket<span class="tk-punct">::</span><span class="tk-fn">where</span><span class="tk-punct">(</span><span class="tk-str">'ref_no'</span><span class="tk-punct">,</span> <span class="tk-num">$ref</span><span class="tk-punct">)-&gt;</span><span class="tk-fn">first</span><span class="tk-punct">();</span>
+        <span class="tk-key">if</span> <span class="tk-punct">(!</span><span class="tk-num">$ticket</span><span class="tk-punct">)</span> <span class="tk-key">return</span> <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">error</span><span class="tk-punct">(</span><span class="tk-str">"Ticket {$ref} not found."</span><span class="tk-punct">);</span>
+
+        <span class="tk-cmt">// Security gate — only work on ASSIGNED board status (2 or 12)</span>
+        <span class="tk-key">if</span> <span class="tk-punct">(!</span><span class="tk-fn">in_array</span><span class="tk-punct">(</span><span class="tk-num">$ticket</span><span class="tk-punct">-&gt;</span>board_status_id<span class="tk-punct">,</span> <span class="tk-punct">[</span><span class="tk-num">2</span><span class="tk-punct">,</span> <span class="tk-num">12</span><span class="tk-punct">]))</span> <span class="tk-punct">{</span>
+            <span class="tk-key">return</span> <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">error</span><span class="tk-punct">(</span><span class="tk-str">"Ticket not in ASSIGNED status."</span><span class="tk-punct">);</span>
+        <span class="tk-punct">}</span>
+
+        <span class="tk-num">$model</span> = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">option</span><span class="tk-punct">(</span><span class="tk-str">'model'</span><span class="tk-punct">)</span>
+            ?? <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">choice</span><span class="tk-punct">(</span><span class="tk-str">'AI brain?'</span><span class="tk-punct">,</span> <span class="tk-punct">[</span><span class="tk-str">'claude'</span><span class="tk-punct">,</span> <span class="tk-str">'gemini'</span><span class="tk-punct">,</span> <span class="tk-str">'openai'</span><span class="tk-punct">,</span> <span class="tk-str">'openrouter'</span><span class="tk-punct">,</span> <span class="tk-str">'qwen'</span><span class="tk-punct">],</span> <span class="tk-num">0</span><span class="tk-punct">);</span>
+
+        <span class="tk-num">$repo</span> = DB<span class="tk-punct">::</span><span class="tk-fn">table</span><span class="tk-punct">(</span><span class="tk-str">'systems'</span><span class="tk-punct">)-&gt;</span><span class="tk-fn">where</span><span class="tk-punct">(</span><span class="tk-str">'code'</span><span class="tk-punct">,</span> <span class="tk-num">$ticket</span><span class="tk-punct">-&gt;</span>system<span class="tk-punct">)-&gt;</span><span class="tk-fn">value</span><span class="tk-punct">(</span><span class="tk-str">'repo'</span><span class="tk-punct">);</span>
+        <span class="tk-num">$agent</span> = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span>{<span class="tk-num">$model</span>}<span class="tk-punct">;</span> <span class="tk-cmt">// dispatch to chosen brain</span>
+
+        <span class="tk-key">return</span> <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span>harness<span class="tk-punct">-&gt;</span><span class="tk-fn">run</span><span class="tk-punct">(</span><span class="tk-num">$ticket</span><span class="tk-punct">,</span> <span class="tk-num">$repo</span><span class="tk-punct">,</span> <span class="tk-num">$agent</span><span class="tk-punct">);</span>
+    <span class="tk-punct">}</span>
+<span class="tk-punct">}</span></pre>
+		</div>
+
+		<p><strong>And the verifier &mdash; deliberately separate from the worker:</strong></p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">~/app/<span class="active">Console/Commands/AiVerifyCommand.php</span></span>
+			</header>
+<pre><span class="tk-cmt">// php artisan ai:verify IN-2025-000006 --cmd="vendor/bin/phpunit --filter MemoTest"</span>
+<span class="tk-num">$context</span> = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span>harness<span class="tk-punct">-&gt;</span><span class="tk-fn">getSessionContext</span><span class="tk-punct">(</span><span class="tk-num">$ticket</span><span class="tk-punct">);</span>
+<span class="tk-num">$repo</span>    = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">option</span><span class="tk-punct">(</span><span class="tk-str">'repo'</span><span class="tk-punct">)</span> ?? <span class="tk-num">$context</span><span class="tk-punct">[</span><span class="tk-str">'target_repos'</span><span class="tk-punct">][</span><span class="tk-num">0</span><span class="tk-punct">];</span>
+<span class="tk-num">$cmd</span>     = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span><span class="tk-fn">option</span><span class="tk-punct">(</span><span class="tk-str">'cmd'</span><span class="tk-punct">)</span> ?? <span class="tk-str">'php artisan test'</span><span class="tk-punct">;</span>
+
+<span class="tk-num">$result</span> = <span class="tk-num">$this</span><span class="tk-punct">-&gt;</span>harness<span class="tk-punct">-&gt;</span><span class="tk-fn">runVerification</span><span class="tk-punct">(</span><span class="tk-num">$ticket</span><span class="tk-punct">,</span> <span class="tk-num">$repo</span><span class="tk-punct">,</span> <span class="tk-num">$cmd</span><span class="tk-punct">);</span>
+
+<span class="tk-cmt">// Log pass/fail + stdout to the ticket comment thread automatically</span>
+<span class="tk-key">return</span> <span class="tk-num">$result</span><span class="tk-punct">[</span><span class="tk-str">'success'</span><span class="tk-punct">]</span> ? <span class="tk-num">0</span> : <span class="tk-num">1</span><span class="tk-punct">;</span></pre>
+		</div>
+
+		<figure class="cs-shot-real">
+			<img src="../images/shot-ai-engineer.png" alt="Autonomous AI Engineer console — terminal-style screenshot showing the ai:work command flow: ticket lookup, security gate, repo auto-detect, model selection (Claude/Gemini/OpenAI/OpenRouter/Qwen), and AI agent run output." loading="lazy" decoding="async">
+			<figcaption><span class="tag">MOCK</span>Console session for <code>php artisan ai:work IN-2025-000006 --model=claude</code> &middot; security gate, auto repo detection, multi-brain selector, AI agent run, verification result. Ticket and file names anonymized.</figcaption>
+		</figure>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">stack</div>
+		<h2>Tech</h2>
+		<ul>
+			<li><strong>Backend:</strong> Laravel 11 (PHP 8.2+), MySQL, Eloquent,
+				Sanctum, Spatie Laravel-Permission, DomPDF,
+				<code>maatwebsite/excel</code>, Carbon, Telescope, Pint.</li>
+			<li><strong>AI brains wired in:</strong> Claude (Anthropic), Gemini (Google),
+				OpenAI (GPT family), OpenRouter (model gateway), Qwen (Alibaba). Each
+				lives in its own service class behind a common harness interface.</li>
+			<li><strong>Orchestration:</strong>
+				<code>AiHarnessService</code> for session context + dispatch;
+				<code>AIChatMemory</code> Eloquent model for per-ticket conversation
+				persistence; <code>TicketLogger</code> trait for structured audit logs.</li>
+			<li><strong>Workflow integration:</strong>
+				<code>SystemTicket</code>, <code>BoardStatus</code>,
+				<code>SystemTicketDocument</code> &mdash; the AI Engineer is a regular
+				<code>User</code> row in the same Kanban-driven ticketing system as the
+				human team.</li>
+			<li><strong>Verification:</strong> PHPUnit (default
+				<code>php artisan test</code>); custom test commands via
+				<code>--cmd</code> for per-repo conventions.</li>
+			<li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Git &middot; Postman &middot; Laravel Tinker.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">outcome</div>
+		<h2>Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k">LLM brains wired in</div>
+				<div class="cs-metric__v">5</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">console commands</div>
+				<div class="cs-metric__v">3</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">security gates</div>
+				<div class="cs-metric__v">board + repo</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">verification</div>
+				<div class="cs-metric__v">PHPUnit ✓</div>
+			</div>
+		</div>
+
+		<p>
+			The team gained an &ldquo;extra engineer&rdquo; that picks up small tickets,
+			edits the right repository, and verifies its own work against the real test
+			suite &mdash; without escaping the existing ticket, board, and audit-log
+			workflow. The 5-LLM selector means a single ticket can be retried with a
+			different brain when one model misreads the task. Every AI action lands as
+			a comment in the ticket thread, so a human reviewer always has the full
+			session record before approving a merge.
+		</p>
+		<p>
+			Specific business figures (ticket-throughput delta, hours saved per week)
+			stay with the client; <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">lessons</div>
+		<h2>What I&rsquo;d do again — and differently</h2>
+		<p><strong>Worked well:</strong></p>
+		<ul>
+			<li><strong>Modelling the AI as a teammate inside the existing workflow.</strong>
+				A real <code>User</code> row, the same board, the same comment thread.
+				No special &ldquo;AI portal&rdquo; for the team to learn.</li>
+			<li><strong>Security gate at the command boundary.</strong> Only
+				<em>ASSIGNED</em> tickets are pickable. Auto-detected repos from
+				<code>systems</code>. The AI can&rsquo;t touch what it wasn&rsquo;t
+				assigned to.</li>
+			<li><strong>Independent verification step.</strong> Splitting
+				<code>ai:work</code> from <code>ai:verify</code> meant the verifier
+				can&rsquo;t be coerced by whatever the agent said it did &mdash; the
+				real test suite is the source of truth.</li>
+			<li><strong>Multi-brain abstraction.</strong> Five interchangeable agent
+				services behind one harness means the operator picks the right tool for
+				the job, and a new brain is a one-class addition.</li>
+			<li><strong>Persistent chat memory.</strong> Threaded follow-ups on the
+				same ticket continue the conversation, just like a human picking up where
+				they left off.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Move verification into CI proper.</strong> Right now
+				<code>ai:verify</code> runs locally on the AI host. Wiring it into the
+				existing GitHub Actions / Jenkins pipeline would give per-PR checks for
+				free.</li>
+			<li><strong>Cost &amp; latency telemetry per brain.</strong> Models change
+				price/speed often; a small per-call telemetry table would help pick the
+				right default model for routine work.</li>
+			<li><strong>Tighter sandboxing.</strong> Today the AI runs against the real
+				repo on the AI host&rsquo;s filesystem. A per-run ephemeral container
+				(or worktree) would isolate cross-ticket contamination risk.</li>
+			<li><strong>Bring more agentic tools into the harness.</strong> A
+				file-search tool, a git-history tool, and a doc-lookup tool would expand
+				the kinds of tickets the AI can handle confidently &mdash; today
+				it&rsquo;s strongest on focused single-repo edits.</li>
+		</ul>
+	</section>
+
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I build autonomous AI engineer pipelines like this &mdash; ticket-gated, multi-LLM, independently verified, audit-logged. If your team wants AI assistance that actually lives inside your existing workflow, let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · Transport Management System — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Transport Management System (TMS) — a Vue 3 + Laravel 11 platform running an enterprise logistics fleet end-to-end: bookings, dispatch, costing/charges, driver and truck rosters, live GPS, incidents, maintenance schedules, and a 324-page admin UI." />
+<meta name="theme-color" content="#050814">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/tms.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · Transport Management System — Lemmuel Turaya" />
+<meta property="og:description" content="Enterprise TMS on Vue 3 + Laravel 11 — bookings → dispatch → costing → live-GPS → invoice lifecycle. ~68 models, ~99 controllers, ~98 migrations, ~324 Vue pages." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/tms.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-tms.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Theme bootstrap -->
+<script>
+	(function () {
+		try {
+			var stored = localStorage.getItem('portfolio.theme');
+			var theme = (stored === 'light' || stored === 'dark') ? stored
+				: ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
+			document.documentElement.setAttribute('data-theme', theme);
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">tms</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<!-- Hero -->
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>Transport Management System<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Enterprise logistics dispatch + GPS + costing on Vue 3 + Laravel 11</span></h1>
+		<p class="cs-hero__tagline">
+			A full-stack TMS that runs an enterprise logistics operator&rsquo;s transport
+			arm end-to-end &mdash; from customer booking through dispatch, costing,
+			live-GPS tracking, incident handling, and maintenance scheduling to invoice.
+			Companion to the WMS mobile app and the customer-service CRM, sharing the
+			same Sanctum auth and Spatie permission system.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">client</span>
+				<span class="cs-meta__v">Confidential &middot; logistics operator under NDA</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Full-Stack Developer</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v">2024 &mdash; Present</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v">In production</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">scope</span>
+				<span class="cs-meta__v">~68 models &middot; ~99 controllers &middot; ~98 migrations &middot; ~324 pages</span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">Vue 3</span>
+			<span class="cs-chip">Laravel 11</span>
+			<span class="cs-chip">Sanctum</span>
+			<span class="cs-chip">Spatie Permissions</span>
+			<span class="cs-chip">AG Grid Enterprise</span>
+			<span class="cs-chip">Velzon Admin</span>
+			<span class="cs-chip">DomPDF</span>
+			<span class="cs-chip">Live GPS</span>
+			<span class="cs-chip">MySQL</span>
+		</div>
+	</header>
+
+	<section class="cs-section">
+		<div class="cs-section__label">tl;dr</div>
+		<h2>What it is</h2>
+		<p>
+			A platform the operator&rsquo;s transport team runs every day:
+			<strong>booking</strong> orders from customers, planning the
+			<strong>dispatch</strong> across an internal fleet and external truckers,
+			watching the trucks move on a <strong>live GPS</strong> map, logging
+			<strong>incidents</strong>, generating <strong>costing &amp; charge
+			breakdowns</strong>, scheduling <strong>vehicle maintenance</strong>, and
+			closing out the cycle by invoicing the customer.
+		</p>
+		<p>
+			Backend: Laravel 11 + MySQL + Sanctum + Spatie Permissions, with DomPDF for
+			document generation and <code>maatwebsite/excel</code> for bulk exports.
+			Frontend: Vue 3 (Vue CLI) on the Velzon admin template with AG Grid
+			Enterprise, Vue Router, Vuex modules, i18n, AOS, and a live-GPS map view.
+			<strong>~68 models</strong>, <strong>~99 controllers</strong>,
+			<strong>~98 migrations</strong>, and <strong>~324 Vue pages</strong> across
+			20+ domain folders.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">problem</div>
+		<h2>The bottleneck</h2>
+		<p>
+			Before the TMS, the transport operations team worked across multiple
+			disconnected tools:
+		</p>
+		<ul>
+			<li>Bookings came in through email, phone, and spreadsheet templates &mdash; no
+				single intake queue.</li>
+			<li>Dispatch planning was a whiteboard plus a chat group, with status logged
+				in a shared Excel file that drifted.</li>
+			<li>GPS feeds came from the carrier&rsquo;s own portal &mdash; the ops team
+				had to keep two browser tabs open and reconcile by eye.</li>
+			<li>Costing per booking was computed manually from a rate card workbook with
+				breakdowns for trucking, containers, minimums, and surcharges.</li>
+			<li>Vehicle maintenance was tracked in a separate sheet; missed services led
+				to surprise breakdowns.</li>
+			<li>Trucker partner companies and personnel were managed off-platform &mdash;
+				suspensions and document expiries fell through the cracks.</li>
+			<li>Customer billing was a manual reconciliation against the cost workbook,
+				with the inevitable end-of-month scramble.</li>
+		</ul>
+		<p>
+			The team needed <strong>one system</strong> that owns the lifecycle from
+			booking intake to invoice, with <strong>role-based access</strong> per
+			operations team, <strong>live GPS</strong> on the same screen, and
+			<strong>costing rules driven by data</strong> (rate cards, breakdowns,
+			surcharges) instead of by Excel macros.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">approach</div>
+		<h2>How I broke it down</h2>
+		<ul>
+			<li><strong>Modelled the booking lifecycle as explicit nouns.</strong>
+				<code>Booking</code> &rarr; <code>BookingDetail</code> &rarr;
+				<code>BookingStatusLog</code>, with <code>DispatchGroup</code>,
+				<code>Drivers</code>, <code>DriverHelper</code>, and trucker-partner
+				records (<code>TruckerCompany</code>, <code>TruckerPersonnel</code>,
+				<code>TruckerRates</code>, <code>TruckerSuspension</code>,
+				<code>TruckerPersonnelDocs</code>) wired in as relationships.</li>
+			<li><strong>Charges as a first-class domain.</strong> Separate
+				<code>Charges</code>, <code>ChargeList</code>, <code>ChargeDetail</code>,
+				<code>ChargeHeader</code>, and a Costing engine
+				(<code>Costing</code> &rarr; <code>CostingCost</code> &rarr;
+				<code>CostingDetails</code> &rarr; <code>CostingTariffs</code>) so a
+				single booking can be costed correctly under multiple rate-card schemes.</li>
+			<li><strong>Spatie Permission for RBAC.</strong> Bought the proven
+				role + permission package instead of building from scratch &mdash; the
+				transport team needs many fine-grained verbs (book, dispatch, edit
+				costing, release invoice) and Spatie handles them cleanly.</li>
+			<li><strong>Sanctum bearer tokens</strong> for the same auth surface used by
+				the companion WMS mobile app and CRM, so a single internal SSO works
+				across the ops stack.</li>
+			<li><strong>Live GPS on the dashboard.</strong>
+				<code>GpsLocation</code> records flow in from the carrier feed; the Vue
+				app polls + interpolates on a map view so dispatchers can spot
+				stuck-in-traffic and route exceptions early.</li>
+			<li><strong>Excel bulk operations.</strong>
+				<code>maatwebsite/excel</code> + <code>mavinoo/laravel-batch</code> for
+				bulk import of rate cards and bulk export of billing breakdowns &mdash;
+				the team lives in Excel for offline review.</li>
+			<li><strong>Velzon admin theme</strong> for the UI foundation. ~324 Vue pages
+				is too many to design from scratch; the theme buys consistent forms,
+				modals, tables, and dashboards.</li>
+			<li><strong>Approval &amp; data-restriction layer.</strong>
+				<code>ChangesApproval</code> + <code>DataRestriction</code> models gate
+				edits to sensitive records (rates, charges, customer pricing) so the
+				system holds even when many users touch the same booking.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">solution</div>
+		<h2>What I built</h2>
+
+		<p><strong>Domain modules shipped:</strong></p>
+		<ul>
+			<li><strong>Booking intake</strong> &mdash; <code>Booking</code>,
+				<code>BookingDetails</code>, <code>BookingStatusLogs</code>,
+				<code>BookingRemarksHistory</code>, <code>TrBookingHDR</code>,
+				<code>TrBookingStatusHistory</code>, with status workflow + remarks
+				thread per booking.</li>
+			<li><strong>Dispatch &amp; planning</strong> &mdash;
+				<code>DispatchGroup</code>, <code>Drivers</code>,
+				<code>DriverHelper</code>, <code>DeliveryAssociate</code>,
+				<code>TruckerDispatchGroup</code>, with assignment workflows and a
+				planning calendar view.</li>
+			<li><strong>Fleet &amp; vehicles</strong> &mdash; trucks, fleet types,
+				<code>VehicleChecklistHeader</code> + <code>VehicleChecklistCategory</code>
+				+ <code>VehicleChecklistDetails</code>, plus <code>ExemptPlateIdles</code>
+				and <code>UnavailabilityReason</code> for downtime tracking.</li>
+			<li><strong>Trucker partners</strong> &mdash; <code>TruckerCompany</code>,
+				<code>TruckerPersonnel</code>, <code>TruckerPersonnelDocs</code>,
+				<code>TruckerRates</code>, <code>TruckerSuspension</code> &mdash;
+				external-partner registry with rate cards and compliance docs.</li>
+			<li><strong>Costing engine</strong> &mdash; <code>Costing</code> &rarr;
+				<code>CostingCost</code> &rarr; <code>CostingDetails</code> +
+				<code>CostingTariffs</code>; per-booking cost breakdown with multiple
+				tariff schemes.</li>
+			<li><strong>Charges catalog</strong> &mdash; <code>Charges</code>,
+				<code>ChargeList</code>, <code>ChargeDetail</code>,
+				<code>ChargeHeader</code> &mdash; configurable charge types layered onto
+				bookings.</li>
+			<li><strong>Live GPS</strong> &mdash; <code>GpsLocation</code> stream with a
+				live map view in the Vue UI for dispatch monitoring.</li>
+			<li><strong>Incidents</strong> &mdash; incident logging during transit with
+				severity classification and remarks history.</li>
+			<li><strong>Maintenance</strong> &mdash;
+				<code>MaintenanceTemplate</code> + schedules per vehicle to surface
+				upcoming services before they become breakdowns.</li>
+			<li><strong>Master data</strong> &mdash;
+				<code>Customer</code>, <code>Client</code>, <code>AreaCode</code>,
+				<code>Country</code>, <code>Cities</code>, <code>Barangays</code>,
+				<code>LocationCode</code>, <code>DocumentTypes</code>,
+				<code>Uoms</code>, <code>Incoterm</code>, <code>TripType</code>,
+				<code>FleetType</code>.</li>
+			<li><strong>RBAC</strong> &mdash; Spatie Laravel-Permission with
+				<code>CommonPermission</code> overlay for OU-style data restrictions and
+				<code>ChangesApproval</code> for sensitive-edit gating.</li>
+		</ul>
+
+		<figure class="cs-shot-real">
+			<img src="../images/shot-tms-dispatch.png" alt="TMS Booking + Live GPS dashboard — anonymized active-bookings table with status pills, live truck position cards, and per-row dispatch actions." loading="lazy" decoding="async">
+			<figcaption><span class="tag">MOCK</span>Booking + Live-GPS console &middot; active-bookings table with status workflow, live truck position cards, fleet utilization stats. Customer + trucker names anonymized.</figcaption>
+		</figure>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">stack</div>
+		<h2>Tech</h2>
+		<ul>
+			<li><strong>Backend:</strong> Laravel 11 (PHP 8.2+), MySQL, Eloquent,
+				Sanctum, Spatie Laravel-Permission, DomPDF (barryvdh/laravel-dompdf),
+				<code>maatwebsite/excel</code> (XLSX import/export),
+				<code>mavinoo/laravel-batch</code> (bulk DB ops), Carbon (date math),
+				Laravel Telescope (dev debugging), Pint (style).</li>
+			<li><strong>Frontend:</strong> Vue 3 (Vue CLI), Velzon Admin template,
+				Vue Router, Vuex modules, Vue i18n, AG Grid Enterprise, ApexCharts,
+				Chart.js, FullCalendar, Vuelidate, Flatpickr, Multiselect, AOS,
+				file-saver, html-to-image &mdash; ~324 pages across booking,
+				booking-planning, customer, fleet-types, live-gps, incident,
+				maintenance, charges, dashboard, reports, calendar, and admin folders.</li>
+			<li><strong>Domain scope:</strong> ~68 Eloquent models &middot; ~99
+				controllers &middot; ~98 migrations on the API; ~324 Vue pages across
+				20+ domain folders on the UI.</li>
+			<li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Git &middot; Composer &middot; Yarn &middot; Postman.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">outcome</div>
+		<h2>Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k">domain models</div>
+				<div class="cs-metric__v">~68</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">api controllers</div>
+				<div class="cs-metric__v">~99</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">ui pages</div>
+				<div class="cs-metric__v">~324</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">live GPS</div>
+				<div class="cs-metric__v">✓</div>
+			</div>
+		</div>
+
+		<p>
+			The platform consolidated booking, dispatch, GPS, costing, charges,
+			incidents, maintenance, and billing onto a single ledger &mdash; the
+			transport ops team stopped switching between five tools to do one
+			booking. Trucker partners, vehicle maintenance schedules, and approval
+			workflows now live where the records they affect live. Live GPS and the
+			incidents log gave dispatch a single screen for the day instead of three
+			open browser tabs.
+		</p>
+		<p>
+			Specific business figures (volume per day, on-time-delivery rate,
+			cost-per-booking reduction) stay with the client;
+			<a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.
+		</p>
+	</section>
+
+	<section class="cs-section">
+		<div class="cs-section__label">lessons</div>
+		<h2>What I&rsquo;d do again — and differently</h2>
+		<p><strong>Worked well:</strong></p>
+		<ul>
+			<li><strong>Spatie Laravel-Permission over a hand-rolled RBAC.</strong> Saved
+				days vs. the JBC/Pamanaland approach of building from scratch. The
+				transport team&rsquo;s permission matrix is dense enough that
+				Spatie&rsquo;s ergonomics paid for themselves in week one.</li>
+			<li><strong>Velzon admin theme.</strong> 324 pages is a lot of UI; the theme
+				kept it visually consistent without a separate design pass per page.</li>
+			<li><strong>Modelling charges as their own subsystem.</strong>
+				<code>Charges</code> + <code>ChargeList</code> + <code>ChargeDetail</code>
+				+ <code>ChargeHeader</code> separated &ldquo;catalog&rdquo; from
+				&ldquo;applied to a booking&rdquo; cleanly &mdash; rate changes
+				don&rsquo;t retroactively rewrite history.</li>
+			<li><strong>Excel bulk operations.</strong> Bringing Excel into the system
+				instead of fighting against it &mdash; the transport team genuinely
+				prefers a CSV/XLSX export for offline review and a bulk import for
+				updating rate cards.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Migrate Vue CLI &rarr; Vite.</strong> 324 pages on Vue CLI is
+				slow to rebuild. Future projects start on Vite (same call as the HRIS
+				project, which moved early and benefited).</li>
+			<li><strong>Push GPS interpolation server-side.</strong> The current
+				client-side polling burns battery on dispatchers&rsquo; laptops; a small
+				WebSocket gateway with server-interpolated positions would be cheaper.</li>
+			<li><strong>Lock in an integration-test suite around the costing engine
+				earlier.</strong> Tariff changes are the most-feared edits in the
+				system &mdash; reproducible tests against fixture bookings would have
+				removed that fear.</li>
+		</ul>
+	</section>
+
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I build operations platforms like this for logistics, real estate, and HR teams &mdash; with the dispatch + costing + RBAC + GPS pieces wired correctly. Let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="mailto:turayalemmuel@gmail.com">Get in touch &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+</main>
+
+</body>
+</html>
