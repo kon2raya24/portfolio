@@ -4525,6 +4525,72 @@ body.theme-sunset {
   body.konami-on { animation: none; }
   .praise-card:hover { transform: none; }
   .case-status--live::before { animation: none; }
+  /* reduced motion users always see content immediately */
+  .animate-box { opacity: 1 !important; }
+  .animate-box.fadeInUp,
+  .animate-box.fadeInLeft,
+  .animate-box.fadeInRight,
+  .animate-box.fadeIn { animation: none !important; }
+}
+
+/* ============================================================
+   MOBILE HERO FIX
+   The legacy `.fh5co-cover { height: 600px }` is a fixed height the
+   original template assumed. The new hero packs much more content
+   (role tag, status badge, tech-chip strip, hero-stats, social icons).
+   On mobile the centered content overflows past 600px and the social
+   icons row visually overlaps the #fh5co-about heading below.
+   Fix: make the hero grow with content on small screens.
+   ============================================================ */
+@media screen and (max-width: 768px) {
+  #fh5co-header,
+  .fh5co-cover,
+  #fh5co-header.fh5co-cover.js-fullheight {
+    height: auto !important;
+    min-height: 100vh;
+    padding: 90px 0 60px;
+  }
+  #fh5co-header .display-t,
+  .fh5co-cover .display-t,
+  #fh5co-header .display-t.js-fullheight,
+  .fh5co-cover .display-t.js-fullheight {
+    display: block !important;
+    height: auto !important;
+    width: 100%;
+  }
+  #fh5co-header .display-tc,
+  .fh5co-cover .display-tc,
+  #fh5co-header .display-tc.js-fullheight,
+  .fh5co-cover .display-tc.js-fullheight {
+    display: block !important;
+    height: auto !important;
+    padding: 24px 0;
+  }
+  /* Stack hero-stats vertically on phones for breathing room */
+  .hero-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  /* Social icons row sits cleanly at the bottom of the hero */
+  #fh5co-header .display-tc .fh5co-social-icons {
+    margin-top: 22px;
+    padding-bottom: 10px;
+  }
+}
+
+/* Reveal-instant: applied by tech-fx.js to .animate-box elements that
+   are already in or above the viewport on page load (typically after a
+   reload that restored the scroll position). Skips the fade keyframe so
+   the user doesn't watch 30+ above-fold sections re-animate every time
+   they reload.
+   Wins over `.js .animate-box { opacity: 0 }` via specificity (0,2,0). */
+.js .animate-box.reveal-instant {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  animation: none !important;
+  -webkit-animation: none !important;
 }
 
 /* ==========================================================================

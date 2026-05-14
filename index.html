@@ -32,6 +32,35 @@
 		})();
 	</script>
 
+	<!-- Scroll restoration: disable the browser's late-restore (which causes the
+	     visible top → saved-Y jump on reload). Read the saved Y now, mark the
+	     document as scroll-pending, then a body-bottom script applies the scroll
+	     and unhides content. Result: no flicker, no jump. -->
+	<script>
+		(function () {
+			try {
+				if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+				var raw = sessionStorage.getItem('portfolio.scroll');
+				var y = raw ? parseInt(raw, 10) : 0;
+				if (!isNaN(y) && y > 0) {
+					window.__scrollPending = y;
+					document.documentElement.classList.add('scroll-pending');
+				}
+			} catch (e) {}
+		})();
+	</script>
+	<style>
+		/* Hide page content until we've applied the saved scroll, so the user
+		   never sees the top-of-page flash. Time-bounded fallback in case JS
+		   fails: auto-reveal after 600ms. */
+		html.scroll-pending body { visibility: hidden; }
+		html.scroll-pending body { animation: scroll-pending-fallback 0.6s forwards; }
+		@keyframes scroll-pending-fallback {
+			0%, 99% { visibility: hidden; }
+			100%    { visibility: visible; }
+		}
+	</style>
+
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
 	<meta property="og:title" content="Lemmuel Turaya — Full-Stack &amp; Mobile App Developer" />
@@ -1484,19 +1513,19 @@
 									</li>
 									<li>
 										<span class="case-tree">├─</span>
-										<a class="case-name case-name--link" href="case-studies/pamanaland.html">pamanaland-rms/</a>
+										<a class="case-name case-name--link" href="case-studies/pamanaland.html">realty-developer-portal/</a>
 										<span class="case-tags"><span class="exp-chip">Vue.js</span> <span class="exp-chip">Laravel</span></span>
 										<a class="case-status case-status--live" href="case-studies/pamanaland.html">LIVE &middot; read writeup &rarr;</a>
 									</li>
 									<li>
 										<span class="case-tree">├─</span>
-										<a class="case-name case-name--link" href="case-studies/jbc.html">jbc-commission-system/</a>
+										<a class="case-name case-name--link" href="case-studies/jbc.html">brokerage-commission-system/</a>
 										<span class="case-tags"><span class="exp-chip">Vue.js</span> <span class="exp-chip">Laravel</span></span>
 										<a class="case-status case-status--live" href="case-studies/jbc.html">LIVE &middot; read writeup &rarr;</a>
 									</li>
 									<li>
 										<span class="case-tree">├─</span>
-										<a class="case-name case-name--link" href="case-studies/hris.html">jbc-marketing-hris/</a>
+										<a class="case-name case-name--link" href="case-studies/hris.html">enterprise-hris/</a>
 										<span class="case-tags"><span class="exp-chip">Vue 3</span> <span class="exp-chip">Laravel 12</span> <span class="exp-chip">Vite</span></span>
 										<a class="case-status case-status--live" href="case-studies/hris.html">LIVE &middot; read writeup &rarr;</a>
 									</li>
@@ -1539,10 +1568,10 @@
 										<span class="praise-card__mark">&ldquo;</span>
 										<p class="praise-card__quote">Real-estate developer operations end-to-end &mdash; reservation &rarr; sales &rarr; equity &rarr; amortization &rarr; financing &rarr; commission &rarr; collection lifecycle with a 5-tier seller hierarchy, OU-scoped CASL RBAC. Live on Vue 3 + Laravel 11.</p>
 										<footer class="praise-card__attrib">
-											<span class="praise-card__avatar" aria-hidden="true">PR</span>
+											<span class="praise-card__avatar" aria-hidden="true">RD</span>
 											<span class="praise-card__who">
-												<span class="praise-card__name">Pamanaland Developer Portal</span>
-												<span class="praise-card__role">Developer Ops &middot; in production</span>
+												<span class="praise-card__name">Real-Estate Developer Portal</span>
+												<span class="praise-card__role">Client under NDA &middot; in production</span>
 											</span>
 											<a class="praise-card__link" href="case-studies/pamanaland.html" aria-label="Read case study"><i class="icon-arrow-right"></i></a>
 										</footer>
@@ -1554,7 +1583,7 @@
 											<span class="praise-card__avatar" aria-hidden="true">WM</span>
 											<span class="praise-card__who">
 												<span class="praise-card__name">WMS Mobile App</span>
-												<span class="praise-card__role">Warehouse Ops &middot; in production</span>
+												<span class="praise-card__role">Client under NDA &middot; in production</span>
 											</span>
 											<a class="praise-card__link" href="case-studies/wms.html" aria-label="Read case study"><i class="icon-arrow-right"></i></a>
 										</footer>
@@ -1563,10 +1592,10 @@
 										<span class="praise-card__mark">&ldquo;</span>
 										<p class="praise-card__quote">A real-estate brokerage&rsquo;s entire operations platform &mdash; commission engine with multi-tier shares + approver workflow, multi-OU RBAC, sales pipeline, expenses, HR-lite. ~22 months, ~640 commits.</p>
 										<footer class="praise-card__attrib">
-											<span class="praise-card__avatar" aria-hidden="true">JB</span>
+											<span class="praise-card__avatar" aria-hidden="true">BC</span>
 											<span class="praise-card__who">
-												<span class="praise-card__name">JBC Commission System</span>
-												<span class="praise-card__role">Brokerage Ops &middot; in production</span>
+												<span class="praise-card__name">Brokerage Commission System</span>
+												<span class="praise-card__role">Client under NDA &middot; in production</span>
 											</span>
 											<a class="praise-card__link" href="case-studies/jbc.html" aria-label="Read case study"><i class="icon-arrow-right"></i></a>
 										</footer>

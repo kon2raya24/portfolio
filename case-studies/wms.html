@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Case Study · WMS Mobile App — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Designing and shipping a hardware-integrated Flutter WMS — barcode scanning, Bluetooth ESC/POS label printing on Epson TM-P80II, offline-first sync — production at AAI Worldwide Logistics. 108 builds and counting." />
+<meta name="description" content="Designing and shipping a hardware-integrated Flutter WMS — barcode scanning, Bluetooth ESC/POS label printing on Epson TM-P80II, offline-first sync — in production at an enterprise logistics operator. 108 builds and counting." />
 <meta name="theme-color" content="#050814">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/case-studies/wms.html" />
@@ -38,15 +38,15 @@
     <h1>WMS Mobile App<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Hardware-integrated Warehouse Management on Flutter</span></h1>
     <p class="cs-hero__tagline">
       A Flutter mobile app paired with an existing Nuxt admin and Laravel REST API to run
-      AAI Worldwide Logistics&rsquo; warehouse floor &mdash; scan-driven receiving, picking,
-      dispatch, validation, count-sheets, and stock movement, with Bluetooth ESC/POS label
-      printing on Epson TM-P80II and offline-first sync over flaky warehouse Wi-Fi.
+      an enterprise logistics operator&rsquo;s warehouse floor &mdash; scan-driven receiving,
+      picking, dispatch, validation, count-sheets, and stock movement, with Bluetooth ESC/POS
+      label printing on Epson TM-P80II and offline-first sync over flaky warehouse Wi-Fi.
     </p>
 
     <div class="cs-meta">
       <div class="cs-meta__item">
-        <span class="cs-meta__k">company</span>
-        <span class="cs-meta__v">AAI Worldwide Logistics</span>
+        <span class="cs-meta__k">client</span>
+        <span class="cs-meta__v">Confidential &middot; under NDA</span>
       </div>
       <div class="cs-meta__item">
         <span class="cs-meta__k">role</span>
@@ -111,7 +111,7 @@
     <div class="cs-section__label">problem</div>
     <h2>The bottleneck</h2>
     <p>
-      Before the mobile app, AAI's warehouse workflows lived on a mix of <strong>desktop
+      Before the mobile app, the warehouse workflows lived on a mix of <strong>desktop
       browser sessions</strong>, printed picklists, and manual XLSX exports. That created
       several friction points:
     </p>
@@ -193,10 +193,10 @@
         from a picker&rsquo;s phone to an Epson TM-P80II clipped to their belt.</li>
     </ul>
 
-    <p>The web admin (<code>aaiwms</code>, Nuxt + CoreUI) keeps its existing role &mdash;
-      dashboards, reports, master data, customer-specific portals (BBraun, BIPC, etc.).
-      The mobile app intentionally <em>does not</em> duplicate those screens; it owns the
-      scan-driven floor operations.</p>
+    <p>The companion web admin (Nuxt + CoreUI) keeps its existing role &mdash;
+      dashboards, reports, master data, and customer-specific portals for the largest
+      tenants (under NDA). The mobile app intentionally <em>does not</em> duplicate
+      those screens; it owns the scan-driven floor operations.</p>
 
     <div class="cs-shot--coming">
       <span class="cs-shot__title">Screenshots coming with the final writeup</span>
@@ -271,7 +271,7 @@
         Zebra / Honeywell barcode scanners in keyboard-wedge mode; rugged Android
         devices as the primary picker hardware.</li>
       <li><strong>Integrations:</strong> SAP-bridged inbound documents (XML / SFTP),
-        BBraun and BIPC customer portals, existing aaiwms Nuxt admin, audit-log streams.</li>
+        large-customer-specific portals (under NDA), companion Nuxt admin, audit-log streams.</li>
       <li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Postman &middot; Git &middot; GitHub Actions.</li>
       <li><strong>Distribution:</strong> internal signed APK with an in-app OTA-update
         flow gated by <code>API_BASE_URL</code> &mdash; pickers see an &ldquo;update

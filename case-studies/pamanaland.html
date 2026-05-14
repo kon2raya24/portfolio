@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Case Study · Pamanaland Developer Portal — Lemmuel Turaya</title>
+<title>Case Study · Real-Estate Developer Portal — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Pamanaland Developer Portal — a Vue 3 + Laravel 11 platform running a real-estate developer end-to-end: reservations, sales, equity, amortization, in-house financing, commission, collection, sales returns, and a multi-tier seller hierarchy." />
+<meta name="description" content="Real-Estate Developer Portal — a Vue 3 + Laravel 11 platform running a real-estate developer end-to-end: reservations, sales, equity, amortization, in-house financing, commission, collection, sales returns, and a multi-tier seller hierarchy." />
 <meta name="theme-color" content="#050814">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/case-studies/pamanaland.html" />
 
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Case Study · Pamanaland Developer Portal — Lemmuel Turaya" />
-<meta property="og:description" content="A Vue 3 + Laravel 11 platform powering an entire real-estate developer: reservation → sales → equity → amortization → financing → commission → collection lifecycle, with multi-tier seller hierarchy and OU-scoped RBAC." />
+<meta property="og:title" content="Case Study · Real-Estate Developer Portal — Lemmuel Turaya" />
+<meta property="og:description" content="A Vue 3 + Laravel 11 platform powering an entire real-estate developer (client under NDA): reservation → sales → equity → amortization → financing → commission → collection lifecycle, with multi-tier seller hierarchy and OU-scoped RBAC." />
 <meta property="og:url" content="https://kon2raya.netlify.app/case-studies/pamanaland.html" />
 <meta property="og:image" content="https://kon2raya.netlify.app/images/og-pamanaland.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -34,7 +34,7 @@
 
   <header class="cs-hero">
     <div class="cs-hero__label">// case-study.md</div>
-    <h1>Pamanaland Developer Portal<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Real-estate developer operations on Vue 3 + Laravel 11</span></h1>
+    <h1>Real-Estate Developer Portal<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">Operations &amp; commission ops on Vue 3 + Laravel 11</span></h1>
     <p class="cs-hero__tagline">
       A full-stack platform that runs a real-estate <em>developer</em> &mdash; projects,
       units, reservations, sales (equity + amortization), in-house financing, commission,
@@ -45,8 +45,8 @@
 
     <div class="cs-meta">
       <div class="cs-meta__item">
-        <span class="cs-meta__k">company</span>
-        <span class="cs-meta__v">Pamanaland Realty</span>
+        <span class="cs-meta__k">client</span>
+        <span class="cs-meta__v">Confidential &middot; under NDA</span>
       </div>
       <div class="cs-meta__item">
         <span class="cs-meta__k">role</span>
@@ -58,11 +58,7 @@
       </div>
       <div class="cs-meta__item">
         <span class="cs-meta__k">status</span>
-        <span class="cs-meta__v">In production</span>
-      </div>
-      <div class="cs-meta__item">
-        <span class="cs-meta__k">live</span>
-        <span class="cs-meta__v"><a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">portal.pamanaland.com</a></span>
+        <span class="cs-meta__v">In production &middot; access-gated tenant portal</span>
       </div>
       <div class="cs-meta__item">
         <span class="cs-meta__k">scope</span>
@@ -87,16 +83,17 @@
     <div class="cs-section__label">tl;dr</div>
     <h2>What it is</h2>
     <p>
-      A web portal that runs the full Pamanaland developer lifecycle &mdash; from
-      <strong>reservation</strong> through <strong>sales</strong>, <strong>equity</strong>,
-      <strong>amortization</strong> (including <strong>in-house financing</strong>),
+      A web portal that runs the full developer lifecycle for a real-estate client
+      &mdash; from <strong>reservation</strong> through <strong>sales</strong>,
+      <strong>equity</strong>, <strong>amortization</strong> (including
+      <strong>in-house financing</strong>),
       <strong>commission ledgers + receipts + releases</strong>,
       <strong>collection receipts</strong>, and <strong>final SOA generation</strong> &mdash;
       with a multi-tier seller hierarchy, project management with title + COO monitoring,
       and operations tooling for time logs, leaves, memos, payslips, and expenses.
     </p>
     <p>
-      Live at <a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;">portal.pamanaland.com</a>.
+      Live in production behind an access-gated tenant portal (client under NDA).
       Vue 3 (Vue CLI) + Bootstrap Vue 3 + AG Grid Enterprise on the frontend, Laravel 11 +
       MySQL + JWT (<code>tymon/jwt-auth</code>) on the backend. <strong>~65 Eloquent
       models</strong>, <strong>~67 controllers</strong>, <strong>~99 migrations</strong>,
@@ -108,7 +105,7 @@
     <div class="cs-section__label">problem</div>
     <h2>The bottleneck</h2>
     <p>
-      Before the portal, Pamanaland&rsquo;s day-to-day ran on a tangle of:
+      Before the portal, the developer&rsquo;s day-to-day ran on a tangle of:
     </p>
     <ul>
       <li>Shared Excel files for inventory and pricing &mdash; with stale rows nobody owned.</li>
@@ -206,7 +203,7 @@
     </ul>
 
     <div class="cs-shot--coming">
-      <span class="cs-shot__title">Live at portal.pamanaland.com</span>
+      <span class="cs-shot__title">Live behind an access-gated tenant portal</span>
       <span class="cs-shot__sub">portal is access-gated &mdash; sanitized walkthrough available on request</span>
     </div>
 
@@ -262,8 +259,7 @@
       <li><strong>Domain scope:</strong> ~65 Eloquent models &middot; ~67 controllers &middot;
         ~99 migrations on the API; ~102 Vue views across 19 domain folders on the UI.</li>
       <li><strong>Tooling:</strong> VS Code &middot; Claude Code &middot; Git &middot; Postman &middot; Yarn &middot; Composer.</li>
-      <li><strong>Deployed at:</strong>
-        <a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;">portal.pamanaland.com</a>.</li>
+      <li><strong>Deployment:</strong> Access-gated tenant portal (URL under NDA).</li>
     </ul>
   </section>
 
@@ -300,8 +296,7 @@
       closing salesperson, with per-receipt release tracking.
     </p>
     <p>
-      Live in production at
-      <a href="https://portal.pamanaland.com/" target="_blank" rel="noopener" style="color:var(--cyan);border-bottom:1px solid var(--cyan);text-decoration:none;">portal.pamanaland.com</a>.
+      Live in production behind an access-gated tenant portal.
       Specific business figures (volumes, days-saved, error reduction) stay with the
       client;
       <a href="mailto:turayalemmuel@gmail.com" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;padding-bottom:1px;">happy to discuss specifics on request</a>.

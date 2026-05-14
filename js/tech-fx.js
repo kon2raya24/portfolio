@@ -1842,6 +1842,109 @@
     }
   })();
 
+  /* ---------- Scroll restoration on reload (paired with the head-inline
+                  bootstrap that disables `history.scrollRestoration` and
+                  flagged `scroll-pending`). Apply the saved Y as early as
+                  possible after parse, then unhide content. Save throttled
+                  on every scroll. ---------- */
+  (function scrollRestore() {
+    function applyScroll() {
+      try {
+        var y = window.__scrollPending;
+        if (typeof y === 'number' && y > 0) {
+          // `behavior: 'instant'` overrides `html { scroll-behavior: smooth }`
+          // for this one call — we want a jump, not an animated scroll.
+          // Fallback: temp-disable scroll-behavior on <html>, scrollTo, restore.
+          if (typeof window.scrollTo === 'function') {
+            try {
+              window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+            } catch (err) {
+              var prev = document.documentElement.style.scrollBehavior;
+              document.documentElement.style.scrollBehavior = 'auto';
+              window.scrollTo(0, y);
+              document.documentElement.style.scrollBehavior = prev;
+            }
+          }
+        }
+      } catch (e) {}
+      document.documentElement.classList.remove('scroll-pending');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        // Two rAFs: one for next paint, one for layout settle. Cheap insurance.
+        requestAnimationFrame(function () { requestAnimationFrame(applyScroll); });
+      });
+    } else {
+      requestAnimationFrame(function () { requestAnimationFrame(applyScroll); });
+    }
+
+    // Re-apply once on full load to correct for late layout shifts (fonts,
+    // images that change page height). Only if the offset is meaningful.
+    window.addEventListener('load', function () {
+      var y = window.__scrollPending;
+      if (typeof y === 'number' && y > 0 && Math.abs(window.scrollY - y) > 4) {
+        try {
+          window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+        } catch (err) {
+          var prev = document.documentElement.style.scrollBehavior;
+          document.documentElement.style.scrollBehavior = 'auto';
+          window.scrollTo(0, y);
+          document.documentElement.style.scrollBehavior = prev;
+        }
+      }
+    });
+
+    // Throttled save — captures current scroll every 200ms while scrolling.
+    var t = 0;
+    window.addEventListener('scroll', function () {
+      if (t) return;
+      t = setTimeout(function () {
+        try { sessionStorage.setItem('portfolio.scroll', String(window.scrollY)); } catch (e) {}
+        t = 0;
+      }, 200);
+    }, { passive: true });
+
+    // Persist immediately when the user leaves the tab so a fresh reload
+    // catches the latest position even if the throttle hasn't fired yet.
+    window.addEventListener('beforeunload', function () {
+      try { sessionStorage.setItem('portfolio.scroll', String(window.scrollY)); } catch (e) {}
+    });
+  })();
+
+  /* ---------- Skip entrance animations on reload/back-forward.
+                  If this is a fresh visit, leave .animate-box alone so
+                  Waypoints can do its staggered fadeInUp as the user
+                  scrolls. If it's a reload OR back/forward nav, mark
+                  EVERY .animate-box as already-revealed RIGHT NOW
+                  (synchronously, before main.js's $(document).ready
+                  queue fires) so Waypoints' first scan sees them all as
+                  animated-fast and never triggers the fade. ---------- */
+  (function skipAnimsOnReload() {
+    var isReload = false;
+    try {
+      if (typeof performance !== 'undefined' && performance.getEntriesByType) {
+        var nav = performance.getEntriesByType('navigation')[0];
+        if (nav && (nav.type === 'reload' || nav.type === 'back_forward')) {
+          isReload = true;
+        }
+      } else if (typeof performance !== 'undefined' && performance.navigation) {
+        // legacy API fallback
+        var t = performance.navigation.type;
+        if (t === 1 /* reload */ || t === 2 /* back_forward */) isReload = true;
+      }
+    } catch (e) {}
+
+    if (!isReload) return;
+
+    // Synchronous mark — runs at tech-fx.js script-execution time, before
+    // DOMContentLoaded fires and before main.js's contentWayPoint() runs.
+    var boxes = document.querySelectorAll('.animate-box');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].classList.add('animated-fast', 'reveal-instant');
+    }
+  })();
+
   /* ---------- Footer git-log: recent commits to portfolio repo ---------- */
   (function gitLog() {
     var list = document.querySelector('[data-git-log-list]');
