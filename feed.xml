@@ -14,6 +14,30 @@
   <ttl>1440</ttl>
 
   <item>
+    <title>v4.9 — Portfolio polish: SEO + UX + dual-audience reframe</title>
+    <link>https://kon2raya.netlify.app/</link>
+    <guid isPermaLink="false">portfolio-v4.9-2026-05-14</guid>
+    <pubDate>Thu, 14 May 2026 23:58:00 +0800</pubDate>
+    <category>major</category>
+    <description><![CDATA[
+      Polish pass to make the portfolio scan well for both recruiters and
+      engineering managers without losing the tech-savvy feel. SEO: Article +
+      BreadcrumbList JSON-LD on every case study, WebSite schema on index,
+      twitter:creator / twitter:site attribution, sitemap + feed dates
+      normalized. UX: prev/next pager at the foot of every case study (8
+      files) for binge-reading; sticky on-page TOC on the three longest
+      writeups (wms-v2, ai-engineer, hris) with jump links to tl;dr / problem
+      / approach / solution / stack / outcome / lessons. Content: hero <h3>
+      reframed to surface "8 shipped case studies + AI-assisted delivery"
+      proof; "1 Vibe Coder" stat tile renamed to "AI-Augmented Dev
+      (Karpathy-style)" and wrapped as a deep link to the ai-engineer case
+      study; green outcome chips on every work-tree row; ★ start here badges
+      on ai-engineer + wms-v2. publish-case-study skill convention updated so
+      case study #9 inherits all the above without drift.
+    ]]></description>
+  </item>
+
+  <item>
     <title>v4.4 — Fourth case study published: Enterprise HRIS</title>
     <link>https://kon2raya.netlify.app/case-studies/hris.html</link>
     <guid isPermaLink="false">portfolio-v4.4-2026-05-14</guid>
