@@ -140,6 +140,86 @@
 })();
 
 // =======================================================
+//  Code-block copy buttons
+//
+//  Finds every .cs-code block, injects a small hex "COPY"
+//  button into the chrome header. Click → copy the inner
+//  <pre> text content to the clipboard, flash "COPIED" for
+//  ~1.4s, then revert. Falls back to execCommand on browsers
+//  without the modern Clipboard API.
+// =======================================================
+(function () {
+  'use strict';
+
+  function init() {
+    var blocks = document.querySelectorAll('.cs-code');
+    if (!blocks.length) return;
+
+    blocks.forEach(function (block) {
+      var chrome = block.querySelector('.cs-code__chrome');
+      var pre = block.querySelector('pre');
+      if (!chrome || !pre) return;
+      if (chrome.querySelector('.cs-code__copy')) return; // already injected
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cs-code__copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.textContent = 'COPY';
+
+      btn.addEventListener('click', function () {
+        var text = pre.textContent || '';
+        copyText(text).then(function () {
+          flash(btn, 'COPIED', true);
+        }).catch(function () {
+          flash(btn, 'FAILED', false);
+        });
+      });
+
+      chrome.appendChild(btn);
+    });
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    // Fallback: hidden textarea + execCommand
+    return new Promise(function (resolve, reject) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok ? resolve() : reject();
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function flash(btn, label, ok) {
+    var original = 'COPY';
+    btn.textContent = label;
+    btn.setAttribute('data-state', ok ? 'ok' : 'fail');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function () {
+      btn.textContent = original;
+      btn.removeAttribute('data-state');
+    }, 1400);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+// =======================================================
 //  Section-heading reveal — IntersectionObserver toggles
 //  .is-revealed on every .cs-section h2 once it enters the
 //  viewport. CSS in case-study.css handles the draw animation.

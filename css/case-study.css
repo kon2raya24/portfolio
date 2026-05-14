@@ -466,6 +466,52 @@ body::before {
   margin-left: 6px;
 }
 .cs-code__file .active { color: var(--cyan); border-bottom: 1px solid var(--cyan); padding-bottom: 1px; }
+
+/* Copy-to-clipboard button injected by js/case-study.js. Hex-clipped
+   for visual consistency with the .tool-badge.tool-ai treatment.
+   Sits at the right edge of the .cs-code__chrome bar (pushed right
+   by margin-left:auto since .cs-code__chrome is flex). */
+.cs-code__copy {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  background: rgba(0, 229, 255, 0.10);
+  color: var(--cyan);
+  border: 0;
+  padding: 4px 14px;
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 50%,
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 50%
+  );
+  cursor: pointer;
+  text-shadow: 0 0 5px rgba(0, 229, 255, 0.35);
+  transition: background 0.18s, color 0.18s, text-shadow 0.18s;
+}
+.cs-code__copy:hover {
+  background: rgba(0, 229, 255, 0.28);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+.cs-code__copy:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+.cs-code__copy[data-state="ok"] {
+  background: rgba(120, 255, 140, 0.25) !important;
+  color: #7cff8c !important;
+  text-shadow: 0 0 6px rgba(120, 255, 140, 0.55) !important;
+}
+.cs-code__copy[data-state="fail"] {
+  background: rgba(255, 95, 87, 0.25) !important;
+  color: #ff8a8a !important;
+  text-shadow: 0 0 6px rgba(255, 95, 87, 0.55) !important;
+}
 .cs-code pre {
   margin: 0;
   padding: 16px 20px;
