@@ -15,6 +15,28 @@
 <meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
 <meta name="twitter:card" content="summary_large_image" />
 
+<script>
+	(function () {
+		try {
+			/* Migrate legacy 'portfolio.theme' → split 'portfolio.mode' + 'portfolio.palette' (one-time) */
+			var legacy = localStorage.getItem('portfolio.theme');
+			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
+				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
+				else if (['cyber','matrix','sunset','xeno','crt'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
+			}
+			var mode = localStorage.getItem('portfolio.mode');
+			if (mode !== 'light' && mode !== 'dark') {
+				mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+			}
+			document.documentElement.setAttribute('data-theme', mode);
+			var palette = localStorage.getItem('portfolio.palette');
+			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
+				document.documentElement.classList.add('theme-' + palette);
+			}
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	})();
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
