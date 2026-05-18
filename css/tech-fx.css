@@ -950,7 +950,9 @@ body.konami-on {
   border-radius: 6px;
   padding: 10px 14px 12px;
   min-width: 200px;
-  box-shadow: 0 0 18px rgba(0, 229, 255, 0.18), inset 0 0 18px rgba(0, 229, 255, 0.04);
+  /* Theme-aware glow — derives from --cyan so xeno glows red, crt green, etc. */
+  box-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 18%, transparent),
+              inset 0 0 18px color-mix(in srgb, var(--cyan) 4%, transparent);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
@@ -981,12 +983,15 @@ body.konami-on {
 }
 .hud__val {
   color: var(--cyan);
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.55);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 55%, transparent);
 }
-.hud__val.warn { color: var(--brand); text-shadow: 0 0 6px rgba(255, 144, 0, 0.55); }
+.hud__val.warn {
+  color: var(--brand);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--brand) 55%, transparent);
+}
 .hud__bar {
   height: 3px;
-  background: rgba(0, 229, 255, 0.1);
+  background: color-mix(in srgb, var(--cyan) 10%, transparent);
   border-radius: 2px;
   margin-top: 6px;
   overflow: hidden;

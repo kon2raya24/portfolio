@@ -1485,9 +1485,26 @@ try {
     overlay.innerHTML = html;
     document.body.appendChild(overlay);
 
-    function open() { overlay.classList.add('is-open'); }
-    function close() { overlay.classList.remove('is-open'); }
-    overlay.querySelector('.kbdhelp__close').addEventListener('click', close);
+    // Track where focus was before opening so we can restore it on close —
+    // proper dialog a11y pattern. Without this, keyboard users land at the
+    // top of the page after closing the help overlay.
+    var lastFocus = null;
+    var closeBtn = overlay.querySelector('.kbdhelp__close');
+    function open() {
+      lastFocus = document.activeElement;
+      overlay.classList.add('is-open');
+      // Move focus into the dialog so screen readers + keyboard users
+      // know they're "in" a modal. Close button is the safe default.
+      if (closeBtn) closeBtn.focus();
+    }
+    function close() {
+      overlay.classList.remove('is-open');
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus();
+        lastFocus = null;
+      }
+    }
+    closeBtn.addEventListener('click', close);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
     document.addEventListener('keydown', function (e) {
       var tag = (document.activeElement && document.activeElement.tagName) || '';
@@ -2330,21 +2347,32 @@ try {
     function openMenu() {
       menu.hidden = false;
       trigger.setAttribute('aria-expanded', 'true');
-      setTimeout(function () { document.addEventListener('click', onDocClick); }, 0);
+      setTimeout(function () {
+        document.addEventListener('click', onDocClick);
+        document.addEventListener('keydown', onMenuKeydown);
+      }, 0);
     }
-    function closeMenu() {
+    function closeMenu(returnFocus) {
       menu.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
       document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onMenuKeydown);
+      // Return focus to the trigger so keyboard users don't lose their place
+      if (returnFocus) trigger.focus();
     }
-    function onDocClick(e) { if (!root.contains(e.target)) closeMenu(); }
+    function onDocClick(e) { if (!root.contains(e.target)) closeMenu(false); }
+    function onMenuKeydown(e) {
+      // Escape closes from anywhere inside the menu (or anywhere on page),
+      // and returns focus to the trigger — proper a11y dialog pattern.
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMenu(true);
+      }
+    }
 
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (menu.hidden) openMenu(); else closeMenu();
-    });
-    trigger.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeMenu();
+      if (menu.hidden) openMenu(); else closeMenu(false);
     });
     modeBtns.forEach(function (b) {
       b.addEventListener('click', function () { applyMode(b.getAttribute('data-mode')); syncUI(); });
