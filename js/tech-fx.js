@@ -1746,8 +1746,9 @@ try {
         print('  <span class="ok">sudo hire-me</span>  request immediate hiring');
         print('  <span class="ok">date</span>        current date · time');
         print('  <span class="ok">neofetch</span>    system info');
-        print('  <span class="ok">theme &lt;name&gt;</span>  cyber | matrix | sunset');
+        print('  <span class="ok">theme &lt;name&gt;</span>  cyber | matrix | sunset | xeno | crt');
         print('  <span class="ok">go &lt;section&gt;</span>  jump to a section');
+        print('  <span class="ok">open &lt;url&gt;</span>     open an https:// URL in a new tab');
         print('  <span class="ok">konami</span>      toggle hue cycle');
         print('  <span class="ok">clear</span>       clear the terminal');
         print('  <span class="ok">exit</span>        close terminal');
