@@ -5025,7 +5025,7 @@ body.konami-on {
   padding: 4px 0;
   color: rgba(230, 243, 255, 0.85);
 }
-.git-log__entry + .git-log__entry { border-top: 1px dashed rgba(0, 229, 255, 0.08); }
+.git-log__entry + .git-log__entry { border-top: 1px dashed color-mix(in srgb, var(--cyan) 8%, transparent); }
 .git-log__sha {
   color: var(--cyan);
   font-weight: 600;
@@ -5034,7 +5034,7 @@ body.konami-on {
   transition: 0.18s;
   letter-spacing: 0.5px;
 }
-.git-log__sha:hover { border-bottom-color: var(--cyan); text-shadow: 0 0 6px rgba(0, 229, 255, 0.4); }
+.git-log__sha:hover { border-bottom-color: var(--cyan); text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent); }
 .git-log__msg {
   color: rgba(230, 243, 255, 0.92);
   overflow: hidden;
