@@ -784,13 +784,13 @@ body::before {
   font-weight: 700;
   box-shadow: 0 4px 18px rgba(0, 229, 255, 0.25);
 }
-.cs-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0, 229, 255, 0.4); }
+.cs-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px color-mix(in srgb, var(--cyan) 40%, transparent); }
 .cs-btn--ghost {
   background: transparent;
   border: 1px solid var(--line-strong);
   color: var(--cyan);
 }
-.cs-btn--ghost:hover { background: rgba(0, 229, 255, 0.08); border-color: var(--cyan); }
+.cs-btn--ghost:hover { background: color-mix(in srgb, var(--cyan) 8%, transparent); border-color: var(--cyan); }
 
 @media (max-width: 768px) {
   .cs-wrap { padding: 32px 18px 60px; }
