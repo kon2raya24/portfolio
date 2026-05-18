@@ -21,9 +21,14 @@
   var FAQ = [
     // -- Identity -----------------------------------------------------
     { q: "Who are you?",
-      aliases: ["who is lemmuel", "introduce yourself", "bio", "about you"],
+      aliases: ["who is lemmuel", "introduce yourself", "bio", "about you", "tell me about yourself", "about lemmuel"],
       category: "about",
       a: "I'm <strong>Lemmuel Turaya</strong> — full-stack and mobile app developer based in Biñan, Laguna, Philippines (GMT+8). 6+ years shipping production platforms across logistics, real estate, HR, and autonomous AI engineering. <a href='#fh5co-about'>About section ↓</a>" },
+
+    { q: "What's your full name?",
+      aliases: ["full name", "your name", "what is your name", "whats your name", "name", "what's your name", "first name", "last name", "surname"],
+      category: "about",
+      a: "<strong>Lemmuel Turaya</strong>. Filipino developer, based in Biñan, Laguna · GMT+8. Friends and colleagues call me Lemmuel (or <code>kon2raya</code> online — same person, same vibes)." },
 
     { q: "Where are you based?",
       aliases: ["location", "country", "timezone", "tz", "where do you live", "philippines"],
