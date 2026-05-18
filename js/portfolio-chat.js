@@ -640,58 +640,106 @@
     a: "Hey 👋 ask me anything about Lemmuel's portfolio — <strong>stack</strong>, <strong>projects</strong>, <strong>availability</strong>, <strong>AI work</strong>, <strong>rates</strong>, contact. Try one of the chips above ↑ or type your own question."
   };
 
+  // Core scoring — returns numeric score for one (input, entry) pair using
+  // substring + token-overlap + Levenshtein signals. Shared by findMatch and
+  // findCloseMatches so ranking stays consistent.
+  function scoreEntry(userInput, normIn, entry) {
+    var candidates = [entry.q].concat(entry.aliases || []);
+    var best = 0;
+    for (var j = 0; j < candidates.length; j++) {
+      var c = candidates[j];
+      var normC = entry._normCache && entry._normCache[j] != null
+        ? entry._normCache[j]
+        : normalize(c);
+      var s = 0;
+      // 1) Substring — strongest, but only when input ≥3 chars (so "hi"
+      //    doesn't match "hiring" via substring).
+      if (normIn.length >= 3 &&
+          (normC.indexOf(normIn) !== -1 || normIn.indexOf(normC) !== -1)) {
+        s = Math.max(s, 0.90);
+      }
+      // 2) Token overlap — only credit when ≥66% of input tokens hit.
+      var overlap = tokenOverlap(userInput, c);
+      if (overlap >= 0.66) {
+        s = Math.max(s, overlap === 1 ? 0.90 : 0.80);
+      }
+      // 3) Edit-distance similarity — only counts at ≥0.78.
+      var lev = similarity(userInput, c);
+      if (lev >= 0.78) {
+        s = Math.max(s, lev * 0.85);
+      }
+      if (s > best) best = s;
+    }
+    return best;
+  }
+
   function findMatch(userInput) {
     var normIn = normalize(userInput);
     if (!normIn) return null;
-
-    // Greetings short-circuit
     if (GREETINGS.indexOf(normIn) !== -1) return GREETING_REPLY;
 
     var best = { score: 0, entry: null };
     for (var i = 0; i < FAQ.length; i++) {
-      var e = FAQ[i];
-      var candidates = [e.q].concat(e.aliases || []);
-      var entryScore = 0;
-      for (var j = 0; j < candidates.length; j++) {
-        var c = candidates[j];
-        var normC = normalize(c);
-        var s = 0;
-
-        // 1) Substring hit — strongest signal, but only when input is long
-        // enough that the substring is meaningful. "hi" should not match
-        // "hiring" via substring; "vue" should match "vue.js".
-        if (normIn.length >= 3 &&
-            (normC.indexOf(normIn) !== -1 || normIn.indexOf(normC) !== -1)) {
-          s = Math.max(s, 0.90);
-        }
-
-        // 2) Token overlap — only credit when majority (>=66%) of the user's
-        // input tokens are present in the candidate. Curbs the common-word
-        // false positive ("Full name" matching "full-time" via shared "full").
-        var overlap = tokenOverlap(userInput, c);
-        if (overlap >= 0.66) {
-          // Perfect overlap is gold; partial-but-majority gets a discount.
-          s = Math.max(s, overlap === 1 ? 0.90 : 0.80);
-        }
-
-        // 3) Edit-distance similarity — only counts at very high values
-        // (typo tolerance for near-exact phrasing). Below 0.78 it produces
-        // too many cross-question false positives.
-        var lev = similarity(userInput, c);
-        if (lev >= 0.78) {
-          s = Math.max(s, lev * 0.85);
-        }
-
-        if (s > entryScore) entryScore = s;
-      }
-      if (entryScore > best.score) {
-        best.score = entryScore;
-        best.entry = e;
-      }
+      var s = scoreEntry(userInput, normIn, FAQ[i]);
+      if (s > best.score) { best.score = s; best.entry = FAQ[i]; }
     }
-    // Threshold raised 0.42 → 0.55 to suppress cross-question false matches.
     return best.score >= 0.55 ? best.entry : null;
   }
+
+  // Returns the top-N entries by raw score (regardless of match threshold).
+  // Used by the fallback "did you mean?" suggestions so a missed query
+  // surfaces the closest related FAQ entries the user can click to rebound.
+  function findCloseMatches(userInput, n) {
+    var normIn = normalize(userInput);
+    if (!normIn) return [];
+    var scored = [];
+    for (var i = 0; i < FAQ.length; i++) {
+      var s = scoreEntry(userInput, normIn, FAQ[i]);
+      if (s > 0.18) scored.push({ score: s, entry: FAQ[i] });  // weak floor
+    }
+    scored.sort(function (a, b) { return b.score - a.score; });
+    return scored.slice(0, n).map(function (x) { return x.entry; });
+  }
+
+  // ---------------------------------------------------------------------
+  // Data validation + alias pre-normalization (runs once at IIFE start).
+  // Warns in console if FAQ data is malformed. Caches normalized
+  // candidates per entry for matcher speed + consistency.
+  // ---------------------------------------------------------------------
+  (function validateAndCacheFAQ() {
+    var seenAliases = Object.create(null);
+    var problems = 0;
+    for (var i = 0; i < FAQ.length; i++) {
+      var e = FAQ[i];
+      if (!e || typeof e !== 'object') {
+        console.warn('[pchat] FAQ entry #' + i + ' is not an object'); problems++; continue;
+      }
+      if (typeof e.q !== 'string' || !e.q.trim()) {
+        console.warn('[pchat] FAQ entry #' + i + ' missing canonical q'); problems++;
+      }
+      if (typeof e.a !== 'string' || !e.a.trim()) {
+        console.warn('[pchat] FAQ entry #' + i + ' (q="' + e.q + '") missing answer a'); problems++;
+      }
+      if (e.aliases && !Array.isArray(e.aliases)) {
+        console.warn('[pchat] FAQ entry #' + i + ' (q="' + e.q + '") aliases should be array'); problems++;
+        e.aliases = [];
+      }
+      if (!e.aliases) e.aliases = [];
+      // Pre-normalize candidates (q + each alias) into _normCache for the matcher
+      var cands = [e.q].concat(e.aliases);
+      e._normCache = cands.map(normalize);
+      // Watch for cross-entry alias collisions (same normalized alias on two entries)
+      for (var k = 0; k < cands.length; k++) {
+        var key = e._normCache[k];
+        if (!key) continue;
+        if (seenAliases[key] && seenAliases[key] !== e.q) {
+          console.warn('[pchat] alias collision: "' + cands[k] + '" appears on both "' + seenAliases[key] + '" and "' + e.q + '"');
+        }
+        seenAliases[key] = e.q;
+      }
+    }
+    if (problems > 0) console.warn('[pchat] FAQ validation: ' + problems + ' problem(s) — see warnings above');
+  })();
 
   // ---------------------------------------------------------------------
   // UI
@@ -818,12 +866,32 @@
         if (match) {
           appendMsg('bot', match.a);
         } else {
-          appendMsg('bot',
-            "I don’t have a curated answer for that yet. The fastest path is direct:<br>" +
+          // Solidified fallback: show top-3 "did you mean?" entries as
+          // clickable chips so a missed query has a rebound path. The
+          // contact CTAs stay as the secondary option.
+          var related = findCloseMatches(text, 3);
+          var html =
+            "I don’t have a curated answer for <em>" + escapeText(text) + "</em>.";
+          if (related.length) {
+            html += " Did you mean one of these?" +
+              "<div class=\"pchat__fallback-related\">" +
+                related.map(function (e, idx) {
+                  return '<button type="button" class="pchat__sugg" data-rebound="' + idx + '">' + escapeText(e.q) + '</button>';
+                }).join('') +
+              "</div>";
+          } else {
+            html += " The fastest path is to ask directly:";
+          }
+          html +=
             "<div class=\"pchat__fallback-actions\">" +
               "<a class=\"pchat__fallback-btn pchat__fallback-btn--primary\" href=\"https://cal.com/lemmuel-turaya/intro\" target=\"_blank\" rel=\"noopener\">Book a 15-min call →</a>" +
               "<a class=\"pchat__fallback-btn\" href=\"mailto:turayalemmuel@gmail.com\">Email me</a>" +
-            "</div>");
+            "</div>";
+          var node = appendMsg('bot', html);
+          // Wire the rebound chips so clicking one resubmits as a new question
+          node.querySelectorAll('[data-rebound]').forEach(function (b, i) {
+            b.addEventListener('click', function () { send(related[i].q); });
+          });
         }
         saveHistory();
       }, delay);

@@ -8228,6 +8228,20 @@ body.pchat-active .viewport-hud {
   40%           { transform: scale(1); opacity: 1; }
 }
 
+/* "Did you mean?" suggestions row inside a fallback bot message —
+   3 closest non-matching entries shown as clickable chips so a missed
+   query has a rebound path. */
+.pchat__fallback-related {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0 4px;
+}
+.pchat__fallback-related .pchat__sugg {
+  width: 100%;
+  text-align: left;
+}
+
 /* Fallback action buttons (shown when no FAQ match) */
 .pchat__fallback-actions {
   display: flex;
