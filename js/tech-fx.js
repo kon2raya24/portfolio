@@ -2448,7 +2448,8 @@ try {
       tabs.forEach(function (t) {
         var active = t.getAttribute('data-cta-track') === track;
         t.classList.toggle('is-active', active);
-        t.setAttribute('aria-selected', active ? 'true' : 'false');
+        // Radio pattern: aria-checked (not aria-selected which is for tabs)
+        t.setAttribute('aria-checked', active ? 'true' : 'false');
       });
       var preset = presets[track];
       if (!preset) return;

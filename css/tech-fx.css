@@ -58,8 +58,8 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   background: transparent;
-  border: 1px solid rgba(0, 229, 255, 0.22);
-  color: rgba(0, 229, 255, 0.7);
+  border: 1px solid color-mix(in srgb, var(--cyan) 22%, transparent);
+  color: color-mix(in srgb, var(--cyan) 70%, transparent);
   padding: 5px 12px;
   border-radius: 3px;
   cursor: pointer;
@@ -71,13 +71,13 @@
 .case-filter:hover {
   border-color: var(--line-strong);
   color: var(--cyan);
-  background: rgba(0, 229, 255, 0.06);
+  background: color-mix(in srgb, var(--cyan) 6%, transparent);
 }
 .case-filter.is-active {
-  background: rgba(0, 229, 255, 0.18);
+  background: color-mix(in srgb, var(--cyan) 18%, transparent);
   border-color: var(--cyan);
   color: #fff;
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent);
 }
 .case-filter__count {
   font-size: 9px;
