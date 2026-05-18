@@ -1146,7 +1146,12 @@ try {
       }
     }
 
+    // Track focus before open so we can restore it on close — same dialog
+    // pattern as kbdhelp. Without this, keyboard users land at the top of
+    // the page after dismissing the palette.
+    var lastFocus = null;
     function open() {
+      lastFocus = document.activeElement;
       overlay.classList.add('is-open');
       input.value = '';
       filter('');
@@ -1154,6 +1159,10 @@ try {
     }
     function close() {
       overlay.classList.remove('is-open');
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus();
+        lastFocus = null;
+      }
     }
 
     input.addEventListener('input', function (e) { filter(e.target.value); });
@@ -1886,7 +1895,10 @@ try {
       print('command not found: <span class="err">' + escape(head) + '</span> &mdash; type <strong>help</strong>.');
     }
 
+    // Track focus-before-open so we restore it on close (dialog a11y).
+    var lastFocus = null;
     function open() {
+      lastFocus = document.activeElement;
       el.classList.add('is-open');
       el.setAttribute('aria-hidden', 'false');
       setTimeout(function () { input.focus(); }, 30);
@@ -1895,6 +1907,10 @@ try {
       el.classList.remove('is-open');
       el.setAttribute('aria-hidden', 'true');
       input.blur();
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus();
+        lastFocus = null;
+      }
     }
     function toggle() {
       el.classList.contains('is-open') ? close() : open();
