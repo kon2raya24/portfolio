@@ -3015,7 +3015,8 @@ body.konami-on {
 }
 .skill-card:hover {
   border-color: var(--line-strong);
-  box-shadow: 0 12px 40px rgba(0, 229, 255, 0.18), 0 0 0 1px rgba(0, 229, 255, 0.25);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--cyan) 18%, transparent),
+              0 0 0 1px color-mix(in srgb, var(--cyan) 25%, transparent);
   transform: translateY(-3px);
 }
 .skill-card__head {
@@ -3147,15 +3148,15 @@ body.konami-on {
 }
 .skill-tier--brand {
   color: var(--brand);
-  border-color: rgba(255, 144, 0, 0.4);
-  background: rgba(255, 144, 0, 0.06);
-  text-shadow: 0 0 6px rgba(255, 144, 0, 0.4);
+  border-color: color-mix(in srgb, var(--brand) 40%, transparent);
+  background: color-mix(in srgb, var(--brand) 6%, transparent);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--brand) 40%, transparent);
 }
 .skill-tier--ai {
   color: var(--magenta);
-  border-color: rgba(255, 43, 214, 0.4);
-  background: rgba(255, 43, 214, 0.05);
-  text-shadow: 0 0 6px rgba(255, 43, 214, 0.4);
+  border-color: color-mix(in srgb, var(--magenta) 40%, transparent);
+  background: color-mix(in srgb, var(--magenta) 5%, transparent);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--magenta) 40%, transparent);
 }
 /* Inline tier legend chips in the intro paragraph */
 .skill-tier-key {
@@ -3192,7 +3193,7 @@ body.konami-on {
 }
 .stack-group:hover {
   border-color: var(--line-strong);
-  box-shadow: 0 6px 22px rgba(0, 229, 255, 0.14);
+  box-shadow: 0 6px 22px color-mix(in srgb, var(--cyan) 14%, transparent);
 }
 .stack-group__label {
   font-family: 'JetBrains Mono', monospace;
