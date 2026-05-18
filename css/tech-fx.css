@@ -1435,13 +1435,15 @@ body.konami-on {
 .work-filter:hover {
   border-color: var(--line-strong);
   color: var(--cyan);
-  background: rgba(0, 229, 255, 0.06);
+  background: color-mix(in srgb, var(--cyan) 6%, transparent);
 }
 .work-filter.is-active {
-  background: linear-gradient(135deg, rgba(0, 229, 255, 0.18), rgba(255, 144, 0, 0.12));
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--cyan) 18%, transparent),
+    color-mix(in srgb, var(--brand) 12%, transparent));
   border-color: var(--cyan);
   color: #fff;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 35%, transparent);
 }
 .work-filter .count {
   margin-left: 6px;
@@ -7168,13 +7170,13 @@ a.btn:focus-visible {
 }
 .hero-stats .stat--linked:hover {
   border-color: var(--brand) !important;
-  box-shadow: 0 0 14px rgba(255, 144, 0, 0.45);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--brand) 45%, transparent);
 }
 .stat__sub {
   display: block;
   font-size: 9px;
   letter-spacing: 1px;
-  color: rgba(255, 144, 0, 0.85);
+  color: color-mix(in srgb, var(--brand) 85%, transparent);
   margin-top: 2px;
   text-transform: lowercase;
 }
