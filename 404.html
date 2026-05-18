@@ -6,6 +6,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050814">
 <meta name="robots" content="noindex">
+
+<script>
+(function () {
+	try {
+		/* Migrate legacy 'portfolio.theme' → split 'portfolio.mode' + 'portfolio.palette' (one-time) */
+		var legacy = localStorage.getItem('portfolio.theme');
+		if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
+			if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
+			else if (['cyber','matrix','sunset','xeno','crt'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
+		}
+		var mode = localStorage.getItem('portfolio.mode');
+		if (mode !== 'light' && mode !== 'dark') {
+			mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+		}
+		document.documentElement.setAttribute('data-theme', mode);
+		var palette = localStorage.getItem('portfolio.palette');
+		if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
+			document.documentElement.classList.add('theme-' + palette);
+		}
+	} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+})();
+</script>
+
 <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -166,6 +189,48 @@
     .actions { flex-direction: column; }
     .btn { justify-content: center; }
   }
+
+  /* ---------- Palette overrides — match the rest of the site ---------- */
+  :root.theme-matrix { --cyan: #00ff7c; --line: rgba(0, 255, 124, 0.22); --line-strong: rgba(0, 255, 124, 0.5); }
+  :root.theme-sunset { --cyan: #ff2bd6; --brand: #ffaa00; --line: rgba(255, 43, 214, 0.22); --line-strong: rgba(255, 43, 214, 0.5); }
+  :root.theme-xeno   { --cyan: #ff1840; --brand: #00ff85; --magenta: #c050ff; --line: rgba(255, 24, 64, 0.22); --line-strong: rgba(255, 24, 64, 0.55); }
+  :root.theme-crt    { --cyan: #33ff33; --brand: #ffb400; --magenta: #33ff33; --line: rgba(51, 255, 51, 0.22); --line-strong: rgba(51, 255, 51, 0.5); }
+
+  /* ---------- Light mode ---------- */
+  :root[data-theme="light"] body {
+    background: #f6f4ee;
+    color: #1a1f2e;
+  }
+  :root[data-theme="light"] body::before {
+    background-image:
+      linear-gradient(rgba(10, 30, 60, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10, 30, 60, 0.06) 1px, transparent 1px);
+  }
+  :root[data-theme="light"] .terminal {
+    background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%);
+    border-color: rgba(10, 30, 60, 0.18);
+    box-shadow: 0 20px 40px rgba(10, 30, 60, 0.12), 0 0 28px rgba(0, 122, 144, 0.08);
+  }
+  :root[data-theme="light"] .chrome {
+    background: linear-gradient(180deg, #f0ece2, #e6e0d2);
+    border-bottom-color: rgba(10, 30, 60, 0.1);
+  }
+  :root[data-theme="light"] .path { color: rgba(10, 30, 60, 0.55); }
+  :root[data-theme="light"] .path .active { color: #00667a; border-bottom-color: #00667a; }
+  :root[data-theme="light"] .dim { color: rgba(10, 30, 60, 0.5); }
+  :root[data-theme="light"] .cmd { color: #00667a; }
+  :root[data-theme="light"] .err { color: #c43030; }
+  :root[data-theme="light"] .prompt { color: #c66a00; }
+  :root[data-theme="light"] .tagline { color: rgba(10, 30, 60, 0.65); }
+  :root[data-theme="light"] .btn {
+    color: #00667a;
+    border-color: rgba(10, 30, 60, 0.25);
+  }
+  :root[data-theme="light"] .btn:hover {
+    background: rgba(0, 122, 144, 0.08);
+    box-shadow: 0 0 12px rgba(0, 122, 144, 0.25);
+  }
+  :root[data-theme="light"] .btn.primary { color: #fff; }
 </style>
 </head>
 <body>
