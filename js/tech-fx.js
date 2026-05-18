@@ -18,6 +18,47 @@ try {
   var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isTouch = matchMedia('(hover: none)').matches || window.innerWidth < 1025;
 
+  /* ---------- Shared theme helpers (used by HUD palette picker + nav theme picker) ----------
+     Single source of truth for mode (light/dark) and palette (cyber/matrix/sunset/xeno).
+     Both UIs sync via 'mode:change' and 'palette:change' custom events. */
+  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno'];
+
+  function currentMode() {
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+  function currentPalette() {
+    for (var i = 0; i < PALETTES.length; i++) {
+      if (document.documentElement.classList.contains('theme-' + PALETTES[i])) return PALETTES[i];
+    }
+    return 'cyber';
+  }
+  function applyMode(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    try { localStorage.setItem('portfolio.mode', mode); } catch (e) {}
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', mode === 'light' ? '#f6f4ee' : '#050814');
+    var hero = document.getElementById('fh5co-header');
+    if (hero) {
+      if (mode === 'light') {
+        if (!hero.dataset.origBg) hero.dataset.origBg = hero.style.backgroundImage || '';
+        hero.style.backgroundImage = 'none';
+      } else if (hero.dataset.origBg !== undefined) {
+        hero.style.backgroundImage = hero.dataset.origBg;
+      }
+    }
+    document.dispatchEvent(new CustomEvent('mode:change', { detail: { mode: mode } }));
+  }
+  function applyPalette(palette) {
+    if (PALETTES.indexOf(palette) === -1) palette = 'cyber';
+    PALETTES.forEach(function (p) { document.documentElement.classList.remove('theme-' + p); });
+    if (palette !== 'cyber') document.documentElement.classList.add('theme-' + palette);
+    try {
+      if (palette === 'cyber') localStorage.removeItem('portfolio.palette');
+      else localStorage.setItem('portfolio.palette', palette);
+    } catch (e) {}
+    document.dispatchEvent(new CustomEvent('palette:change', { detail: { palette: palette } }));
+  }
+
   /* ---------- Calm-mode toggle (injected into the existing .hud) ---------- */
   (function motionToggle() {
     var STORAGE_KEY = 'portfolio.motion';
@@ -601,6 +642,7 @@ try {
         '<button class="theme-pick__btn is-on" data-th="cyber"  aria-label="cyber theme"></button>' +
         '<button class="theme-pick__btn"       data-th="matrix" aria-label="matrix theme"></button>' +
         '<button class="theme-pick__btn"       data-th="sunset" aria-label="sunset theme"></button>' +
+        '<button class="theme-pick__btn"       data-th="xeno"   aria-label="xeno theme"></button>' +
       '</div>' +
       '<div class="hud__row"><span class="hud__label">[ sys ]</span><span class="hud__val">online</span></div>' +
       '<div class="hud__row"><span class="hud__label">time</span><span class="hud__val" data-h="time">--:--:--</span></div>' +
@@ -666,21 +708,19 @@ try {
     window.addEventListener('scroll', updateScroll, { passive: true });
     updateScroll();
 
-    /* Theme switcher */
+    /* Theme switcher — uses the shared applyPalette() defined in the navThemePicker
+       IIFE below so the nav picker and the HUD picker stay in sync (no more
+       portfolio.theme key collision). */
     var themeBtns = el.querySelectorAll('.theme-pick__btn');
-    var stored = null;
-    try { stored = localStorage.getItem('portfolio.theme'); } catch (_) {}
-    function applyTheme(name) {
-      document.body.classList.remove('theme-matrix', 'theme-sunset');
-      if (name === 'matrix') document.body.classList.add('theme-matrix');
-      if (name === 'sunset') document.body.classList.add('theme-sunset');
-      themeBtns.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-th') === name); });
-      try { localStorage.setItem('portfolio.theme', name); } catch (_) {}
+    function syncHud() {
+      var current = currentPalette();
+      themeBtns.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-th') === current); });
     }
     themeBtns.forEach(function (b) {
-      b.addEventListener('click', function () { applyTheme(b.getAttribute('data-th')); });
+      b.addEventListener('click', function () { applyPalette(b.getAttribute('data-th')); });
     });
-    if (stored === 'matrix' || stored === 'sunset') applyTheme(stored);
+    document.addEventListener('palette:change', syncHud);
+    syncHud();
 
     /* Now: rotating status */
     var nowVal = el.querySelector('[data-h="now"]');
@@ -1710,14 +1750,13 @@ try {
       quit:  function () { close(); }
     };
 
-    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset' };
+    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno' };
     function handleTheme(arg) {
       if (!arg || !themeAliases[arg]) {
-        print('usage: theme &lt;cyber | matrix | sunset&gt;', 'err');
+        print('usage: theme &lt;cyber | matrix | sunset | xeno&gt;', 'err');
         return;
       }
-      var btn = document.querySelector('.theme-pick__btn[data-th="' + arg + '"]');
-      if (btn) btn.click();
+      applyPalette(arg);
       print('theme set: <span class="ok">' + arg + '</span>');
     }
 
@@ -2169,45 +2208,55 @@ try {
     else applyFilter('all');
   })();
 
-  /* ---------- Theme toggle (dark <-> light) ---------- */
-  (function themeToggle() {
-    var buttons = document.querySelectorAll('[data-theme-toggle]');
-    if (!buttons.length) return;
+  /* ---------- Theme picker (popover in nav) — uses the shared helpers above ---------- */
+  (function navThemePicker() {
+    var root = document.querySelector('[data-theme-picker]');
+    if (!root) return;
+    var trigger = root.querySelector('[data-theme-picker-trigger]');
+    var menu = root.querySelector('.theme-picker__menu');
+    var modeBtns = root.querySelectorAll('.theme-picker__mode');
+    var paletteBtns = root.querySelectorAll('.theme-picker__dot');
 
-    function currentTheme() {
-      return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    function syncUI() {
+      var mode = currentMode();
+      var palette = currentPalette();
+      modeBtns.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-mode') === mode); });
+      paletteBtns.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-palette') === palette); });
+      trigger.setAttribute('title', 'Theme · ' + mode + ' · ' + palette);
     }
-
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      try { localStorage.setItem('portfolio.theme', theme); } catch (e) {}
-      var meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', theme === 'light' ? '#f6f4ee' : '#050814');
-      buttons.forEach(function (b) {
-        b.setAttribute('aria-label', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme');
-        b.setAttribute('title', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme');
-      });
-      // Neutralize inline background-image on hero in light mode
-      // (set inline so it always wins over CSS specificity battles)
-      var hero = document.getElementById('fh5co-header');
-      if (hero) {
-        if (theme === 'light') {
-          if (!hero.dataset.origBg) hero.dataset.origBg = hero.style.backgroundImage || '';
-          hero.style.backgroundImage = 'none';
-        } else if (hero.dataset.origBg !== undefined) {
-          hero.style.backgroundImage = hero.dataset.origBg;
-        }
-      }
+    function openMenu() {
+      menu.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      setTimeout(function () { document.addEventListener('click', onDocClick); }, 0);
     }
+    function closeMenu() {
+      menu.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', onDocClick);
+    }
+    function onDocClick(e) { if (!root.contains(e.target)) closeMenu(); }
 
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        applyTheme(currentTheme() === 'light' ? 'dark' : 'light');
-      });
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (menu.hidden) openMenu(); else closeMenu();
+    });
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeMenu();
+    });
+    modeBtns.forEach(function (b) {
+      b.addEventListener('click', function () { applyMode(b.getAttribute('data-mode')); syncUI(); });
+    });
+    paletteBtns.forEach(function (b) {
+      b.addEventListener('click', function () { applyPalette(b.getAttribute('data-palette')); syncUI(); });
     });
 
-    // Initialize button state to match the theme set by the FOUC bootstrap
-    applyTheme(currentTheme());
+    // Cross-component sync (HUD picker may also change palette/mode)
+    document.addEventListener('palette:change', syncUI);
+    document.addEventListener('mode:change', syncUI);
+
+    // Initialize state to match what the FOUC bootstrap applied
+    applyMode(currentMode());
+    syncUI();
   })();
 
   /* ---------- Hire CTA: Hiring/Client track toggle ---------- */

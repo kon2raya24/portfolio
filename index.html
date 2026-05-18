@@ -14,20 +14,33 @@
 	<meta name="keywords" content="Lemmuel Turaya, Full-Stack Developer, Mobile App Developer, Flutter, Vue.js, Laravel, Claude AI, Philippines Developer, Remote Developer, Web Developer" />
 	<meta name="theme-color" content="#050814" />
 
-	<!-- Theme bootstrap: applies stored/preferred theme before paint to prevent FOUC -->
+	<!-- Theme bootstrap: applies stored mode + palette before paint to prevent FOUC.
+	     Two separate keys so light/dark mode and the palette tint (cyber/matrix/sunset/xeno)
+	     don't fight over a single localStorage slot. One-time migration from the legacy
+	     'portfolio.theme' key (which used to store either kind of value, causing conflicts). -->
 	<script>
 		(function () {
+			var html = document.documentElement;
 			try {
-				var stored = localStorage.getItem('portfolio.theme');
-				var theme;
-				if (stored === 'light' || stored === 'dark') {
-					theme = stored;
-				} else {
-					theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+				/* One-time migration from legacy 'portfolio.theme' */
+				var legacy = localStorage.getItem('portfolio.theme');
+				if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
+					if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
+					else if (legacy === 'cyber' || legacy === 'matrix' || legacy === 'sunset' || legacy === 'xeno') localStorage.setItem('portfolio.palette', legacy);
 				}
-				document.documentElement.setAttribute('data-theme', theme);
+
+				var mode = localStorage.getItem('portfolio.mode');
+				if (mode !== 'light' && mode !== 'dark') {
+					mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+				}
+				html.setAttribute('data-theme', mode);
+
+				var palette = localStorage.getItem('portfolio.palette');
+				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno') {
+					html.classList.add('theme-' + palette);
+				}
 			} catch (e) {
-				document.documentElement.setAttribute('data-theme', 'dark');
+				html.setAttribute('data-theme', 'dark');
 			}
 		})();
 	</script>
@@ -179,10 +192,26 @@
 						<li><a href="#fh5co-work">Work</a></li>
 						<li><a href="#fh5co-started" class="hire-btn">Hire Me</a></li>
 						<li class="fh5co-nav-extra">
-							<button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
-								<span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">◐</span>
-								<span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">☀</span>
-							</button>
+							<div class="theme-picker" data-theme-picker>
+								<button type="button" class="theme-picker__trigger" data-theme-picker-trigger aria-label="Theme settings" aria-haspopup="true" aria-expanded="false" title="Theme settings">
+									<span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">◐</span>
+									<span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">☀</span>
+								</button>
+								<div class="theme-picker__menu" role="menu" hidden>
+									<div class="theme-picker__group">
+										<span class="theme-picker__label">mode</span>
+										<button type="button" class="theme-picker__mode" data-mode="dark"  role="menuitemradio" aria-label="dark mode"><span aria-hidden="true">◐</span> dark</button>
+										<button type="button" class="theme-picker__mode" data-mode="light" role="menuitemradio" aria-label="light mode"><span aria-hidden="true">☀</span> light</button>
+									</div>
+									<div class="theme-picker__group">
+										<span class="theme-picker__label">palette</span>
+										<button type="button" class="theme-picker__dot" data-palette="cyber"  role="menuitemradio" title="cyber"  aria-label="cyber palette"></button>
+										<button type="button" class="theme-picker__dot" data-palette="matrix" role="menuitemradio" title="matrix" aria-label="matrix palette"></button>
+										<button type="button" class="theme-picker__dot" data-palette="sunset" role="menuitemradio" title="sunset" aria-label="sunset palette"></button>
+										<button type="button" class="theme-picker__dot" data-palette="xeno"   role="menuitemradio" title="xeno · alien invasion" aria-label="xeno palette"></button>
+									</div>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>
