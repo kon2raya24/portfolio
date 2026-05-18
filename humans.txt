@@ -19,11 +19,11 @@
 
 /* SITE */
 
-  Last update:    2026-05-14
+  Last update:    2026-05-18
   Language:       English
   Doctype:        HTML5
   Standards:      WCAG 2.1 AA · responsive · PWA · sitemap.xml · robots.txt
-  Components:     Vanilla JS, no framework on the cyberpunk layer
+  Components:     Vanilla JS, no jQuery, no framework
   Type-set in:    Inter, Orbitron, JetBrains Mono
   IDE:            VS Code · Claude Code
   Built with:     caffeine, Claude AI, and zero frameworks for the FX layer.
