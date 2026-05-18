@@ -214,8 +214,9 @@
 // =======================================================
 (function () {
   'use strict';
-  var prefersReduced = window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The progress bar's CSS transition handles prefers-reduced-motion via
+  // @media (prefers-reduced-motion: reduce) in case-study.css — no JS
+  // smooth-scrolls happen in this IIFE so no JS-side check needed here.
 
   function init() {
     if (document.querySelector('.cs-progress')) return; // already injected
