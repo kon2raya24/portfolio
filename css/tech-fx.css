@@ -4759,6 +4759,30 @@ body.konami-on {
   box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.15), 0 0 12px rgba(0, 229, 255, 0.25);
   background: rgba(0, 229, 255, 0.04);
 }
+/* Invalid state — only fires AFTER the user has interacted (clicked
+   submit or blurred a field), so empty fields don't flash red on first
+   render. :user-invalid is the modern, well-supported spec. */
+.cta-form input:user-invalid,
+.cta-form textarea:user-invalid,
+.cta-form select:user-invalid {
+  border-color: #ff5f57 !important;
+  box-shadow: 0 0 0 3px rgba(255, 95, 87, 0.12), 0 0 10px rgba(255, 95, 87, 0.25) !important;
+  background: rgba(255, 95, 87, 0.04) !important;
+}
+.cta-form input:user-invalid:focus,
+.cta-form textarea:user-invalid:focus,
+.cta-form select:user-invalid:focus {
+  border-color: #ff7a72 !important;
+  box-shadow: 0 0 0 3px rgba(255, 95, 87, 0.18), 0 0 14px rgba(255, 95, 87, 0.35) !important;
+}
+/* Light-theme + xeno overrides — invalid red shifts to match the palette mood */
+:root[data-theme="light"] .cta-form input:user-invalid,
+:root[data-theme="light"] .cta-form textarea:user-invalid,
+:root[data-theme="light"] .cta-form select:user-invalid {
+  border-color: #c43030 !important;
+  background: rgba(196, 48, 48, 0.05) !important;
+  box-shadow: 0 0 0 3px rgba(196, 48, 48, 0.12) !important;
+}
 .cta-form textarea {
   resize: vertical;
   min-height: 96px;

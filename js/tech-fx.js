@@ -1298,6 +1298,17 @@ try {
     if (window.location.search.indexOf('sent=1') > -1 && wrap) {
       wrap.setAttribute('open', '');
       wrap.classList.add('is-sent');
+      // Personalize the success message with the email the user submitted
+      // (stashed in sessionStorage on submit; cleared after read).
+      try {
+        var sentEmail = sessionStorage.getItem('portfolio.contactEmail');
+        if (sentEmail) {
+          wrap.querySelectorAll('[data-success-email]').forEach(function (el) {
+            el.textContent = sentEmail;
+          });
+          sessionStorage.removeItem('portfolio.contactEmail');
+        }
+      } catch (_) {}
       setTimeout(function () {
         var t = document.getElementById('fh5co-started');
         if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1308,6 +1319,15 @@ try {
     }
 
     if (!form) return;
+
+    // Stash the email value on submit so we can restore it into the success
+    // message after Netlify's redirect. Runs in both local + production modes.
+    form.addEventListener('submit', function () {
+      try {
+        var em = form.querySelector('[name="email"]');
+        if (em && em.value) sessionStorage.setItem('portfolio.contactEmail', em.value.trim());
+      } catch (_) {}
+    });
 
     // Detect whether this is running on Netlify (or a real server that handles forms).
     // On localhost/file:// the native submit would 404, so we intercept and fall back to mailto.
