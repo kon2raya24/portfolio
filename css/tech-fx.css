@@ -2027,13 +2027,14 @@ body.konami-on {
   padding: 0;
   cursor: pointer;
   transition: 0.18s;
+  position: relative;
 }
 .theme-picker__dot:hover { transform: scale(1.18); }
 .theme-picker__dot.is-on { border-color: #fff; box-shadow: 0 0 8px currentColor; transform: scale(1.18); }
 .theme-picker__dot[data-palette="cyber"]  { background: #00e5ff; color: #00e5ff; }
 .theme-picker__dot[data-palette="matrix"] { background: #00ff7c; color: #00ff7c; }
 .theme-picker__dot[data-palette="sunset"] { background: #ff2bd6; color: #ff2bd6; }
-.theme-picker__dot[data-palette="xeno"]   { background: #ff1840; color: #ff1840; position: relative; }
+.theme-picker__dot[data-palette="xeno"]   { background: #ff1840; color: #ff1840; }
 .theme-picker__dot[data-palette="xeno"]::after {
   content: 'NEW';
   position: absolute;
@@ -2052,6 +2053,181 @@ body.konami-on {
   white-space: nowrap;
   pointer-events: none;
   text-shadow: 0 0 4px rgba(255, 24, 64, 0.6);
+  transition: opacity 0.18s;
+}
+/* When previewing xeno, hide the NEW badge so it doesn't collide with the preview card */
+.theme-picker__dot[data-palette="xeno"]:hover::after { opacity: 0; }
+
+/* -- Animated theme preview tooltips — pop above each dot on hover -- */
+.theme-picker__preview {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 148px;
+  height: 86px;
+  border-radius: 6px;
+  padding: 9px 11px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  z-index: 1200;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 1.2px;
+  text-transform: lowercase;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.theme-picker__dot:hover > .theme-picker__preview,
+.theme-picker__dot:focus-visible > .theme-picker__preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+@media (hover: none) {
+  .theme-picker__preview { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-picker__preview { transition: opacity 0.18s, visibility 0.18s; transform: translateX(-50%) translateY(0); }
+}
+.theme-picker__preview-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.theme-picker__preview-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.theme-picker__preview-bar {
+  height: 14px;
+  border-radius: 3px;
+  margin-top: 2px;
+}
+.theme-picker__preview-text {
+  margin-top: auto;
+  text-align: right;
+  opacity: 0.7;
+  font-size: 8.5px;
+  letter-spacing: 1.4px;
+}
+
+/* Per-theme preview chrome — each tile is a tiny mockup of that theme's UI */
+.theme-picker__preview--cyber {
+  background: linear-gradient(180deg, #0b1226, #070a18);
+  border: 1px solid rgba(0, 229, 255, 0.45);
+  color: #00e5ff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 229, 255, 0.22);
+  text-shadow: 0 0 4px rgba(0, 229, 255, 0.5);
+}
+.theme-picker__preview--cyber .theme-picker__preview-dots i:nth-child(1) { background: #ff5f57; }
+.theme-picker__preview--cyber .theme-picker__preview-dots i:nth-child(2) { background: #febc2e; }
+.theme-picker__preview--cyber .theme-picker__preview-dots i:nth-child(3) { background: #28c840; }
+.theme-picker__preview--cyber .theme-picker__preview-bar {
+  background: linear-gradient(90deg, #00e5ff, transparent 75%);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+
+.theme-picker__preview--matrix {
+  background: linear-gradient(180deg, #001a0c, #000a05);
+  border: 1px solid rgba(0, 255, 124, 0.5);
+  color: #00ff7c;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 255, 124, 0.22);
+  text-shadow: 0 0 4px rgba(0, 255, 124, 0.5);
+}
+.theme-picker__preview--matrix .theme-picker__preview-dots i { background: #00ff7c; }
+.theme-picker__preview--matrix .theme-picker__preview-dots i:nth-child(2) { opacity: 0.65; }
+.theme-picker__preview--matrix .theme-picker__preview-dots i:nth-child(3) { opacity: 0.4; }
+.theme-picker__preview--matrix .theme-picker__preview-bar {
+  background: linear-gradient(90deg, #00ff7c, transparent 70%);
+  box-shadow: 0 0 6px rgba(0, 255, 124, 0.4);
+}
+
+.theme-picker__preview--sunset {
+  background: linear-gradient(180deg, #1f0820, #0a0010);
+  border: 1px solid rgba(255, 43, 214, 0.5);
+  color: #ff2bd6;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 43, 214, 0.25);
+  text-shadow: 0 0 4px rgba(255, 43, 214, 0.5);
+}
+.theme-picker__preview--sunset .theme-picker__preview-dots i:nth-child(1) { background: #ff2bd6; }
+.theme-picker__preview--sunset .theme-picker__preview-dots i:nth-child(2) { background: #ffaa00; }
+.theme-picker__preview--sunset .theme-picker__preview-dots i:nth-child(3) { background: #ff2bd6; opacity: 0.55; }
+.theme-picker__preview--sunset .theme-picker__preview-bar {
+  background: linear-gradient(90deg, #ff2bd6, #ffaa00);
+  box-shadow: 0 0 6px rgba(255, 43, 214, 0.4);
+}
+
+.theme-picker__preview--xeno {
+  background: linear-gradient(180deg, #16000a, #02000a);
+  border: 1px solid rgba(255, 24, 64, 0.6);
+  color: #ff1840;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 24, 64, 0.3);
+  text-shadow: 0 0 4px rgba(255, 24, 64, 0.6);
+}
+/* Xeno: diamond glyphs instead of round dots */
+.theme-picker__preview--xeno .theme-picker__preview-dots i {
+  border-radius: 0;
+  transform: rotate(45deg);
+  width: 5px;
+  height: 5px;
+}
+.theme-picker__preview--xeno .theme-picker__preview-dots i:nth-child(1) { background: #ff1840; }
+.theme-picker__preview--xeno .theme-picker__preview-dots i:nth-child(2) { background: #c050ff; }
+.theme-picker__preview--xeno .theme-picker__preview-dots i:nth-child(3) { background: #00ff85; }
+.theme-picker__preview--xeno .theme-picker__preview-bar {
+  background: linear-gradient(90deg, #ff1840, #c050ff);
+  clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 50%, calc(100% - 4px) 100%, 4px 100%, 0 50%);
+  box-shadow: 0 0 6px rgba(255, 24, 64, 0.4);
+  border-radius: 0;
+}
+/* Xeno: scope-reticle corner accents */
+.theme-picker__preview--xeno::before,
+.theme-picker__preview--xeno::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(255, 24, 64, 0.7);
+  pointer-events: none;
+}
+.theme-picker__preview--xeno::before {
+  top: 3px;
+  left: 3px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.theme-picker__preview--xeno::after {
+  bottom: 3px;
+  right: 3px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* Edge-flip: rightmost dots' previews would overflow the popover right edge —
+   anchor them to the right of the dot row instead of centered. */
+.theme-picker__dot:nth-last-of-type(1) > .theme-picker__preview {
+  left: auto;
+  right: -6px;
+  transform: translateY(6px);
+}
+.theme-picker__dot:nth-last-of-type(1):hover > .theme-picker__preview,
+.theme-picker__dot:nth-last-of-type(1):focus-visible > .theme-picker__preview {
+  transform: translateY(0);
+}
+/* Same for leftmost (mirror) */
+.theme-picker__dot:nth-of-type(1) > .theme-picker__preview {
+  left: -6px;
+  transform: translateY(6px);
+}
+.theme-picker__dot:nth-of-type(1):hover > .theme-picker__preview,
+.theme-picker__dot:nth-of-type(1):focus-visible > .theme-picker__preview {
+  transform: translateY(0);
 }
 /* Light-theme overrides for the picker menu */
 :root[data-theme="light"] .theme-picker__menu {
