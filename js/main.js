@@ -1,121 +1,125 @@
-;(function () {
-	
-	'use strict';
+/* portfolio/js/main.js
+   Vanilla replacement for the jQuery + Stellar + Waypoints + Easing + Bootstrap-JS stack.
+   No external deps. Uses IntersectionObserver / requestAnimationFrame / matchMedia.
+*/
+(function () {
+  'use strict';
 
-	var isMobile = {
-		Android: function() {
-			return navigator.userAgent.match(/Android/i);
-		},
-			BlackBerry: function() {
-			return navigator.userAgent.match(/BlackBerry/i);
-		},
-			iOS: function() {
-			return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-		},
-			Opera: function() {
-			return navigator.userAgent.match(/Opera Mini/i);
-		},
-			Windows: function() {
-			return navigator.userAgent.match(/IEMobile/i);
-		},
-			any: function() {
-			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-		}
-	};
+  function isMobile() {
+    return /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+  }
 
-	
-	var fullHeight = function() {
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-		if ( !isMobile.any() ) {
-			$('.js-fullheight').css('height', $(window).height());
-			$(window).resize(function(){
-				$('.js-fullheight').css('height', $(window).height());
-			});
-		}
-	};
+  // .js-fullheight — pin to viewport height. Skipped on mobile to avoid the
+  // iOS Safari address-bar resize jitter (matches the original's behavior).
+  function fullHeight() {
+    if (isMobile()) return;
+    var els = document.querySelectorAll('.js-fullheight');
+    if (!els.length) return;
+    function apply() {
+      var h = window.innerHeight + 'px';
+      els.forEach(function (el) { el.style.height = h; });
+    }
+    apply();
+    window.addEventListener('resize', apply, { passive: true });
+  }
 
-	// Parallax
-	var parallax = function() {
-		$(window).stellar();
-	};
+  // Background parallax — replaces $(window).stellar() for [data-stellar-background-ratio]
+  function parallax() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll('[data-stellar-background-ratio]');
+    if (!els.length) return;
+    var ticking = false;
+    function update() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      els.forEach(function (el) {
+        var ratio = parseFloat(el.getAttribute('data-stellar-background-ratio')) || 0.5;
+        el.style.backgroundPositionY = (-y * ratio) + 'px';
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }, { passive: true });
+    update();
+  }
 
-	var contentWayPoint = function() {
-		var i = 0;
-		$('.animate-box').waypoint( function( direction ) {
+  // Scroll-triggered fade-in for .animate-box — replaces jquery.waypoints.
+  // Mirrors the original's staggered-cascade behavior (100ms between siblings)
+  // by batching all entries that intersect in the same observer tick.
+  function animateBoxes() {
+    var boxes = document.querySelectorAll('.animate-box');
+    if (!boxes.length) return;
+    if (!('IntersectionObserver' in window)) {
+      boxes.forEach(function (el) { el.classList.add('fadeInUp', 'animated-fast'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      var batch = [];
+      entries.forEach(function (en) {
+        if (en.isIntersecting && !en.target.classList.contains('animated-fast')) {
+          batch.push(en.target);
+          io.unobserve(en.target);
+        }
+      });
+      batch.forEach(function (el, i) {
+        setTimeout(function () {
+          var effect = el.getAttribute('data-animate-effect');
+          var cls = 'fadeInUp';
+          if (effect === 'fadeIn') cls = 'fadeIn';
+          else if (effect === 'fadeInLeft') cls = 'fadeInLeft';
+          else if (effect === 'fadeInRight') cls = 'fadeInRight';
+          el.classList.add(cls, 'animated-fast');
+        }, i * 100);
+      });
+    }, { rootMargin: '0px 0px -15% 0px', threshold: 0.01 });
+    boxes.forEach(function (el) { io.observe(el); });
+  }
 
-			if( direction === 'down' && !$(this.element).hasClass('animated-fast') ) {
-				
-				i++;
+  // Back-to-top button — .js-top is the floating wrapper, .js-gotop is the link.
+  function goToTop() {
+    var btn = document.querySelector('.js-gotop');
+    if (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+      });
+    }
+    var wrap = document.querySelector('.js-top');
+    if (!wrap) return;
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        wrap.classList.toggle('active', (window.pageYOffset || document.documentElement.scrollTop) > 200);
+        ticking = false;
+      });
+    }, { passive: true });
+  }
 
-				$(this.element).addClass('item-animate');
-				setTimeout(function(){
+  // .fh5co-loader fade-out — replaces $(loader).fadeOut('slow') (default ~600ms).
+  function loaderPage() {
+    var loader = document.querySelector('.fh5co-loader');
+    if (!loader) return;
+    loader.style.transition = 'opacity 0.6s';
+    loader.style.opacity = '0';
+    setTimeout(function () { loader.style.display = 'none'; }, 650);
+  }
 
-					$('body .animate-box.item-animate').each(function(k){
-						var el = $(this);
-						setTimeout( function () {
-							var effect = el.data('animate-effect');
-							if ( effect === 'fadeIn') {
-								el.addClass('fadeIn animated-fast');
-							} else if ( effect === 'fadeInLeft') {
-								el.addClass('fadeInLeft animated-fast');
-							} else if ( effect === 'fadeInRight') {
-								el.addClass('fadeInRight animated-fast');
-							} else {
-								el.addClass('fadeInUp animated-fast');
-							}
+  function ready(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
 
-							el.removeClass('item-animate');
-						},  k * 100, 'easeInOutExpo' );
-					});
-					
-				}, 50);
-				
-			}
-
-		} , { offset: '85%' } );
-	};
-
-
-
-	var goToTop = function() {
-
-		$('.js-gotop').on('click', function(event){
-			
-			event.preventDefault();
-
-			$('html, body').animate({
-				scrollTop: $('html').offset().top
-			}, 500, 'easeInOutExpo');
-			
-			return false;
-		});
-
-		$(window).scroll(function(){
-
-			var $win = $(window);
-			if ($win.scrollTop() > 200) {
-				$('.js-top').addClass('active');
-			} else {
-				$('.js-top').removeClass('active');
-			}
-
-		});
-	
-	};
-
-	// Loading page
-	var loaderPage = function() {
-		$(".fh5co-loader").fadeOut("slow");
-	};
-
-
-	$(function(){
-		contentWayPoint();
-		goToTop();
-		loaderPage();
-		fullHeight();
-		parallax();
-	});
-
-
+  ready(function () {
+    animateBoxes();
+    goToTop();
+    loaderPage();
+    fullHeight();
+    parallax();
+  });
 }());
