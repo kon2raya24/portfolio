@@ -34,6 +34,10 @@
 				theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
 			}
 			document.documentElement.setAttribute('data-theme', theme);
+			var palette = localStorage.getItem('portfolio.palette');
+			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno') {
+				document.documentElement.classList.add('theme-' + palette);
+			}
 		} catch (e) {
 			document.documentElement.setAttribute('data-theme', 'dark');
 		}

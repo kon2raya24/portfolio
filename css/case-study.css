@@ -1418,3 +1418,271 @@ body::before {
 @media print {
   .viewport-hud { display: none !important; }
 }
+
+/* =========================================================================
+   PALETTE OVERRIDES — match what the index theme picker applies.
+   Activated by :root.theme-{matrix,sunset,xeno} on <html> (FOUC-safe).
+   ========================================================================= */
+:root.theme-matrix {
+  --cyan: #00ff7c;
+  --cyan-dim: #08b85d;
+  --line: rgba(0, 255, 124, 0.22);
+  --line-strong: rgba(0, 255, 124, 0.5);
+  --glow-cyan: 0 0 12px rgba(0, 255, 124, 0.6), 0 0 30px rgba(0, 255, 124, 0.25);
+}
+:root.theme-sunset {
+  --cyan: #ff2bd6;
+  --cyan-dim: #c41fa3;
+  --line: rgba(255, 43, 214, 0.22);
+  --line-strong: rgba(255, 43, 214, 0.5);
+  --glow-cyan: 0 0 12px rgba(255, 43, 214, 0.6), 0 0 30px rgba(255, 43, 214, 0.25);
+  --brand: #ffaa00;
+}
+:root.theme-xeno {
+  --cyan: #ff1840;
+  --cyan-dim: #b80c2a;
+  --line: rgba(255, 24, 64, 0.22);
+  --line-strong: rgba(255, 24, 64, 0.55);
+  --glow-cyan: 0 0 12px rgba(255, 24, 64, 0.6), 0 0 30px rgba(255, 24, 64, 0.25);
+  --brand: #00ff85;
+  --magenta: #c050ff;
+}
+
+/* =========================================================================
+   XENO DEEP-SKIN — mirrors the index xeno-skin so the case study reads as
+   the same intercepted-transmission UI, not just a recolor.
+   ========================================================================= */
+:root.theme-xeno {
+  background: #02000a;
+}
+:root.theme-xeno body {
+  background:
+    radial-gradient(ellipse 80% 50% at 18% 12%, rgba(192, 80, 255, 0.10), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 82% 30%, rgba(255, 24, 64, 0.09), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 85%, rgba(0, 255, 133, 0.06), transparent 60%),
+    radial-gradient(circle at 50% 50%, #050108 0%, #02000a 70%) !important;
+}
+/* Starfield layered pseudo-elements — note: case-study.css has its own
+   body::before for the grid lattice; we use body::after only here and rely
+   on the existing ::before getting recolored via vars. */
+:root.theme-xeno body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, rgba(0, 255, 133, 0.5) 1px, transparent 1px);
+  background-size: 470px 470px;
+  background-position: 80px 110px;
+  opacity: 0.25;
+  animation: xeno-cs-drift 90s linear infinite;
+}
+@keyframes xeno-cs-drift {
+  to { background-position: 880px 990px; }
+}
+/* Global scan beam (top → bottom every 14s) on the case-study main */
+:root.theme-xeno .cs-wrap {
+  position: relative;
+  z-index: 1;
+}
+:root.theme-xeno .cs-wrap::before {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -120px;
+  height: 120px;
+  z-index: 9998;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(255, 24, 64, 0.06) 40%,
+    rgba(255, 24, 64, 0.14) 50%,
+    rgba(255, 24, 64, 0.06) 60%,
+    transparent 100%);
+  box-shadow: 0 0 32px rgba(255, 24, 64, 0.35);
+  animation: xeno-cs-scan 14s linear infinite;
+}
+@keyframes xeno-cs-scan {
+  0%   { transform: translateY(0); opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+/* -- Hero: corner-bracket reticles + glitch h1 -- */
+:root.theme-xeno .cs-hero {
+  position: relative;
+}
+:root.theme-xeno .cs-hero::before,
+:root.theme-xeno .cs-hero::after {
+  content: '';
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(255, 24, 64, 0.55);
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(255, 24, 64, 0.5));
+}
+:root.theme-xeno .cs-hero::before {
+  top: -8px;
+  left: -8px;
+  border-right: 0;
+  border-bottom: 0;
+}
+:root.theme-xeno .cs-hero::after {
+  bottom: -8px;
+  right: -8px;
+  border-left: 0;
+  border-top: 0;
+}
+:root.theme-xeno .cs-hero h1 {
+  text-shadow:
+    -1px 0 rgba(255, 24, 64, 0.6),
+    2px 0 rgba(0, 255, 133, 0.45),
+    0 0 18px rgba(255, 24, 64, 0.4) !important;
+}
+
+/* -- Tech chips + meta: hostile-tech red bordered, corner-cut -- */
+:root.theme-xeno .cs-chip {
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  border-radius: 0 !important;
+  border-color: rgba(255, 24, 64, 0.4) !important;
+  background: rgba(255, 24, 64, 0.06) !important;
+  color: #ffb0bf !important;
+}
+:root.theme-xeno .cs-meta {
+  border-color: rgba(255, 24, 64, 0.25) !important;
+}
+:root.theme-xeno .cs-meta__k { color: rgba(255, 128, 148, 0.7) !important; }
+
+/* -- Top metrics block: red intrusion-alert frame -- */
+:root.theme-xeno .cs-metrics--top {
+  background: linear-gradient(180deg, rgba(255, 24, 64, 0.05), rgba(10, 0, 16, 0.55)) !important;
+  border-color: rgba(255, 24, 64, 0.35) !important;
+}
+:root.theme-xeno .cs-metric {
+  background: linear-gradient(180deg, #16000a, #0a0008) !important;
+  border-color: rgba(255, 24, 64, 0.22) !important;
+}
+:root.theme-xeno .cs-metric__v {
+  color: #ff1840 !important;
+  text-shadow: 0 0 12px rgba(255, 24, 64, 0.55) !important;
+}
+
+/* -- Section panels: hostile chrome -- */
+:root.theme-xeno .cs-section {
+  border-color: rgba(255, 24, 64, 0.2);
+}
+:root.theme-xeno .cs-section h2 {
+  color: #fff !important;
+  text-shadow:
+    -1px 0 rgba(255, 24, 64, 0.6),
+    2px 0 rgba(0, 255, 133, 0.35),
+    0 0 14px rgba(255, 24, 64, 0.4) !important;
+}
+:root.theme-xeno .cs-section__label {
+  color: #ff8094 !important;
+  letter-spacing: 2px;
+}
+
+/* -- TOC: red treatment, sticky scope feel -- */
+:root.theme-xeno .cs-toc {
+  background: rgba(8, 0, 12, 0.85) !important;
+  border-color: rgba(255, 24, 64, 0.35) !important;
+}
+:root.theme-xeno .cs-toc__label { color: #ff8094 !important; }
+:root.theme-xeno .cs-toc__nav a {
+  color: rgba(255, 176, 191, 0.7);
+}
+:root.theme-xeno .cs-toc__nav a:hover,
+:root.theme-xeno .cs-toc__nav a.is-active {
+  color: #ff1840 !important;
+  text-shadow: 0 0 6px rgba(255, 24, 64, 0.5);
+}
+
+/* -- Buttons: angular clip-path matching the index xeno chevrons -- */
+:root.theme-xeno .cs-btn--primary {
+  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%);
+  border-radius: 0 !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #ff1840, #c050ff) !important;
+  color: #fff !important;
+}
+:root.theme-xeno .cs-btn--ghost {
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  border-radius: 0 !important;
+  letter-spacing: 1.6px !important;
+  border-color: rgba(255, 24, 64, 0.5) !important;
+  color: #ff8094 !important;
+}
+
+/* -- Status pills (LIVE / DRAFT / PLANNED) — red treatment -- */
+:root.theme-xeno .case-status--live {
+  background: rgba(0, 255, 133, 0.08) !important;
+  border-color: rgba(0, 255, 133, 0.5) !important;
+  color: #00ff85 !important;
+  text-shadow: 0 0 6px rgba(0, 255, 133, 0.5);
+}
+
+/* -- CTA block & pager -- */
+:root.theme-xeno .cs-cta {
+  border-color: rgba(255, 24, 64, 0.35) !important;
+  background: rgba(8, 0, 12, 0.7) !important;
+}
+:root.theme-xeno .cs-pager__link {
+  border-color: rgba(255, 24, 64, 0.25) !important;
+  background: rgba(8, 0, 12, 0.4);
+}
+:root.theme-xeno .cs-pager__link:hover {
+  border-color: rgba(255, 24, 64, 0.6) !important;
+  box-shadow: 0 0 20px rgba(255, 24, 64, 0.18);
+}
+
+/* -- OG preview frame: red border (intercepted card) -- */
+:root.theme-xeno .cs-og-preview__frame {
+  border-color: rgba(255, 24, 64, 0.5) !important;
+  box-shadow: 0 0 24px rgba(255, 24, 64, 0.18);
+}
+
+/* -- Outcomes block (BEFORE/AFTER) override: red label, deeper void rows -- */
+:root.theme-xeno .cs-outcomes--top {
+  background: linear-gradient(180deg, rgba(255, 24, 64, 0.06), rgba(10, 0, 16, 0.55)) !important;
+  border-color: rgba(255, 24, 64, 0.35) !important;
+}
+:root.theme-xeno .cs-outcomes--top .cs-outcomes__label { color: #ff8094 !important; }
+:root.theme-xeno .cs-outcome-row {
+  background: linear-gradient(180deg, #16000a, #0a0008) !important;
+  border-color: rgba(255, 24, 64, 0.25) !important;
+}
+:root.theme-xeno .cs-outcome-row__tag--after {
+  color: #00ff85 !important;
+  text-shadow: 0 0 6px rgba(0, 255, 133, 0.5);
+}
+
+/* -- Custom cursor: matching scope-reticle (desktop only) -- */
+:root.theme-xeno body {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='none' stroke='%23ff1840' stroke-width='1.5' stroke-opacity='0.85'/><circle cx='16' cy='16' r='1.5' fill='%23ff1840'/><line x1='16' y1='4' x2='16' y2='10' stroke='%23ff1840' stroke-width='1.5'/><line x1='16' y1='22' x2='16' y2='28' stroke='%23ff1840' stroke-width='1.5'/><line x1='4' y1='16' x2='10' y2='16' stroke='%23ff1840' stroke-width='1.5'/><line x1='22' y1='16' x2='28' y2='16' stroke='%23ff1840' stroke-width='1.5'/></svg>") 16 16, crosshair;
+}
+:root.theme-xeno a,
+:root.theme-xeno button,
+:root.theme-xeno [role="button"],
+:root.theme-xeno summary { cursor: pointer; }
+:root.theme-xeno input,
+:root.theme-xeno textarea,
+:root.theme-xeno select { cursor: text; }
+@media (hover: none) {
+  :root.theme-xeno body { cursor: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-xeno body::after,
+  :root.theme-xeno .cs-wrap::before { animation: none !important; }
+}
+@media (max-width: 768px) {
+  :root.theme-xeno body::after { display: none; }
+  :root.theme-xeno .cs-wrap::before { display: none; }
+  :root.theme-xeno .cs-hero::before,
+  :root.theme-xeno .cs-hero::after { width: 32px; height: 32px; }
+}
