@@ -1071,7 +1071,9 @@ body.konami-on {
   background: linear-gradient(180deg, #0b1226, #070a18);
   border: 1px solid var(--line-strong);
   border-radius: 10px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 229, 255, 0.18), 0 0 50px rgba(0, 229, 255, 0.2);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+              0 0 0 1px color-mix(in srgb, var(--cyan) 18%, transparent),
+              0 0 50px color-mix(in srgb, var(--cyan) 20%, transparent);
   font-family: 'JetBrains Mono', monospace;
   color: #e6f3ff;
   overflow: hidden;
@@ -1233,7 +1235,7 @@ body.konami-on {
 .siderail__dot {
   width: 10px;
   height: 10px;
-  border: 1.5px solid rgba(0, 229, 255, 0.45);
+  border: 1.5px solid color-mix(in srgb, var(--cyan) 45%, transparent);
   border-radius: 50%;
   background: transparent;
   transition: 0.25s;
@@ -1268,7 +1270,7 @@ body.konami-on {
 .siderail__item.is-active .siderail__dot {
   background: var(--cyan);
   border-color: var(--cyan);
-  box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px color-mix(in srgb, var(--cyan) 40%, transparent);
   transform: scale(1.2);
 }
 .siderail__item.is-active .siderail__label {
@@ -1338,7 +1340,7 @@ body.konami-on {
   background: linear-gradient(180deg, #0b1226, #070a18);
   border: 1px solid var(--line-strong);
   border-radius: 10px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 229, 255, 0.2);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 50px color-mix(in srgb, var(--cyan) 20%, transparent);
   font-family: 'JetBrains Mono', monospace;
   color: #e6f3ff;
   overflow: hidden;
