@@ -167,7 +167,8 @@ try {
     });
   })();
 
-  /* ---------- Matrix rain (hero) ---------- */
+  /* ---------- Matrix rain (hero) — theme-aware: katakana for cyber/matrix/sunset,
+       alien-tech glyphs in xeno mode so the canvas matches the rest of the skin. */
   (function matrixRain() {
     if (prefersReduced) return;
     var host = document.getElementById('fh5co-header');
@@ -176,7 +177,8 @@ try {
     canvas.className = 'matrix-canvas';
     host.appendChild(canvas);
     var ctx = canvas.getContext('2d');
-    var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789{}[]<>/=+-*&|';
+    var CHARS_DEFAULT = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789{}[]<>/=+-*&|';
+    var CHARS_XENO    = '◢◤◥◣◇◆▣▤⌬⌷⎔⏣◈⬚⬢⬡▦▩▨ΞΛΔΨΣΦΘΩ0123456789█▓▒░⏃⏄⏅';
     var cols = 0, drops = [], fontSize = 16;
 
     function resize() {
@@ -203,16 +205,21 @@ try {
     function draw(ts) {
       if (visible && document.visibilityState === 'visible' && ts - lastFrame > 55) {
         lastFrame = ts;
-        ctx.fillStyle = 'rgba(5, 8, 20, 0.18)';
+        var xeno = currentPalette() === 'xeno';
+        var chars = xeno ? CHARS_XENO : CHARS_DEFAULT;
+        var trailColor = xeno ? 'rgba(2, 0, 10, 0.20)' : 'rgba(5, 8, 20, 0.18)';
+        var primary   = xeno ? '#ff1840' : '#00e5ff';
+        var accent    = xeno ? '#00ff85' : '#FF9000';
+        ctx.fillStyle = trailColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.font = fontSize + 'px "JetBrains Mono", monospace';
         for (var i = 0; i < cols; i++) {
           var ch = chars.charAt(Math.floor(Math.random() * chars.length));
           var x = i * fontSize;
           var y = drops[i] * fontSize;
-          var grad = (Math.random() < 0.02) ? '#FF9000' : '#00e5ff';
-          ctx.fillStyle = grad;
-          ctx.shadowColor = grad;
+          var c = (Math.random() < 0.02) ? accent : primary;
+          ctx.fillStyle = c;
+          ctx.shadowColor = c;
           ctx.shadowBlur = 6;
           ctx.fillText(ch, x, y);
           if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
@@ -1399,6 +1406,7 @@ try {
       { keys: ['ctrl', 'k'], desc: 'Open command palette' },
       { keys: ['/'],         desc: 'Quick search commands' },
       { keys: ['`'],         desc: 'Toggle dev terminal' },
+      { keys: ['alt', 't'],  desc: 'Cycle theme palette (cyber → matrix → sunset → xeno)' },
       { keys: ['?'],         desc: 'Show this help' },
       { keys: ['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'b', 'a'], desc: 'Konami mode (hue cycle)' },
       { keys: ['esc'],       desc: 'Close any overlay' },
@@ -2253,6 +2261,17 @@ try {
     // Cross-component sync (HUD picker may also change palette/mode)
     document.addEventListener('palette:change', syncUI);
     document.addEventListener('mode:change', syncUI);
+
+    // Alt+T cycles palettes (cyber → matrix → sunset → xeno → cyber).
+    // Ignored when an input/textarea is focused so it doesn't hijack typing.
+    document.addEventListener('keydown', function (e) {
+      if (!e.altKey || (e.key !== 't' && e.key !== 'T')) return;
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      e.preventDefault();
+      var idx = PALETTES.indexOf(currentPalette());
+      applyPalette(PALETTES[(idx + 1) % PALETTES.length]);
+    });
 
     // Initialize state to match what the FOUC bootstrap applied
     applyMode(currentMode());
