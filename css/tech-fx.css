@@ -4506,9 +4506,9 @@ body.konami-on {
   transition: 0.18s;
 }
 .cta-track__tab.is-active {
-  background: rgba(0, 229, 255, 0.12);
+  background: color-mix(in srgb, var(--cyan) 12%, transparent);
   color: var(--cyan);
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent);
 }
 .cta-track__tab.is-active .cta-track__icon {
   color: var(--cyan);
@@ -4733,7 +4733,7 @@ body.konami-on {
   transition: transform 0.22s;
 }
 .cta-form-wrap[open] .cta-form-toggle__chev { transform: rotate(90deg); }
-.cta-form-toggle:hover { text-shadow: 0 0 6px rgba(0, 229, 255, 0.4); }
+.cta-form-toggle:hover { text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent); }
 
 .cta-form {
   margin-top: 18px;
