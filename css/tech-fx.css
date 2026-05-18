@@ -8453,6 +8453,13 @@ body.pchat-active .viewport-hud {
   color: #1a1f2e;
 }
 
+/* -- Stack the "scroll to top" button above the chat bubble so they don't
+   overlap. Chat bubble is 56px tall at bottom:24px; sit gototop 12px above. */
+.gototop {
+  bottom: 92px !important;
+  right: 27px !important;
+}
+
 /* -- Mobile -- */
 @media (max-width: 640px) {
   .pchat { bottom: 14px; right: 14px; }
@@ -8463,6 +8470,11 @@ body.pchat-active .viewport-hud {
     max-height: 600px;
     right: 0;
     bottom: 64px;
+  }
+  /* Bubble is 50px tall at bottom:14px on mobile — gototop sits above it. */
+  .gototop {
+    bottom: 74px !important;
+    right: 14px !important;
   }
 }
 
