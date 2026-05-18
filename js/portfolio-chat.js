@@ -770,6 +770,15 @@
         '<line x1="6" y1="6" x2="18" y2="18"/>' +
         '<line x1="18" y1="6" x2="6" y2="18"/>' +
       '</svg>';
+    var BROWSE_SVG =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<line x1="8" y1="6" x2="20" y2="6"/>' +
+        '<line x1="8" y1="12" x2="20" y2="12"/>' +
+        '<line x1="8" y1="18" x2="20" y2="18"/>' +
+        '<circle cx="4" cy="6" r="1" fill="currentColor"/>' +
+        '<circle cx="4" cy="12" r="1" fill="currentColor"/>' +
+        '<circle cx="4" cy="18" r="1" fill="currentColor"/>' +
+      '</svg>';
 
     wrap.innerHTML =
       '<button type="button" class="pchat__bubble" aria-label="Open chat — ask me anything about the portfolio" data-pchat-open>' +
@@ -784,8 +793,9 @@
             '<span class="pchat__head-name">~/ask-me</span>' +
           '</div>' +
           '<div class="pchat__head-actions">' +
-            '<button type="button" class="pchat__reset" data-pchat-reset aria-label="Reset conversation" title="Reset">↻</button>' +
-            '<button type="button" class="pchat__close" data-pchat-close aria-label="Close chat" title="Close (Esc)">×</button>' +
+            '<button type="button" class="pchat__icon-btn pchat__browse" data-pchat-browse aria-label="Browse all questions" aria-pressed="false" title="Browse all questions">' + BROWSE_SVG + '</button>' +
+            '<button type="button" class="pchat__icon-btn pchat__reset" data-pchat-reset aria-label="Reset conversation" title="Reset">↻</button>' +
+            '<button type="button" class="pchat__icon-btn pchat__close" data-pchat-close aria-label="Close chat" title="Close (Esc)">×</button>' +
           '</div>' +
         '</header>' +
         '<div class="pchat__body" data-pchat-body>' +
@@ -795,6 +805,7 @@
           '</div>' +
           '<div class="pchat__suggestions" data-pchat-suggestions></div>' +
         '</div>' +
+        '<div class="pchat__browse-view" data-pchat-browse-view hidden></div>' +
         '<form class="pchat__form" data-pchat-form>' +
           '<input type="text" class="pchat__input" data-pchat-input placeholder="Ask a question…" autocomplete="off" spellcheck="false" aria-label="Type your question">' +
           '<button type="submit" class="pchat__submit" aria-label="Send">→</button>' +
@@ -806,10 +817,84 @@
     var panel = wrap.querySelector('.pchat__panel');
     var closeBtn = wrap.querySelector('[data-pchat-close]');
     var resetBtn = wrap.querySelector('[data-pchat-reset]');
+    var browseBtn = wrap.querySelector('[data-pchat-browse]');
     var body = wrap.querySelector('[data-pchat-body]');
+    var browseView = wrap.querySelector('[data-pchat-browse-view]');
     var form = wrap.querySelector('[data-pchat-form]');
     var input = wrap.querySelector('[data-pchat-input]');
     var suggBox = wrap.querySelector('[data-pchat-suggestions]');
+
+    // Display names for the category slugs used in the FAQ data
+    var CATEGORY_LABELS = {
+      about:        'About Lemmuel',
+      stack:        'Tech stack',
+      ai:           'AI / LLM work',
+      'case-study': 'Case studies',
+      hire:         'Hiring & availability',
+      contact:      'Get in touch',
+      process:      'How I work',
+      work:         'Work history',
+      meta:         'About this site / chat'
+    };
+    var CATEGORY_ORDER = ['about', 'stack', 'ai', 'case-study', 'work', 'hire', 'process', 'contact', 'meta'];
+
+    function buildBrowseView() {
+      // Bucket FAQ by category
+      var buckets = {};
+      for (var i = 0; i < FAQ.length; i++) {
+        var c = FAQ[i].category || 'meta';
+        if (!buckets[c]) buckets[c] = [];
+        buckets[c].push(FAQ[i]);
+      }
+      // Render in canonical order, then any leftover categories alphabetically
+      var html = '<div class="pchat__browse-head">Browse all <strong>' + FAQ.length + '</strong> questions</div>';
+      var rendered = {};
+      CATEGORY_ORDER.forEach(function (cat) {
+        if (!buckets[cat] || !buckets[cat].length) return;
+        rendered[cat] = true;
+        html += renderCategory(cat, buckets[cat]);
+      });
+      Object.keys(buckets).sort().forEach(function (cat) {
+        if (rendered[cat]) return;
+        html += renderCategory(cat, buckets[cat]);
+      });
+      browseView.innerHTML = html;
+      // Wire row clicks → submit as a new chat message
+      browseView.querySelectorAll('[data-browse-q]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var q = btn.getAttribute('data-browse-q');
+          closeBrowse();
+          send(q);
+        });
+      });
+    }
+    function renderCategory(slug, entries) {
+      var label = CATEGORY_LABELS[slug] || slug;
+      var rows = entries.map(function (e) {
+        return '<button type="button" class="pchat__browse-row" data-browse-q="' + escapeAttr(e.q) + '">' +
+                 escapeText(e.q) +
+               '</button>';
+      }).join('');
+      return '<section class="pchat__browse-cat">' +
+               '<h4 class="pchat__browse-cat-title">' + escapeText(label) + ' <span class="pchat__browse-cat-count">' + entries.length + '</span></h4>' +
+               '<div class="pchat__browse-rows">' + rows + '</div>' +
+             '</section>';
+    }
+    function openBrowse() {
+      buildBrowseView();
+      body.hidden = true;
+      browseView.hidden = false;
+      browseView.scrollTop = 0;
+      browseBtn.setAttribute('aria-pressed', 'true');
+    }
+    function closeBrowse() {
+      browseView.hidden = true;
+      body.hidden = false;
+      browseBtn.setAttribute('aria-pressed', 'false');
+    }
+    function toggleBrowse() {
+      browseView.hidden ? openBrowse() : closeBrowse();
+    }
 
     var lastFocus = null;
 
@@ -950,6 +1035,7 @@
     });
     closeBtn.addEventListener('click', close);
     resetBtn.addEventListener('click', reset);
+    browseBtn.addEventListener('click', toggleBrowse);
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
