@@ -1131,10 +1131,10 @@ try {
       if (!it) return;
       close();
       if (it.action === 'konami') { document.body.classList.toggle('konami-on'); return; }
-      if (it.action === 'top')    { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      if (it.action === 'top')    { window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' }); return; }
       if (it.hash) {
         var t = document.querySelector(it.hash);
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (t) t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
         return;
       }
       if (it.href) {
@@ -1214,7 +1214,7 @@ try {
       a.addEventListener('click', function (e) {
         e.preventDefault();
         var t = document.getElementById(s.id);
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (t) t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
       });
       nav.appendChild(a);
       items.push({ id: s.id, el: a });
@@ -1327,7 +1327,7 @@ try {
       } catch (_) {}
       setTimeout(function () {
         var t = document.getElementById('fh5co-started');
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (t) t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
       }, 300);
       if (history.replaceState) {
         history.replaceState({}, document.title, window.location.pathname + window.location.hash);
@@ -1677,7 +1677,7 @@ try {
         document.dispatchEvent(ev2);
       }
       else if (act === 'konami')     { document.body.classList.toggle('konami-on'); techToast(document.body.classList.contains('konami-on') ? 'konami: ON' : 'konami: OFF'); }
-      else if (act === 'top')        { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      else if (act === 'top')        { window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' }); }
     });
   })();
 
@@ -1819,7 +1819,7 @@ try {
         print('redirecting to the hire section &mdash; let\'s talk.', 'ok');
         setTimeout(function () {
           var t = document.getElementById('fh5co-started');
-          if (t) t.scrollIntoView({ behavior: 'smooth' });
+          if (t) t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
         }, 500);
       },
       date: function () {
@@ -1867,7 +1867,7 @@ try {
       if (!id) { print('unknown section: ' + escape(arg), 'err'); return; }
       var t = document.getElementById(id);
       if (t) {
-        t.scrollIntoView({ behavior: 'smooth' });
+        t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
         print('navigating to /' + arg + ' ...', 'ok');
       }
     }
