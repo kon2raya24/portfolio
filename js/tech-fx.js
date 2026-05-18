@@ -1103,7 +1103,7 @@ try {
       { id: 'fh5co-header',   label: '~/hero' },
       { id: 'fh5co-about',    label: 'about_me' },
       { id: 'fh5co-resume',   label: 'experience' },
-      { id: 'fh5co-features', label: 'services' },
+      { id: 'fh5co-features', label: 'build' },
       { id: 'fh5co-skills',   label: 'skills' },
       { id: 'fh5co-work',     label: 'projects' },
       { id: 'fh5co-blog',     label: 'case_studies' },
