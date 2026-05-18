@@ -846,8 +846,18 @@
         if (!buckets[c]) buckets[c] = [];
         buckets[c].push(FAQ[i]);
       }
+      var header =
+        '<div class="pchat__browse-head">' +
+          '<span>Browse all <strong>' + FAQ.length + '</strong> questions</span>' +
+        '</div>' +
+        '<div class="pchat__browse-search-wrap">' +
+          '<input type="text" class="pchat__browse-search" data-browse-search ' +
+            'placeholder="filter questions…  (↓ navigate, ↵ ask)" ' +
+            'autocomplete="off" spellcheck="false" aria-label="Filter questions">' +
+          '<span class="pchat__browse-empty" data-browse-empty hidden>no questions match — try fewer words</span>' +
+        '</div>';
       // Render in canonical order, then any leftover categories alphabetically
-      var html = '<div class="pchat__browse-head">Browse all <strong>' + FAQ.length + '</strong> questions</div>';
+      var html = header;
       var rendered = {};
       CATEGORY_ORDER.forEach(function (cat) {
         if (!buckets[cat] || !buckets[cat].length) return;
@@ -867,11 +877,79 @@
           send(q);
         });
       });
+      // Wire the search/filter
+      var searchEl = browseView.querySelector('[data-browse-search]');
+      var emptyEl = browseView.querySelector('[data-browse-empty]');
+      if (searchEl) {
+        searchEl.addEventListener('input', function () {
+          filterBrowse(searchEl.value, emptyEl);
+        });
+        // Keyboard nav from the search box
+        searchEl.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            focusFirstVisibleRow();
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            // Submit the first visible row's question
+            var first = visibleRows()[0];
+            if (first) { closeBrowse(); send(first.getAttribute('data-browse-q')); }
+          }
+        });
+      }
+      // Keyboard nav on rows themselves (arrow up/down + enter)
+      browseView.querySelectorAll('[data-browse-q]').forEach(function (btn) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            var rows = visibleRows();
+            var idx = rows.indexOf(btn);
+            var next = e.key === 'ArrowDown' ? rows[idx + 1] : rows[idx - 1];
+            if (next) next.focus();
+            else if (e.key === 'ArrowUp' && searchEl) searchEl.focus();
+          }
+        });
+      });
+    }
+    function visibleRows() {
+      return Array.prototype.slice.call(
+        browseView.querySelectorAll('[data-browse-q]:not([hidden])')
+      );
+    }
+    function focusFirstVisibleRow() {
+      var rows = visibleRows();
+      if (rows[0]) rows[0].focus();
+    }
+    function filterBrowse(query, emptyEl) {
+      var q = normalize(query);
+      var anyVisible = false;
+      // Each row matches if q is substring of entry.q or any alias.
+      // Empty query = show all.
+      var sections = browseView.querySelectorAll('.pchat__browse-cat');
+      sections.forEach(function (section) {
+        var sectionVisible = false;
+        section.querySelectorAll('[data-browse-q]').forEach(function (row) {
+          var entryIdx = parseInt(row.getAttribute('data-browse-idx'), 10);
+          var entry = FAQ[entryIdx];
+          if (!entry) { row.hidden = true; return; }
+          var match = !q;
+          if (!match && entry._normCache) {
+            for (var i = 0; i < entry._normCache.length; i++) {
+              if (entry._normCache[i].indexOf(q) !== -1) { match = true; break; }
+            }
+          }
+          row.hidden = !match;
+          if (match) { sectionVisible = true; anyVisible = true; }
+        });
+        section.hidden = !sectionVisible;
+      });
+      if (emptyEl) emptyEl.hidden = anyVisible || !q;
     }
     function renderCategory(slug, entries) {
       var label = CATEGORY_LABELS[slug] || slug;
       var rows = entries.map(function (e) {
-        return '<button type="button" class="pchat__browse-row" data-browse-q="' + escapeAttr(e.q) + '">' +
+        var idx = FAQ.indexOf(e);
+        return '<button type="button" class="pchat__browse-row" data-browse-q="' + escapeAttr(e.q) + '" data-browse-idx="' + idx + '">' +
                  escapeText(e.q) +
                '</button>';
       }).join('');
@@ -886,6 +964,9 @@
       browseView.hidden = false;
       browseView.scrollTop = 0;
       browseBtn.setAttribute('aria-pressed', 'true');
+      // Auto-focus the filter input so the user can start typing immediately
+      var searchEl = browseView.querySelector('[data-browse-search]');
+      if (searchEl) setTimeout(function () { searchEl.focus(); }, 40);
     }
     function closeBrowse() {
       browseView.hidden = true;

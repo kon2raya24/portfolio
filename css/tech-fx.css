@@ -8134,9 +8134,47 @@ body.pchat-active .viewport-hud {
   color: rgba(230, 243, 255, 0.55);
   padding-bottom: 8px;
   border-bottom: 1px dashed color-mix(in srgb, var(--cyan) 22%, transparent);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .pchat__browse-head strong { color: var(--cyan); }
+
+/* Filter input — sticky at the top of the browse view as the user scrolls */
+.pchat__browse-search-wrap {
+  position: sticky;
+  top: -14px;
+  margin: 0 -14px 12px;
+  padding: 6px 14px 10px;
+  background: linear-gradient(180deg, #0b1226 0%, rgba(11, 18, 38, 0.96) 85%, rgba(11, 18, 38, 0));
+  z-index: 2;
+}
+.pchat__browse-search {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid color-mix(in srgb, var(--cyan) 22%, transparent);
+  color: #e6f3ff;
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+.pchat__browse-search::placeholder { color: rgba(230, 243, 255, 0.4); }
+.pchat__browse-search:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 14%, transparent);
+}
+.pchat__browse-empty {
+  display: block;
+  font-size: 11px;
+  color: rgba(230, 243, 255, 0.5);
+  margin-top: 6px;
+  font-style: italic;
+}
+:root[data-theme="light"] .pchat__browse-search-wrap {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.95) 85%, rgba(255, 255, 255, 0));
+}
+:root[data-theme="light"] .pchat__browse-search { background: #fff; color: #1a1f2e; border-color: rgba(10, 30, 60, 0.18); }
 .pchat__browse-cat {
   margin-bottom: 14px;
 }
