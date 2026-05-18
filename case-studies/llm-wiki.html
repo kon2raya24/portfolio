@@ -150,6 +150,34 @@
 		</div>
 	</div>
 
+	<div class="cs-outcomes cs-outcomes--top" data-status="draft" aria-label="What changed for the team">
+		<div class="cs-outcomes__label">// outcome &middot; what changed</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--before">BEFORE</span>
+			<p class="cs-outcome-row__txt cs-outcome-row__txt--before">Notes scattered across repo READMEs, Slack threads, and engineer heads.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--after">AFTER</span>
+			<p class="cs-outcome-row__txt">Single Markdown vault next to the source tree, every page YAML-front-mattered.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--before">BEFORE</span>
+			<p class="cs-outcome-row__txt cs-outcome-row__txt--before">LLMs (Claude / Cursor / Cline) got a chaotic context window every session.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--after">AFTER</span>
+			<p class="cs-outcome-row__txt">Per-folder <code>_INDEX.md</code> gives agents a stable shape they can navigate without flailing.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--before">BEFORE</span>
+			<p class="cs-outcome-row__txt cs-outcome-row__txt--before">Documentation drift hid behind file mtimes; nobody knew which pages were stale.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--after">AFTER</span>
+			<p class="cs-outcome-row__txt">Frontmatter <code>verified:</code> field marks freshness; a future script can flag stale pages by interval.</p>
+		</div>
+	</div>
+
 	<section class="cs-section">
 		<div class="cs-section__label">tl;dr</div>
 		<h2>What it is</h2>
