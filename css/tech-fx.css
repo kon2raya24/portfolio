@@ -263,7 +263,7 @@ strong { color: var(--cyan); }
   height: 3px;
   width: 0%;
   background: linear-gradient(90deg, var(--cyan), var(--brand), var(--magenta));
-  box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(0, 229, 255, 0.6);
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px color-mix(in srgb, var(--cyan) 60%, transparent);
   z-index: 10000;
   transition: width 80ms linear;
   pointer-events: none;
@@ -836,7 +836,9 @@ body.konami-on {
   align-items: center;
   gap: 10px;
   padding: 13px 26px;
-  background: linear-gradient(180deg, rgba(0, 229, 255, 0.18) 0%, rgba(0, 229, 255, 0.08) 100%);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--cyan) 18%, transparent) 0%,
+    color-mix(in srgb, var(--cyan) 8%, transparent) 100%);
   border: 1px solid var(--cyan);
   border-radius: 6px;
   color: #eafdff !important;
@@ -845,14 +847,18 @@ body.konami-on {
   letter-spacing: 1.5px;
   text-transform: lowercase;
   text-decoration: none;
-  box-shadow: 0 0 22px rgba(0, 229, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--cyan) 22%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--cyan) 50%, transparent);
   transition: 0.22s;
 }
 .hero-cta__primary:hover,
 .hero-cta__primary:focus-visible {
-  background: linear-gradient(180deg, rgba(0, 229, 255, 0.32) 0%, rgba(0, 229, 255, 0.16) 100%);
-  box-shadow: 0 0 32px rgba(0, 229, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--cyan) 32%, transparent) 0%,
+    color-mix(in srgb, var(--cyan) 16%, transparent) 100%);
+  box-shadow: 0 0 32px color-mix(in srgb, var(--cyan) 40%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transform: translateY(-1px);
   color: #ffffff !important;
 }
