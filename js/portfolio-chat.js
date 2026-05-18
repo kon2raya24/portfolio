@@ -627,9 +627,20 @@
     return hits / inT.length;
   }
 
+  // Quick greeting bypass — "hi" / "hello" / etc. shouldn't go through the
+  // matcher (where "hi" is a substring of "hiring" and would false-match).
+  var GREETINGS = ['hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'hi there', 'hey there', 'hello there', 'hiya', 'greetings'];
+  var GREETING_REPLY = {
+    q: '(greeting)',
+    a: "Hey 👋 ask me anything about Lemmuel's portfolio — <strong>stack</strong>, <strong>projects</strong>, <strong>availability</strong>, <strong>AI work</strong>, <strong>rates</strong>, contact. Try one of the chips above ↑ or type your own question."
+  };
+
   function findMatch(userInput) {
     var normIn = normalize(userInput);
     if (!normIn) return null;
+
+    // Greetings short-circuit
+    if (GREETINGS.indexOf(normIn) !== -1) return GREETING_REPLY;
 
     var best = { score: 0, entry: null };
     for (var i = 0; i < FAQ.length; i++) {
@@ -640,14 +651,32 @@
         var c = candidates[j];
         var normC = normalize(c);
         var s = 0;
-        // Substring hit is a strong signal
-        if (normC.indexOf(normIn) !== -1 || normIn.indexOf(normC) !== -1) {
-          s = Math.max(s, 0.85);
+
+        // 1) Substring hit — strongest signal, but only when input is long
+        // enough that the substring is meaningful. "hi" should not match
+        // "hiring" via substring; "vue" should match "vue.js".
+        if (normIn.length >= 3 &&
+            (normC.indexOf(normIn) !== -1 || normIn.indexOf(normC) !== -1)) {
+          s = Math.max(s, 0.90);
         }
-        // Token overlap (input tokens found in candidate)
-        s = Math.max(s, tokenOverlap(userInput, c) * 0.90);
-        // Edit-distance similarity (penalizes typos lightly)
-        s = Math.max(s, similarity(userInput, c) * 0.95);
+
+        // 2) Token overlap — only credit when majority (>=66%) of the user's
+        // input tokens are present in the candidate. Curbs the common-word
+        // false positive ("Full name" matching "full-time" via shared "full").
+        var overlap = tokenOverlap(userInput, c);
+        if (overlap >= 0.66) {
+          // Perfect overlap is gold; partial-but-majority gets a discount.
+          s = Math.max(s, overlap === 1 ? 0.90 : 0.80);
+        }
+
+        // 3) Edit-distance similarity — only counts at very high values
+        // (typo tolerance for near-exact phrasing). Below 0.78 it produces
+        // too many cross-question false positives.
+        var lev = similarity(userInput, c);
+        if (lev >= 0.78) {
+          s = Math.max(s, lev * 0.85);
+        }
+
         if (s > entryScore) entryScore = s;
       }
       if (entryScore > best.score) {
@@ -655,8 +684,8 @@
         best.entry = e;
       }
     }
-    // Threshold tuned for the seed FAQ set; raise if false-positives appear.
-    return best.score >= 0.42 ? best.entry : null;
+    // Threshold raised 0.42 → 0.55 to suppress cross-question false matches.
+    return best.score >= 0.55 ? best.entry : null;
   }
 
   // ---------------------------------------------------------------------
