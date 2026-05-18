@@ -10,8 +10,63 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Thu, 14 May 2026 23:59:00 +0800</lastBuildDate>
+  <lastBuildDate>Mon, 18 May 2026 23:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v5.0 — Audit-driven major: 5 themes, jQuery removed, mobile nav fixed, full a11y sweep</title>
+    <link>https://kon2raya.netlify.app/</link>
+    <guid isPermaLink="false">portfolio-v5.0-2026-05-18</guid>
+    <pubDate>Mon, 18 May 2026 23:00:00 +0800</pubDate>
+    <category>major</category>
+    <description><![CDATA[
+      Single biggest day of shipping since the portfolio's first cut. Audit-driven
+      pass that found and fixed real bugs (not polish) end-to-end.
+
+      Theme system: replaced the binary dark/light toggle with a popover picker
+      exposing both mode (dark/light) and palette (cyber/matrix/sunset/xeno/crt).
+      Xeno is a full alien-transmission skin — void background, drifting starfield,
+      sweeping red scan beam, scope-reticle hero corners, diamond pane glyphs,
+      scope-reticle cursor, angular clip-path buttons. Crt is retro phosphor
+      green-on-black with heavy scanlines, corner vignette, sharp corners,
+      chromatic-aberration headings, faint screen flicker. Hover-preview tooltips
+      on each palette dot. Alt+T cycles. Matrix-rain canvas uses alien glyphs in
+      xeno mode. Split localStorage (mode + palette) with one-time migration.
+
+      Conversion: hero "Book a 15-min call" CTA above the fold (cal.com); same
+      CTA appended to every case-study close-out. Removed self-written praise
+      section that read as fake testimonials. Reordered work-grid (6 LIVE first,
+      then PROTOTYPE, then 2 ARCHIVE — was leading with 2018-era design archive).
+      Reframed "Services" pane → "What I Build" with capability framing. Scaffolded
+      cs-outcomes--top BEFORE/AFTER block on all 8 case studies (hidden behind
+      data-status="draft" pending review). FAQ badge widened from recruiter-only
+      to engagement (both audiences).
+
+      Critical regressions fixed: mobile hamburger nav added (phones literally
+      couldn't navigate before); <noscript> fallback so JS-disabled visitors
+      don't see a perpetual loader; broken OG share previews fixed across 4
+      pages (generated missing og-cover.png).
+
+      A11y sweep: main + contentinfo landmarks, hero h1→h2 hierarchy fix,
+      comprehensive :focus-visible across 14 selectors, dialog focus management
+      on command palette + dev terminal + keyboard-shortcuts overlay, theme
+      picker Escape-from-menu + focus return, count-up respects
+      prefers-reduced-motion, CTA-track ARIA role tab→radio (no tabpanels meant
+      tabs were misleading).
+
+      Code hygiene: removed jQuery + Stellar + Waypoints + Bootstrap-JS + Easing
+      (~250KB / 5 fewer requests), full vanilla rewrite of main.js with
+      IntersectionObserver / requestAnimationFrame / matchMedia. Skill % bars
+      replaced with PRIMARY/STRONG/WORKING tier chips. ~25 widgets converted
+      to color-mix(in srgb, var(--cyan)...) so they glow correctly in every
+      palette (hero CTA, HUD, siderail, ctx-menu, cmdk, kbdhelp, live-stats,
+      commit-graph, tool-badge, scroll-progress, work-filter, case-filter,
+      viewport-hud, stat--linked, cs-btn, cs-share, etc.). SEO: canonical URLs
+      on uses + changelog; sitemap refreshed with real git-log lastmod per file.
+      Resume sync: projects[] URLs switched from auth-gated portals to public
+      case studies. LinkedIn About now leads with cal.com instead of email.
+    ]]></description>
+  </item>
 
   <item>
     <title>v4.9 — Portfolio polish: SEO + UX + dual-audience reframe</title>
