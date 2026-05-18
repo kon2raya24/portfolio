@@ -1774,10 +1774,10 @@ try {
         print('see <a href="resume.pdf" target="_blank">resume.pdf</a> for the full document.', 'dim');
       },
       skills: function () {
-        print('<span class="ok">frontend</span>  · vue.js · nuxt.js · vuetify · html5 · css3 · javascript · bootstrap');
+        print('<span class="ok">frontend</span>  · vue.js · nuxt.js · vuetify · html5 · css3 · javascript · typescript · bootstrap');
         print('<span class="ok">backend </span>  · laravel · php · mysql · node.js · rest · silverstripe · statamic');
         print('<span class="ok">mobile  </span>  · flutter · dart · firebase');
-        print('<span class="ok">ai/auto </span>  · claude ai · openai · n8n · zapier · make.com');
+        print('<span class="ok">ai/auto </span>  · claude · gemini · openai · openrouter · qwen · multi-llm orchestration · autonomous agents · n8n · zapier');
       },
       stack: function () {
         print('editor:   vs code + claude code');
