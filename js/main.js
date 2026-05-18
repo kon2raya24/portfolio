@@ -103,48 +103,18 @@
 	
 	};
 
-	var pieChart = function() {
-		$('.chart').easyPieChart({
-			scaleColor: false,
-			lineWidth: 5,
-			lineCap: 'round',
-			barColor: function(percent) {
-				return percent >= 90 ? '#00e5ff' : (percent >= 80 ? '#FF9000' : '#0ea5b8');
-			},
-			trackColor:	"rgba(0, 229, 255, 0.08)",
-			size: 160,
-			animate: 1200
-		});
-	};
-
-	var skillsWayPoint = function() {
-		if ($('#fh5co-skills').length > 0 ) {
-			$('#fh5co-skills').waypoint( function( direction ) {
-										
-				if( direction === 'down' && !$(this.element).hasClass('animated') ) {
-					setTimeout( pieChart , 400);					
-					$(this.element).addClass('animated');
-				}
-			} , { offset: '90%' } );
-		}
-
-	};
-
-
 	// Loading page
 	var loaderPage = function() {
 		$(".fh5co-loader").fadeOut("slow");
 	};
 
-	
+
 	$(function(){
 		contentWayPoint();
 		goToTop();
 		loaderPage();
 		fullHeight();
 		parallax();
-		// pieChart();
-		skillsWayPoint();
 	});
 
 

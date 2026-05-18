@@ -2898,8 +2898,57 @@ body.theme-sunset {
   font-size: 13px;
   color: rgba(230, 243, 255, 0.85);
   border-bottom: 1px dashed rgba(0, 229, 255, 0.08);
+  position: relative;
 }
 .case-studies__list li:last-child { border-bottom: 0; }
+
+/* Hover-preview thumbnail: desktop only — pops the OG card next to the row.
+   Keeps the text-art ls -la look intact when idle. */
+.case-preview {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: 280px;
+  height: auto;
+  aspect-ratio: 320 / 168;
+  display: block;
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  box-shadow: 0 12px 36px rgba(0, 229, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: #0a1024;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96) translateY(4px);
+  transform-origin: bottom right;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 5;
+}
+.case-studies__list li:hover > .case-preview,
+.case-studies__list li:focus-within > .case-preview {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+/* Top two rows: pop BELOW so the preview isn't clipped by the panel chrome */
+.case-studies__list li:nth-child(1) > .case-preview,
+.case-studies__list li:nth-child(2) > .case-preview {
+  bottom: auto;
+  top: calc(100% + 8px);
+  transform-origin: top right;
+  transform: scale(0.96) translateY(-4px);
+}
+.case-studies__list li:nth-child(1):hover > .case-preview,
+.case-studies__list li:nth-child(1):focus-within > .case-preview,
+.case-studies__list li:nth-child(2):hover > .case-preview,
+.case-studies__list li:nth-child(2):focus-within > .case-preview {
+  transform: scale(1) translateY(0);
+}
+@media (hover: none), (max-width: 768px) {
+  .case-preview { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-preview { transition: none; }
+}
 .case-tree {
   color: var(--cyan-dim);
   letter-spacing: -1px;
