@@ -1588,6 +1588,336 @@ body.konami-on {
   :root.theme-xeno .hero-status .status-badge { animation: none; }
 }
 
+/* =========================================================================
+   XENO SKIN — radical visual departure from cyber theme.
+   Same content, different planet: deep-void background, hostile alien chrome,
+   sweeping scanner, scope-reticle hero, diamond glyphs, angular clip-paths.
+   Activated by :root.theme-xeno only — cyber/matrix/sunset themes are untouched.
+   ========================================================================= */
+
+/* -- Void background + nebula wash -- */
+:root.theme-xeno {
+  background: #02000a;
+}
+:root.theme-xeno body {
+  background:
+    radial-gradient(ellipse 80% 50% at 18% 12%, rgba(192, 80, 255, 0.10), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 82% 30%, rgba(255, 24, 64, 0.09), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 85%, rgba(0, 255, 133, 0.06), transparent 60%),
+    radial-gradient(circle at 50% 50%, #050108 0%, #02000a 70%) !important;
+}
+
+/* -- Starfield: fixed-position pseudo-element with many tiny box-shadow points -- */
+:root.theme-xeno body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.55) 1px, transparent 1px);
+  background-size: 220px 220px;
+  background-position: 0 0;
+  opacity: 0.35;
+  /* Layer a second starfield at different scale + offset for depth */
+}
+:root.theme-xeno body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, rgba(0, 255, 133, 0.5) 1px, transparent 1px);
+  background-size: 470px 470px;
+  background-position: 80px 110px;
+  opacity: 0.25;
+  animation: xeno-drift 90s linear infinite;
+}
+@keyframes xeno-drift {
+  to { background-position: 880px 990px; }
+}
+
+/* -- Global sweeping scan beam (sweeps top → bottom every ~14s) -- */
+:root.theme-xeno #page {
+  position: relative;
+  z-index: 1;
+}
+:root.theme-xeno #page::before {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -120px;
+  height: 120px;
+  z-index: 9998;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(255, 24, 64, 0.06) 40%,
+    rgba(255, 24, 64, 0.14) 50%,
+    rgba(255, 24, 64, 0.06) 60%,
+    transparent 100%);
+  box-shadow: 0 0 32px rgba(255, 24, 64, 0.35);
+  animation: xeno-scan 14s linear infinite;
+}
+@keyframes xeno-scan {
+  0%   { transform: translateY(0); opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+/* -- Hero override: suppress the cover photo, lay down a deep-space + reticle -- */
+:root.theme-xeno #fh5co-header {
+  background-image: none !important;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 40%, rgba(255, 24, 64, 0.10), transparent 60%),
+    radial-gradient(ellipse 80% 100% at 50% 100%, rgba(192, 80, 255, 0.12), transparent 60%),
+    linear-gradient(180deg, #05000c 0%, #07000a 60%, #02000a 100%) !important;
+}
+/* Replace the cyber tech-grid with a red alien lattice */
+:root.theme-xeno .tech-grid {
+  background-image:
+    linear-gradient(rgba(255, 24, 64, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 24, 64, 0.10) 1px, transparent 1px) !important;
+  background-size: 64px 64px !important;
+  opacity: 0.7;
+}
+/* Replace the gentle cyber scanline with an aggressive red horizon line */
+:root.theme-xeno .scanline {
+  background: repeating-linear-gradient(0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 24, 64, 0.045) 2px,
+    rgba(255, 24, 64, 0.045) 3px) !important;
+}
+/* Scope-reticle corner brackets on the hero (4 corners) */
+:root.theme-xeno #fh5co-header::before,
+:root.theme-xeno #fh5co-header::after {
+  content: '';
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border: 2px solid rgba(255, 24, 64, 0.55);
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0 0 6px rgba(255, 24, 64, 0.5));
+}
+:root.theme-xeno #fh5co-header::before {
+  top: 80px;
+  left: 28px;
+  border-right: 0;
+  border-bottom: 0;
+}
+:root.theme-xeno #fh5co-header::after {
+  bottom: 28px;
+  right: 28px;
+  border-left: 0;
+  border-top: 0;
+}
+/* Pair them with two more via the .overlay element (also already present in markup) */
+:root.theme-xeno #fh5co-header .overlay::before,
+:root.theme-xeno #fh5co-header .overlay::after {
+  content: '';
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border: 2px solid rgba(255, 24, 64, 0.55);
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0 0 6px rgba(255, 24, 64, 0.5));
+}
+:root.theme-xeno #fh5co-header .overlay::before {
+  top: 80px;
+  right: 28px;
+  border-left: 0;
+  border-bottom: 0;
+}
+:root.theme-xeno #fh5co-header .overlay::after {
+  bottom: 28px;
+  left: 28px;
+  border-right: 0;
+  border-top: 0;
+}
+/* Hero h1 — glitch-style red+green offset shadow for an "intercepted transmission" feel */
+:root.theme-xeno #fh5co-header h1 span {
+  text-shadow:
+    -1px 0 rgba(255, 24, 64, 0.6),
+    2px 0 rgba(0, 255, 133, 0.45),
+    0 0 18px rgba(255, 24, 64, 0.4) !important;
+  letter-spacing: 4px !important;
+}
+
+/* -- Terminal-pane "mac dots" → diamond alien glyphs in red gradient.
+      Targets every pane chrome that uses the .*__dots > i pattern. -- */
+:root.theme-xeno .case-studies__dots i,
+:root.theme-xeno .cta-card__dots i,
+:root.theme-xeno .px-card__dots i {
+  border-radius: 0 !important;
+  width: 10px !important;
+  height: 10px !important;
+  transform: rotate(45deg);
+  box-shadow: 0 0 6px currentColor;
+}
+:root.theme-xeno .case-studies__dots i:nth-child(1),
+:root.theme-xeno .cta-card__dots i:nth-child(1),
+:root.theme-xeno .px-card__dots i:nth-child(1)   { background: #ff1840 !important; color: #ff1840; }
+:root.theme-xeno .case-studies__dots i:nth-child(2),
+:root.theme-xeno .cta-card__dots i:nth-child(2),
+:root.theme-xeno .px-card__dots i:nth-child(2)   { background: #c050ff !important; color: #c050ff; }
+:root.theme-xeno .case-studies__dots i:nth-child(3),
+:root.theme-xeno .cta-card__dots i:nth-child(3),
+:root.theme-xeno .px-card__dots i:nth-child(3)   { background: #00ff85 !important; color: #00ff85; }
+
+/* Pane chrome — red bottom-glow + hostile-tech border-top */
+:root.theme-xeno .case-studies__chrome,
+:root.theme-xeno .cta-card__chrome,
+:root.theme-xeno .px-card__chrome {
+  border-bottom: 1px solid rgba(255, 24, 64, 0.35) !important;
+  background: linear-gradient(180deg, #16000a 0%, #0a0008 100%) !important;
+  box-shadow: inset 0 -1px 0 rgba(255, 24, 64, 0.15);
+}
+
+/* -- Section panels: hostile-tech border + red corner cut -- */
+:root.theme-xeno .case-studies,
+:root.theme-xeno .cta-card,
+:root.theme-xeno .px-card,
+:root.theme-xeno .proj-card,
+:root.theme-xeno .skill-card,
+:root.theme-xeno .exp-card,
+:root.theme-xeno .stack-group {
+  border: 1px solid rgba(255, 24, 64, 0.3) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 24, 64, 0.05) inset !important;
+}
+:root.theme-xeno .proj-card:hover,
+:root.theme-xeno .skill-card:hover,
+:root.theme-xeno .stack-group:hover {
+  border-color: rgba(255, 24, 64, 0.7) !important;
+  box-shadow: 0 14px 40px rgba(255, 24, 64, 0.25), 0 0 0 1px rgba(255, 24, 64, 0.35) inset !important;
+}
+
+/* -- Angular clip-path on every primary CTA — alien-tech chevron cut -- */
+:root.theme-xeno .hero-cta__primary,
+:root.theme-xeno .cs-btn--primary {
+  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%);
+  border-radius: 0 !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+}
+:root.theme-xeno .btn.btn-ghost,
+:root.theme-xeno .cs-btn--ghost {
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  border-radius: 0 !important;
+  letter-spacing: 1.6px !important;
+}
+
+/* -- All exp-chips get a hostile-tech corner cut (alien glyph aesthetic) -- */
+:root.theme-xeno .exp-chip,
+:root.theme-xeno .tech-chip {
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  border-radius: 0 !important;
+  border-color: rgba(255, 24, 64, 0.4) !important;
+  background: rgba(255, 24, 64, 0.06) !important;
+  color: #ffb0bf !important;
+}
+
+/* -- Hero stat block: red glow on numbers, hostile-tech border on the frame -- */
+:root.theme-xeno .hero-stats {
+  border-color: rgba(255, 24, 64, 0.5) !important;
+  box-shadow: 0 0 28px rgba(255, 24, 64, 0.18), inset 0 0 18px rgba(255, 24, 64, 0.06) !important;
+}
+:root.theme-xeno .hero-stats .stat strong {
+  color: #ff1840 !important;
+  text-shadow: 0 0 14px rgba(255, 24, 64, 0.55) !important;
+}
+
+/* -- Terminal-tag (the "> ./init_developer.sh_") gets a "TRANSMISSION" feel -- */
+:root.theme-xeno .terminal-tag {
+  background: rgba(255, 24, 64, 0.08) !important;
+  border-color: rgba(255, 24, 64, 0.5) !important;
+  color: #ff8094 !important;
+  text-shadow: 0 0 6px rgba(255, 24, 64, 0.5);
+}
+:root.theme-xeno .terminal-tag .cursor-blink { color: #ff1840 !important; }
+
+/* -- Nav: hostile-red hover + slight glow on Hire Me -- */
+:root.theme-xeno .fh5co-nav-links li a:hover { color: #ff8094 !important; }
+:root.theme-xeno .hire-btn {
+  background: linear-gradient(135deg, #ff1840, #c050ff) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 24, 64, 0.7) !important;
+  box-shadow: 0 0 18px rgba(255, 24, 64, 0.5);
+  text-shadow: 0 0 6px rgba(255, 24, 64, 0.5);
+}
+
+/* -- Hyperframe (decorative corners on profile thumb + stats) — red treatment -- */
+:root.theme-xeno .hyperframe__corner {
+  border-color: rgba(255, 24, 64, 0.7) !important;
+  filter: drop-shadow(0 0 4px rgba(255, 24, 64, 0.5));
+}
+:root.theme-xeno .hyperframe__halo {
+  background: radial-gradient(circle, rgba(255, 24, 64, 0.25), transparent 65%) !important;
+  animation: xeno-halo-pulse 3.6s ease-in-out infinite;
+}
+@keyframes xeno-halo-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%      { opacity: 0.9; transform: scale(1.06); }
+}
+
+/* -- Section heading h2: red sci-fi treatment -- */
+:root.theme-xeno .fh5co-heading h2,
+:root.theme-xeno section h2 {
+  color: #fff !important;
+  text-shadow:
+    -1px 0 rgba(255, 24, 64, 0.6),
+    2px 0 rgba(0, 255, 133, 0.35),
+    0 0 18px rgba(255, 24, 64, 0.4) !important;
+  letter-spacing: 5px !important;
+}
+
+/* -- Case-study tree (the ls -la list) — alien transmission feel -- */
+:root.theme-xeno .case-name--link { color: #ff8094 !important; }
+:root.theme-xeno .case-status--live {
+  background: rgba(0, 255, 133, 0.08) !important;
+  border-color: rgba(0, 255, 133, 0.5) !important;
+  color: #00ff85 !important;
+  text-shadow: 0 0 6px rgba(0, 255, 133, 0.5);
+}
+
+/* -- HUD widget (right-side panel) — red on void -- */
+:root.theme-xeno .hud {
+  border-color: rgba(255, 24, 64, 0.3) !important;
+  background: rgba(8, 0, 12, 0.85) !important;
+  box-shadow: 0 0 32px rgba(255, 24, 64, 0.15), inset 0 0 18px rgba(255, 24, 64, 0.04) !important;
+}
+:root.theme-xeno .hud__val { color: #ff8094 !important; }
+:root.theme-xeno .hud__bar i { background: linear-gradient(90deg, #ff1840, #c050ff) !important; }
+
+/* -- Siderail (right-side dot-nav) — red dot, red glow on hover -- */
+:root.theme-xeno .siderail__dot { background: rgba(255, 24, 64, 0.4) !important; }
+:root.theme-xeno .siderail__item.is-active .siderail__dot,
+:root.theme-xeno .siderail__item:hover .siderail__dot {
+  background: #ff1840 !important;
+  box-shadow: 0 0 10px rgba(255, 24, 64, 0.7);
+}
+
+/* -- Reduced-motion respects xeno animations -- */
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-xeno body::after,
+  :root.theme-xeno #page::before,
+  :root.theme-xeno .hyperframe__halo { animation: none !important; }
+}
+
+/* -- Mobile/touch — keep the heavy effects from crushing perf -- */
+@media (max-width: 768px) {
+  :root.theme-xeno body::before { background-size: 160px 160px; opacity: 0.25; }
+  :root.theme-xeno body::after { display: none; }
+  :root.theme-xeno #page::before { display: none; }
+  :root.theme-xeno #fh5co-header::before,
+  :root.theme-xeno #fh5co-header::after,
+  :root.theme-xeno #fh5co-header .overlay::before,
+  :root.theme-xeno #fh5co-header .overlay::after { width: 32px; height: 32px; }
+}
+
 /* ---------- Nav theme picker (popover) ---------- */
 .theme-picker { position: relative; display: inline-block; }
 .theme-picker__trigger {
