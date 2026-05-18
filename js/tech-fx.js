@@ -231,6 +231,41 @@ try {
     requestAnimationFrame(draw);
   })();
 
+  /* ---------- Hero terminal-tag typewriter — `> ./init_developer.sh_` ----------
+     Variable per-char delay for a natural feel. Locks the element's width
+     beforehand so the centered hero doesn't jitter as text grows. Skipped
+     under prefers-reduced-motion (text appears immediately as before). */
+  (function heroTyping() {
+    if (prefersReduced) return;
+    var el = document.querySelector('.terminal-tag');
+    if (!el) return;
+    var textNode = el.firstChild;
+    if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return;
+    var fullText = textNode.textContent;
+    if (!fullText || fullText.length < 2) return;
+
+    // Reserve the rendered width so the centered terminal tag doesn't shift
+    // as characters type in (the box stays put, text fills it left-to-right).
+    var rect = el.getBoundingClientRect();
+    if (rect.width > 0) {
+      el.style.minWidth = Math.ceil(rect.width) + 'px';
+      el.style.textAlign = 'left';
+    }
+
+    textNode.textContent = '';
+    var i = 0;
+    function step() {
+      if (i >= fullText.length) return;
+      textNode.textContent += fullText.charAt(i);
+      i++;
+      var ch = fullText.charAt(i - 1);
+      // Slower on punctuation + space, faster on letters; tiny random jitter
+      var base = (ch === '.' || ch === '/' || ch === ' ') ? 75 : 32;
+      setTimeout(step, base + Math.random() * 20);
+    }
+    setTimeout(step, 320);
+  })();
+
   /* ---------- Particles canvas (services bg) ---------- */
   (function particles() {
     if (prefersReduced) return;
