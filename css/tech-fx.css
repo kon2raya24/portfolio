@@ -1456,7 +1456,9 @@ body.konami-on {
   padding: 6px;
   font-family: 'JetBrains Mono', monospace;
   color: #e6f3ff;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 229, 255, 0.2);
+  /* Glow uses the per-palette --glow-cyan token so xeno glows red, crt
+     glows phosphor green, etc. The dark drop-shadow is universal. */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), var(--glow-cyan);
   display: none;
   animation: ctx-in 0.14s ease;
 }
@@ -1490,7 +1492,9 @@ body.konami-on {
   transition: 0.12s;
 }
 .ctx-menu__item:hover {
-  background: linear-gradient(90deg, rgba(0, 229, 255, 0.14), rgba(0, 229, 255, 0.04));
+  /* color-mix derives the hover tint from the active palette's --cyan,
+     so xeno hovers red, crt hovers green, matrix hovers bright-green, etc. */
+  background: color-mix(in srgb, var(--cyan) 14%, transparent);
   color: #fff;
 }
 .ctx-menu__icon {
@@ -6078,20 +6082,36 @@ body.konami-on {
 /* ============================================================
    FOCUS-VISIBLE rings (a11y) — applies in both themes
    ============================================================ */
-.theme-toggle:focus-visible,
+/* Comprehensive focus-visible — restores keyboard focus indication that
+   style.css's legacy `a:focus { outline: none }` (and similar rules) wipes
+   out. Lists every interactive element on the site so keyboard nav stays
+   visible across every theme. */
+.theme-picker__trigger:focus-visible,
+.theme-picker__mode:focus-visible,
+.theme-picker__dot:focus-visible,
+.theme-pick__btn:focus-visible,
+.fh5co-nav-toggle:focus-visible,
+.fh5co-nav-links li a:focus-visible,
+.fh5co-nav-brand:focus-visible,
 .cta-track__tab:focus-visible,
 [data-cta-track]:focus-visible,
 .work-filter:focus-visible,
+.case-filter:focus-visible,
 .case-status:focus-visible,
 .case-name--link:focus-visible,
+.proj-card__link:focus-visible,
 .cs-btn:focus-visible,
 .cta-btn:focus-visible,
-.cta-form__submit:focus-visible {
+.cta-form__submit:focus-visible,
+.hero-cta__primary:focus-visible,
+.hero-cta__secondary:focus-visible,
+.btn-ghost:focus-visible,
+a.btn:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 3px;
   border-radius: 4px;
 }
-:root[data-theme="light"] .theme-toggle:focus-visible,
+:root[data-theme="light"] .theme-picker__trigger:focus-visible,
 :root[data-theme="light"] .cta-track__tab:focus-visible,
 :root[data-theme="light"] .work-filter:focus-visible,
 :root[data-theme="light"] .cta-btn:focus-visible,
