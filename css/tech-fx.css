@@ -4940,7 +4940,7 @@ body.konami-on {
 }
 .footer-meta a:hover {
   border-bottom-color: var(--cyan);
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent);
 }
 .footer-meta__sep {
   color: rgba(255, 255, 255, 0.2);
@@ -4972,7 +4972,8 @@ body.konami-on {
   max-width: 720px;
   text-align: left;
   font-family: 'JetBrains Mono', monospace;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 229, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35),
+              0 0 0 1px color-mix(in srgb, var(--cyan) 8%, transparent);
   overflow: hidden;
 }
 .git-log__chrome {
