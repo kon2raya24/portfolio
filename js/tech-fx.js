@@ -1107,7 +1107,6 @@ try {
       { id: 'fh5co-skills',   label: 'skills' },
       { id: 'fh5co-work',     label: 'projects' },
       { id: 'fh5co-blog',     label: 'case_studies' },
-      { id: 'fh5co-praise',   label: 'impact' },
       { id: 'fh5co-started',  label: 'contact' }
     ];
     var nav = document.createElement('nav');
@@ -1143,43 +1142,6 @@ try {
     }
     window.addEventListener('scroll', update, { passive: true });
     update();
-  })();
-
-  /* ---------- Skill bars: animate fill + count when in view ---------- */
-  (function skillBars() {
-    var cards = document.querySelectorAll('.skill-card');
-    if (!cards.length) return;
-    function animate(card) {
-      if (card._ran) return;
-      card._ran = true;
-      card.querySelectorAll('.skill-bar i').forEach(function (bar) {
-        var lvl = parseInt(bar.getAttribute('data-lvl'), 10) || 0;
-        requestAnimationFrame(function () {
-          bar.style.inset = '0 ' + (100 - lvl) + '% 0 0';
-        });
-      });
-      card.querySelectorAll('.skill-val').forEach(function (v) {
-        var target = parseInt(v.getAttribute('data-target'), 10) || 0;
-        var start = performance.now(), dur = 1100;
-        function step(now) {
-          var p = Math.min(1, (now - start) / dur);
-          var eased = 1 - Math.pow(1 - p, 3);
-          v.textContent = Math.round(target * eased);
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      });
-    }
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { animate(en.target); io.unobserve(en.target); }
-        });
-      }, { threshold: 0.25 });
-      cards.forEach(function (c) { io.observe(c); });
-    } else {
-      cards.forEach(animate);
-    }
   })();
 
   /* ---------- Count-up animation for hero stats ---------- */

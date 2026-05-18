@@ -159,10 +159,6 @@ Update the **last entry above the new one** to use `├─` if it was previously
 
 Find the `data-count="N"` for `Case Studies` in `index.html` (around line 175). Bump `N` to the new total.
 
-### "Shipped impact" praise card (optional)
-
-If the new study is genuinely distinctive (new domain, flagship work, AI/agent angle), consider swapping it into the 3-card praise pane (around line 1568–1655). Keep the pane at 3 cards — swap, don't append. Current rotation: Pamanaland, WMS, AI Engineer.
-
 ---
 
 ## 5. `sitemap.xml`
@@ -266,5 +262,4 @@ Don't push automatically. Ask the user — same rule as `update-resume`. The cas
 - **Don't link the client's live URL** even if it's already public. The case study lives in NDA-framed neutral.
 - **Don't skip the `MOCK` tag** on screenshot captions. Recruiters who think a render is a real screenshot are a credibility risk.
 - **Don't push without the user.** This skill is for content; content gets human review.
-- **Don't add a 4th praise card** on the index — keep the grid at 3.
 - **Don't write generic ChatGPT-style filler in the body.** The case study earns its slot by having concrete numbers and specific patterns; remove anything that could be said about any project.
