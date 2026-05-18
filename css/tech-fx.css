@@ -193,10 +193,10 @@ html, body {
 
 /* Tool badges: dark glass instead of white */
 .tool-badge {
-  background: rgba(0, 229, 255, 0.06) !important;
+  background: color-mix(in srgb, var(--cyan) 6%, transparent) !important;
   border: 1px solid var(--line-strong) !important;
   color: var(--cyan) !important;
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.25);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 25%, transparent);
 }
 .tool-badge:hover {
   background: var(--cyan) !important;
@@ -732,8 +732,8 @@ strong { color: var(--cyan); }
   border: 1px solid rgba(0, 229, 255, 0.1);
   transition: 0.3s;
 }
-.commit-cell[data-level="1"] { background: rgba(0, 229, 255, 0.25); }
-.commit-cell[data-level="2"] { background: rgba(0, 229, 255, 0.5); }
+.commit-cell[data-level="1"] { background: color-mix(in srgb, var(--cyan) 25%, transparent); }
+.commit-cell[data-level="2"] { background: color-mix(in srgb, var(--cyan) 50%, transparent); }
 .commit-cell[data-level="3"] { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
 .commit-cell[data-level="4"] { background: var(--brand); box-shadow: 0 0 8px var(--brand); }
 .commit-cell:hover { transform: scale(1.6); }
