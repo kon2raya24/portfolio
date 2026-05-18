@@ -18,7 +18,7 @@
   text-decoration: none;
   z-index: 100000;
   border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 18px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--cyan) 40%, transparent);
   transition: top 0.18s;
 }
 .skip-link:focus {
