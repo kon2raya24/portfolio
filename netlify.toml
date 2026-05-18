@@ -15,3 +15,18 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "no-store"
+
+# Global security headers — safe defaults flagged by Lighthouse +
+# securityheaders.com. None of these break anything; they just close
+# common attack surfaces.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent MIME-sniffing attacks (browser must respect the declared content-type)
+    X-Content-Type-Options = "nosniff"
+    # Don't leak full URL paths to third-party referrers
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Disable browser features the portfolio doesn't use
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+    # Allow site to be embedded only by itself (clickjacking prevention)
+    X-Frame-Options = "SAMEORIGIN"
