@@ -1533,6 +1533,148 @@ body.konami-on {
   transform: translateY(0);
 }
 
+/* ---------- Mobile nav hamburger toggle + slide-down menu ----------
+   The legacy style.css rule sets .fh5co-nav-links { display: none } at
+   ≤768px with no replacement, leaving mobile visitors stranded. This
+   block adds a hamburger button + a full-width drop-down panel that
+   actually lets people navigate the site on phones. */
+.fh5co-nav-toggle {
+  display: none;                /* Hidden on desktop — only shows ≤768px */
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  cursor: pointer;
+  float: right;
+  margin-top: 14px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  position: relative;
+  z-index: 1101;
+  transition: 0.22s;
+}
+.fh5co-nav-toggle:hover,
+.fh5co-nav-toggle[aria-expanded="true"] {
+  border-color: var(--cyan);
+  background: rgba(0, 229, 255, 0.08);
+}
+.fh5co-nav-toggle__bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--cyan);
+  border-radius: 1px;
+  transition: 0.22s ease;
+  box-shadow: 0 0 4px rgba(0, 229, 255, 0.5);
+}
+/* Open-state — morph 3 bars into an X */
+.fh5co-nav-toggle[aria-expanded="true"] .fh5co-nav-toggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.fh5co-nav-toggle[aria-expanded="true"] .fh5co-nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.fh5co-nav-toggle[aria-expanded="true"] .fh5co-nav-toggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media screen and (max-width: 768px) {
+  .fh5co-nav-toggle { display: flex; }
+  /* Override the legacy display: none from style.css so we can animate
+     the menu open. Start closed (height: 0 + overflow hidden), open by
+     adding .is-open which expands. */
+  #fh5co-nav .fh5co-nav-links {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0 18px;
+    background: linear-gradient(180deg, #0b1226 0%, #070a18 100%);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line-strong);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(0, 229, 255, 0.08);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.28s ease, opacity 0.22s ease, visibility 0.22s, padding 0.28s ease;
+    z-index: 1100;
+    line-height: 1.4;
+  }
+  #fh5co-nav .fh5co-nav-links.is-open {
+    max-height: 600px;
+    padding: 14px 18px 18px;
+    opacity: 1;
+    visibility: visible;
+  }
+  #fh5co-nav .fh5co-nav-links li {
+    display: block;
+    margin: 0;
+    border-bottom: 1px dashed rgba(0, 229, 255, 0.12);
+  }
+  #fh5co-nav .fh5co-nav-links li:last-child { border-bottom: 0; }
+  #fh5co-nav .fh5co-nav-links li a {
+    display: block;
+    padding: 14px 4px;
+    color: rgba(230, 243, 255, 0.85);
+    line-height: 1.2;
+  }
+  #fh5co-nav .fh5co-nav-links li a:hover,
+  #fh5co-nav .fh5co-nav-links li a:focus-visible {
+    color: var(--cyan);
+  }
+  #fh5co-nav .fh5co-nav-links li a.hire-btn {
+    text-align: center;
+    margin: 8px 0 4px;
+    background: linear-gradient(135deg, var(--cyan), var(--brand));
+    color: var(--bg-dark) !important;
+    font-weight: 700;
+  }
+  /* The theme picker lives inside the nav — let its popover anchor
+     fully on-screen rather than overflowing the right edge. */
+  #fh5co-nav .fh5co-nav-extra { padding: 10px 0 4px; }
+  #fh5co-nav .theme-picker__menu {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+/* Light-theme variants for the mobile menu surfaces */
+:root[data-theme="light"] .fh5co-nav-toggle {
+  border-color: rgba(10, 30, 60, 0.25);
+}
+:root[data-theme="light"] .fh5co-nav-toggle__bar {
+  background: #00667a;
+  box-shadow: 0 0 4px rgba(0, 122, 144, 0.4);
+}
+@media screen and (max-width: 768px) {
+  :root[data-theme="light"] #fh5co-nav .fh5co-nav-links {
+    background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%);
+    border-bottom-color: rgba(10, 30, 60, 0.2);
+    box-shadow: 0 18px 30px rgba(10, 30, 60, 0.12);
+  }
+  :root[data-theme="light"] #fh5co-nav .fh5co-nav-links li {
+    border-bottom-color: rgba(10, 30, 60, 0.1);
+  }
+  :root[data-theme="light"] #fh5co-nav .fh5co-nav-links li a {
+    color: rgba(10, 30, 60, 0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fh5co-nav-toggle__bar { transition: none; }
+  #fh5co-nav .fh5co-nav-links { transition: opacity 0.15s, visibility 0.15s; }
+}
+
 /* ---------- Theme switcher (palettes) ---------- */
 .theme-pick {
   display: flex;

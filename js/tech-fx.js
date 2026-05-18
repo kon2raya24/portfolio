@@ -2252,6 +2252,45 @@ try {
     else applyFilter('all');
   })();
 
+  /* ---------- Mobile nav hamburger — toggle the slide-down menu on ≤768px ----------
+     Without this, mobile visitors couldn't navigate at all — style.css hides
+     .fh5co-nav-links on small viewports and there was never a replacement. */
+  (function mobileNavToggle() {
+    var btn = document.querySelector('[data-nav-toggle]');
+    var menu = document.getElementById('fh5co-nav-menu');
+    if (!btn || !menu) return;
+
+    function setOpen(open) {
+      menu.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+    // Close when any nav link is clicked (anchor scrolls land cleanly)
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { setOpen(false); });
+    });
+    // Outside click closes the menu — but ignore clicks inside the theme picker
+    // (its own popover lives in the menu and would otherwise close instantly).
+    document.addEventListener('click', function (e) {
+      if (menu.classList.contains('is-open') &&
+          !menu.contains(e.target) &&
+          !btn.contains(e.target)) {
+        setOpen(false);
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) setOpen(false);
+    });
+    // Reset on resize past the breakpoint so the menu doesn't stay "open" on desktop
+    var mql = window.matchMedia('(max-width: 768px)');
+    function onChange() { if (!mql.matches) setOpen(false); }
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if (mql.addListener) mql.addListener(onChange); // older Safari
+  })();
+
   /* ---------- Theme picker (popover in nav) — uses the shared helpers above ---------- */
   (function navThemePicker() {
     var root = document.querySelector('[data-theme-picker]');
