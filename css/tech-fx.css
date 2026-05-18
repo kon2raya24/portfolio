@@ -8440,6 +8440,19 @@ body.pchat-active .viewport-hud {
   box-shadow: 0 0 14px color-mix(in srgb, var(--cyan) 40%, transparent);
 }
 
+/* -- Browse-row search highlight -- */
+.pchat__hl {
+  background: color-mix(in srgb, var(--cyan) 30%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+:root[data-theme="light"] .pchat__hl {
+  background: color-mix(in srgb, var(--brand) 28%, transparent);
+  color: #1a1f2e;
+}
+
 /* -- Mobile -- */
 @media (max-width: 640px) {
   .pchat { bottom: 14px; right: 14px; }

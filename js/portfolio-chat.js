@@ -747,6 +747,7 @@
   var isTouch = matchMedia('(hover: none)').matches || window.innerWidth < 1025;
   var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var STORAGE_KEY = 'portfolio.chat.history';
+  var BROWSE_QUERY_KEY = 'portfolio.chat.browseQuery';
 
   function build() {
     if (document.querySelector('.pchat')) return;
@@ -923,8 +924,11 @@
     function filterBrowse(query, emptyEl) {
       var q = normalize(query);
       var anyVisible = false;
-      // Each row matches if q is substring of entry.q or any alias.
-      // Empty query = show all.
+      // Persist the query so opening browse later restores it
+      try {
+        if (q) sessionStorage.setItem(BROWSE_QUERY_KEY, query);
+        else sessionStorage.removeItem(BROWSE_QUERY_KEY);
+      } catch (_) {}
       var sections = browseView.querySelectorAll('.pchat__browse-cat');
       sections.forEach(function (section) {
         var sectionVisible = false;
@@ -932,6 +936,7 @@
           var entryIdx = parseInt(row.getAttribute('data-browse-idx'), 10);
           var entry = FAQ[entryIdx];
           if (!entry) { row.hidden = true; return; }
+          var qText = row.getAttribute('data-browse-q') || '';
           var match = !q;
           if (!match && entry._normCache) {
             for (var i = 0; i < entry._normCache.length; i++) {
@@ -939,11 +944,29 @@
             }
           }
           row.hidden = !match;
+          // Highlight matching substring in the visible row text
+          if (match && q) {
+            row.innerHTML = highlightMatch(qText, query);
+          } else if (match) {
+            row.innerHTML = escapeText(qText);
+          }
           if (match) { sectionVisible = true; anyVisible = true; }
         });
         section.hidden = !sectionVisible;
       });
       if (emptyEl) emptyEl.hidden = anyVisible || !q;
+    }
+    // Wraps every occurrence of `query` (case-insensitive) in the haystack
+    // with a <mark> so the user sees why each row matched.
+    function highlightMatch(haystack, query) {
+      var qNorm = String(query || '').trim();
+      if (!qNorm) return escapeText(haystack);
+      // Build a case-insensitive matcher escaping regex special chars
+      var safe = qNorm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var re = new RegExp('(' + safe + ')', 'gi');
+      // Escape the haystack first, then run regex on the escaped version
+      var escaped = escapeText(haystack);
+      return escaped.replace(re, '<mark class="pchat__hl">$1</mark>');
     }
     function renderCategory(slug, entries) {
       var label = CATEGORY_LABELS[slug] || slug;
@@ -964,9 +987,22 @@
       browseView.hidden = false;
       browseView.scrollTop = 0;
       browseBtn.setAttribute('aria-pressed', 'true');
-      // Auto-focus the filter input so the user can start typing immediately
       var searchEl = browseView.querySelector('[data-browse-search]');
-      if (searchEl) setTimeout(function () { searchEl.focus(); }, 40);
+      var emptyEl = browseView.querySelector('[data-browse-empty]');
+      // Restore the last query (if any) so the filter persists across opens
+      try {
+        var lastQ = sessionStorage.getItem(BROWSE_QUERY_KEY);
+        if (lastQ && searchEl) {
+          searchEl.value = lastQ;
+          filterBrowse(lastQ, emptyEl);
+        }
+      } catch (_) {}
+      // Auto-focus the filter input so the user can start typing immediately
+      if (searchEl) setTimeout(function () {
+        searchEl.focus();
+        // Select existing value so a new query overwrites cleanly
+        if (searchEl.value) searchEl.select();
+      }, 40);
     }
     function closeBrowse() {
       browseView.hidden = true;
