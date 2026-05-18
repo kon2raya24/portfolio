@@ -5115,14 +5115,16 @@ body.konami-on {
 .live-stats__val {
   color: var(--cyan);
   font-weight: 500;
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  /* color-mix derives the glow from the active palette's --cyan, so xeno
+     value text glows red, crt glows green, matrix bright-green, etc. */
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent);
   font-variant-numeric: tabular-nums;
   min-width: 28px;
   transition: color 0.25s;
 }
 .live-stats__val.is-bumped {
   color: var(--brand);
-  text-shadow: 0 0 10px rgba(255, 144, 0, 0.6);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--brand) 60%, transparent);
   animation: bump 0.4s ease;
 }
 @keyframes bump {
