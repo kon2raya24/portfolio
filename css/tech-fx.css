@@ -667,6 +667,8 @@ strong { color: var(--cyan); }
 /* ---------- Tech chip: subtle bracket decorators ---------- */
 .tech-chip {
   position: relative;
+  transition: 0.22s;
+  cursor: default;
 }
 .tech-chip::before {
   content: '<';
@@ -683,12 +685,26 @@ strong { color: var(--cyan); }
   transform: none !important;
   left: auto !important;
   top: auto !important;
+  transition: 0.22s;
 }
 .tech-chip::after {
   content: '/>';
   color: var(--cyan-dim);
   margin-left: 4px;
   opacity: 0.6;
+  transition: 0.22s;
+}
+/* Brighten the JSX-style brackets and lift slightly on hover */
+.tech-chip:hover {
+  transform: translateY(-1px);
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+}
+.tech-chip:hover::before,
+.tech-chip:hover::after {
+  color: var(--cyan);
+  opacity: 1;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
 }
 
 /* ---------- Tool badge: hover lift + glow ---------- */
@@ -786,6 +802,25 @@ body.konami-on {
 .hero-status .status-badge {
   font-size: 12px;
   letter-spacing: 1.2px;
+}
+
+/* ---------- Hero social icons — lift + accent glow on hover ----------
+   The base color: #fff from style.css; tech-fx adds interactivity. */
+#fh5co-header .fh5co-social-icons li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.22s, transform 0.22s, text-shadow 0.22s;
+}
+#fh5co-header .fh5co-social-icons li a:hover {
+  color: var(--cyan) !important;
+  transform: translateY(-3px);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+}
+#fh5co-header .fh5co-social-icons li a:focus-visible {
+  color: var(--cyan) !important;
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
 }
 
 /* ---------- Hero primary CTA — book a call ---------- */
@@ -2879,6 +2914,46 @@ body.konami-on {
   text-transform: uppercase;
   white-space: nowrap;
   line-height: 1.4;
+  transition: 0.2s;
+}
+/* Subtle lift + glow on the surrounding row's hover — non-interactive
+   chips, but reading should feel alive when the cursor crosses a skill. */
+.skill-card__list li:hover .skill-tier {
+  transform: translateX(-2px);
+}
+.skill-card__list li:hover .skill-tier--primary {
+  background: rgba(0, 229, 255, 0.16);
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.35);
+}
+.skill-card__list li:hover .skill-tier--strong {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: rgba(0, 229, 255, 0.4);
+}
+.skill-card__list li:hover .skill-tier--working {
+  color: rgba(230, 243, 255, 0.75);
+  border-color: rgba(230, 243, 255, 0.32);
+}
+.skill-card__list li:hover .skill-tier--brand {
+  background: rgba(255, 144, 0, 0.14);
+  border-color: var(--brand);
+  box-shadow: 0 0 10px rgba(255, 144, 0, 0.35);
+}
+.skill-card__list li:hover .skill-tier--ai {
+  background: rgba(255, 43, 214, 0.12);
+  border-color: var(--magenta);
+  box-shadow: 0 0 10px rgba(255, 43, 214, 0.35);
+}
+/* Subtle bg highlight on the row itself */
+.skill-card__list li {
+  transition: background 0.2s, color 0.2s;
+  margin: 0 -4px;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  border-radius: 3px;
+}
+.skill-card__list li:hover {
+  background: rgba(0, 229, 255, 0.04);
 }
 .skill-tier--primary {
   color: var(--cyan);
