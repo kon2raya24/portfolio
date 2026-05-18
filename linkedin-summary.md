@@ -57,7 +57,8 @@ I work end-to-end — requirements, architecture, implementation, testing, deplo
 — Open to —
 Full-time, contract, or freelance · remote, hybrid, or onsite · Philippines (GMT+8) with strong APAC / EU-morning / US-evening overlap.
 
-Reach me directly: turayalemmuel@gmail.com
+Book a 15-min intro call: https://cal.com/lemmuel-turaya/intro
+Or email: turayalemmuel@gmail.com
 Portfolio: https://kon2raya.netlify.app
 ```
 
