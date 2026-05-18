@@ -1245,6 +1245,13 @@ try {
       node._ran = true;
       var target = parseInt(node.getAttribute('data-count'), 10) || 0;
       var suffix = node.getAttribute('data-suffix') || '';
+      // Respect reduced-motion: skip the animation, set the final value
+      // directly. Motion-sensitive users still see the number, just not
+      // the count-up effect.
+      if (prefersReduced) {
+        node.textContent = target + suffix;
+        return;
+      }
       var dur = 1200, start = performance.now();
       function step(now) {
         var p = Math.min(1, (now - start) / dur);
