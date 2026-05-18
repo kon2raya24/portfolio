@@ -7978,11 +7978,11 @@ body.pchat-active .viewport-hud {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
               0 0 22px color-mix(in srgb, var(--cyan) 32%, transparent);
   transition: transform 0.22s, box-shadow 0.22s;
   padding: 0;
+  overflow: visible;
 }
 .pchat__bubble:hover,
 .pchat__bubble:focus-visible {
@@ -7994,12 +7994,23 @@ body.pchat-active .viewport-hud {
   outline: 2px solid var(--brand);
   outline-offset: 3px;
 }
-.pchat__bubble[aria-expanded="true"] .pchat__bubble-icon { transform: rotate(90deg) scale(0.85); opacity: 0.7; }
+/* Stack chat-icon + close-icon at the bubble center. Default = chat shown,
+   close hidden. When aria-expanded="true" (panel open), they swap. */
 .pchat__bubble-icon {
+  position: absolute;
+  inset: 0;
   display: inline-flex;
-  transition: transform 0.22s, opacity 0.22s;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.22s ease, transform 0.22s ease;
   line-height: 1;
+  pointer-events: none;
 }
+.pchat__bubble-icon--chat  { opacity: 1; transform: scale(1) rotate(0deg); }
+.pchat__bubble-icon--close { opacity: 0; transform: scale(0.7) rotate(-45deg); }
+.pchat__bubble[aria-expanded="true"] .pchat__bubble-icon--chat  { opacity: 0; transform: scale(0.7) rotate(45deg); }
+.pchat__bubble[aria-expanded="true"] .pchat__bubble-icon--close { opacity: 1; transform: scale(1) rotate(0deg); }
+.pchat__bubble-icon svg { display: block; }
 .pchat__bubble-pulse {
   position: absolute;
   inset: -4px;

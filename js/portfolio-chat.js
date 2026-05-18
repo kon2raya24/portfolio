@@ -200,7 +200,371 @@
     { q: "Easter eggs?",
       aliases: ["easter egg", "secret", "hidden", "konami"],
       category: "meta",
-      a: "There's a konami code in here somewhere. ↑↑↓↓←→←→BA. Also right-click for a dev menu, backtick for a terminal. Have fun." }
+      a: "There's a konami code in here somewhere. ↑↑↓↓←→←→BA. Also right-click for a dev menu, backtick for a terminal. Have fun." },
+
+    // -- Background / experience depth -------------------------------
+    { q: "How many years of experience do you have?",
+      aliases: ["how many years", "years of experience", "experience level", "years coding", "how long coding", "tenure"],
+      category: "about",
+      a: "<strong>6+ years</strong> shipping production work — from junior web dev (Switch Connect, Australia · 2019) through full-stack and mobile at current role (AAI Worldwide Logistics · since Nov 2024). Full timeline in the <a href='#fh5co-resume'>resume section ↓</a>" },
+
+    { q: "Where did you study?",
+      aliases: ["education", "university", "college", "school", "degree", "where did you go to school", "alma mater"],
+      category: "about",
+      a: "<strong>B.S. Information Technology</strong> · Trimex Colleges, Philippines · 2015–2019 · GPA 1.50 (Philippine scale, equivalent to ~3.85/4.0)." },
+
+    { q: "Are you self-taught?",
+      aliases: ["self taught", "bootcamp", "formal education", "cs degree"],
+      category: "about",
+      a: "Formal CS-adjacent degree (B.S. IT at Trimex Colleges) plus continuous self-learning. The fundamentals came from school; everything practical came from shipping production work for the last 6+ years." },
+
+    { q: "Are you senior, mid-level, or junior?",
+      aliases: ["senior", "mid level", "midlevel", "junior", "seniority", "level", "title", "role level"],
+      category: "about",
+      a: "<strong>Senior-leaning mid-to-senior</strong> on the IC track. 6+ yrs · 8 published case studies · architectural ownership on multiple shipped systems. Titles have lagged scope (typical PH market). Happy to discuss leveling on a call." },
+
+    { q: "When did you start coding?",
+      aliases: ["how did you get into coding", "start coding", "career start", "first job", "got into programming", "how did you start"],
+      category: "about",
+      a: "First production role: <strong>Junior Web Developer at Switch Connect (Australia, remote)</strong> in 2019. Built ERP modules + integrated Xero / Eversign / Google Maps / ABN Lookup. Programming itself started during the B.S. IT at Trimex (2015–2019)." },
+
+    // -- Specific tech: yes ------------------------------------------
+    { q: "Do you know Nuxt.js?",
+      aliases: ["nuxt", "nuxt3", "nuxt.js", "ssr"],
+      category: "stack",
+      a: "<strong>Yes</strong> — Nuxt 3 is my default when SSR or static-generation matters. Shipped projects use Vue CLI for SPAs and Nuxt for marketing pages." },
+
+    { q: "Do you know SQL / MySQL?",
+      aliases: ["sql", "mysql", "database", "rdbms", "queries", "schema design"],
+      category: "stack",
+      a: "Yes — <strong>MySQL is my daily DB</strong>. Schema design, migrations, query tuning, online DDL (ALGORITHM=INPLACE LOCK=NONE for big-table changes in <a href='case-studies/wms-v2.html'>wms-v2</a>). Comfortable with EXPLAIN, indexing strategy, and <code>GET_LOCK</code> for concurrency (see <a href='case-studies/hris.html'>HRIS</a> memo numbering)." },
+
+    { q: "Do you know REST API design?",
+      aliases: ["rest", "api", "rest api", "endpoint design", "api design"],
+      category: "stack",
+      a: "Yes — REST-first, OpenAPI when shape-sharing with frontend matters. Token-based auth (JWT, Sanctum, OAuth flows). Pagination + versioning + idempotency patterns. Background: 5 production back-ends with substantial REST surfaces." },
+
+    { q: "Do you know Bootstrap?",
+      aliases: ["bootstrap", "bootstrap css", "bootstrap vue"],
+      category: "stack",
+      a: "Yes — Bootstrap 4/5 + Bootstrap Vue 3. Used on most production projects for fast grid + utility classes." },
+
+    { q: "Do you know Vuetify?",
+      aliases: ["vuetify", "vue material", "material design"],
+      category: "stack",
+      a: "Yes — Vuetify 2 + 3. Used on TMS and Trucking Rates module at AAI. Familiar with theming + custom component overrides." },
+
+    { q: "Do you know AG Grid?",
+      aliases: ["ag grid", "ag-grid", "ag grid enterprise", "data grid", "table component"],
+      category: "stack",
+      a: "Yes — AG Grid <strong>Enterprise</strong> on multiple production projects (Pamanaland, HRIS, WMS v2). Comfortable with column defs, row models, server-side pagination, custom cell renderers, master/detail." },
+
+    { q: "Do you know Pinia or Vuex?",
+      aliases: ["pinia", "vuex", "state management", "store"],
+      category: "stack",
+      a: "Both. <strong>Vuex</strong> on older Vue 2 projects (Pamanaland), <strong>Pinia</strong> on Vue 3 (HRIS, WMS v2). Pinia for new work — better TS support + smaller surface." },
+
+    { q: "Do you know Firebase?",
+      aliases: ["firebase", "firestore", "fcm", "google cloud", "auth firebase"],
+      category: "stack",
+      a: "Yes — Auth + Firestore + FCM on Flutter mobile work. Not my deepest area; my mobile backend defaults to a Laravel REST API." },
+
+    { q: "Do you know Docker?",
+      aliases: ["docker", "containers", "containerization"],
+      category: "stack",
+      a: "Yes — Docker for local dev environments. Not deeply ops-focused (no Kubernetes in production yet); happy to grow that surface for an infra-leaning role." },
+
+    { q: "Do you know Git?",
+      aliases: ["git", "github", "version control", "vcs"],
+      category: "stack",
+      a: "Daily — GitHub workflow, feature branches, PR reviews, conventional commits. ~640 combined commits on a single project (JBC). I treat git history as documentation." },
+
+    { q: "Do you know CI/CD?",
+      aliases: ["ci/cd", "ci cd", "continuous integration", "deployment", "github actions", "jenkins", "buddy"],
+      category: "stack",
+      a: "Yes — Jenkins + Buddy dual-CI on <a href='case-studies/hris.html'>HRIS</a>, GitHub Actions for personal projects. PHPUnit + ESLint + PHPStan as deploy gates." },
+
+    { q: "Do you know testing?",
+      aliases: ["testing", "tdd", "unit tests", "phpunit", "playwright", "cypress", "jest", "test driven"],
+      category: "stack",
+      a: "Yes — <strong>PHPUnit</strong> for Laravel back-ends (the <a href='case-studies/ai-engineer.html'>AI engineer</a> uses real PHPUnit as a deploy gate), <strong>Playwright</strong> for Vue 3 e2e (on <a href='case-studies/hris.html'>HRIS</a> and <a href='case-studies/wms-v2.html'>WMS v2</a>). TDD on critical paths, integration tests on the rest." },
+
+    { q: "Do you know Statamic or SilverStripe?",
+      aliases: ["statamic", "silverstripe", "cms"],
+      category: "stack",
+      a: "Yes to both. <strong>SilverStripe</strong> at Lumina Homes (real-estate site). <strong>Statamic</strong> at Uratex (landing pages)." },
+
+    { q: "Do you know WordPress?",
+      aliases: ["wordpress", "wp", "wp theme"],
+      category: "stack",
+      a: "Yes — corporate sites + light theme customization. Not my favorite tool (PHP CMS work tends to be SilverStripe or Statamic for me) but happy to maintain WP sites." },
+
+    { q: "Do you know jsPDF / DomPDF?",
+      aliases: ["pdf generation", "jspdf", "dompdf", "pdf reports"],
+      category: "stack",
+      a: "Yes — jsPDF for client-side PDF (reports), DomPDF for server-side (Laravel templated documents, payslips, SOAs). See <a href='case-studies/hris.html'>HRIS payroll</a> and <a href='case-studies/tms.html'>TMS invoices</a>." },
+
+    { q: "Do you know Figma?",
+      aliases: ["figma", "design tool", "wireframe", "ui design"],
+      category: "stack",
+      a: "Yes — design-to-code workflow daily. Comfortable reading specs, building responsive layouts pixel-accurate, and producing prototypes when needed (Uratex portal prototype)." },
+
+    // -- Specific tech: not daily driver -----------------------------
+    { q: "Do you know Angular?",
+      aliases: ["angular", "angularjs"],
+      category: "stack",
+      a: "<strong>Not a daily driver</strong>. Vue 3 is. Patterns translate (components, services, RxJS-like reactivity); can pick up for the right role." },
+
+    { q: "Do you know Svelte?",
+      aliases: ["svelte", "sveltekit"],
+      category: "stack",
+      a: "Not in production work. Vue 3 is my frontend. Happy to learn for the right role." },
+
+    { q: "Do you know Python?",
+      aliases: ["python", "django", "flask", "fastapi"],
+      category: "stack",
+      a: "Comfortable basics; <strong>not in production work</strong>. My back-end stack is Laravel (PHP). I'd ramp up on Django/FastAPI for the right role." },
+
+    { q: "Do you know Java or C# or Go?",
+      aliases: ["java", "spring", "c#", "csharp", ".net", "dotnet", "go", "golang"],
+      category: "stack",
+      a: "Not in production work. My backend is Laravel/PHP. I read these languages comfortably and could ramp up for the right role." },
+
+    { q: "Do you know Rust?",
+      aliases: ["rust"],
+      category: "stack",
+      a: "Not in production work. PHP/Laravel is my back-end. Open to learning for the right project." },
+
+    { q: "Do you know Node.js?",
+      aliases: ["node", "node.js", "express", "nestjs", "nest.js"],
+      category: "stack",
+      a: "Comfortable — <strong>not as deep as Laravel</strong>. I use Node for tooling (build steps, scripts, CLIs). Most of my back-end production work is Laravel." },
+
+    { q: "Do you know Next.js?",
+      aliases: ["next.js", "nextjs", "vercel"],
+      category: "stack",
+      a: "Not daily — <strong>Nuxt 3</strong> is my SSR framework when I need SSR. Concepts transfer cleanly between the two." },
+
+    { q: "Do you know React Native?",
+      aliases: ["react native", "rn", "expo"],
+      category: "stack",
+      a: "Not in production — <strong>Flutter</strong> is my mobile stack. See <a href='case-studies/wms.html'>WMS Mobile</a>." },
+
+    { q: "Do you know Swift / iOS native?",
+      aliases: ["swift", "ios", "ios native", "swiftui", "xcode"],
+      category: "stack",
+      a: "No native iOS work — Flutter handles iOS for me. Happy to defer to a native iOS specialist when truly native APIs matter." },
+
+    { q: "Do you know Kotlin / Android native?",
+      aliases: ["kotlin", "android native", "android studio"],
+      category: "stack",
+      a: "Android Studio comfortable for Flutter builds + debugging Android-specific issues. No production native Kotlin work — Flutter covers the cross-platform need." },
+
+    { q: "Do you know PostgreSQL?",
+      aliases: ["postgresql", "postgres", "psql"],
+      category: "stack",
+      a: "Comfortable — but my production DB is <strong>MySQL</strong>. Concepts transfer; would ramp up on PG-specific features (JSONB, full-text, partial indexes) for the right role." },
+
+    { q: "Do you know MongoDB or NoSQL?",
+      aliases: ["mongodb", "mongo", "nosql", "redis", "dynamodb"],
+      category: "stack",
+      a: "Limited production exposure — my DB work is mostly MySQL relational. Redis for caching/sessions in some projects. Comfortable picking up document or KV stores where they fit." },
+
+    { q: "Do you know GraphQL?",
+      aliases: ["graphql", "apollo", "relay"],
+      category: "stack",
+      a: "<strong>REST-first</strong> in my production work. Comfortable reading GraphQL; would happily pick it up for a role where it's the API style." },
+
+    { q: "Do you know AWS / GCP / Azure?",
+      aliases: ["aws", "amazon web services", "gcp", "google cloud", "azure", "cloud", "cloud platforms"],
+      category: "stack",
+      a: "<strong>Limited direct ops work</strong> — deploy targets so far have been Netlify (this site) and the customer's own infra. Familiar with the concepts; would ramp on the specific platform for an infra-leaning role." },
+
+    { q: "Do you know Kubernetes?",
+      aliases: ["kubernetes", "k8s", "helm"],
+      category: "stack",
+      a: "No production Kubernetes work — Docker for local dev. Happy to grow into k8s for an ops-adjacent role." },
+
+    // -- AI deep ------------------------------------------------------
+    { q: "Claude or ChatGPT?",
+      aliases: ["claude vs chatgpt", "claude or gpt", "preferred llm", "favorite llm", "best llm"],
+      category: "ai",
+      a: "<strong>Claude is my daily driver</strong> (Claude Code, Claude Max). The autonomous AI engineer wires all five (Claude, Gemini, OpenAI, OpenRouter, Qwen) behind one harness so the operator picks the brain per task — no religious preference, just whichever brain fits the work." },
+
+    { q: "Do you know LangChain?",
+      aliases: ["langchain", "llamaindex", "haystack", "agent framework"],
+      category: "ai",
+      a: "Hand-rolled the agent harness (AiHarnessService) for the production AI Engineer rather than wrapping LangChain. Same patterns (tool use, memory, chains) but built minimal in Laravel for tighter control + audit trail. See <a href='case-studies/ai-engineer.html'>case study</a>." },
+
+    { q: "Do you know prompt engineering?",
+      aliases: ["prompt engineering", "system prompts", "prompts", "prompting"],
+      category: "ai",
+      a: "Yes — production system prompts for the multi-LLM agent + the Karpathy-style LLM wiki design itself is prompt-context engineering (per-folder <code>_INDEX.md</code> shapes what an agent sees in its context window)." },
+
+    { q: "Do you know RAG?",
+      aliases: ["rag", "retrieval augmented", "vector db", "embeddings", "semantic search"],
+      category: "ai",
+      a: "Conceptually yes — the <a href='case-studies/llm-wiki.html'>LLM-Friendly Wiki</a> is a <em>structured</em> retrieval system (file paths + per-folder indexes) without a vector DB. Comfortable with embedding-based RAG patterns; would build the right one per use case." },
+
+    { q: "Have you trained or fine-tuned models?",
+      aliases: ["fine tuning", "fine-tune", "trained models", "model training", "lora"],
+      category: "ai",
+      a: "<strong>No production fine-tuning work</strong>. My AI engineering is at the orchestration + agent layer (multi-LLM harness, tool use, prompt context). Open to growing the training-side surface for the right role." },
+
+    { q: "What is multi-LLM orchestration?",
+      aliases: ["multi llm", "multi-llm", "llm orchestration", "ai harness"],
+      category: "ai",
+      a: "One service interface, multiple LLM providers behind it. In the <a href='case-studies/ai-engineer.html'>AI Engineer</a>: <code>AiHarnessService</code> dispatches to Claude / Gemini / OpenAI / OpenRouter / Qwen based on operator choice per ticket. Adding a new brain is a one-class change." },
+
+    { q: "Will AI replace developers?",
+      aliases: ["ai replace developers", "will ai take jobs", "ai taking jobs", "future of coding"],
+      category: "ai",
+      a: "It's already changing the shape of the work. The leverage shifts from typing code to <strong>system design + judgment + verification</strong>. Engineers who let AI compress prototyping while keeping code review + tests in the loop ship more, not less." },
+
+    { q: "Why no AI in production back-end?",
+      aliases: ["are you using ai", "ai integration", "ai features in app", "embed ai in product"],
+      category: "ai",
+      a: "I do — the <a href='case-studies/ai-engineer.html'>autonomous AI Engineer</a> is production multi-LLM agentry wired into a real ticketing system. The <a href='case-studies/llm-wiki.html'>LLM-Friendly Wiki</a> is the agent's context layer. Both ship under NDA but the patterns are documented." },
+
+    // -- Work history depth ------------------------------------------
+    { q: "Where do you work now?",
+      aliases: ["current job", "current employer", "currently work", "current role", "current company"],
+      category: "work",
+      a: "<strong>AAI Worldwide Logistics</strong> · Application Developer · Nov 2024 – Present. FMS, WMS (mobile + web), TMS, CRM, autonomous AI engineer pipeline. SAP integration + heavy logistics-domain work." },
+
+    { q: "Tell me about your time at Octal",
+      aliases: ["octal", "octal philippines"],
+      category: "work",
+      a: "<strong>Octal Philippines Inc.</strong> · Software Developer · Oct 2022 – Oct 2024 (assigned to AAI Worldwide Logistics IT). Two years of continuous delivery on FMS / CRM / TMS / WMS. Trucking Rates module, TMS dashboard, LES UI, FAREYE API integration." },
+
+    { q: "Tell me about your time at Uratex",
+      aliases: ["uratex"],
+      category: "work",
+      a: "<strong>Uratex Philippines</strong> · Full-Stack Developer · Mar – Oct 2022. Laravel surveys with detailed reporting, Trip Management System for company vehicles, corporate landing page, Statamic CMS-driven brand page with countdown timer." },
+
+    { q: "Tell me about your time at Lumina",
+      aliases: ["lumina", "lumina homes"],
+      category: "work",
+      a: "<strong>Lumina Homes</strong> · Marketing Staff (Full-Stack Developer) · Mar 2021 – Mar 2022. Hybrid dev + marketing role. Property-listing loan calculator with email delivery, SilverStripe real-estate site maintenance, SEO via SEMrush + Ahrefs." },
+
+    { q: "Tell me about your time at Switch Connect",
+      aliases: ["switch connect", "first job", "first role", "australia"],
+      category: "work",
+      a: "<strong>Switch Connect Pty Ltd</strong> · Junior Web Developer · Aug 2019 – Sep 2020 (Australia, fully remote). First professional role. ERP modules, Google Maps API for address validation, ABN Lookup, Xero + Eversign integrations." },
+
+    // -- Engagement depth --------------------------------------------
+    { q: "Will you relocate?",
+      aliases: ["relocate", "relocation", "move", "willing to move"],
+      category: "hire",
+      a: "Within the Philippines: <strong>yes</strong>, for the right onsite role. Outside the Philippines: <strong>requires sponsorship</strong> — happy to discuss for a serious offer." },
+
+    { q: "Project basis or long-term?",
+      aliases: ["project basis", "long term", "short term", "project work", "ongoing"],
+      category: "hire",
+      a: "<strong>Both</strong>. Short scoped projects work well. Long-term partnerships (months → years) also welcome — most of my production work has been multi-year on the same systems." },
+
+    { q: "Will you sign an NDA?",
+      aliases: ["nda", "non disclosure", "confidentiality"],
+      category: "hire",
+      a: "Standard NDAs — <strong>yes</strong>, no problem. Most of my current portfolio is anonymized under client NDAs already (Pamanaland, JBC, WMS, HRIS, TMS are all NDA-framed)." },
+
+    { q: "Will you do a paid trial?",
+      aliases: ["trial", "trial period", "paid trial", "test project", "tryout"],
+      category: "hire",
+      a: "Open to it — <strong>1-2 week paid trial</strong> on a real scoped piece of work usually de-risks both sides faster than a long interview loop. Discuss on a call." },
+
+    { q: "Do you have a side project quota?",
+      aliases: ["moonlighting", "side project", "side work", "freelance on the side"],
+      category: "hire",
+      a: "I'm currently full-time at AAI. Open to <strong>contract on the side</strong> with reasonable scope (5-10 hrs/week) — but full-time + a separate sustained contract is a hard no. Honest about availability." },
+
+    { q: "Hourly rate?",
+      aliases: ["hourly", "hourly rate", "rate per hour", "$/hr"],
+      category: "hire",
+      a: "Negotiable based on scope. I prefer <strong>scoped project rates</strong> over hourly when possible — better aligned incentives. <a href='https://cal.com/lemmuel-turaya/intro' target='_blank' rel='noopener'>Book a call</a> to discuss your specific engagement." },
+
+    // -- Process / philosophy depth ----------------------------------
+    { q: "Do you write tests?",
+      aliases: ["tests", "test coverage", "testing philosophy", "do you test"],
+      category: "process",
+      a: "Yes — PHPUnit on Laravel, Playwright on Vue. Coverage depth scales with risk: <strong>critical paths get TDD</strong>, the rest get integration tests. The AI engineer requires PHPUnit to pass before any merge — same standard I apply to my own work." },
+
+    { q: "How do you handle deadlines?",
+      aliases: ["deadlines", "estimates", "estimation", "project planning", "scoping"],
+      category: "process",
+      a: "Break work into thin slices, estimate each, ship the spine first, then refine. I'm honest when estimates slip — usually the cause is hidden complexity, and the right move is to scope-reduce or extend, not heroics. Weekly demos catch drift early." },
+
+    { q: "Do you do code review?",
+      aliases: ["code review", "pull requests", "pr review", "merge review"],
+      category: "process",
+      a: "Yes — both giving and receiving. I treat PRs as conversations + documentation. AI-assisted code still gets human review (the AI engineer also runs PHPUnit before any merge for the same reason)." },
+
+    { q: "Can you lead a team?",
+      aliases: ["lead", "team lead", "leadership", "tech lead", "manage", "managing"],
+      category: "process",
+      a: "Yes — I lead the WMS v2 rewrite (architecture decisions, CI guardrails, canonical patterns). Comfortable owning a system, setting conventions, and mentoring juniors. Not interested in pure people management — IC track with leadership scope." },
+
+    { q: "Do you mentor?",
+      aliases: ["mentor", "mentoring", "teach", "onboard juniors", "pair programming"],
+      category: "process",
+      a: "Yes — pair programming, PR feedback, internal docs (Karpathy-style LLM wiki is literally a mentorship artifact for both humans and AI). Comfortable onboarding new engineers onto a codebase." },
+
+    { q: "How do you communicate with clients or teams?",
+      aliases: ["communication", "async", "remote work", "communication style", "how do you communicate"],
+      category: "process",
+      a: "<strong>Async-default</strong>. Written specs, recorded walkthroughs, weekly demos. Synchronous for kickoffs, blockers, and tough calls. Slack/Teams day-to-day. GMT+8 timezone with strong APAC, EU-morning, US-evening overlap." },
+
+    // -- Personal / soft ---------------------------------------------
+    { q: "What's your /now page?",
+      aliases: ["what are you working on", "now", "current focus", "right now", "currently"],
+      category: "about",
+      a: "Open <a href='now.html'>/now</a> — Derek-Sivers-style current-focus page. Updated regularly." },
+
+    { q: "What tools do you use?",
+      aliases: ["uses", "tools", "what's in your kit", "your setup", "editor setup", "daily tools"],
+      category: "about",
+      a: "Editor + terminal + hardware + daily software — open <a href='uses.html'>/uses</a> (Wes-Bos-style tradition). Highlights: VS Code + Claude Code, Windows Terminal + WSL Ubuntu, Figma." },
+
+    { q: "What's your work style?",
+      aliases: ["work style", "how do you work", "productivity"],
+      category: "process",
+      a: "Async-default, ship-incremental, README-as-you-build. AI-augmented where it speeds delivery without compromising code review or tests. Treat git history as documentation; treat <code>CLAUDE.md</code> as onboarding for both humans and AI." },
+
+    { q: "Do you blog or write?",
+      aliases: ["blog", "writing", "articles", "posts", "publications", "twitter", "x"],
+      category: "about",
+      a: "No public blog (yet). The portfolio case studies + the LLM-friendly wiki + this chat are the public writing for now. Reach out if you want long-form thinking on a specific topic." },
+
+    // -- Meta / portfolio --------------------------------------------
+    { q: "Why no React?",
+      aliases: ["why vue not react", "why not react", "react vs vue", "vue over react"],
+      category: "meta",
+      a: "Vue happened to be the stack at my first deep production role (Lumina, 2021) and it's stuck because the team familiarity + Vue 3 + Pinia + TypeScript is a delightful combo. Not religious — I'd ship React for a React-shop role." },
+
+    { q: "Why so much chrome on this site?",
+      aliases: ["why cyber", "why cyberpunk", "design choice", "aesthetic", "why so themed", "why so much animation"],
+      category: "meta",
+      a: "Intentional brand signal — proves I can build polished interactive UIs <strong>without</strong> a React/Vue framework, in pure vanilla. The 5 themes + animations + this chat widget are demos disguised as decoration. <a href='changelog.html'>/changelog</a> shows the iteration." },
+
+    { q: "Who built this chatbot?",
+      aliases: ["who made you", "what are you", "are you a real ai", "are you claude", "are you chatgpt", "who built you"],
+      category: "meta",
+      a: "I'm a hand-curated FAQ matcher dressed as a chat widget — <strong>not</strong> a real LLM. Lemmuel wrote every answer; the matcher is fuzzy Levenshtein + token overlap. Zero API costs, zero hallucination. Source: <a href='https://github.com/kon2raya24/portfolio/blob/main/js/portfolio-chat.js' target='_blank' rel='noopener'>js/portfolio-chat.js</a>" },
+
+    { q: "What if I have a question you can't answer?",
+      aliases: ["question not answered", "you don't know", "don't have answer", "off topic"],
+      category: "meta",
+      a: "Two options: <a href='https://cal.com/lemmuel-turaya/intro' target='_blank' rel='noopener'>book a 15-min call</a> or <a href='mailto:turayalemmuel@gmail.com'>email Lemmuel directly</a>. Real human, usually replies within 24 hours." },
+
+    { q: "Can I see your CV?",
+      aliases: ["cv", "resume pdf", "download resume", "resume download", "pdf resume"],
+      category: "contact",
+      a: "Yes — <a href='resume.pdf' target='_blank'>download resume.pdf</a> (ATS-friendly). Also available as machine-readable <a href='resume.json' target='_blank'>resume.json</a> (JSON Resume format)." },
+
+    { q: "What's the meaning of life?",
+      aliases: ["meaning of life", "42", "philosophy", "why are we here"],
+      category: "meta",
+      a: "42. Now ask me about Vue." }
   ];
 
   // Suggested-question chips — rotated/shuffled on each open.
@@ -211,7 +575,15 @@
     "What's your rate?",
     "How do I reach you?",
     "How was this portfolio built?",
-    "Tell me about the WMS mobile app"
+    "Tell me about the WMS mobile app",
+    "How many years of experience?",
+    "Do you know Vue.js?",
+    "Do you know React?",
+    "Claude or ChatGPT?",
+    "Remote, hybrid, or onsite?",
+    "Notice period?",
+    "Can I see your CV?",
+    "What if I have a question you can't answer?"
   ];
 
   // ---------------------------------------------------------------------
@@ -300,9 +672,27 @@
     var wrap = document.createElement('div');
     wrap.className = 'pchat';
     wrap.setAttribute('aria-live', 'polite');
+    // Bubble icon: inline SVG chat-bubble-with-dots (Feather/Lucide-style).
+    // currentColor inherits the theme accent — bubble glows red in xeno,
+    // phosphor green in crt, etc. Crisp at every size; no emoji rendering
+    // inconsistency across Windows/macOS/Linux.
+    var BUBBLE_SVG =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>' +
+        '<circle cx="8.5" cy="11.5" r="0.9" fill="currentColor" stroke="none"/>' +
+        '<circle cx="12" cy="11.5" r="0.9" fill="currentColor" stroke="none"/>' +
+        '<circle cx="15.5" cy="11.5" r="0.9" fill="currentColor" stroke="none"/>' +
+      '</svg>';
+    var CLOSE_SVG =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<line x1="6" y1="6" x2="18" y2="18"/>' +
+        '<line x1="18" y1="6" x2="6" y2="18"/>' +
+      '</svg>';
+
     wrap.innerHTML =
       '<button type="button" class="pchat__bubble" aria-label="Open chat — ask me anything about the portfolio" data-pchat-open>' +
-        '<span class="pchat__bubble-icon" aria-hidden="true">💬</span>' +
+        '<span class="pchat__bubble-icon pchat__bubble-icon--chat" aria-hidden="true">' + BUBBLE_SVG + '</span>' +
+        '<span class="pchat__bubble-icon pchat__bubble-icon--close" aria-hidden="true">' + CLOSE_SVG + '</span>' +
         '<span class="pchat__bubble-pulse" aria-hidden="true"></span>' +
       '</button>' +
       '<div class="pchat__panel" role="dialog" aria-modal="false" aria-label="Ask me about the portfolio" hidden>' +
