@@ -173,6 +173,22 @@
 	<!-- Tech FX layer  -->
 	<link rel="stylesheet" href="css/tech-fx.css">
 
+	<!-- No-JS fallback: kill the full-screen loader (otherwise it stays
+	     forever blocking all content) and ensure animated sections start
+	     visible. Links + content remain reachable without JS. -->
+	<noscript>
+		<style>
+			.fh5co-loader { display: none !important; }
+			.animate-box,
+			.js .animate-box { opacity: 1 !important; visibility: visible !important; }
+			.fh5co-nav-toggle { display: none !important; }
+			/* On mobile, show the nav links since the hamburger toggle won't work */
+			@media screen and (max-width: 768px) {
+				.fh5co-nav-links { display: block !important; }
+			}
+		</style>
+	</noscript>
+
 </head>
 
 <body>
