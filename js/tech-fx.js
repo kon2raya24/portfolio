@@ -21,7 +21,7 @@ try {
   /* ---------- Shared theme helpers (used by HUD palette picker + nav theme picker) ----------
      Single source of truth for mode (light/dark) and palette (cyber/matrix/sunset/xeno).
      Both UIs sync via 'mode:change' and 'palette:change' custom events. */
-  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno'];
+  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno', 'crt'];
 
   function currentMode() {
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
@@ -685,6 +685,7 @@ try {
         '<button class="theme-pick__btn"       data-th="matrix" aria-label="matrix theme"></button>' +
         '<button class="theme-pick__btn"       data-th="sunset" aria-label="sunset theme"></button>' +
         '<button class="theme-pick__btn"       data-th="xeno"   aria-label="xeno theme"></button>' +
+        '<button class="theme-pick__btn"       data-th="crt"    aria-label="crt theme"></button>' +
       '</div>' +
       '<div class="hud__row"><span class="hud__label">[ sys ]</span><span class="hud__val">online</span></div>' +
       '<div class="hud__row"><span class="hud__label">time</span><span class="hud__val" data-h="time">--:--:--</span></div>' +
@@ -1441,7 +1442,7 @@ try {
       { keys: ['ctrl', 'k'], desc: 'Open command palette' },
       { keys: ['/'],         desc: 'Quick search commands' },
       { keys: ['`'],         desc: 'Toggle dev terminal' },
-      { keys: ['alt', 't'],  desc: 'Cycle theme palette (cyber → matrix → sunset → xeno)' },
+      { keys: ['alt', 't'],  desc: 'Cycle theme palette (cyber → matrix → sunset → xeno → crt)' },
       { keys: ['?'],         desc: 'Show this help' },
       { keys: ['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'b', 'a'], desc: 'Konami mode (hue cycle)' },
       { keys: ['esc'],       desc: 'Close any overlay' },
@@ -1793,10 +1794,10 @@ try {
       quit:  function () { close(); }
     };
 
-    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno' };
+    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno', crt: 'crt' };
     function handleTheme(arg) {
       if (!arg || !themeAliases[arg]) {
-        print('usage: theme &lt;cyber | matrix | sunset | xeno&gt;', 'err');
+        print('usage: theme &lt;cyber | matrix | sunset | xeno | crt&gt;', 'err');
         return;
       }
       applyPalette(arg);

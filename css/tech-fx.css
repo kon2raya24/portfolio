@@ -1527,6 +1527,7 @@ body.konami-on {
 .theme-pick__btn[data-th="matrix"] { background: #00ff7c; color: #00ff7c; }
 .theme-pick__btn[data-th="sunset"] { background: #ff2bd6; color: #ff2bd6; }
 .theme-pick__btn[data-th="xeno"]   { background: #ff1840; color: #ff1840; }
+.theme-pick__btn[data-th="crt"]    { background: #33ff33; color: #33ff33; }
 
 /* Matrix palette: green-dominant */
 :root.theme-matrix {
@@ -1544,6 +1545,16 @@ body.konami-on {
   --line-strong: rgba(255, 43, 214, 0.5);
   --glow-cyan: 0 0 12px rgba(255, 43, 214, 0.6), 0 0 30px rgba(255, 43, 214, 0.25);
   --brand: #ffaa00;
+}
+/* CRT palette: retro phosphor monitor — single-color green-on-black, heavy scanlines, sharp corners */
+:root.theme-crt {
+  --cyan: #33ff33;
+  --cyan-dim: #28b428;
+  --line: rgba(51, 255, 51, 0.22);
+  --line-strong: rgba(51, 255, 51, 0.55);
+  --glow-cyan: 0 0 12px rgba(51, 255, 51, 0.6), 0 0 28px rgba(51, 255, 51, 0.25);
+  --brand: #ffb400;        /* amber secondary — like older monochrome monitors that ran amber */
+  --magenta: #33ff33;      /* fold magenta into green so the palette stays monochrome */
 }
 /* Xeno palette: alien-invasion / interstellar — hostile red + bio-luminescent green + UV purple */
 :root.theme-xeno {
@@ -1935,6 +1946,114 @@ body.konami-on {
   :root.theme-xeno body { cursor: auto; }
 }
 
+/* =========================================================================
+   CRT SKIN — old phosphor green-on-black monitor. Heavy horizontal scanlines,
+   subtle vignette darkening for a CRT-curvature illusion, sharp corners on
+   every panel, monochrome phosphor glow on text.
+   ========================================================================= */
+:root.theme-crt {
+  background: #000800;
+}
+:root.theme-crt body {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(0, 60, 0, 0.35), transparent 80%),
+    radial-gradient(circle at 50% 50%, #001500 0%, #000400 90%) !important;
+  color: #aaffaa !important;
+}
+/* Heavy horizontal scanlines — fixed overlay, multiply blend for that "CRT lines" feel */
+:root.theme-crt body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.28) 2px,
+    rgba(0, 0, 0, 0.28) 3px);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+/* Soft vignette — corners darker to simulate CRT screen curvature */
+:root.theme-crt body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9996;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
+}
+/* Sharp corners everywhere — CRT monitors had pixel-sharp UIs */
+:root.theme-crt .hyperframe,
+:root.theme-crt .proj-card,
+:root.theme-crt .skill-card,
+:root.theme-crt .exp-card,
+:root.theme-crt .case-studies,
+:root.theme-crt .cta-card,
+:root.theme-crt .px-card,
+:root.theme-crt .stack-group,
+:root.theme-crt .hero-cta__primary,
+:root.theme-crt .hero-cta__secondary,
+:root.theme-crt .btn,
+:root.theme-crt .cs-btn,
+:root.theme-crt .exp-chip,
+:root.theme-crt .tech-chip,
+:root.theme-crt .skill-tier,
+:root.theme-crt .theme-picker__menu,
+:root.theme-crt .terminal-tag,
+:root.theme-crt .case-status--live,
+:root.theme-crt .status-badge { border-radius: 0 !important; }
+
+/* Phosphor green glow on text — applied to common text containers */
+:root.theme-crt #fh5co-header h1 span,
+:root.theme-crt #fh5co-header h3,
+:root.theme-crt section h2,
+:root.theme-crt .fh5co-heading h2,
+:root.theme-crt .terminal-tag,
+:root.theme-crt .case-name--link,
+:root.theme-crt .cs-meta__v,
+:root.theme-crt .hero-stats .stat strong {
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.55), 0 0 14px rgba(51, 255, 51, 0.22) !important;
+}
+/* Subtle chromatic-aberration h1 effect — old CRT signal artifact */
+:root.theme-crt #fh5co-header h1 span {
+  text-shadow:
+    -1px 0 rgba(255, 80, 80, 0.45),
+    1px 0 rgba(80, 200, 255, 0.4),
+    0 0 14px rgba(51, 255, 51, 0.7) !important;
+}
+
+/* Faint CRT screen flicker — every ~6s the screen dims by 4% for one frame */
+:root.theme-crt #page {
+  animation: crt-flicker 6s steps(48) infinite;
+}
+@keyframes crt-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  97%           { opacity: 0.96; }
+  98%           { opacity: 0.99; }
+}
+
+/* Suppress the cyber hero background — let the CRT phosphor wash show through */
+:root.theme-crt #fh5co-header {
+  background: linear-gradient(180deg, #001500 0%, #000800 100%) !important;
+  background-image: none !important;
+}
+/* Re-tint the tech-grid green */
+:root.theme-crt .tech-grid {
+  background-image:
+    linear-gradient(rgba(51, 255, 51, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 255, 51, 0.10) 1px, transparent 1px) !important;
+  opacity: 0.6;
+}
+/* Cyber scanline gets replaced by CRT phosphor pulse */
+:root.theme-crt .scanline { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-crt #page { animation: none; }
+  :root.theme-crt body::before { opacity: 0.4; } /* lighter scanlines under reduced motion */
+}
+
 /* ---------- Nav theme picker (popover) ---------- */
 .theme-picker { position: relative; display: inline-block; }
 .theme-picker__trigger {
@@ -2035,6 +2154,7 @@ body.konami-on {
 .theme-picker__dot[data-palette="matrix"] { background: #00ff7c; color: #00ff7c; }
 .theme-picker__dot[data-palette="sunset"] { background: #ff2bd6; color: #ff2bd6; }
 .theme-picker__dot[data-palette="xeno"]   { background: #ff1840; color: #ff1840; }
+.theme-picker__dot[data-palette="crt"]    { background: #33ff33; color: #33ff33; }
 .theme-picker__dot[data-palette="xeno"]::after {
   content: 'NEW';
   position: absolute;
@@ -2207,6 +2327,38 @@ body.konami-on {
   right: 3px;
   border-left: 0;
   border-top: 0;
+}
+
+.theme-picker__preview--crt {
+  background: linear-gradient(180deg, #001500, #000400);
+  border: 1px solid rgba(51, 255, 51, 0.55);
+  color: #33ff33;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(51, 255, 51, 0.3);
+  text-shadow: 0 0 4px rgba(51, 255, 51, 0.6);
+  border-radius: 0; /* sharp corners — on-brand */
+  position: relative;
+  overflow: hidden;
+}
+.theme-picker__preview--crt .theme-picker__preview-dots i { background: #33ff33; }
+.theme-picker__preview--crt .theme-picker__preview-dots i:nth-child(2) { opacity: 0.65; }
+.theme-picker__preview--crt .theme-picker__preview-dots i:nth-child(3) { opacity: 0.4; }
+.theme-picker__preview--crt .theme-picker__preview-bar {
+  background: linear-gradient(90deg, #33ff33, transparent 75%);
+  box-shadow: 0 0 6px rgba(51, 255, 51, 0.5);
+  border-radius: 0;
+}
+/* Heavy scanline overlay inside the preview to convey the CRT vibe */
+.theme-picker__preview--crt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 1px,
+    rgba(0,0,0,0.35) 1px,
+    rgba(0,0,0,0.35) 2px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 /* Edge-flip: rightmost dots' previews would overflow the popover right edge —

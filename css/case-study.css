@@ -1447,6 +1447,67 @@ body::before {
   --brand: #00ff85;
   --magenta: #c050ff;
 }
+:root.theme-crt {
+  --cyan: #33ff33;
+  --cyan-dim: #28b428;
+  --line: rgba(51, 255, 51, 0.22);
+  --line-strong: rgba(51, 255, 51, 0.55);
+  --glow-cyan: 0 0 12px rgba(51, 255, 51, 0.6), 0 0 28px rgba(51, 255, 51, 0.25);
+  --brand: #ffb400;
+  --magenta: #33ff33;
+}
+/* CRT skin (case studies): scanlines + vignette + sharp corners + phosphor text */
+:root.theme-crt body {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(0, 60, 0, 0.35), transparent 80%),
+    radial-gradient(circle at 50% 50%, #001500 0%, #000400 90%) !important;
+  color: #aaffaa !important;
+}
+:root.theme-crt body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg,
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0.28) 2px,
+    rgba(0,0,0,0.28) 3px);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+:root.theme-crt .cs-wrap::after {
+  /* vignette */
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9996;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.72) 100%);
+}
+:root.theme-crt .cs-section,
+:root.theme-crt .cs-metrics--top,
+:root.theme-crt .cs-metric,
+:root.theme-crt .cs-toc,
+:root.theme-crt .cs-cta,
+:root.theme-crt .cs-pager__link,
+:root.theme-crt .cs-btn,
+:root.theme-crt .cs-chip { border-radius: 0 !important; }
+:root.theme-crt .cs-hero h1 {
+  text-shadow:
+    -1px 0 rgba(255, 80, 80, 0.4),
+    1px 0 rgba(80, 200, 255, 0.35),
+    0 0 14px rgba(51, 255, 51, 0.7) !important;
+}
+:root.theme-crt .cs-section h2,
+:root.theme-crt .cs-metric__v,
+:root.theme-crt .cs-meta__v {
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.55) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-crt body::after { opacity: 0.4; }
+}
 
 /* =========================================================================
    XENO DEEP-SKIN — mirrors the index xeno-skin so the case study reads as

@@ -26,7 +26,7 @@
 				var legacy = localStorage.getItem('portfolio.theme');
 				if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
 					if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
-					else if (legacy === 'cyber' || legacy === 'matrix' || legacy === 'sunset' || legacy === 'xeno') localStorage.setItem('portfolio.palette', legacy);
+					else if (legacy === 'cyber' || legacy === 'matrix' || legacy === 'sunset' || legacy === 'xeno' || legacy === 'crt') localStorage.setItem('portfolio.palette', legacy);
 				}
 
 				var mode = localStorage.getItem('portfolio.mode');
@@ -36,7 +36,7 @@
 				html.setAttribute('data-theme', mode);
 
 				var palette = localStorage.getItem('portfolio.palette');
-				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno') {
+				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
 					html.classList.add('theme-' + palette);
 				}
 			} catch (e) {
@@ -231,6 +231,13 @@
 												<span class="theme-picker__preview-dots"><i></i><i></i><i></i></span>
 												<span class="theme-picker__preview-bar"></span>
 												<span class="theme-picker__preview-text">xeno · alien</span>
+											</span>
+										</button>
+										<button type="button" class="theme-picker__dot" data-palette="crt"    role="menuitemradio" title="crt · retro phosphor monitor" aria-label="crt palette">
+											<span class="theme-picker__preview theme-picker__preview--crt" aria-hidden="true">
+												<span class="theme-picker__preview-dots"><i></i><i></i><i></i></span>
+												<span class="theme-picker__preview-bar"></span>
+												<span class="theme-picker__preview-text">crt · phosphor</span>
 											</span>
 										</button>
 									</div>

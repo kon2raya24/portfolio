@@ -25,7 +25,7 @@
 			var legacy = localStorage.getItem('portfolio.theme');
 			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
 				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
-				else if (['cyber','matrix','sunset','xeno'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
+				else if (['cyber','matrix','sunset','xeno','crt'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
 			}
 			var mode = localStorage.getItem('portfolio.mode');
 			if (mode !== 'light' && mode !== 'dark') {
@@ -33,7 +33,7 @@
 			}
 			document.documentElement.setAttribute('data-theme', mode);
 			var palette = localStorage.getItem('portfolio.palette');
-			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno') {
+			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
 				document.documentElement.classList.add('theme-' + palette);
 			}
 		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
