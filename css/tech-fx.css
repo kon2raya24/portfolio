@@ -7948,8 +7948,19 @@ a.btn:focus-visible {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 9990;
+  /* Above siderail (9996), HUD (9997), tech-tip (10005). Below
+     command palette + dialogs which sit at 10000+. */
+  z-index: 9998;
   font-family: 'JetBrains Mono', monospace;
+}
+/* When chat is open, dim the right-side siderail + HUD so their
+   labels/tooltips don't show through the chat panel content. */
+body.pchat-active .siderail,
+body.pchat-active .hud,
+body.pchat-active .viewport-hud {
+  opacity: 0.18;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
 }
 
 /* -- Bubble -- */

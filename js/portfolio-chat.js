@@ -432,12 +432,16 @@
       lastFocus = document.activeElement;
       panel.hidden = false;
       bubble.setAttribute('aria-expanded', 'true');
+      // Body class lets CSS dim the siderail / HUD / viewport-hud so
+      // their tooltips and dots don't show through the chat panel.
+      document.body.classList.add('pchat-active');
       renderSuggestions();
       setTimeout(function () { input.focus(); }, 30);
     }
     function close() {
       panel.hidden = true;
       bubble.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('pchat-active');
       if (lastFocus && typeof lastFocus.focus === 'function') {
         lastFocus.focus();
         lastFocus = null;
