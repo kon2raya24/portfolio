@@ -200,9 +200,51 @@
     <!-- LATEST -->
     <li class="log-entry log-entry--latest">
       <div class="log-head">
+        <span class="log-version">v<span class="num">3.5</span></span>
+        <span class="log-date">2026-05-18</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        Massive audit-driven pass &mdash; theme picker + 5 palettes, jQuery removed, mobile nav fixed, comprehensive a11y, no-JS fallback. Single biggest day of shipping since the portfolio's first cut.
+      </p>
+      <ul>
+        <li>Added a <strong>theme picker</strong> popover in the nav (mode: dark/light, palette: 5 options). Replaces the binary light/dark toggle.</li>
+        <li>Added <strong>xeno</strong> palette &mdash; alien-invasion / interstellar skin with void background, drifting starfield, sweeping red scan beam, scope-reticle hero corners, diamond pane glyphs, scope-reticle cursor, angular clip-path buttons. Goes beyond palette swap into a different visual UI.</li>
+        <li>Added <strong>crt</strong> palette &mdash; retro phosphor green-on-black with heavy scanlines, corner vignette, sharp corners, monochrome chromatic-aberration headings, faint screen flicker.</li>
+        <li>Added hover-preview tooltips on each palette dot &mdash; tiny live mockup of that theme's chrome before you commit.</li>
+        <li>Added <code>Alt+T</code> shortcut to cycle palettes (cyber &rarr; matrix &rarr; sunset &rarr; xeno &rarr; crt).</li>
+        <li>Added theme-aware <strong>matrix-canvas alien glyphs</strong> in xeno mode (◢◤◇◆▣⌬⌷⎔⏣ + Greek caps).</li>
+        <li>Added <strong>hero typewriter</strong> &mdash; <code>&gt; ./init_developer.sh</code> types in char-by-char on load.</li>
+        <li>Added <strong>"Book a 15-min call"</strong> primary CTA in the hero above the fold; same cal.com CTA on every case-study close-out.</li>
+        <li>Added <strong>case-study hover-preview thumbnails</strong> &mdash; pop the OG card next to the tree row on hover, desktop only.</li>
+        <li>Added <code>cs-outcomes--top</code> BEFORE/AFTER scaffold to every case study (hidden by default via <code>data-status="draft"</code> until reviewed).</li>
+        <li>Added <strong>mobile hamburger menu</strong> &mdash; without it, phones literally couldn't navigate (regression-grade bug).</li>
+        <li>Added <code>&lt;noscript&gt;</code> fallback so JS-disabled visitors don't see a perpetual loader.</li>
+        <li>Added form <code>:user-invalid</code> styling + personalized success email (sessionStorage stash/restore).</li>
+        <li>Added <code>main</code> + <code>contentinfo</code> ARIA landmarks on the index.</li>
+        <li>Added comprehensive <code>:focus-visible</code> across 14 selectors so keyboard users can see what's focused.</li>
+        <li>Added focus-return on dialog close for the command palette, dev terminal, and keyboard-shortcuts overlay.</li>
+        <li class="fix">Removed fake testimonials section &mdash; self-written project blurbs framed as quotes were credibility-leaky. One real LinkedIn rec beats three synthetic ones.</li>
+        <li class="fix">Reordered work-grid &mdash; 6 LIVE production cards first (Pamanaland, JBC, UPHDJGT, PH Dev Utils, This Portfolio, JBC Marketing), then PROTOTYPE, then 2 ARCHIVE. Was leading with 2018-era design archive.</li>
+        <li class="fix">Reframed Services pane &rarr; <strong>"What I Build"</strong> &mdash; capability framing that works for both recruiters and clients.</li>
+        <li class="fix">Skill <code>%%</code> bars replaced with PRIMARY / STRONG / WORKING tier chips. No more fake-precise self-rating.</li>
+        <li class="fix">Removed jQuery + Stellar + Waypoints + Bootstrap JS + Easing &mdash; full vanilla rewrite of <code>main.js</code> with IntersectionObserver, requestAnimationFrame, and matchMedia. Zero jQuery now loaded.</li>
+        <li class="fix">Hero <code>h1</code>&rarr;<code>h3</code> heading skip fixed to <code>h1</code>&rarr;<code>h2</code> (WCAG 1.3.1).</li>
+        <li class="fix">CTA-track "Hiring / Client" ARIA: <code>role="tab"</code> &rarr; <code>role="radio"</code> (no tabpanels meant tabs were misleading).</li>
+        <li class="fix">Theme system: split localStorage into <code>portfolio.mode</code> + <code>portfolio.palette</code> with one-time migration from legacy <code>portfolio.theme</code>. Two systems no longer fighting over one key.</li>
+        <li class="fix">~25 widgets converted to <code>color-mix(in srgb, var(--cyan)&hellip;)</code> &mdash; hero CTA, HUD, siderail, ctx-menu, cmdk, kbdhelp, live-stats, commit-graph, tool-badge, scroll-progress, work-filter, case-filter, viewport-hud, stat--linked, cs-btn, cs-share, etc. Now glow correctly in every palette.</li>
+        <li class="fix">Generated missing <code>og-cover.png</code> + repointed index + now.html OG image tags. Share previews on LinkedIn/Twitter were broken (wrong aspect ratio or 404).</li>
+        <li class="fix">Resume sync: <code>projects[]</code> URLs for Pamanaland + JBC switched from auth-gated portals to public case-study pages. PDF regenerated.</li>
+        <li>LinkedIn About now leads with cal.com instead of email (matches the live-site CTA).</li>
+        <li>Sitemap refreshed &mdash; every touched URL got its real <code>lastmod</code> from <code>git log</code>.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry">
+      <div class="log-head">
         <span class="log-version">v<span class="num">3.4</span></span>
         <span class="log-date">2026-05-13</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">credibility</span>
       </div>
       <p class="log-summary">
         Dev-credibility passes &mdash; <code>/uses</code>, <code>resume.json</code>, this changelog.

@@ -1660,11 +1660,23 @@ body.konami-on {
   /* The theme picker lives inside the nav — let its popover anchor
      fully on-screen rather than overflowing the right edge. */
   #fh5co-nav .fh5co-nav-extra { padding: 10px 0 4px; }
+  /* Mobile theme picker — sit inside the menu flow, fit the parent width.
+     Base rule's min-width: 220px would overflow narrow phones; reset it. */
   #fh5co-nav .theme-picker__menu {
     position: static;
     width: 100%;
+    min-width: 0;
     margin-top: 8px;
+    box-sizing: border-box;
   }
+  /* Mode-row buttons can wrap if the screen is super narrow */
+  #fh5co-nav .theme-picker__group {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  /* Preview tooltips don't make sense on touch — already display:none
+     via the @media (hover: none) rule, but reinforced here. */
+  #fh5co-nav .theme-picker__preview { display: none; }
 }
 
 /* Light-theme variants for the mobile menu surfaces */
