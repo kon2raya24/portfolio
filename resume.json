@@ -3,7 +3,7 @@
   "meta": {
     "version": "1.0.0",
     "canonical": "https://kon2raya.netlify.app/resume.json",
-    "lastModified": "2026-05-14-c"
+    "lastModified": "2026-05-18"
   },
   "basics": {
     "name": "Lemmuel Turaya",
@@ -326,7 +326,7 @@
         "CSV + PDF report exports replaced manual Excel reconciliations"
       ],
       "keywords": ["Vue.js", "Laravel", "MySQL", "Ag-Grid", "jsPDF"],
-      "url": "https://portal.pamanaland.com/",
+      "url": "https://kon2raya.netlify.app/case-studies/pamanaland.html",
       "roles": ["Full-Stack Developer"],
       "type": "application"
     },
@@ -334,7 +334,7 @@
       "name": "JBC Commission Management System",
       "description": "Sales commission management system for JBC Marketing OPC.",
       "keywords": ["Vue.js", "Laravel", "REST"],
-      "url": "https://portal.jbcmarketing.com.ph/",
+      "url": "https://kon2raya.netlify.app/case-studies/jbc.html",
       "roles": ["Full-Stack Developer"],
       "type": "application"
     },
