@@ -1029,7 +1029,7 @@ body.konami-on {
   pointer-events: none;
   z-index: 5;
   transition: 0.4s ease;
-  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.6));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--cyan) 60%, transparent));
 }
 .hyperframe::before { top: -8px; left: -8px; border-top: 2px solid; border-left: 2px solid; }
 .hyperframe::after  { bottom: -8px; right: -8px; border-bottom: 2px solid; border-right: 2px solid; }
@@ -1042,7 +1042,7 @@ body.konami-on {
   width: 34px;
   height: 34px;
   border-color: var(--brand);
-  filter: drop-shadow(0 0 10px rgba(255, 144, 0, 0.7));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--brand) 70%, transparent));
 }
 
 /* Tilt setup */
