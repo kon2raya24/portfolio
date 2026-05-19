@@ -1,0 +1,14 @@
+# Local-only resume variants tailored for specific applications.
+# Kept on disk for attaching to emails, never committed to the public repo
+# (would otherwise be indexed at the deployed portfolio URL).
+resume-ats-*.html
+resume-*-preview.png
+Lemmuel-Turaya-CV-*.pdf
+
+# Editor/OS detritus
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/

@@ -136,37 +136,6 @@ try {
     update();
   })();
 
-  /* ---------- Custom cursor (desktop only) ---------- */
-  (function customCursor() {
-    if (isTouch) return;
-    var dot = document.createElement('div'); dot.className = 'cursor-dot';
-    var ring = document.createElement('div'); ring.className = 'cursor-ring';
-    document.body.appendChild(dot); document.body.appendChild(ring);
-
-    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    var rx = mx, ry = my;
-    document.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
-    }, { passive: true });
-
-    function loop() {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
-      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)';
-      requestAnimationFrame(loop);
-    }
-    loop();
-
-    var hoverables = 'a, button, .btn, .tech-chip, .tool-badge, .work, .feature-left, .timeline-panel, .commit-cell, .info li, .fh5co-nav-brand';
-    document.addEventListener('mouseover', function (e) {
-      if (e.target.closest && e.target.closest(hoverables)) ring.classList.add('is-hover');
-    });
-    document.addEventListener('mouseout', function (e) {
-      if (e.target.closest && e.target.closest(hoverables)) ring.classList.remove('is-hover');
-    });
-  })();
-
   /* ---------- Matrix rain (hero) — theme-aware: katakana for cyber/matrix/sunset,
        alien-tech glyphs in xeno mode so the canvas matches the rest of the skin. */
   (function matrixRain() {
@@ -693,6 +662,12 @@ try {
       '<div class="hud__row"><span class="hud__label">scroll</span><span class="hud__val" data-h="scroll">0%</span></div>' +
       '<div class="hud__row"><span class="hud__label">section</span><span class="hud__val" data-h="section">hero</span></div>' +
       '<div class="hud__row"><span class="hud__label">views</span><span class="hud__val" data-h="views">…</span></div>' +
+      '<div class="hud__row hud__row--coords"><span class="hud__label">coords</span><span class="hud__val" data-h="coords">14.6°N 121.0°E</span></div>' +
+      '<div class="hud__row hud__row--hw"><span class="hud__label">cores</span><span class="hud__val" data-h="cores">—</span></div>' +
+      '<div class="hud__row hud__row--hw"><span class="hud__label">mem</span><span class="hud__val" data-h="mem">—</span></div>' +
+      '<div class="hud__row hud__row--hw"><span class="hud__label">net</span><span class="hud__val" data-h="net">—</span></div>' +
+      '<div class="hud__row hud__row--hw"><span class="hud__label">batt</span><span class="hud__val" data-h="batt">—</span></div>' +
+      '<div class="hud__row hud__row--dev"><span class="hud__label">[ dev ]</span><span class="hud__val" data-h="dev">unlocked</span></div>' +
       '<div class="hud__bar"><i data-h="bar"></i></div>' +
       '<div class="hud__now"><span class="hud__now-label">now</span><span class="hud__now-val" data-h="now">booting…</span></div>';
     document.body.appendChild(el);
@@ -702,6 +677,55 @@ try {
     var elScroll = el.querySelector('[data-h="scroll"]');
     var elSection = el.querySelector('[data-h="section"]');
     var elBar = el.querySelector('[data-h="bar"]');
+    var elCores = el.querySelector('[data-h="cores"]');
+    var elMem   = el.querySelector('[data-h="mem"]');
+    var elNet   = el.querySelector('[data-h="net"]');
+    var elBatt  = el.querySelector('[data-h="batt"]');
+
+    // Hardware HUD lines — pure read-only browser-exposed device metrics.
+    // Recruiters who notice these signal the site is hardware-aware in the
+    // same way modern dev tools are.
+    (function fillHardware() {
+      var cores = navigator.hardwareConcurrency || null;
+      if (cores) elCores.textContent = cores;
+      else elCores.textContent = 'n/a';
+
+      var mem = navigator.deviceMemory || null;
+      if (mem) elMem.textContent = mem + 'GB';
+      else elMem.textContent = 'n/a';
+
+      function updateNet() {
+        var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (!conn) { elNet.textContent = 'n/a'; return; }
+        var t = conn.effectiveType || '—';
+        var down = conn.downlink ? conn.downlink.toFixed(1) + 'mbps' : '';
+        var save = conn.saveData ? ' · save' : '';
+        elNet.textContent = (t + (down ? ' · ' + down : '') + save).toUpperCase();
+      }
+      updateNet();
+      var conn = navigator.connection;
+      if (conn && typeof conn.addEventListener === 'function') {
+        conn.addEventListener('change', updateNet);
+      }
+
+      function updateBatt(b) {
+        var pct = Math.round(b.level * 100);
+        var charging = b.charging ? '+' : '';
+        elBatt.textContent = charging + pct + '%';
+        // Color-shift when low
+        elBatt.style.color = pct < 20 ? 'var(--brand)' : '';
+      }
+      if (navigator.getBattery) {
+        navigator.getBattery().then(function (b) {
+          updateBatt(b);
+          ['levelchange', 'chargingchange'].forEach(function (ev) {
+            b.addEventListener(ev, function () { updateBatt(b); });
+          });
+        }).catch(function () { elBatt.textContent = 'n/a'; });
+      } else {
+        elBatt.textContent = 'n/a';
+      }
+    })();
 
     function pad(n) { return (n < 10 ? '0' : '') + n; }
     setInterval(function () {
@@ -791,6 +815,77 @@ try {
     }
     rotateNow();
     setInterval(rotateNow, 3800);
+
+    // Live commit ticker — folds the latest public PushEvents from
+    // kon2raya24's GitHub into the rotating status array, so visitors see
+    // what's actually shipping today. Cached in sessionStorage for 15 min
+    // to stay well inside GitHub's 60 req/hr unauth limit.
+    (function liveCommits() {
+      var CACHE_KEY = 'portfolio.gh.events';
+      var TTL = 15 * 60 * 1000;
+      function inject(phrases) {
+        if (!phrases || !phrases.length) return;
+        statuses = phrases.concat(statuses);
+        // Align nowIdx to 0 so the init's pending rotateNow() setTimeout
+        // (or the setInterval) reads statuses[0] = our injected phrase. Also
+        // snap textContent synchronously in case the fetch resolved after
+        // the init's timeout already fired.
+        nowIdx = 0;
+        if (nowVal) {
+          nowVal.textContent = statuses[0];
+          nowVal.style.opacity = 1;
+        }
+      }
+      try {
+        var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+        if (cached && cached.data && Date.now() - cached.t < TTL) {
+          inject(cached.data);
+          return;
+        }
+      } catch (_) {}
+      function timeAgo(iso) {
+        var s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+        if (s < 60)        return s + 's ago';
+        if (s < 3600)      return Math.floor(s / 60) + 'm ago';
+        if (s < 86400)     return Math.floor(s / 3600) + 'h ago';
+        if (s < 86400 * 7) return Math.floor(s / 86400) + 'd ago';
+        return Math.floor(s / (86400 * 7)) + 'w ago';
+      }
+      fetch('https://api.github.com/users/kon2raya24/events/public?per_page=20', {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (events) {
+          // Note: GitHub's PushEvent public payload may omit the commits[]
+          // array for some users/repos. So we surface repo + freshness only,
+          // which is still a strong "actively shipping" signal.
+          var phrases = [];
+          var seenRepos = {};
+          events.forEach(function (e) {
+            if (e.type !== 'PushEvent') return;
+            var repo = (e.repo && e.repo.name) ? e.repo.name.split('/').pop() : null;
+            if (!repo || seenRepos[repo]) return;
+            seenRepos[repo] = true;
+            var ago = e.created_at ? timeAgo(e.created_at) : null;
+            // If commits array is present (some events have it), prefer that;
+            // otherwise fall back to the "pushed to {repo}" framing.
+            var msg = '';
+            if (e.payload && Array.isArray(e.payload.commits) && e.payload.commits.length) {
+              var c = e.payload.commits[e.payload.commits.length - 1];
+              msg = String(c.message || '').split('\n')[0].trim();
+              if (msg.length > 48) msg = msg.slice(0, 45) + '…';
+            }
+            var line = msg
+              ? 'shipped: ' + msg + ' → ' + repo
+              : 'pushed to ' + repo + (ago ? ' · ' + ago : '');
+            phrases.push(line);
+          });
+          phrases = phrases.slice(0, 5);
+          try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data: phrases })); } catch (_) {}
+          inject(phrases);
+        })
+        .catch(function () { /* offline or rate-limited — fall back to hardcoded statuses */ });
+    })();
 
     // Visit counter HUD value is shared with footer LiveStats
     var viewsEl = el.querySelector('[data-h="views"]');
@@ -1051,40 +1146,239 @@ try {
     });
   })();
 
-  /* ---------- Command palette ---------- */
+  /* ---------- Command palette ----------
+   * Sectioned, fuzzy, alias-aware. Ingests the 95-entry FAQ from
+   * window.PortfolioChat.faq and hands selected questions off to the chat.
+   * Free-form queries surface an "Ask the assistant" pseudo-row so any input
+   * has a path forward.
+   * ------------------------------------------------------------------------- */
   (function cmdk() {
-    var items = [
-      { label: 'Go to: About',     hash: '#fh5co-about',    icon: '#', meta: 'jump' },
-      { label: 'Go to: Resume',    hash: '#fh5co-resume',   icon: '#', meta: 'jump' },
-      { label: 'Go to: Services',  hash: '#fh5co-features', icon: '#', meta: 'jump' },
-      { label: 'Go to: Skills',    hash: '#fh5co-skills',   icon: '#', meta: 'jump' },
-      { label: 'Go to: Work',      hash: '#fh5co-work',     icon: '#', meta: 'jump' },
-      { label: 'Hire Me',          hash: '#fh5co-started',  icon: '$', meta: 'action' },
-      { label: 'Email: turayalemmuel@gmail.com', href: 'mailto:turayalemmuel@gmail.com', icon: '@', meta: 'contact' },
-      { label: 'GitHub: kon2raya24', href: 'https://github.com/kon2raya24', icon: '↗', meta: 'link' },
-      { label: 'LinkedIn',          href: 'https://www.linkedin.com/in/lemmuel-turaya/', icon: '↗', meta: 'link' },
-      { label: 'Download Resume',  href: 'resume.pdf', icon: '⇣', meta: 'file' },
-      { label: 'Open /uses',       href: 'uses.html', icon: '⚙', meta: 'page' },
-      { label: 'Open /changelog',  href: 'changelog.html', icon: '◷', meta: 'page' },
-      { label: 'Open resume.json', href: 'resume.json', icon: '{}', meta: 'data' },
-      { label: 'Toggle Konami Mode', action: 'konami', icon: '★', meta: 'easter egg' },
-      { label: 'Scroll to Top',    action: 'top', icon: '↑', meta: 'nav' }
+    var CASE_STUDIES = [
+      { slug: 'ai-engineer', title: 'Autonomous AI Engineer',      meta: 'AI · Laravel',      aliases: ['ai', 'agent', 'multi-llm', 'claude', 'gemini', 'phpunit', 'autonomous'] },
+      { slug: 'wms-v2',      title: 'WMS v2 Inventory Rewrite',    meta: 'Web · Vue/Laravel', aliases: ['wms', 'rewrite', 'canonical', 'v3', 'basecrud'] },
+      { slug: 'hris',        title: 'Enterprise HRIS',             meta: 'Web · Vue 3',       aliases: ['hr', 'payroll', 'totp', '2fa', 'human resources'] },
+      { slug: 'tms',         title: 'Transport Management System', meta: 'Web · GPS',         aliases: ['transport', 'dispatch', 'logistics', 'gps'] },
+      { slug: 'pamanaland',  title: 'Pamanaland Realty Portal',    meta: 'Web · Vue/Laravel', aliases: ['real estate', 'realty', 'developer portal', 'rms'] },
+      { slug: 'jbc',         title: 'JBC Commission System',       meta: 'Web · Vue/Laravel', aliases: ['brokerage', 'commission'] },
+      { slug: 'wms',         title: 'WMS Mobile App',              meta: 'Mobile · Flutter',  aliases: ['warehouse', 'bluetooth', 'scanner', 'flutter'] },
+      { slug: 'llm-wiki',    title: 'LLM-Friendly Wiki',           meta: 'Docs · Obsidian',   aliases: ['obsidian', 'karpathy', 'knowledge base', 'wiki'] }
     ];
+
+    var items = [
+      { section: 'navigate', label: 'Go to: About',         hash: '#fh5co-about',    icon: '#', meta: 'jump', aliases: ['about', 'bio'] },
+      { section: 'navigate', label: 'Go to: Experience',    hash: '#fh5co-resume',   icon: '#', meta: 'jump', aliases: ['resume', 'experience', 'work history', 'timeline'] },
+      { section: 'navigate', label: 'Go to: Build',         hash: '#fh5co-features', icon: '#', meta: 'jump', aliases: ['services', 'features', 'build', 'what i build'] },
+      { section: 'navigate', label: 'Go to: Skills',        hash: '#fh5co-skills',   icon: '#', meta: 'jump', aliases: ['skills', 'tech', 'stack'] },
+      { section: 'navigate', label: 'Go to: Projects',      hash: '#fh5co-work',     icon: '#', meta: 'jump', aliases: ['work', 'projects'] },
+      { section: 'navigate', label: 'Go to: Case Studies',  hash: '#fh5co-blog',     icon: '#', meta: 'jump', aliases: ['case studies', 'blog', 'writeups'] },
+      { section: 'navigate', label: 'Go to: Contact',       hash: '#fh5co-started',  icon: '#', meta: 'jump', aliases: ['contact'] }
+    ];
+
+    CASE_STUDIES.forEach(function (cs) {
+      items.push({
+        section: 'case-study',
+        label: 'Case study: ' + cs.title,
+        href: 'case-studies/' + cs.slug + '.html',
+        icon: '◆', meta: cs.meta,
+        thumb: 'images/og-' + cs.slug + '.png',  // inline preview in palette rows
+        aliases: [cs.slug].concat(cs.aliases)
+      });
+    });
+
+    // Deep links into named sections inside each case study. Each entry
+    // points at a stable <h2 id> added across all 8 writeups. Hand-curated
+    // — same discipline as the FAQ aliases — so typing "PHPUnit", "BaseCrud"
+    // or "Bluetooth" lands the user at the right anchor, not the page top.
+    var CASE_SECTIONS = [
+      // ai-engineer
+      { slug: 'ai-engineer', anchor: 'what-i-built',         label: 'AI Engineer · Multi-LLM dispatcher (Claude/Gemini/OpenAI/OpenRouter/Qwen)', meta: 'What I built',  aliases: ['multi llm', 'dispatcher', 'claude', 'gemini', 'openai', 'openrouter', 'qwen', 'llm router'] },
+      { slug: 'ai-engineer', anchor: 'tech',                 label: 'AI Engineer · PHPUnit deploy verifier',                                    meta: 'Tech',           aliases: ['phpunit', 'verifier', 'deploy gate', 'tests'] },
+      { slug: 'ai-engineer', anchor: 'how-i-broke-it-down',  label: 'AI Engineer · Repo auto-detection + ticket pickup',                        meta: 'Approach',       aliases: ['ticket', 'auto detect repo', 'assigned ticket', 'workflow'] },
+      { slug: 'ai-engineer', anchor: 'what-it-is',           label: 'AI Engineer · Karpathy-style autonomous engineering',                      meta: 'Context',        aliases: ['karpathy', 'autonomous', 'ai engineer'] },
+      // wms (Flutter)
+      { slug: 'wms',         anchor: 'what-i-built',         label: 'WMS Mobile · Bluetooth ESC/POS label printing (Epson TM-P80II)',           meta: 'What I built',  aliases: ['bluetooth', 'esc/pos', 'escpos', 'label printing', 'epson', 'tm-p80ii', 'printer'] },
+      { slug: 'wms',         anchor: 'what-i-built',         label: 'WMS Mobile · Offline replay queue (no scans lost mid-aisle)',              meta: 'What I built',  aliases: ['offline', 'replay queue', 'offline first', 'sync queue'] },
+      { slug: 'wms',         anchor: 'what-i-built',         label: 'WMS Mobile · Dual-input scanning (camera + keyboard-wedge)',               meta: 'What I built',  aliases: ['scanner', 'scanning', 'keyboard wedge', 'camera scan', 'barcode'] },
+      { slug: 'wms',         anchor: 'results',              label: 'WMS Mobile · 108 build releases, 13 feature modules',                      meta: 'Results',        aliases: ['108 releases', 'release cadence', 'modules'] },
+      // wms-v2
+      { slug: 'wms-v2',      anchor: 'what-i-built',         label: 'WMS v2 · Canonical V3 list-page pattern + BaseCrud foundation',            meta: 'What I built',  aliases: ['canonical v3', 'basecrud', 'list page', 'v3 pattern', 'crud framework'] },
+      { slug: 'wms-v2',      anchor: 'tech',                 label: 'WMS v2 · CI-enforced architectural guardrails (ESLint + PHPStan)',         meta: 'Tech',           aliases: ['eslint', 'phpstan', 'guardrails', 'architecture rules', 'ci gates'] },
+      { slug: 'wms-v2',      anchor: 'tech',                 label: 'WMS v2 · Online DDL on huge tables (ALGORITHM=INPLACE LOCK=NONE)',          meta: 'Tech',           aliases: ['online ddl', 'algorithm inplace', 'lock none', 'big table migration', 'zero downtime ddl'] },
+      // hris
+      { slug: 'hris',        anchor: 'tech',                 label: 'HRIS · TOTP 2FA',                                                          meta: 'Tech',           aliases: ['totp', '2fa', 'two factor', 'mfa'] },
+      { slug: 'hris',        anchor: 'tech',                 label: 'HRIS · Jenkins + Buddy dual CI/CD',                                        meta: 'Tech',           aliases: ['jenkins', 'buddy', 'dual ci', 'pipeline'] },
+      { slug: 'hris',        anchor: 'tech',                 label: 'HRIS · GET_LOCK-serialized memo numbering',                                meta: 'Tech',           aliases: ['get_lock', 'memo number', 'serialization', 'concurrent numbering'] },
+      { slug: 'hris',        anchor: 'what-i-built',         label: 'HRIS · PH government payroll tables (SSS/PhilHealth/PagIBIG/BIR)',         meta: 'What I built',  aliases: ['payroll', 'sss', 'philhealth', 'pag-ibig', 'pagibig', 'bir', 'philippines payroll'] },
+      { slug: 'hris',        anchor: 'what-i-built',         label: 'HRIS · 95 pages across the full HR lifecycle',                             meta: 'What I built',  aliases: ['95 pages', 'hr lifecycle', 'pages'] },
+      // tms
+      { slug: 'tms',         anchor: 'what-i-built',         label: 'TMS · Live GPS dispatch + booking → invoice pipeline',                     meta: 'What I built',  aliases: ['live gps', 'dispatch', 'booking', 'invoice pipeline', 'route'] },
+      { slug: 'tms',         anchor: 'results',              label: 'TMS · 324 pages, 68 models',                                               meta: 'Results',        aliases: ['324 pages', '68 models', 'scale'] },
+      // pamanaland
+      { slug: 'pamanaland',  anchor: 'what-i-built',         label: 'Pamanaland · Reservation → equity → amortization → in-house financing',   meta: 'What I built',  aliases: ['reservation', 'equity', 'amortization', 'in-house financing', 'real estate lifecycle'] },
+      { slug: 'pamanaland',  anchor: 'tech',                 label: 'Pamanaland · OU-scoped CASL RBAC, 5-tier seller hierarchy',                meta: 'Tech',           aliases: ['casl', 'rbac', 'permissions', 'ou', 'seller tier', 'sales hierarchy'] },
+      // jbc
+      { slug: 'jbc',         anchor: 'what-i-built',         label: 'JBC · 5-tier commission shares + approver workflow',                       meta: 'What I built',  aliases: ['commission share', '5 tier', 'approver workflow', 'sales commission'] },
+      { slug: 'jbc',         anchor: 'results',              label: 'JBC · 22 months in production, ~640 commits',                              meta: 'Results',        aliases: ['22 months', '640 commits', 'longevity'] },
+      // llm-wiki
+      { slug: 'llm-wiki',    anchor: 'what-i-built',         label: 'LLM Wiki · Per-folder _INDEX.md (cuts agent token cost)',                  meta: 'What I built',  aliases: ['_index.md', 'per folder index', 'token cost', 'agent context'] },
+      { slug: 'llm-wiki',    anchor: 'what-it-is',           label: 'LLM Wiki · Karpathy-pattern Obsidian vault shared by humans + agents',     meta: 'Context',        aliases: ['obsidian', 'karpathy', 'shared vault', 'agent docs'] }
+    ];
+    CASE_SECTIONS.forEach(function (cs) {
+      items.push({
+        section: 'case-section',
+        label: cs.label,
+        href: 'case-studies/' + cs.slug + '.html#' + cs.anchor,
+        icon: '⬡',
+        meta: cs.meta,
+        aliases: [cs.slug].concat(cs.aliases || [])
+      });
+    });
+
+    items.push(
+      { section: 'action', label: 'Hire Me',                  hash: '#fh5co-started', icon: '$', meta: 'cta',         aliases: ['hire', 'work with me'] },
+      { section: 'action', label: 'Explore case studies in 3D',action: 'orbital',     icon: '◎', meta: 'gallery',     aliases: ['3d', 'orbital', 'gallery', 'showcase', 'spin', 'ring', 'explore', 'orbit'] },
+      { section: 'action', label: 'Take the 30-second tour',  action: 'tour',         icon: '▶', meta: 'guided',      aliases: ['tour', 'walkthrough', 'demo', 'guided'] },
+      { section: 'action', label: 'Cycle theme (Alt+T)',      action: 'cycleTheme',   icon: '◐', meta: 'theme',       aliases: ['theme', 'palette', 'dark mode', 'cyber', 'matrix', 'sunset', 'xeno', 'crt'] },
+      { section: 'action', label: 'Toggle Konami Mode',       action: 'konami',       icon: '★', meta: 'easter egg',  aliases: ['konami', 'easter egg', 'secret'] },
+      { section: 'action', label: 'Scroll to Top',            action: 'top',          icon: '↑', meta: 'nav',         aliases: ['top', 'scroll to top'] }
+    );
+
+    items.push(
+      { section: 'resource', label: 'Email: turayalemmuel@gmail.com', href: 'mailto:turayalemmuel@gmail.com', icon: '@', meta: 'contact', aliases: ['email', 'mail'] },
+      { section: 'resource', label: 'GitHub: kon2raya24',              href: 'https://github.com/kon2raya24',                icon: '↗', meta: 'link', aliases: ['github', 'repo', 'code'] },
+      { section: 'resource', label: 'LinkedIn',                        href: 'https://www.linkedin.com/in/lemmuel-turaya/',  icon: '↗', meta: 'link', aliases: ['linkedin'] },
+      { section: 'resource', label: 'Book a 15-min intro call',        href: 'https://cal.com/lemmuel-turaya/intro',         icon: '☎', meta: 'cal.com', aliases: ['cal.com', 'call', 'book', 'meeting', 'intro'] },
+      { section: 'resource', label: 'Download Resume (PDF)',           href: 'resume.pdf',     icon: '⇣', meta: 'file', aliases: ['cv', 'resume', 'pdf', 'download'] },
+      { section: 'resource', label: 'Open /uses',                      href: 'uses.html',      icon: '⚙', meta: 'page', aliases: ['uses', 'setup', 'tools'] },
+      { section: 'resource', label: 'Open /changelog',                 href: 'changelog.html', icon: '◷', meta: 'page', aliases: ['changelog', 'updates', 'history'] },
+      { section: 'resource', label: 'Open resume.json',                href: 'resume.json',    icon: '{}', meta: 'data', aliases: ['json', 'resume json', 'data'] },
+      // Clipboard actions — useful for recruiters/hiring managers pasting
+      // contact info into ATS forms, Slack, or notes. action='copy' + text.
+      { section: 'resource', label: 'Copy email address',  action: 'copy', text: 'turayalemmuel@gmail.com',                  icon: '⎘', meta: 'copy', aliases: ['copy email', 'paste email', 'clipboard'] },
+      { section: 'resource', label: 'Copy GitHub URL',     action: 'copy', text: 'https://github.com/kon2raya24',             icon: '⎘', meta: 'copy', aliases: ['copy github', 'github link'] },
+      { section: 'resource', label: 'Copy LinkedIn URL',   action: 'copy', text: 'https://www.linkedin.com/in/lemmuel-turaya/', icon: '⎘', meta: 'copy', aliases: ['copy linkedin', 'linkedin link'] },
+      { section: 'resource', label: 'Copy resume PDF link',action: 'copy', text: 'https://kon2raya.netlify.app/resume.pdf', icon: '⎘', meta: 'copy', aliases: ['copy resume', 'cv link', 'paste resume'] }
+    );
+
+    // FAQ ingestion — the chat IIFE exposes its curated entries on
+    // window.PortfolioChat.faq. The chat may bootstrap after us on slow
+    // loads, so we try inline first and fall back to DOMContentLoaded.
+    function loadFaqItems() {
+      var src = (window.PortfolioChat && window.PortfolioChat.faq) || [];
+      src.forEach(function (e) {
+        items.push({
+          section: 'faq',
+          label: e.q,
+          action: 'ask',
+          ask: e.q,
+          icon: '?',
+          meta: e.category || 'faq',
+          aliases: (e.aliases || []).concat([e.category || ''])
+        });
+      });
+    }
+    if (window.PortfolioChat && window.PortfolioChat.faq) loadFaqItems();
+    else document.addEventListener('DOMContentLoaded', loadFaqItems, { once: true });
+
+    var SECTION_LABELS = {
+      'ask':          'Ask the assistant',
+      'recent':       'Recently used',
+      'navigate':     'Navigate',
+      'case-study':   'Case studies',
+      'case-section': 'Inside the case studies',
+      'faq':          'FAQ',
+      'action':       'Actions',
+      'resource':     'Resources'
+    };
+    var SECTION_ORDER = ['ask', 'recent', 'navigate', 'case-study', 'case-section', 'faq', 'action', 'resource'];
+
+    // Recent-items persistence — stores label+section composite keys for the
+    // last few items the user picked. Returning visitors get a one-click
+    // re-entry to what they cared about last session.
+    var RECENT_KEY = 'portfolio.cmdk.recent';
+    var RECENT_MAX = 4;
+    function itemKey(it) { return it.section + '|' + it.label; }
+    function loadRecent() {
+      try { var raw = localStorage.getItem(RECENT_KEY); return raw ? JSON.parse(raw) : []; }
+      catch (e) { return []; }
+    }
+    function pushRecent(it) {
+      if (!it || it.section === 'ask' || it.__virtual) return; // skip virtual ask-row
+      var keys = loadRecent().filter(function (k) { return k !== itemKey(it); });
+      keys.unshift(itemKey(it));
+      keys = keys.slice(0, RECENT_MAX);
+      try { localStorage.setItem(RECENT_KEY, JSON.stringify(keys)); } catch (e) {}
+    }
+    function recentItems() {
+      var keys = loadRecent();
+      if (!keys.length) return [];
+      var byKey = {};
+      items.forEach(function (it) { byKey[itemKey(it)] = it; });
+      return keys.map(function (k) { return byKey[k]; }).filter(Boolean);
+    }
+
+    function normalize(s) {
+      return String(s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function highlight(text, q) {
+      if (!q) return escapeHtml(text);
+      var safe = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return escapeHtml(text).replace(new RegExp('(' + safe + ')', 'gi'),
+        '<mark class="cmdk__hl">$1</mark>');
+    }
+    function scoreItem(it, nq) {
+      if (!nq) return 1;
+      var nl = normalize(it.label);
+      var nm = normalize(it.meta || '');
+      if (nl === nq) return 100;
+      if (nl.indexOf(nq) === 0) return 80;
+      if (nl.indexOf(nq) !== -1) return 60;
+      var na = it.aliases || [];
+      for (var i = 0; i < na.length; i++) {
+        var a = normalize(na[i]);
+        if (!a) continue;
+        if (a === nq) return 70;
+        if (a.indexOf(nq) === 0) return 50;
+        if (a.indexOf(nq) !== -1) return 40;
+      }
+      if (nm.indexOf(nq) !== -1) return 30;
+      // Per-token prefix overlap on the label — handles "vue laravel" → "Vue/Laravel"
+      var qToks = nq.split(' ').filter(Boolean);
+      var lToks = nl.split(' ').filter(Boolean);
+      if (qToks.length && lToks.length) {
+        var hits = 0;
+        for (var k = 0; k < qToks.length; k++) {
+          for (var j = 0; j < lToks.length; j++) {
+            if (lToks[j].indexOf(qToks[k]) === 0) { hits++; break; }
+          }
+        }
+        if (hits === qToks.length) return 25;
+        if (hits / qToks.length >= 0.5) return 15;
+      }
+      return 0;
+    }
 
     var overlay = document.createElement('div');
     overlay.className = 'cmdk-overlay';
     overlay.innerHTML =
-      '<div class="cmdk" role="dialog" aria-modal="true">' +
+      '<div class="cmdk" role="dialog" aria-modal="true" aria-label="Command palette">' +
         '<div class="cmdk__head">' +
           '<span class="cmdk__prompt">&gt;</span>' +
-          '<input class="cmdk__input" type="text" placeholder="Search commands… (try: hire, github, resume)" autocomplete="off" spellcheck="false">' +
+          '<input class="cmdk__input" type="text" placeholder="Search: case studies, FAQ, jump-to… (or type to ask)" autocomplete="off" spellcheck="false" aria-label="Command palette search">' +
           '<span class="cmdk__kbd">ESC</span>' +
         '</div>' +
         '<ul class="cmdk__list" role="listbox"></ul>' +
         '<div class="cmdk__foot">' +
           '<span><kbd>↑↓</kbd> navigate</span>' +
+          '<span><kbd>tab</kbd> section</span>' +
           '<span><kbd>↵</kbd> select</span>' +
           '<span><kbd>esc</kbd> close</span>' +
+          '<span class="cmdk__count" data-cmdk-count></span>' +
         '</div>' +
       '</div>';
     document.body.appendChild(overlay);
@@ -1096,42 +1390,263 @@ try {
     document.body.appendChild(hint);
     setTimeout(function () { hint.style.transition = 'opacity 0.6s'; hint.style.opacity = '0'; }, 9000);
 
-    var input = overlay.querySelector('.cmdk__input');
-    var list = overlay.querySelector('.cmdk__list');
-    var active = 0;
-    var filtered = items.slice();
+    // Mobile FAB — Ctrl+K is keyboard-only, so phones need a tap target.
+    // Placed bottom-left so the bottom-right chat bubble + go-to-top stack
+    // stays uncluttered. CSS hides it on viewports >= 769px.
+    var fab = document.createElement('button');
+    fab.type = 'button';
+    fab.className = 'cmdk-fab';
+    fab.setAttribute('aria-label', 'Open command palette');
+    fab.innerHTML = '<span class="cmdk-fab__kbd">⌘K</span>';
+    fab.addEventListener('click', function () {
+      overlay.classList.contains('is-open') ? close() : open();
+    });
+    document.body.appendChild(fab);
 
-    function render() {
+    // First-time mobile coachmark — most phone visitors won't know what ⌘K
+    // does. A speech-bubble pointing at the FAB introduces it on first run.
+    // Auto-dismisses after 6s, on first FAB tap, or on any scroll. Flag is
+    // persisted in localStorage so it shows once per device.
+    var COACH_KEY = 'portfolio.cmdk.fab.seen';
+    function maybeShowCoach() {
+      try { if (localStorage.getItem(COACH_KEY)) return; } catch (e) {}
+      if (!matchMedia('(max-width: 768px)').matches) return;
+      var coach = document.createElement('div');
+      coach.className = 'cmdk-fab-coach';
+      coach.setAttribute('role', 'tooltip');
+      coach.innerHTML =
+        '<div class="cmdk-fab-coach__body">' +
+          '<strong>Tap to search</strong>' +
+          '<span class="cmdk-fab-coach__sub">100+ Q&amp;A · 8 case studies</span>' +
+        '</div>' +
+        '<i class="cmdk-fab-coach__arrow" aria-hidden="true"></i>';
+      document.body.appendChild(coach);
+      var dismissed = false;
+      var dismiss = function () {
+        if (dismissed) return;
+        dismissed = true;
+        coach.classList.add('is-leaving');
+        setTimeout(function () { if (coach.parentNode) coach.parentNode.removeChild(coach); }, 320);
+        try { localStorage.setItem(COACH_KEY, '1'); } catch (e) {}
+        window.removeEventListener('scroll', onScroll, { passive: true });
+      };
+      var onScroll = function () { dismiss(); };
+      fab.addEventListener('click', dismiss, { once: true });
+      coach.addEventListener('click', dismiss);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      setTimeout(dismiss, 6000);
+      // Fade in on next frame so transitions catch
+      requestAnimationFrame(function () { coach.classList.add('is-open'); });
+    }
+    setTimeout(maybeShowCoach, 1400);
+
+    var input   = overlay.querySelector('.cmdk__input');
+    var list    = overlay.querySelector('.cmdk__list');
+    var countEl = overlay.querySelector('[data-cmdk-count]');
+    var rows = [];        // focusable row DOM nodes
+    var rowsItems = [];   // parallel: the item for each row
+    var active = 0;
+
+    function buildAskItem(q) {
+      return {
+        section: 'ask',
+        label: 'Ask the assistant: "' + q + '"',
+        action: 'ask',
+        ask: q,
+        icon: '✦',
+        meta: 'chat',
+        __virtual: true
+      };
+    }
+
+    function render(query) {
+      query = query || '';
+      var nq = normalize(query);
       list.innerHTML = '';
-      filtered.forEach(function (it, i) {
-        var li = document.createElement('li');
-        li.className = i === active ? 'is-active' : '';
-        li.innerHTML =
-          '<span class="cmdk__icon">' + it.icon + '</span>' +
-          '<span>' + it.label + '</span>' +
-          '<span class="cmdk__meta">' + it.meta + '</span>';
-        li.addEventListener('click', function () { exec(it); });
-        list.appendChild(li);
+      rows = [];
+      rowsItems = [];
+
+      var grouped = {};
+      SECTION_ORDER.forEach(function (k) { grouped[k] = []; });
+
+      items.forEach(function (it) {
+        var s = scoreItem(it, nq);
+        if (s > 0) grouped[it.section].push({ s: s, it: it });
+      });
+
+      // Sort each section by score desc, preserving insertion order for ties
+      Object.keys(grouped).forEach(function (k) {
+        grouped[k].sort(function (a, b) { return b.s - a.s; });
+        grouped[k] = grouped[k].map(function (x) { return x.it; });
+      });
+
+      // Prepend virtual "Ask the assistant: <query>" when typing free-form
+      if (query.trim()) grouped.ask.unshift(buildAskItem(query.trim()));
+
+      // Surface recently-used items at the top — only on the no-query state,
+      // so a filtered view stays a pure search and isn't polluted by history.
+      // Also remove them from their native section so they don't render twice.
+      if (!nq) {
+        var recents = recentItems();
+        if (recents.length) {
+          var recentKeys = {};
+          recents.forEach(function (it) {
+            recentKeys[itemKey(it)] = true;
+            grouped.recent.push(it);
+          });
+          Object.keys(grouped).forEach(function (k) {
+            if (k === 'recent') return;
+            grouped[k] = grouped[k].filter(function (it) { return !recentKeys[itemKey(it)]; });
+          });
+        }
+      }
+
+      SECTION_ORDER.forEach(function (key) {
+        var bucket = grouped[key];
+        if (!bucket || !bucket.length) return;
+        var header = document.createElement('li');
+        header.className = 'cmdk__section';
+        header.setAttribute('aria-hidden', 'true');
+        header.textContent = SECTION_LABELS[key] || key;
+        list.appendChild(header);
+
+        // Cap larger sections when the user hasn't typed yet — surfacing all
+        // 100+ FAQ + 20+ case-section entries unfiltered would wall-of-text
+        // the open state. Once a query is present, show every match.
+        var cap = (!nq && (key === 'faq' || key === 'case-section')) ? 6 : 60;
+        var visible = bucket.slice(0, cap);
+        visible.forEach(function (it) {
+          var li = document.createElement('li');
+          li.className = 'cmdk__row';
+          if (it.__virtual) li.classList.add('cmdk__row--ask');
+          li.setAttribute('role', 'option');
+          li.setAttribute('data-section', it.section);
+          // Case-study rows render a thumbnail of their OG image instead of
+          // the generic ◆ glyph; gives the palette a magazine-cover feel.
+          var iconCell = it.thumb
+            ? '<span class="cmdk__icon cmdk__icon--thumb"><img src="' + escapeHtml(it.thumb) + '" alt="" width="44" height="24" loading="lazy" decoding="async"></span>'
+            : '<span class="cmdk__icon">' + escapeHtml(it.icon || '') + '</span>';
+          li.innerHTML =
+            iconCell +
+            '<span class="cmdk__label">' + highlight(it.label, query.trim()) + '</span>' +
+            '<span class="cmdk__meta">' + highlight(it.meta || '', query.trim()) + '</span>';
+          // Stagger row entry — index capped at 8 so a 50-row result set
+          // doesn't take a full second to finish drawing in.
+          li.style.animationDelay = (Math.min(rows.length, 8) * 18) + 'ms';
+          // 3D parallax on case-study rows — the OG thumbnail floats forward
+          // on translateZ as the row tilts under the cursor. Builds on the
+          // existing tilt() IIFE pattern; respects reduced-motion + touch.
+          if (it.section === 'case-study' && !isTouch && !prefersReduced) {
+            li.classList.add('cmdk__row--tilt');
+            var raf = null;
+            li.addEventListener('mousemove', function (ev) {
+              if (raf) return;
+              raf = requestAnimationFrame(function () {
+                var r = li.getBoundingClientRect();
+                var px = (ev.clientX - r.left) / r.width;
+                var py = (ev.clientY - r.top) / r.height;
+                var ry = (px - 0.5) * 6;
+                var rx = (0.5 - py) * 4;
+                li.style.transform = 'perspective(700px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+                raf = null;
+              });
+            });
+            li.addEventListener('mouseleave', function () {
+              li.style.transform = '';
+            });
+          }
+          li.addEventListener('click', function () { exec(it); });
+          list.appendChild(li);
+          rows.push(li);
+          rowsItems.push(it);
+        });
+        if (bucket.length > cap) {
+          var more = document.createElement('li');
+          more.className = 'cmdk__more';
+          more.setAttribute('aria-hidden', 'true');
+          more.textContent = '+ ' + (bucket.length - cap) + ' more — type to filter';
+          list.appendChild(more);
+        }
+      });
+
+      if (!rows.length) {
+        var empty = document.createElement('li');
+        empty.className = 'cmdk__empty';
+        empty.textContent = 'No matches. Press Enter to ask the assistant.';
+        list.appendChild(empty);
+      }
+
+      active = 0;
+      paintActive();
+      if (countEl) countEl.textContent = rows.length + ' result' + (rows.length === 1 ? '' : 's');
+    }
+
+    function paintActive() {
+      rows.forEach(function (r, i) {
+        var isActive = i === active;
+        r.classList.toggle('is-active', isActive);
+        if (isActive) r.scrollIntoView({ block: 'nearest' });
       });
     }
 
-    function filter(q) {
-      q = q.trim().toLowerCase();
-      if (!q) { filtered = items.slice(); }
-      else {
-        filtered = items.filter(function (it) {
-          return it.label.toLowerCase().indexOf(q) > -1 || it.meta.toLowerCase().indexOf(q) > -1;
-        });
+    // Toast — non-blocking confirmation for actions that don't navigate
+    // (clipboard copy mainly). Anchored bottom-center of the palette.
+    function showToast(msg) {
+      var t = overlay.querySelector('.cmdk__toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.className = 'cmdk__toast';
+        overlay.querySelector('.cmdk').appendChild(t);
       }
-      active = 0;
-      render();
+      t.textContent = msg;
+      t.classList.remove('is-open');
+      // Reflow so animation re-triggers
+      void t.offsetWidth;
+      t.classList.add('is-open');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.classList.remove('is-open'); }, 1500);
     }
 
     function exec(it) {
-      if (!it) return;
+      if (!it) {
+        var q = (input.value || '').trim();
+        if (q) { close(); if (window.PortfolioChat) window.PortfolioChat.ask(q); }
+        return;
+      }
+      pushRecent(it);
+      // Copy actions don't close the palette — visitors often want to copy
+      // several things in a row. Toast confirms each paste-buffer write.
+      if (it.action === 'copy' && it.text) {
+        var done = function () { showToast('Copied: ' + it.text); };
+        var fail = function () { showToast('Copy failed — select manually'); };
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(it.text).then(done, fail);
+          } else {
+            // Older browsers: fallback via a temp textarea
+            var ta = document.createElement('textarea');
+            ta.value = it.text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            done();
+          }
+        } catch (e) { fail(); }
+        return;
+      }
       close();
-      if (it.action === 'konami') { document.body.classList.toggle('konami-on'); return; }
-      if (it.action === 'top')    { window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' }); return; }
+      if (it.action === 'ask' && it.ask) {
+        if (window.PortfolioChat) window.PortfolioChat.ask(it.ask);
+        return;
+      }
+      if (it.action === 'konami')     { document.body.classList.toggle('konami-on'); return; }
+      if (it.action === 'top')        { window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' }); return; }
+      if (it.action === 'tour')       { if (window.PortfolioTour) window.PortfolioTour.start(); return; }
+      if (it.action === 'orbital')    { if (window.PortfolioOrbital) window.PortfolioOrbital.open(); return; }
+      if (it.action === 'cycleTheme') {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 't', altKey: true, bubbles: true }));
+        return;
+      }
       if (it.hash) {
         var t = document.querySelector(it.hash);
         if (t) t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
@@ -1146,15 +1661,12 @@ try {
       }
     }
 
-    // Track focus before open so we can restore it on close — same dialog
-    // pattern as kbdhelp. Without this, keyboard users land at the top of
-    // the page after dismissing the palette.
     var lastFocus = null;
     function open() {
       lastFocus = document.activeElement;
       overlay.classList.add('is-open');
       input.value = '';
-      filter('');
+      render('');
       setTimeout(function () { input.focus(); }, 10);
     }
     function close() {
@@ -1165,12 +1677,44 @@ try {
       }
     }
 
-    input.addEventListener('input', function (e) { filter(e.target.value); });
+    input.addEventListener('input', function (e) { render(e.target.value); });
     input.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowDown') { e.preventDefault(); active = (active + 1) % Math.max(filtered.length, 1); render(); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); active = (active - 1 + filtered.length) % Math.max(filtered.length, 1); render(); }
-      else if (e.key === 'Enter') { e.preventDefault(); exec(filtered[active]); }
-      else if (e.key === 'Escape') { close(); }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!rows.length) return;
+        active = (active + 1) % rows.length; paintActive();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!rows.length) return;
+        active = (active - 1 + rows.length) % rows.length; paintActive();
+      } else if (e.key === 'Tab') {
+        // Tab / Shift+Tab — jump to the first row of the next/previous
+        // section. Conflict-free with browser tab-switching shortcuts and
+        // makes long result sets scannable in one keystroke per section.
+        if (!rows.length) return;
+        e.preventDefault();
+        var dir = e.shiftKey ? -1 : 1;
+        var current = rowsItems[active] ? rowsItems[active].section : null;
+        var len = rows.length;
+        for (var step = 1; step <= len; step++) {
+          var i = (active + dir * step + len * len) % len;
+          if (rowsItems[i] && rowsItems[i].section !== current) {
+            // Going backward, we hit the LAST row of the prev section first.
+            // Walk back through it until we land on its FIRST row.
+            if (dir === -1) {
+              var landed = rowsItems[i].section;
+              while (i > 0 && rowsItems[i - 1] && rowsItems[i - 1].section === landed) i--;
+            }
+            active = i; paintActive();
+            break;
+          }
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        exec(rowsItems[active] || null);
+      } else if (e.key === 'Escape') {
+        close();
+      }
     });
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
 
@@ -1180,13 +1724,1458 @@ try {
         overlay.classList.contains('is-open') ? close() : open();
       } else if (e.key === '/' && !overlay.classList.contains('is-open')) {
         var tag = (document.activeElement && document.activeElement.tagName) || '';
-        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        var ce  = document.activeElement && document.activeElement.isContentEditable;
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !ce) {
           e.preventDefault(); open();
         }
       }
     });
 
-    render();
+    window.PortfolioPalette = { open: open, close: close };
+  })();
+
+  /* ---------- Guided 30-second tour ----------
+   * Auto-scrolls through key sections with caption bubbles. Triggered from
+   * the command palette ("Take the 30-second tour"). ESC cancels, click
+   * → advances, button-bar gives Pause/Next/Skip control.
+   * ------------------------------------------------------------------------- */
+  (function tour() {
+    var STEPS = [
+      { id: 'fh5co-header',   title: '~/hero',          caption: "Hey — I'm <strong>Lemmuel Turaya</strong>. Full-stack &amp; mobile dev, 6+ years shipping production work." },
+      { id: 'fh5co-about',    title: 'about_me',        caption: "<strong>Vue · Laravel · Flutter</strong> daily. Karpathy-style AI-augmented engineering with <strong>Claude Code</strong> every day." },
+      { id: 'fh5co-resume',   title: 'experience',      caption: "Logistics → real estate → HR → autonomous AI engineering. The timeline shows the surface area." },
+      { id: 'fh5co-skills',   title: 'skills',          caption: "The daily stack and what I'd pair on. Vue 3 / Nuxt / Pinia, Laravel 11/12, Flutter, MySQL, Playwright + PHPUnit." },
+      { id: 'fh5co-blog',     title: 'case_studies',    caption: "<strong>8 deep-dives</strong> into shipped systems. The AI-engineer + WMS v2 writeups are starred — start there." },
+      { id: 'fh5co-started',  title: 'contact',         caption: "Open to remote / hybrid / onsite. <strong>Book a 15-min call</strong> or use the form — replies within 24h." }
+    ];
+
+    var prefersReducedLocal = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var STEP_MS = prefersReducedLocal ? 1200 : 4500;
+
+    var bubble = null;
+    var idx = 0;
+    var paused = false;
+    var timer = null;
+
+    function ensureBubble() {
+      if (bubble) return bubble;
+      bubble = document.createElement('div');
+      bubble.className = 'tour-bubble';
+      bubble.setAttribute('role', 'dialog');
+      bubble.setAttribute('aria-modal', 'false');
+      bubble.setAttribute('aria-label', 'Guided tour');
+      document.body.appendChild(bubble);
+      return bubble;
+    }
+
+    // Step-mode content (the per-section caption + control bar). Re-rendered
+    // fresh on each tour start so post-finale state doesn't leak in.
+    function renderStepUI() {
+      bubble.classList.remove('tour-bubble--finale');
+      bubble.innerHTML =
+        '<div class="tour-bubble__head">' +
+          '<span class="tour-bubble__title" data-tour-title></span>' +
+          '<span class="tour-bubble__step" data-tour-step></span>' +
+        '</div>' +
+        '<div class="tour-bubble__caption" data-tour-caption></div>' +
+        '<div class="tour-bubble__bar">' +
+          '<button type="button" class="tour-btn" data-tour-prev>← Back</button>' +
+          '<button type="button" class="tour-btn" data-tour-pause>Pause</button>' +
+          '<button type="button" class="tour-btn" data-tour-skip>Skip</button>' +
+          '<button type="button" class="tour-btn tour-btn--primary" data-tour-next>Next →</button>' +
+        '</div>' +
+        '<div class="tour-bubble__progress"><span data-tour-progress></span></div>';
+      bubble.querySelector('[data-tour-prev]').addEventListener('click',  function () { goto(idx - 1); });
+      bubble.querySelector('[data-tour-next]').addEventListener('click',  function () { goto(idx + 1); });
+      bubble.querySelector('[data-tour-skip]').addEventListener('click',  stop);
+      bubble.querySelector('[data-tour-pause]').addEventListener('click', function () {
+        paused = !paused;
+        bubble.querySelector('[data-tour-pause]').textContent = paused ? 'Resume' : 'Pause';
+        if (paused) clearTimer(); else scheduleNext();
+      });
+    }
+
+    // Finale CTA — what visitors see after the last step. Soft sell: book a
+    // call / email / replay the tour. Auto-fades after 18s unless interacted
+    // with, so the bubble doesn't camp on the page forever.
+    var finaleTimer = null;
+    function renderFinaleUI() {
+      bubble.classList.add('tour-bubble--finale');
+      bubble.innerHTML =
+        '<div class="tour-bubble__head">' +
+          '<span class="tour-bubble__title">tour_complete</span>' +
+          '<span class="tour-bubble__step">★ end</span>' +
+        '</div>' +
+        '<div class="tour-bubble__caption">' +
+          "That's the 30-second version. If anything caught your eye, the fastest paths are below — or press <kbd>⌘K</kbd> to search the 100+ Q&amp;A and 8 case studies." +
+        '</div>' +
+        '<div class="tour-bubble__bar tour-bubble__bar--finale">' +
+          '<button type="button" class="tour-btn"                 data-tour-replay>↻ Replay</button>' +
+          '<a      type="button" class="tour-btn"                 data-tour-email href="mailto:turayalemmuel@gmail.com">✉ Email</a>' +
+          '<a      type="button" class="tour-btn tour-btn--primary" data-tour-book  href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener">☎ Book a 15-min call →</a>' +
+          '<button type="button" class="tour-btn tour-btn--ghost" data-tour-close>Close</button>' +
+        '</div>' +
+        '<div class="tour-bubble__progress"><span style="width:100%"></span></div>';
+      bubble.querySelector('[data-tour-replay]').addEventListener('click', function () {
+        clearTimer(); if (finaleTimer) { clearTimeout(finaleTimer); finaleTimer = null; }
+        renderStepUI(); paused = false; goto(0);
+      });
+      bubble.querySelector('[data-tour-close]').addEventListener('click', stop);
+      // Email/book links: user clicks naturally close the bubble after action
+      ['[data-tour-email]', '[data-tour-book]'].forEach(function (sel) {
+        bubble.querySelector(sel).addEventListener('click', function () {
+          // Give the link a tick to navigate, then dismiss
+          setTimeout(stop, 300);
+        });
+      });
+      if (finaleTimer) clearTimeout(finaleTimer);
+      finaleTimer = setTimeout(stop, 18000);
+    }
+
+    function clearTimer() { if (timer) { clearTimeout(timer); timer = null; } }
+    function scheduleNext() {
+      clearTimer();
+      if (paused) return;
+      timer = setTimeout(function () { goto(idx + 1); }, STEP_MS);
+    }
+    function clearHighlights() {
+      document.querySelectorAll('.tour-target').forEach(function (el) {
+        el.classList.remove('tour-target');
+      });
+    }
+    function setProgress() {
+      var p = bubble.querySelector('[data-tour-progress]');
+      if (p) p.style.width = ((idx + 1) / STEPS.length * 100).toFixed(1) + '%';
+    }
+
+    function goto(next) {
+      if (next < 0) next = 0;
+      if (next >= STEPS.length) { complete(); return; }
+      idx = next;
+      var step = STEPS[idx];
+      var target = document.getElementById(step.id);
+      clearHighlights();
+      if (target) {
+        target.classList.add('tour-target');
+        target.scrollIntoView({ behavior: prefersReducedLocal ? 'auto' : 'smooth', block: 'start' });
+      }
+      bubble.querySelector('[data-tour-title]').textContent   = step.title;
+      bubble.querySelector('[data-tour-step]').textContent    = (idx + 1) + ' / ' + STEPS.length;
+      bubble.querySelector('[data-tour-caption]').innerHTML   = step.caption;
+      setProgress();
+      scheduleNext();
+    }
+
+    function complete() {
+      clearTimer();
+      clearHighlights();
+      renderFinaleUI();
+    }
+
+    function start() {
+      if (bubble && bubble.classList.contains('is-open')) return;
+      ensureBubble();
+      renderStepUI();
+      bubble.classList.add('is-open');
+      document.body.classList.add('tour-active');
+      paused = false;
+      goto(0);
+    }
+    function stop() {
+      clearTimer();
+      if (finaleTimer) { clearTimeout(finaleTimer); finaleTimer = null; }
+      clearHighlights();
+      if (bubble) bubble.classList.remove('is-open');
+      document.body.classList.remove('tour-active');
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!bubble || !bubble.classList.contains('is-open')) return;
+      if (e.key === 'Escape')          { e.preventDefault(); stop(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); goto(idx + 1); }
+      else if (e.key === 'ArrowLeft')  { e.preventDefault(); goto(idx - 1); }
+    });
+
+    window.PortfolioTour = { start: start, stop: stop };
+  })();
+
+  /* ---------- Orbital 3D case-study selector ----------
+   * Full-screen 3D ring of the 8 case studies, drag to rotate, ←→ to snap to
+   * the next card, Enter to dive in, ESC to close. Triggered from a palette
+   * command. Vanilla CSS 3D — no Three.js. Reduced-motion degrades to a
+   * flat row layout (the keyframe animation is suppressed but the static
+   * positioning still works).
+   * ------------------------------------------------------------------------- */
+  (function orbital3d() {
+    var CARDS = [
+      { slug: 'ai-engineer', title: 'Autonomous AI Engineer',      meta: 'Multi-LLM · Laravel' },
+      { slug: 'wms-v2',      title: 'WMS v2 Inventory Rewrite',    meta: 'Vue 3 · Laravel 12' },
+      { slug: 'hris',        title: 'Enterprise HRIS',             meta: 'Vue 3 · TypeScript' },
+      { slug: 'tms',         title: 'Transport Management System', meta: 'Live GPS · Dispatch' },
+      { slug: 'pamanaland',  title: 'Pamanaland Realty Portal',    meta: 'Real estate · CASL' },
+      { slug: 'jbc',         title: 'JBC Commission System',       meta: '22 months in prod' },
+      { slug: 'wms',         title: 'WMS Mobile App',              meta: 'Flutter · BT printing' },
+      { slug: 'llm-wiki',    title: 'LLM-Friendly Wiki',           meta: 'Obsidian · Karpathy' }
+    ];
+
+    var overlay = null;
+    var ring    = null;
+    var rot     = 0;
+    var targetRot = 0;
+    var focusedIdx = -1;
+    var rafId   = null;
+    var drag    = null;
+    var perDeg  = 360 / CARDS.length;
+
+    // Starfield state — populated lazily in build()
+    var starCanvas = null;
+    var starCtx    = null;
+    var stars      = [];
+    var starW      = 0;
+    var starH      = 0;
+    var starSpeed  = 0.0015;  // baseline z-velocity per frame
+    var starWarp   = 0;       // additive warp speed during drag (eases back to 0)
+    var lastRotForStars = 0;  // tracks rotation delta → side-drift for stars
+
+    function spawnStar(z) {
+      // Stars distributed in a wide cone around the camera; (x,y) are NDC-ish
+      // multiplied by a large factor so they fly off-screen as z→0.
+      return {
+        x: (Math.random() - 0.5) * 2.6,
+        y: (Math.random() - 0.5) * 2.6,
+        z: typeof z === 'number' ? z : Math.random(),
+        c: Math.random() < 0.18 ? 'cyan' : (Math.random() < 0.5 ? 'white' : 'soft')
+      };
+    }
+
+    function initStars() {
+      stars = [];
+      var n = window.innerWidth < 700 ? 220 : 480;
+      for (var i = 0; i < n; i++) stars.push(spawnStar(Math.random()));
+    }
+
+    function sizeStarCanvas() {
+      if (!starCanvas) return;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      starW = starCanvas.clientWidth  = window.innerWidth;
+      starH = starCanvas.clientHeight = window.innerHeight;
+      starCanvas.width  = Math.floor(starW * dpr);
+      starCanvas.height = Math.floor(starH * dpr);
+      if (starCtx) starCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function renderStars() {
+      if (!starCtx || prefersReduced) return;
+      starCtx.clearRect(0, 0, starW, starH);
+      var cx = starW * 0.5;
+      var cy = starH * 0.5;
+      // Convert ring rotation delta into a horizontal drift so the starfield
+      // appears to pan with the user's spin — a small but addictive coupling.
+      var drotDeg = rot - lastRotForStars;
+      lastRotForStars = rot;
+      var drift = drotDeg * 0.6;   // px per frame, signed
+
+      // Ease warp speed back down each frame (decay)
+      starWarp *= 0.92;
+      if (starWarp < 0.0001) starWarp = 0;
+
+      var dz = starSpeed + starWarp;
+
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        s.z -= dz;
+        if (s.z <= 0.001) { stars[i] = spawnStar(1); continue; }
+        // Apply horizontal drift directly (perspective-scaled)
+        s.x += drift * 0.0008 / s.z;
+        if (s.x >  2.0) s.x -= 4.0;
+        if (s.x < -2.0) s.x += 4.0;
+
+        var k = 1 / s.z;
+        var sx = cx + s.x * k * cx * 0.7;
+        var sy = cy + s.y * k * cy * 0.7;
+        if (sx < -20 || sx > starW + 20 || sy < -20 || sy > starH + 20) continue;
+
+        // Size + brightness scale with closeness (1-z); add warp-trail length
+        var size  = Math.max(0.4, (1 - s.z) * 2.2);
+        var alpha = Math.min(1, (1 - s.z) * 1.3);
+
+        // Color
+        var fill;
+        if (s.c === 'cyan')      fill = 'rgba(0, 229, 255, ' + (alpha * 0.95) + ')';
+        else if (s.c === 'soft') fill = 'rgba(180, 210, 255, ' + (alpha * 0.7) + ')';
+        else                     fill = 'rgba(255, 255, 255, ' + alpha + ')';
+
+        if (starWarp > 0.002) {
+          // Streak: draw a short line from prev (deeper) position
+          var prevK  = 1 / (s.z + dz);
+          var prevSx = cx + s.x * prevK * cx * 0.7;
+          var prevSy = cy + s.y * prevK * cy * 0.7;
+          starCtx.strokeStyle = fill;
+          starCtx.lineWidth = size;
+          starCtx.beginPath();
+          starCtx.moveTo(prevSx, prevSy);
+          starCtx.lineTo(sx, sy);
+          starCtx.stroke();
+        } else {
+          starCtx.fillStyle = fill;
+          starCtx.beginPath();
+          starCtx.arc(sx, sy, size, 0, Math.PI * 2);
+          starCtx.fill();
+        }
+      }
+    }
+
+    function build() {
+      overlay = document.createElement('div');
+      overlay.className = 'orbital3d-overlay';
+      overlay.hidden = true;
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', 'Case studies in 3D');
+
+      var cardsHtml = CARDS.map(function (c, i) {
+        return '<a class="orbital3d-card" data-cs="' + c.slug + '" href="case-studies/' + c.slug + '.html" style="--i: ' + i + ';" aria-label="' + c.title + '">' +
+          '<img class="orbital3d-card__img" src="images/og-' + c.slug + '.png" alt="" loading="lazy" decoding="async">' +
+          '<div class="orbital3d-card__inner">' +
+            '<div class="orbital3d-card__title">' + c.title + '</div>' +
+            '<div class="orbital3d-card__meta">' + c.meta + '</div>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+
+      overlay.innerHTML =
+        '<button type="button" class="orbital3d-close" aria-label="Close 3D view">[ ESC ]</button>' +
+        '<canvas class="orbital3d-starfield" aria-hidden="true"></canvas>' +
+        '<div class="orbital3d-nebula" aria-hidden="true">' +
+          '<span class="orbital3d-nebula__cloud orbital3d-nebula__cloud--a"></span>' +
+          '<span class="orbital3d-nebula__cloud orbital3d-nebula__cloud--b"></span>' +
+          '<span class="orbital3d-nebula__cloud orbital3d-nebula__cloud--c"></span>' +
+        '</div>' +
+        '<div class="orbital3d-grid" aria-hidden="true"></div>' +
+        '<div class="orbital3d-horizon" aria-hidden="true"></div>' +
+        '<div class="orbital3d-stage">' +
+          '<div class="orbital3d-ring" style="--total: ' + CARDS.length + '; --rot: 0deg;">' + cardsHtml + '</div>' +
+        '</div>' +
+        '<div class="orbital3d-hud">' +
+          '<span class="orbital3d-hud__title" data-orb-title>Case Studies · spin to explore</span>' +
+          '<span class="orbital3d-hud__hint">drag · <kbd>←</kbd><kbd>→</kbd> navigate · <kbd>↵</kbd> open · <kbd>esc</kbd> close</span>' +
+        '</div>';
+
+      document.body.appendChild(overlay);
+      ring = overlay.querySelector('.orbital3d-ring');
+
+      // Starfield canvas — context lazily created here, sized on open()
+      starCanvas = overlay.querySelector('.orbital3d-starfield');
+      if (starCanvas) {
+        starCtx = starCanvas.getContext('2d');
+        starCtx.lineCap = 'round';
+      }
+
+      var stage = overlay.querySelector('.orbital3d-stage');
+      stage.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('.orbital3d-card')) return;  // let card clicks through
+        drag = { startX: e.clientX, startRot: targetRot, prevX: e.clientX };
+        starWarp = Math.max(starWarp, 0.012);  // initial warp kick
+        try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+      stage.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        var dx = e.clientX - drag.startX;
+        targetRot = drag.startRot - dx * 0.5;
+        // Continuous warp: speed proportional to drag velocity
+        var vx = Math.abs(e.clientX - drag.prevX);
+        drag.prevX = e.clientX;
+        starWarp = Math.min(0.05, Math.max(starWarp, vx * 0.0015));
+      });
+      var endDrag = function () {
+        if (!drag) return;
+        drag = null;
+        // Snap to nearest card
+        targetRot = Math.round(targetRot / perDeg) * perDeg;
+        focusedIdx = ((-Math.round(targetRot / perDeg)) % CARDS.length + CARDS.length) % CARDS.length;
+        updateHud();
+      };
+      stage.addEventListener('pointerup', endDrag);
+      stage.addEventListener('pointercancel', endDrag);
+
+      // Card clicks: first click snaps + focuses, second click on the focused
+      // card navigates. Avoids accidental dives during exploration.
+      overlay.querySelectorAll('.orbital3d-card').forEach(function (a, i) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (focusedIdx === i) { window.location.href = a.getAttribute('href'); return; }
+          targetRot = -i * perDeg;
+          focusedIdx = i;
+          updateHud();
+        });
+      });
+
+      overlay.querySelector('.orbital3d-close').addEventListener('click', close);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    }
+
+    function updateHud() {
+      if (!overlay) return;
+      var t = overlay.querySelector('[data-orb-title]');
+      if (t && focusedIdx >= 0) t.textContent = CARDS[focusedIdx].title + ' · ' + CARDS[focusedIdx].meta;
+    }
+
+    function animate() {
+      if (!overlay || overlay.hidden) { rafId = null; return; }
+      // Idle auto-drift so the ring breathes when the user isn't interacting
+      if (!drag && focusedIdx < 0) targetRot -= 0.08;
+      // Spring-ease toward target
+      rot += (targetRot - rot) * 0.12;
+      if (ring) ring.style.setProperty('--rot', rot.toFixed(3) + 'deg');
+      // Mark front-facing card so CSS can highlight it
+      var frontIdx = ((-Math.round(rot / perDeg)) % CARDS.length + CARDS.length) % CARDS.length;
+      overlay.querySelectorAll('.orbital3d-card').forEach(function (c, i) {
+        c.classList.toggle('is-front', i === frontIdx);
+      });
+      renderStars();
+      rafId = requestAnimationFrame(animate);
+    }
+
+    var resizeHandler = function () { sizeStarCanvas(); };
+    var lastFocus = null;
+
+    function open() {
+      if (!overlay) build();
+      lastFocus = document.activeElement;
+      overlay.hidden = false;
+      document.body.classList.add('orbital3d-active');
+      focusedIdx = -1;
+      updateHud();
+      if (!prefersReduced) {
+        sizeStarCanvas();
+        if (!stars.length) initStars();
+        window.addEventListener('resize', resizeHandler);
+      }
+      if (!rafId) rafId = requestAnimationFrame(animate);
+      // Move focus into the modal so keyboard users can ESC / arrow-nav
+      var closeBtn = overlay.querySelector('.orbital3d-close');
+      setTimeout(function () { if (closeBtn) closeBtn.focus(); }, 50);
+    }
+    function close() {
+      if (overlay) overlay.hidden = true;
+      document.body.classList.remove('orbital3d-active');
+      window.removeEventListener('resize', resizeHandler);
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      // Return focus to whatever launched the orbital (typically the palette)
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus();
+        lastFocus = null;
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!overlay || overlay.hidden) return;
+      if (e.key === 'Escape')          { e.preventDefault(); close(); }
+      else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        focusedIdx = (focusedIdx < 0 ? 0 : focusedIdx + 1) % CARDS.length;
+        targetRot = -focusedIdx * perDeg; starWarp = Math.max(starWarp, 0.022); updateHud();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        focusedIdx = (focusedIdx < 0 ? CARDS.length - 1 : focusedIdx - 1 + CARDS.length) % CARDS.length;
+        targetRot = -focusedIdx * perDeg; starWarp = Math.max(starWarp, 0.022); updateHud();
+      } else if (e.key === 'Enter' && focusedIdx >= 0) {
+        e.preventDefault();
+        window.location.href = 'case-studies/' + CARDS[focusedIdx].slug + '.html';
+      }
+    });
+
+    window.PortfolioOrbital = { open: open, close: close };
+  })();
+
+  /* -------------------------------------------------------------------------
+   * 3D Card Tilt — magnetic pointer-follow tilt on every card-like element.
+   * Applies rotateX/Y based on cursor offset from the card center; eases
+   * smoothly back to neutral when the pointer leaves. Sets a CSS variable
+   * --tilt-glow so the inner glow can follow the cursor too. Skipped under
+   * prefers-reduced-motion and on touch-only devices to avoid jittery tilts
+   * on cards the user is trying to scroll past.
+   * ------------------------------------------------------------------------- */
+  (function cardTilt3d() {
+    if (prefersReduced) return;
+    var isTouchOnly = window.matchMedia && window.matchMedia('(hover: none)').matches;
+    if (isTouchOnly) return;
+
+    var SEL = '.exp-card, .proj-card, .svc-card, .skill-card, .px-card, .cta-card, .code-card, .about-panel';
+    var MAX_TILT = 8;   // degrees
+    var LIFT     = 6;   // translateZ on hover (px)
+
+    document.querySelectorAll(SEL).forEach(function (el) {
+      el.classList.add('tilt3d');
+      var raf = 0;
+      var lastX = 0, lastY = 0;
+
+      function apply() {
+        raf = 0;
+        var r = el.getBoundingClientRect();
+        var px = (lastX - r.left) / r.width;     // 0..1
+        var py = (lastY - r.top)  / r.height;
+        var rx = (0.5 - py) * MAX_TILT * 2;       // top→tilt back, bottom→tilt forward
+        var ry = (px - 0.5) * MAX_TILT * 2;       // left→tilt left, right→tilt right
+        el.style.setProperty('--tilt-rx', rx.toFixed(2) + 'deg');
+        el.style.setProperty('--tilt-ry', ry.toFixed(2) + 'deg');
+        el.style.setProperty('--tilt-z',  LIFT + 'px');
+        el.style.setProperty('--tilt-gx', (px * 100).toFixed(1) + '%');
+        el.style.setProperty('--tilt-gy', (py * 100).toFixed(1) + '%');
+      }
+      el.addEventListener('pointermove', function (e) {
+        lastX = e.clientX; lastY = e.clientY;
+        if (!raf) raf = requestAnimationFrame(apply);
+      });
+      el.addEventListener('pointerleave', function () {
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        el.style.setProperty('--tilt-rx', '0deg');
+        el.style.setProperty('--tilt-ry', '0deg');
+        el.style.setProperty('--tilt-z',  '0px');
+      });
+    });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Hero Parallax — multi-layer pointer-driven depth in the hero. Each
+   * layer reads its own CSS variable --depth (set via JS), so the magnitude
+   * of motion is controlled by layer. The avatar moves least (deepest), the
+   * stats float in the middle, and the CTA buttons feel like they're closest
+   * to the camera. Also hooks into scroll position for a subtle Y parallax.
+   * ------------------------------------------------------------------------- */
+  (function heroParallax3d() {
+    if (prefersReduced) return;
+    var hero = document.getElementById('fh5co-header');
+    if (!hero) return;
+
+    // Layer definitions: selector + depth (px of motion per 100px of pointer offset)
+    var layers = [
+      { sel: '.profile-thumb',     depth: 14 },
+      { sel: '.terminal-tag',      depth: 8  },
+      { sel: 'h1',                 depth: 18 },
+      { sel: 'h2',                 depth: 12 },
+      { sel: '.hero-status',       depth: 9  },
+      { sel: '.tech-stack-strip',  depth: 6  },
+      { sel: '.hero-stats',        depth: 22 },
+      { sel: '.hero-cta',          depth: 26 },
+      { sel: '.fh5co-social-icons', depth: 16 }
+    ];
+    var nodes = [];
+    layers.forEach(function (L) {
+      var el = hero.querySelector(L.sel);
+      if (el) {
+        el.classList.add('hero-parallax-layer');
+        nodes.push({ el: el, depth: L.depth });
+      }
+    });
+    if (!nodes.length) return;
+
+    var targetX = 0, targetY = 0;
+    var curX = 0, curY = 0;
+    var raf = 0;
+
+    function tick() {
+      curX += (targetX - curX) * 0.08;
+      curY += (targetY - curY) * 0.08;
+      nodes.forEach(function (n) {
+        var dx = (curX * n.depth).toFixed(2);
+        var dy = (curY * n.depth).toFixed(2);
+        n.el.style.transform = 'translate3d(' + dx + 'px, ' + dy + 'px, 0)';
+      });
+      // Continue easing until close enough to target
+      if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        raf = 0;
+      }
+    }
+
+    hero.addEventListener('pointermove', function (e) {
+      var r = hero.getBoundingClientRect();
+      // Map pointer to -0.5..+0.5 around hero center
+      targetX = ((e.clientX - r.left) / r.width  - 0.5);
+      targetY = ((e.clientY - r.top)  / r.height - 0.5);
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+    hero.addEventListener('pointerleave', function () {
+      targetX = 0; targetY = 0;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Scroll-Reveal 3D — IntersectionObserver-driven 3D entry animation for
+   * sections coming into view. Adds .reveal3d-in when ≥18% of the target is
+   * visible. CSS handles the transform/opacity animation (translateZ from
+   * -180px → 0, rotateX from -10deg → 0). Once revealed, the observer stops
+   * watching that element. Skipped under prefers-reduced-motion.
+   * ------------------------------------------------------------------------- */
+  (function scrollReveal3d() {
+    if (prefersReduced) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    var TARGETS = [
+      '#fh5co-about .about-panel',
+      '#fh5co-resume .exp-card',
+      '#fh5co-features .svc-card',
+      '#fh5co-skills .skill-card',
+      '#fh5co-work .proj-card',
+      '#fh5co-blog .case-studies',
+      '#fh5co-started .cta-card',
+      'section > .container > .row > .col-md-12 > .heading',
+      'section .section-heading'
+    ].join(', ');
+
+    var nodes = document.querySelectorAll(TARGETS);
+    if (!nodes.length) return;
+
+    nodes.forEach(function (n, i) {
+      n.classList.add('reveal3d');
+      // Stagger siblings so a grid of cards waterfalls in rather than
+      // popping in unison. Cap the stagger so very-long lists don't have
+      // visible final-element lag.
+      var idx = Array.prototype.indexOf.call(n.parentNode.children, n);
+      n.style.setProperty('--reveal-delay', Math.min(idx, 5) * 70 + 'ms');
+    });
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (ent) {
+        if (ent.isIntersecting) {
+          ent.target.classList.add('reveal3d-in');
+          obs.unobserve(ent.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+
+    nodes.forEach(function (n) { obs.observe(n); });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * 3D Section Headings — bigger, more theatrical reveal than the card
+   * reveal: heading rotates in from rotateY(-30deg) translateZ(-200px) with
+   * a slight overshoot via --ez-back. One observer per heading; unobserve
+   * after firing.
+   * ------------------------------------------------------------------------- */
+  (function heading3d() {
+    if (prefersReduced) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    // Pick the first <h2> inside each major section.
+    var SECTION_IDS = ['fh5co-about', 'fh5co-resume', 'fh5co-features',
+                       'fh5co-skills', 'fh5co-work', 'fh5co-blog', 'fh5co-started'];
+    var headings = [];
+    SECTION_IDS.forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (!sec) return;
+      var h = sec.querySelector('h2, h3.heading-section, .section-heading');
+      if (h) headings.push(h);
+    });
+    if (!headings.length) return;
+
+    headings.forEach(function (h) { h.classList.add('heading3d'); });
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (ent) {
+        if (ent.isIntersecting) {
+          ent.target.classList.add('heading3d-in');
+          obs.unobserve(ent.target);
+        }
+      });
+    }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
+
+    headings.forEach(function (h) { obs.observe(h); });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Page Dive — when navigating to a case-study (or any in-portfolio link
+   * we choose to intercept), animate the dive-out before navigation. The
+   * receiving page reads sessionStorage on load and runs the dive-in
+   * animation. Cmd/Ctrl-click and middle-click bypass the dive so opening
+   * in a new tab is unaffected.
+   * ------------------------------------------------------------------------- */
+  (function pageDive() {
+    if (prefersReduced) return;
+
+    // 1) Outgoing: intercept case-study link clicks
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      // Modifier keys or non-primary button → let the browser handle it
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.button !== 0) return;
+      if (a.target && a.target !== '_self') return;
+
+      var href = a.getAttribute('href');
+      if (!href || href[0] === '#') return;       // anchor links skip
+      if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+
+      // Only intercept same-origin case-study links
+      var isCaseStudy = href.indexOf('case-studies/') !== -1 ||
+                        href.indexOf('/case-studies/') !== -1;
+      if (!isCaseStudy) return;
+
+      try {
+        var url = new URL(a.href, window.location.href);
+        if (url.origin !== window.location.origin) return;
+      } catch (_) { return; }
+
+      e.preventDefault();
+
+      // Flash overlay covers the discontinuity
+      var flash = document.createElement('div');
+      flash.className = 'page-dive-flash';
+      document.body.appendChild(flash);
+
+      document.body.classList.add('page-dive-out');
+      try { sessionStorage.setItem('pf-dive', '1'); } catch (_) {}
+
+      // Navigate after the animation has visually completed (~1.0s)
+      setTimeout(function () { window.location.href = a.href; }, 720);
+    }, true);
+
+    // 2) Incoming: if we arrived via a dive, play the dive-in animation
+    try {
+      if (sessionStorage.getItem('pf-dive') === '1') {
+        sessionStorage.removeItem('pf-dive');
+        // Wait one frame so the class actually triggers an animation
+        document.body.classList.add('page-dive-in');
+        // Remove the class after the animation completes so it doesn't
+        // affect subsequent page interactions.
+        setTimeout(function () {
+          document.body.classList.remove('page-dive-in');
+        }, 1200);
+      }
+    } catch (_) {}
+
+    // 3) bfcache safety: when iOS Safari / Firefox restore from
+    //    back-forward cache, the body may still wear a stale
+    //    .page-dive-out class (with pointer-events: none locking the page).
+    //    Clear all dive state on pageshow so the restored page is usable.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) {
+        document.body.classList.remove('page-dive-out', 'page-dive-in');
+        document.querySelectorAll('.page-dive-flash').forEach(function (n) {
+          n.parentNode && n.parentNode.removeChild(n);
+        });
+        try { sessionStorage.removeItem('pf-dive'); } catch (_) {}
+      }
+    });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Cursor Spotlight — a global, viewport-anchored radial-gradient that
+   * tracks the cursor across every page. Lives as a fixed pseudo-element on
+   * <body> with mix-blend-mode: screen so it adds light to elements rather
+   * than washing them out. Makes the whole portfolio feel like one
+   * continuous lit space rather than disconnected dark cards.
+   * ------------------------------------------------------------------------- */
+  // cursorSpotlight: lightweight bootstrap. The actual position updates
+  // are merged into customCursor() below so we have a single
+  // pointermove listener + single RAF feeding both the dot/ring AND the
+  // spotlight CSS variables. Cuts the always-on pointer infra in half.
+  (function cursorSpotlightBootstrap() {
+    if (prefersReduced) return;
+    var isTouchOnly = window.matchMedia && window.matchMedia('(hover: none)').matches;
+    if (isTouchOnly) return;
+    document.documentElement.classList.add('has-spotlight');
+    document.documentElement.style.setProperty('--spot-x', '50vw');
+    document.documentElement.style.setProperty('--spot-y', '50vh');
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Siderail 3D Depth — the existing right-rail dot navigator now has real
+   * depth: the active dot pops forward via translateZ, its immediate
+   * neighbors lift slightly less, and far-away dots recede. The whole rail
+   * also subtly tilts toward the cursor when hovered. JS just adds the
+   * .is-near class to the 2 nearest-to-active dots; CSS handles the
+   * transforms.
+   * ------------------------------------------------------------------------- */
+  (function siderail3d() {
+    if (prefersReduced) return;
+    // The siderail IIFE below builds the DOM, so we wait one tick.
+    setTimeout(function () {
+      var rail = document.querySelector('.siderail');
+      if (!rail) return;
+      rail.classList.add('siderail--3d');
+
+      var items = rail.querySelectorAll('.siderail__item');
+
+      function updateNear() {
+        var activeIdx = -1;
+        items.forEach(function (it, i) {
+          if (it.classList.contains('is-active')) activeIdx = i;
+        });
+        items.forEach(function (it, i) {
+          var d = Math.abs(i - activeIdx);
+          it.classList.toggle('is-near-1', d === 1);
+          it.classList.toggle('is-near-2', d === 2);
+        });
+      }
+
+      // Watch for is-active changes on each item (siderail IIFE toggles it
+      // on scroll). MutationObserver is the cleanest way without rewriting
+      // the existing siderail.
+      var mo = new MutationObserver(updateNear);
+      items.forEach(function (it) {
+        mo.observe(it, { attributes: true, attributeFilter: ['class'] });
+      });
+      updateNear();
+    }, 50);
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Section Parallax Depth — as you scroll through each section, the
+   * section's <h2> heading gets a small translateZ proportional to how
+   * deep you are within that section. Subtle but pervasive — creates a
+   * spatial sense of "moving past" a heading rather than just scrolling.
+   * ------------------------------------------------------------------------- */
+  (function sectionParallax3d() {
+    if (prefersReduced) return;
+
+    var SECTION_IDS = ['fh5co-about', 'fh5co-resume', 'fh5co-features',
+                       'fh5co-skills', 'fh5co-work', 'fh5co-blog', 'fh5co-started'];
+    var entries = [];
+    SECTION_IDS.forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (!sec) return;
+      var h = sec.querySelector('h2, h3.heading-section, .section-heading');
+      if (!h) return;
+      h.classList.add('section-parallax');
+      entries.push({ section: sec, heading: h });
+    });
+    if (!entries.length) return;
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var vh = window.innerHeight;
+      entries.forEach(function (e) {
+        var r = e.section.getBoundingClientRect();
+        // Progress through the section: 0 = section just entered viewport
+        // bottom, 1 = section about to leave viewport top
+        var progress = 1 - (r.bottom / (r.height + vh));
+        progress = Math.max(0, Math.min(1, progress));
+        // Map 0..1 → translateZ from +20 (when entering) to -40 (leaving)
+        var z = 20 - progress * 60;
+        // Map 0..1 → rotateX from +6deg to -6deg
+        var rx = 6 - progress * 12;
+        e.heading.style.setProperty('--sp-z',  z.toFixed(1) + 'px');
+        e.heading.style.setProperty('--sp-rx', rx.toFixed(2) + 'deg');
+      });
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Custom Cursor — dot + ring follower. The dot snaps to the actual
+   * pointer; the ring lags via spring easing. Both scale when over
+   * interactive elements (a, button, [role=button], inputs). Pairs with the
+   * global spotlight (cursorSpotlight) — together they make the cursor feel
+   * like a physical light source rather than an OS arrow. Skipped on touch
+   * and reduced-motion.
+   * ------------------------------------------------------------------------- */
+  (function customCursor() {
+    if (prefersReduced) return;
+    var isTouchOnly = window.matchMedia && window.matchMedia('(hover: none)').matches;
+    if (isTouchOnly) return;
+
+    var dot  = document.createElement('div');
+    var ring = document.createElement('div');
+    dot.className  = 'cursor-dot';
+    ring.className = 'cursor-ring';
+    dot.setAttribute('aria-hidden', 'true');
+    ring.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(ring);
+    document.body.appendChild(dot);
+    document.documentElement.classList.add('has-custom-cursor');
+
+    var dx = window.innerWidth * 0.5, dy = window.innerHeight * 0.5;
+    var rx = dx, ry = dy;
+    var raf = 0;
+
+    var root = document.documentElement;
+
+    function tick() {
+      // Spring-ease the ring toward the dot. Higher factor = snappier ring.
+      rx += (dx - rx) * 0.38;
+      ry += (dy - ry) * 0.38;
+      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%, -50%)';
+      // Spotlight follows the ring's eased position — single RAF drives
+      // both. No separate spotlight tick required.
+      root.style.setProperty('--spot-x', rx.toFixed(1) + 'px');
+      root.style.setProperty('--spot-y', ry.toFixed(1) + 'px');
+      if (Math.abs(dx - rx) > 0.4 || Math.abs(dy - ry) > 0.4) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        raf = 0;
+      }
+    }
+
+    window.addEventListener('pointermove', function (e) {
+      dx = e.clientX; dy = e.clientY;
+      // Dot snaps to the pointer immediately — no waiting for the next RAF
+      // tick. Removes the 1-frame (up to 16ms) lag that made the cursor
+      // feel sluggish.
+      dot.style.transform = 'translate3d(' + dx + 'px,' + dy + 'px,0) translate(-50%, -50%)';
+      if (!raf) raf = requestAnimationFrame(tick);
+    }, { passive: true });
+
+    // Scale up over interactive elements
+    var HOVER_SEL = 'a, button, [role="button"], input, textarea, select, .cmdk__row, .siderail__item, .orbital3d-card, .tilt3d, .cs-tilt3d';
+    document.addEventListener('pointerover', function (e) {
+      if (e.target.closest && e.target.closest(HOVER_SEL)) {
+        document.documentElement.classList.add('cursor-over-link');
+      }
+    });
+    document.addEventListener('pointerout', function (e) {
+      if (e.target.closest && e.target.closest(HOVER_SEL)) {
+        // Only clear if we're not entering another hover target
+        var rel = e.relatedTarget;
+        if (!rel || !(rel.closest && rel.closest(HOVER_SEL))) {
+          document.documentElement.classList.remove('cursor-over-link');
+        }
+      }
+    });
+    // On pointerdown, briefly contract the ring
+    window.addEventListener('pointerdown', function () {
+      document.documentElement.classList.add('cursor-down');
+    });
+    window.addEventListener('pointerup', function () {
+      document.documentElement.classList.remove('cursor-down');
+    });
+    // Hide when leaving the window
+    document.addEventListener('mouseleave', function () {
+      document.documentElement.classList.add('cursor-out');
+    });
+    document.addEventListener('mouseenter', function () {
+      document.documentElement.classList.remove('cursor-out');
+    });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Glitch Text — RGB-split + character scramble on hover and ambient
+   * intervals. CSS handles the chromatic-aberration text-shadow (cyan +
+   * magenta). JS adds momentary scramble on the hero h1 + section h2's
+   * every 8-14s and on hover.
+   * ------------------------------------------------------------------------- */
+  (function glitchText() {
+    if (prefersReduced) return;
+
+    var GLYPHS = '!@#$%^&*<>?/\\|+=~01';
+    function scramble(el, originalText, duration) {
+      var len = originalText.length;
+      var startTime = performance.now();
+      function frame(now) {
+        var t = (now - startTime) / duration;
+        if (t >= 1) { el.textContent = originalText; return; }
+        // Scramble first ~30% of characters with random glyphs, decreasing
+        // over time
+        var newText = '';
+        for (var i = 0; i < len; i++) {
+          var ch = originalText.charAt(i);
+          if (ch === ' ') { newText += ' '; continue; }
+          if (Math.random() < (1 - t) * 0.35) {
+            newText += GLYPHS.charAt((Math.random() * GLYPHS.length) | 0);
+          } else {
+            newText += ch;
+          }
+        }
+        el.textContent = newText;
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // Target: hero name (first h1 span) + section h2's
+    var targets = [];
+    var heroH1 = document.querySelector('#fh5co-header h1 span');
+    if (heroH1) targets.push(heroH1);
+    document.querySelectorAll('#fh5co-about h2, #fh5co-resume h2, #fh5co-features h2, #fh5co-skills h2, #fh5co-work h2, #fh5co-blog h2, #fh5co-started h2').forEach(function (h) {
+      // Use a wrapping span so the glitch class can scope without
+      // disturbing nested anchors/elements
+      targets.push(h);
+    });
+    if (!targets.length) return;
+
+    targets.forEach(function (t) {
+      var originalText = t.textContent;
+      t.dataset.glitchOriginal = originalText;
+      t.classList.add('glitch-text');
+
+      // Hover trigger
+      t.addEventListener('pointerenter', function () {
+        t.classList.add('glitch-text--active');
+        scramble(t, originalText, 380);
+        setTimeout(function () {
+          t.classList.remove('glitch-text--active');
+        }, 420);
+      });
+    });
+
+    // One-shot intro glitch on page load (hero only)
+    if (heroH1) {
+      setTimeout(function () {
+        heroH1.classList.add('glitch-text--active');
+        scramble(heroH1, heroH1.dataset.glitchOriginal, 700);
+        setTimeout(function () { heroH1.classList.remove('glitch-text--active'); }, 750);
+      }, 600);
+    }
+
+    // Ambient glitch: pick a random target every 8-14s, but only if it's
+    // currently visible — skip targets that scroll out of view.
+    function ambientPulse() {
+      var visible = targets.filter(function (t) {
+        var r = t.getBoundingClientRect();
+        return r.top < window.innerHeight && r.bottom > 0;
+      });
+      if (visible.length) {
+        var t = visible[(Math.random() * visible.length) | 0];
+        t.classList.add('glitch-text--active');
+        scramble(t, t.dataset.glitchOriginal, 320);
+        setTimeout(function () { t.classList.remove('glitch-text--active'); }, 360);
+      }
+      setTimeout(ambientPulse, 8000 + Math.random() * 6000);
+    }
+    setTimeout(ambientPulse, 6000);
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Marquee Tech-Stack Ticker — a continuous-loop horizontal scroller
+   * injected between the hero and the about section. Lists the user's full
+   * tech-stack repertoire as a self-repeating band. CSS @keyframes handles
+   * the motion; we duplicate the content so the loop is seamless.
+   * ------------------------------------------------------------------------- */
+  (function marqueeTechTicker() {
+    var hero = document.getElementById('fh5co-header');
+    var about = document.getElementById('fh5co-about');
+    if (!hero || !about) return;
+    // Don't double-inject if a previous run already placed it
+    if (document.querySelector('.tech-marquee')) return;
+
+    var TECH = [
+      'Vue 3', 'Laravel 12', 'TypeScript', 'Flutter', 'Tailwind',
+      'PHP 8', 'MySQL', 'Node.js', 'Inertia.js', 'Pinia',
+      'Claude', 'Gemini', 'OpenAI', 'Karpathy-style', 'Vibe Coding',
+      'Docker', 'Git', 'REST', 'WebSockets', 'PWA',
+      'Vite', 'Sass', 'CASL', 'Element Plus', 'Capacitor'
+    ];
+
+    var marquee = document.createElement('div');
+    marquee.className = 'tech-marquee';
+    marquee.setAttribute('aria-hidden', 'true');
+    // Build TECH-list items (no wrapper); we'll duplicate inside one row so
+    // the loop is seamless — animating the row by -50% slides exactly one
+    // copy left, and the second copy is identical so there's no visible
+    // jump at the boundary.
+    function buildItems() {
+      return TECH.map(function (t) {
+        return '<span class="tech-marquee__item">' + t +
+               '<span class="tech-marquee__sep" aria-hidden="true">◇</span></span>';
+      }).join('');
+    }
+    marquee.innerHTML = '<span class="tech-marquee__row">' +
+                         buildItems() + buildItems() +
+                       '</span>';
+    about.parentNode.insertBefore(marquee, about);
+
+    // Pause the marquee animation when it scrolls offscreen. Without this
+    // the CSS @keyframes runs continuously, forcing the browser to
+    // recomposite the entire compositing tree every frame — which combined
+    // with the spotlight's mix-blend-mode was costing real fps even when
+    // the marquee itself wasn't visible.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        marquee.classList.toggle('is-paused', !entries[0].isIntersecting);
+      }, { threshold: 0 }).observe(marquee);
+    }
+
+    // Scroll-velocity boost — when the user scrolls fast, briefly speed up
+    // the marquee + tint it brighter. Decays exponentially back to baseline.
+    // Caps so a long furious scroll doesn't run at warp speed indefinitely.
+    if (!prefersReduced) {
+      var row = marquee.querySelector('.tech-marquee__row');
+      var baseDuration = 38;       // seconds — must match CSS
+      var lastScrollY = window.scrollY;
+      var lastTs = performance.now();
+      var boost = 0;               // 0..1, decays each frame
+      var raf = 0;
+
+      function decay() {
+        boost *= 0.92;
+        if (boost < 0.01) {
+          boost = 0;
+          // Reset to CSS baseline
+          row.style.animationDuration = '';
+          marquee.style.setProperty('--marquee-boost', '0');
+          raf = 0;
+          return;
+        }
+        // Lerp duration from base → fast (base/4) based on boost
+        var dur = baseDuration * (1 - boost * 0.75);
+        row.style.animationDuration = dur.toFixed(2) + 's';
+        marquee.style.setProperty('--marquee-boost', boost.toFixed(2));
+        raf = requestAnimationFrame(decay);
+      }
+
+      window.addEventListener('scroll', function () {
+        var now = performance.now();
+        var dy = Math.abs(window.scrollY - lastScrollY);
+        var dt = Math.max(1, now - lastTs);
+        var velocity = dy / dt;     // px/ms
+        lastScrollY = window.scrollY;
+        lastTs = now;
+        // Map ~0..3 px/ms → 0..1 boost. Trackpad fling = ~2 px/ms.
+        var b = Math.min(1, velocity / 3);
+        if (b > boost) boost = b;
+        if (!raf) raf = requestAnimationFrame(decay);
+      }, { passive: true });
+    }
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Boot Sequence Overlay — a brief terminal-style boot screen on first
+   * visit. Types out "> ./init_developer.sh" then dissolves into the hero.
+   * Total duration ~700ms. sessionStorage-gated so it only fires once per
+   * session — repeat visits in the same session skip directly to content.
+   * Disabled under prefers-reduced-motion and on touch (no time to read on
+   * mobile, and many mobile browsers paint over the overlay weirdly).
+   * ------------------------------------------------------------------------- */
+  (function bootSequence() {
+    if (prefersReduced) return;
+    var isTouchOnly = window.matchMedia && window.matchMedia('(hover: none)').matches;
+    if (isTouchOnly) return;
+    try {
+      if (sessionStorage.getItem('pf-booted') === '1') return;
+      sessionStorage.setItem('pf-booted', '1');
+    } catch (_) { /* private mode → still play; harmless */ }
+
+    // If we arrived via a page-dive, skip — the dive itself is the entry.
+    try {
+      if (sessionStorage.getItem('pf-dive') === '1') return;
+    } catch (_) {}
+
+    var overlay = document.createElement('div');
+    overlay.className = 'boot-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.innerHTML =
+      '<div class="boot-overlay__inner">' +
+        '<div class="boot-overlay__lines">' +
+          '<div class="boot-overlay__line"><span class="boot-overlay__prompt">$</span> <span class="boot-overlay__cmd" data-boot="cmd"></span><span class="boot-overlay__cursor">_</span></div>' +
+          '<div class="boot-overlay__line boot-overlay__line--out" data-boot="line1">[ ok ] motion subsystem online</div>' +
+          '<div class="boot-overlay__line boot-overlay__line--out" data-boot="line2">[ ok ] spotlight calibrated</div>' +
+          '<div class="boot-overlay__line boot-overlay__line--out" data-boot="line3">[ ok ] 8 case studies loaded</div>' +
+          '<div class="boot-overlay__line boot-overlay__line--out boot-overlay__line--final" data-boot="ready">→ welcome.</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    var cmdEl = overlay.querySelector('[data-boot="cmd"]');
+    var CMD = './init_developer.sh';
+    var i = 0;
+    var dismissed = false;
+    var timers = [];
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      timers.forEach(clearTimeout);
+      overlay.classList.add('boot-overlay--out');
+      setTimeout(function () {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, 220);
+    }
+
+    function typeChar() {
+      if (dismissed) return;
+      if (i <= CMD.length) {
+        cmdEl.textContent = CMD.slice(0, i);
+        i++;
+        timers.push(setTimeout(typeChar, 14));   // was 22
+      } else {
+        // Reveal status lines with a tight stagger
+        ['line1', 'line2', 'line3', 'ready'].forEach(function (k, idx) {
+          timers.push(setTimeout(function () {
+            var n = overlay.querySelector('[data-boot="' + k + '"]');
+            if (n) n.classList.add('is-in');
+          }, idx * 30));                          // was 70
+        });
+        timers.push(setTimeout(dismiss, 180));    // was 380
+      }
+    }
+
+    // Click anywhere to skip — important on repeat visits where the user
+    // already knows the bit and just wants the content.
+    overlay.style.pointerEvents = 'auto';
+    overlay.addEventListener('click', dismiss);
+    document.addEventListener('keydown', function k(e) {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+        document.removeEventListener('keydown', k);
+        dismiss();
+      }
+    }, { once: false });
+
+    // Start typing on next frame so the overlay has time to render
+    requestAnimationFrame(function () { timers.push(setTimeout(typeChar, 40)); });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Console Signature — when a recruiter (or anyone) opens devtools, they
+   * find an ASCII banner + a "let's talk" message. Cheap, runs once on
+   * script load. The %c styling makes it look real — same techniques big
+   * companies use (Facebook's "STOP! This is a developer feature" warning,
+   * Vercel's gradient logo, etc).
+   * ------------------------------------------------------------------------- */
+  (function consoleSignature() {
+    try {
+      var titleStyle = [
+        'color: #00e5ff',
+        'font-size: 18px',
+        'font-weight: 700',
+        'letter-spacing: 4px',
+        'font-family: "JetBrains Mono", monospace',
+        'text-shadow: 0 0 10px rgba(0, 229, 255, 0.6)',
+        'padding: 8px 0'
+      ].join(';');
+      var subStyle = [
+        'color: #FF9000',
+        'font-size: 11px',
+        'letter-spacing: 1.5px',
+        'font-family: "JetBrains Mono", monospace',
+        'padding: 2px 0'
+      ].join(';');
+      var bodyStyle = [
+        'color: rgba(255, 255, 255, 0.7)',
+        'font-size: 11px',
+        'line-height: 1.6',
+        'font-family: "JetBrains Mono", monospace'
+      ].join(';');
+      var linkStyle = [
+        'color: #00e5ff',
+        'font-weight: 600',
+        'font-size: 11px',
+        'font-family: "JetBrains Mono", monospace'
+      ].join(';');
+
+      console.log('%cLEMMUEL · TURAYA', titleStyle);
+      console.log('%c> full-stack & mobile dev · 8 shipped case studies', subStyle);
+      console.log(
+        '%c\nYou opened devtools. That means you actually look at code.\n' +
+        'The whole site is vanilla JS / CSS — no framework taxes.\n\n' +
+        'If you\'re hiring, the case studies are above.\n' +
+        'Or jump straight to %ccal.com/lemmuel-turaya/intro%c — 15 min, no slides.',
+        bodyStyle, linkStyle, bodyStyle
+      );
+      console.log(
+        '%c\ntry: %cKonami code%c (↑↑↓↓←→←→BA) for developer mode.',
+        bodyStyle, linkStyle, bodyStyle
+      );
+    } catch (_) { /* ancient browser — skip */ }
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Time-of-Day Greeting — the hero's terminal-tag command appends a flag
+   * based on the local hour. Tiny touch, signals the page is reactive to
+   * the visitor's context.
+   * ------------------------------------------------------------------------- */
+  (function timeOfDayGreeting() {
+    var slot = document.querySelector('[data-tod-arg]');
+    if (!slot) return;
+    var h = new Date().getHours();
+    var arg;
+    if (h >= 5  && h < 12) arg = ' --morning';
+    else if (h >= 12 && h < 17) arg = ' --afternoon';
+    else if (h >= 17 && h < 22) arg = ' --evening';
+    else arg = ' --burning-midnight-oil';
+    slot.textContent = arg;
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Konami Code Easter Egg — ↑↑↓↓←→←→BA unlocks "developer mode": adds
+   * .developer-mode-on to <html> (CSS amps the glitch + reveals a hidden
+   * HUD line), shows a toast, and persists for the session. A small,
+   * earned moment for anyone who tries it.
+   * ------------------------------------------------------------------------- */
+  (function konamiCode() {
+    var SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+               'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    var pos = 0;
+    var armed = true;
+
+    // Restore developer mode if already unlocked this session
+    try {
+      if (sessionStorage.getItem('pf-devmode') === '1') {
+        document.documentElement.classList.add('developer-mode-on');
+        armed = false;
+      }
+    } catch (_) {}
+
+    function unlock() {
+      if (!armed) return;
+      armed = false;
+      document.documentElement.classList.add('developer-mode-on');
+      try { sessionStorage.setItem('pf-devmode', '1'); } catch (_) {}
+
+      // Toast
+      var toast = document.createElement('div');
+      toast.className = 'konami-toast';
+      toast.setAttribute('role', 'status');
+      toast.innerHTML =
+        '<div class="konami-toast__title">[ DEVELOPER MODE: ACTIVATED ]</div>' +
+        '<div class="konami-toast__body">glitch amplified · hidden HUD line revealed</div>' +
+        '<div class="konami-toast__hint">press <kbd>esc</kbd> to dismiss</div>';
+      document.body.appendChild(toast);
+      requestAnimationFrame(function () { toast.classList.add('is-in'); });
+      var dismiss = function () {
+        toast.classList.remove('is-in');
+        setTimeout(function () {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 280);
+      };
+      setTimeout(dismiss, 4200);
+      document.addEventListener('keydown', function escHandler(e) {
+        if (e.key === 'Escape') {
+          document.removeEventListener('keydown', escHandler);
+          dismiss();
+        }
+      });
+
+      console.log('%c[ KONAMI OK ]%c developer mode unlocked.',
+        'color:#00e5ff;font-weight:600;font-family:"JetBrains Mono",monospace;',
+        'color:rgba(255,255,255,0.7);font-family:"JetBrains Mono",monospace;');
+    }
+
+    window.addEventListener('keydown', function (e) {
+      // Ignore if typing into an input (don't trigger on chat / palette)
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' ||
+                t.isContentEditable)) {
+        pos = 0; return;
+      }
+      var expected = SEQ[pos];
+      var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      if (key === expected) {
+        pos++;
+        if (pos === SEQ.length) { pos = 0; unlock(); }
+      } else {
+        pos = (key === SEQ[0]) ? 1 : 0;
+      }
+    });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Scroll-State Class — adds body.is-scrolling during active scroll;
+   * removes 150ms after the last scroll event. CSS uses this to pause
+   * expensive paint ops (mix-blend-mode spotlight, glitch text-shadow,
+   * tilt-card glow pseudos) while the user is scrolling. The spotlight
+   * alone is a viewport-sized mix-blend-mode: screen layer — easily
+   * 8-12ms of paint per frame on mid-range mobile. Pausing it during
+   * scroll = the single biggest frame-rate recovery available.
+   * ------------------------------------------------------------------------- */
+  (function scrollStateClass() {
+    if (prefersReduced) return;
+    var root = document.documentElement;       // <html> — ancestor of everything
+    var t = 0;
+    window.addEventListener('scroll', function () {
+      if (t === 0) root.classList.add('is-scrolling');
+      else clearTimeout(t);
+      t = setTimeout(function () {
+        root.classList.remove('is-scrolling');
+        t = 0;
+      }, 150);
+    }, { passive: true });
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Idle Nudge — after 45s of no input, gently pulse the chat bubble and
+   * show a tooltip ("still there? — ask me anything"). Resets on any
+   * pointer/key/scroll event. Tech-savvy version of "are you still
+   * watching?" — but with a developer's preferred channel: chat.
+   * ------------------------------------------------------------------------- */
+  (function idleNudge() {
+    if (prefersReduced) return;
+    var IDLE_MS = 45000;
+    var timer = null;
+    var nudged = false;
+
+    function findBubble() {
+      return document.querySelector('.pchat__bubble, .pchat__fab, [data-pchat-toggle]');
+    }
+
+    function nudge() {
+      if (nudged) return;
+      var bubble = findBubble();
+      if (!bubble) return;
+      nudged = true;
+      bubble.classList.add('is-nudging');
+
+      var tip = document.createElement('div');
+      tip.className = 'idle-nudge-tip';
+      tip.setAttribute('role', 'status');
+      tip.textContent = 'still there? — ask me anything';
+      document.body.appendChild(tip);
+      requestAnimationFrame(function () { tip.classList.add('is-in'); });
+
+      // Auto-clear after 6s, OR on any activity (handled below)
+      var dismissTip = function () {
+        tip.classList.remove('is-in');
+        setTimeout(function () {
+          if (tip.parentNode) tip.parentNode.removeChild(tip);
+        }, 280);
+      };
+      setTimeout(dismissTip, 6000);
+    }
+
+    function reset() {
+      if (nudged) {
+        nudged = false;
+        var bubble = findBubble();
+        if (bubble) bubble.classList.remove('is-nudging');
+        document.querySelectorAll('.idle-nudge-tip').forEach(function (n) {
+          n.classList.remove('is-in');
+          setTimeout(function () {
+            if (n.parentNode) n.parentNode.removeChild(n);
+          }, 280);
+        });
+      }
+      clearTimeout(timer);
+      timer = setTimeout(nudge, IDLE_MS);
+    }
+
+    ['pointermove', 'pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart']
+      .forEach(function (ev) {
+        window.addEventListener(ev, reset, { passive: true });
+      });
+    reset();
+  })();
+
+  /* -------------------------------------------------------------------------
+   * Tab-Away Title — when the visitor switches tabs, the document.title
+   * becomes a witty come-back line. Restored when they tab back. Classic
+   * tech-savvy detail that signals "this person sweats the small stuff".
+   * ------------------------------------------------------------------------- */
+  (function tabAwayTitle() {
+    var MESSAGES = [
+      '👀 come back · still here',
+      '⏳ pinged · I\'m waiting',
+      '⌘+K when you\'re back',
+      '✦ don\'t be a stranger',
+      '🪐 still building stuff'
+    ];
+    var original = document.title;
+    var altIdx = (Math.random() * MESSAGES.length) | 0;
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        document.title = MESSAGES[altIdx];
+        altIdx = (altIdx + 1) % MESSAGES.length;   // rotate for next time
+      } else {
+        document.title = original;
+      }
+    });
   })();
 
   /* ---------- Side-rail section navigator ---------- */
@@ -1477,6 +3466,9 @@ try {
     var rows = [
       { keys: ['ctrl', 'k'], desc: 'Open command palette' },
       { keys: ['/'],         desc: 'Quick search commands' },
+      { keys: ['↑', '↓'],    desc: 'Navigate palette results' },
+      { keys: ['tab'],       desc: 'Jump between palette sections' },
+      { keys: ['↵'],         desc: 'Open selected result' },
       { keys: ['`'],         desc: 'Toggle dev terminal' },
       { keys: ['alt', 't'],  desc: 'Cycle theme palette (cyber → matrix → sunset → xeno → crt)' },
       { keys: ['?'],         desc: 'Show this help' },

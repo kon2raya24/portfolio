@@ -127,11 +127,13 @@ html, body {
   background: transparent !important;
 }
 
-/* Navigation: glass-dark instead of white */
+/* Navigation: glass-dark — backdrop-filter removed; it was costing
+   ~5-15ms/frame every frame because backdrop-filter blur(12px) on a
+   fixed-position nav repaints whenever ANYTHING under it changes
+   (marquee, parallax, scroll). Bumped the background opacity to
+   0.92 to compensate for losing the blur. */
 #fh5co-nav {
-  background: rgba(8, 12, 28, 0.78) !important;
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  background: rgba(8, 12, 28, 0.92) !important;
   border-bottom: 1px solid var(--line);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
 }
@@ -267,42 +269,6 @@ strong { color: var(--cyan); }
   z-index: 10000;
   transition: width 80ms linear;
   pointer-events: none;
-}
-
-/* ---------- Custom cursor (desktop only) ---------- */
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate3d(-50%, -50%, 0);
-  will-change: transform;
-  mix-blend-mode: difference;
-}
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--cyan);
-  border-radius: 50%;
-  box-shadow: 0 0 12px var(--cyan);
-}
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid rgba(0, 229, 255, 0.65);
-  border-radius: 50%;
-  transition: width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-}
-.cursor-ring.is-hover {
-  width: 54px;
-  height: 54px;
-  border-color: var(--brand);
-  background: rgba(255, 144, 0, 0.08);
-}
-@media (max-width: 1024px), (hover: none) {
-  .cursor-dot, .cursor-ring { display: none !important; }
 }
 
 /* ---------- Matrix rain canvas (hero) ---------- */
@@ -951,7 +917,7 @@ body.konami-on {
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--cyan);
-  background: rgba(5, 8, 20, 0.78);
+  background: rgba(5, 8, 20, 0.92);
   border: 1px solid var(--line-strong);
   border-radius: 6px;
   padding: 10px 14px 12px;
@@ -959,8 +925,8 @@ body.konami-on {
   /* Theme-aware glow — derives from --cyan so xeno glows red, crt green, etc. */
   box-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 18%, transparent),
               inset 0 0 18px color-mix(in srgb, var(--cyan) 4%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  /* backdrop-filter removed — always-visible fixed widget shouldn't pay
+     the every-frame blur cost. Bumped background opacity to 0.92. */
   pointer-events: none;
 }
 .hud::before {
@@ -1073,7 +1039,7 @@ body.konami-on {
 @keyframes cmdk-fade { from { opacity: 0; } to { opacity: 1; } }
 
 .cmdk {
-  width: min(560px, 92vw);
+  width: min(640px, 92vw);
   background: linear-gradient(180deg, #0b1226, #070a18);
   border: 1px solid var(--line-strong);
   border-radius: 10px;
@@ -1216,10 +1182,795 @@ body.konami-on {
   .cmdk-hint { display: none; }
 }
 
+/* ---------- Mobile FAB: opens the palette where Ctrl+K isn't a thing ---------- */
+.cmdk-fab {
+  position: fixed;
+  bottom: 22px;
+  left: 18px;
+  z-index: 9997;
+  display: none;            /* shown on small viewports only */
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--cyan) 60%, transparent);
+  background: linear-gradient(135deg,
+              color-mix(in srgb, var(--cyan) 25%, #050814),
+              color-mix(in srgb, var(--cyan) 8%, #050814));
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45),
+              0 0 22px color-mix(in srgb, var(--cyan) 35%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.cmdk-fab:hover,
+.cmdk-fab:focus-visible {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5),
+              0 0 32px color-mix(in srgb, var(--cyan) 55%, transparent);
+  outline: none;
+}
+.cmdk-fab__kbd {
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+}
+@media (max-width: 768px) {
+  .cmdk-fab { display: flex; }
+}
+/* Hide while palette is open (no point pointing at itself) and while tour
+   is running (the bubble owns attention then). */
+.cmdk-overlay.is-open ~ .cmdk-fab,
+body.tour-active .cmdk-fab,
+body.pchat-active .cmdk-fab {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+/* First-time mobile coachmark — speech bubble pointing at the FAB. Shown
+   only on viewports ≤768px (the FAB is desktop-hidden anyway). */
+.cmdk-fab-coach {
+  position: fixed;
+  left: 76px;            /* just past the 48px FAB + 18px left + gap */
+  bottom: 26px;
+  z-index: 9998;
+  max-width: calc(100vw - 100px);
+  padding: 10px 14px;
+  background: linear-gradient(180deg, #0b1226, #070a18);
+  border: 1px solid color-mix(in srgb, var(--cyan) 55%, transparent);
+  border-radius: 8px;
+  color: rgba(230, 243, 255, 0.95);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5),
+              0 0 24px color-mix(in srgb, var(--cyan) 35%, transparent);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.cmdk-fab-coach.is-open    { opacity: 1; transform: translateX(0); }
+.cmdk-fab-coach.is-leaving { opacity: 0; transform: translateX(-8px); }
+.cmdk-fab-coach__body { display: flex; flex-direction: column; gap: 2px; }
+.cmdk-fab-coach__body strong {
+  color: var(--cyan);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent);
+  letter-spacing: 0.5px;
+}
+.cmdk-fab-coach__sub {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.cmdk-fab-coach__arrow {
+  position: absolute;
+  left: -6px;
+  bottom: 16px;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #0b1226 50%, transparent 50%);
+  border-left: 1px solid color-mix(in srgb, var(--cyan) 55%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--cyan) 55%, transparent);
+  transform: rotate(45deg);
+}
+@media (min-width: 769px) { .cmdk-fab-coach { display: none; } }
+
+/* ---------- Command palette: sectioned/fuzzy extensions ---------- */
+/* Override generic li styles for non-row entries (headers / empty / "more"). */
+.cmdk__list .cmdk__section {
+  cursor: default;
+  padding: 12px 12px 4px;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.35);
+  border-radius: 0;
+  pointer-events: none;
+  /* Stay visible as the list scrolls — keeps the user oriented inside long
+     FAQ / case-section result sets. Backdrop hides the rows behind the header
+     so transparent + scrolling text doesn't bleed through. */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(180deg,
+              rgba(7, 10, 24, 0.95) 0%,
+              rgba(7, 10, 24, 0.95) 70%,
+              rgba(7, 10, 24, 0) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.cmdk__list .cmdk__section:first-child { padding-top: 6px; }
+.cmdk__list .cmdk__more,
+.cmdk__list .cmdk__empty {
+  cursor: default;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+  padding: 6px 14px 10px;
+  background: transparent !important;
+  pointer-events: none;
+}
+.cmdk__list .cmdk__empty { padding: 16px 14px; }
+
+/* Virtual "Ask the assistant" row: brand-tinted, stands out from FAQ rows. */
+.cmdk__list .cmdk__row--ask {
+  background: linear-gradient(90deg,
+              color-mix(in srgb, var(--brand) 14%, transparent),
+              color-mix(in srgb, var(--brand) 4%, transparent));
+  border: 1px dashed color-mix(in srgb, var(--brand) 50%, transparent);
+}
+.cmdk__list .cmdk__row--ask .cmdk__icon { color: var(--brand); }
+.cmdk__list .cmdk__row--ask.is-active,
+.cmdk__list .cmdk__row--ask:hover {
+  background: linear-gradient(90deg,
+              color-mix(in srgb, var(--brand) 24%, transparent),
+              color-mix(in srgb, var(--brand) 8%, transparent));
+}
+
+/* Match-highlight inside palette rows. */
+.cmdk__list .cmdk__hl {
+  background: transparent;
+  color: var(--cyan);
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+  padding: 0;
+}
+
+/* Label column needs ellipsis so long FAQ questions don't push meta off-row. */
+.cmdk__list .cmdk__row .cmdk__label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Staggered row entry — rows fade up in sequence as the list renders so the
+   palette feels like it's being typed in rather than dropped in. Capped at
+   ~9 steps so very long result sets don't feel laggy. */
+@keyframes cmdk-row-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cmdk__list .cmdk__row {
+  animation: cmdk-row-in 0.22s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk__list .cmdk__row { animation: none; }
+}
+
+/* 3D parallax variant on case-study rows — the row tilts under the cursor
+   (set inline by JS) and the thumbnail floats forward via translateZ. */
+.cmdk__list .cmdk__row--tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.2, 1);
+  will-change: transform;
+}
+.cmdk__list .cmdk__row--tilt .cmdk__icon--thumb img {
+  transform: translateZ(8px);
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.cmdk__list .cmdk__row--tilt:hover .cmdk__icon--thumb img {
+  transform: translateZ(14px) scale(1.04);
+}
+.cmdk__list .cmdk__row--tilt .cmdk__label,
+.cmdk__list .cmdk__row--tilt .cmdk__meta {
+  transform: translateZ(2px);
+}
+
+/* Thumbnail variant of the icon cell — case-study rows show their OG image
+   instead of the generic ◆ glyph so the palette reads like a magazine TOC. */
+.cmdk__list .cmdk__row .cmdk__icon--thumb {
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  padding: 0;
+}
+.cmdk__list .cmdk__row .cmdk__icon--thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 15%, transparent);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.cmdk__list .cmdk__row.is-active .cmdk__icon--thumb img,
+.cmdk__list .cmdk__row:hover .cmdk__icon--thumb img {
+  border-color: color-mix(in srgb, var(--cyan) 70%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 35%, transparent);
+}
+/* Case-section labels are content-rich ("AI Engineer · PHPUnit deploy verifier")
+   and got ellipsis-truncated under the original 1-line rule. Allow these rows
+   to wrap to 2 lines so the keyword stays visible. */
+.cmdk__list .cmdk__row[data-section="case-section"] {
+  align-items: flex-start;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+.cmdk__list .cmdk__row[data-section="case-section"] .cmdk__label {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.35;
+}
+.cmdk__list .cmdk__row[data-section="case-section"] .cmdk__icon,
+.cmdk__list .cmdk__row[data-section="case-section"] .cmdk__meta {
+  margin-top: 2px;
+}
+
+/* Result counter in the footer — right-aligned. */
+.cmdk__foot .cmdk__count {
+  margin-left: auto;
+  color: rgba(0, 229, 255, 0.5);
+}
+
+/* Copy-action toast — non-blocking confirmation, slides up from the footer. */
+.cmdk__toast {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;            /* sit just above the footer's 36ish px */
+  transform: translate(-50%, 8px);
+  z-index: 2;
+  max-width: calc(100% - 32px);
+  padding: 8px 14px;
+  border-radius: 5px;
+  border: 1px solid color-mix(in srgb, var(--cyan) 55%, transparent);
+  background: rgba(5, 8, 20, 0.92);
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 40%, transparent);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45),
+              0 0 18px color-mix(in srgb, var(--cyan) 30%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmdk__toast.is-open { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Guided 30-second tour ---------- */
+.tour-bubble {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(20px);
+  width: min(640px, 92vw);
+  z-index: 10002;
+  background: linear-gradient(180deg, #0b1226, #070a18);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55),
+              0 0 0 1px color-mix(in srgb, var(--cyan) 18%, transparent),
+              0 0 50px color-mix(in srgb, var(--cyan) 22%, transparent);
+  font-family: 'JetBrains Mono', monospace;
+  color: #e6f3ff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  overflow: hidden;
+}
+.tour-bubble.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.tour-bubble__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(0, 229, 255, 0.04);
+}
+.tour-bubble__title {
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.35);
+}
+.tour-bubble__step {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+.tour-bubble__caption {
+  padding: 14px 18px 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(230, 243, 255, 0.92);
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+.tour-bubble__caption strong { color: var(--cyan); text-shadow: 0 0 6px rgba(0, 229, 255, 0.35); }
+.tour-bubble__bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px 14px;
+  flex-wrap: wrap;
+}
+.tour-btn {
+  background: rgba(0, 229, 255, 0.06);
+  border: 1px solid var(--line);
+  color: rgba(230, 243, 255, 0.85);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.tour-btn:hover { background: rgba(0, 229, 255, 0.12); color: #fff; }
+.tour-btn--primary {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cyan) 35%, transparent), color-mix(in srgb, var(--cyan) 18%, transparent));
+  border-color: color-mix(in srgb, var(--cyan) 60%, transparent);
+  color: #fff;
+  margin-left: auto;
+}
+.tour-btn--primary:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cyan) 55%, transparent), color-mix(in srgb, var(--cyan) 28%, transparent));
+}
+.tour-btn--ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+}
+.tour-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.85);
+}
+/* The finale uses anchor elements styled as buttons for Email + Book links —
+   reset link defaults so they match button siblings exactly. */
+a.tour-btn { text-decoration: none; display: inline-flex; align-items: center; }
+
+/* Finale-mode bubble: brighter glow, slightly larger so it commands attention
+   after a tour completion. */
+.tour-bubble--finale {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55),
+              0 0 0 1px color-mix(in srgb, var(--brand) 35%, transparent),
+              0 0 70px color-mix(in srgb, var(--brand) 35%, transparent);
+}
+.tour-bubble--finale .tour-bubble__head {
+  background: linear-gradient(90deg,
+              color-mix(in srgb, var(--brand) 12%, transparent),
+              color-mix(in srgb, var(--cyan) 8%, transparent));
+}
+.tour-bubble--finale .tour-bubble__title { color: var(--brand); text-shadow: 0 0 8px color-mix(in srgb, var(--brand) 40%, transparent); }
+.tour-bubble--finale .tour-bubble__caption kbd {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tour-bubble__bar--finale {
+  flex-wrap: wrap;
+  align-items: center;
+}
+.tour-bubble__bar--finale .tour-btn--primary { margin-left: auto; }
+.tour-bubble__progress {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+.tour-bubble__progress > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--cyan), var(--brand));
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+  transition: width 0.4s ease;
+}
+
+/* Highlight the currently-focused section during the tour.
+   Bright pulse on entry → settles into a persistent soft ring so the eye
+   stays connected to the section the caption refers to. */
+.tour-target {
+  position: relative;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cyan) 55%, transparent),
+              0 0 40px color-mix(in srgb, var(--cyan) 18%, transparent);
+  animation: tour-pulse 1.6s ease-out;
+  transition: box-shadow 0.4s ease;
+}
+@keyframes tour-pulse {
+  0%   { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cyan) 90%, transparent), 0 0 70px color-mix(in srgb, var(--cyan) 45%, transparent); }
+  100% { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cyan) 55%, transparent), 0 0 40px color-mix(in srgb, var(--cyan) 18%, transparent); }
+}
+
+/* Dim ambient UI while the tour runs so attention follows the caption. */
+body.tour-active .siderail,
+body.tour-active .hud,
+body.tour-active .cmdk-hint {
+  opacity: 0.25;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-bubble { transition: opacity 0.15s ease; transform: translateX(-50%) translateY(0); }
+  .tour-target { animation: none; }
+  .tour-bubble__progress > span { transition: none; }
+}
+@media (max-width: 768px) {
+  .tour-bubble { bottom: 12px; width: calc(100vw - 24px); }
+  .tour-bubble__caption { font-size: 13px; padding: 12px 14px 6px; }
+  .tour-bubble__bar { padding: 8px 10px 12px; }
+}
+
+/* ============================================================================
+   ORBITAL 3D — full-screen ring of case-study cards orbiting the viewer.
+   Triggered from the palette's "Explore case studies in 3D" command.
+   Pure CSS 3D, no Three.js. The ring rotates via the --rot custom property
+   set by JS; cards are positioned via --i and the parent's --total.
+   ============================================================================ */
+.orbital3d-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10003;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 45%, color-mix(in srgb, var(--cyan) 14%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--brand) 10%, transparent) 0%, transparent 60%),
+    rgba(3, 5, 12, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  animation: orb-fade 0.32s ease;
+}
+@keyframes orb-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Deep-space starfield — Canvas2D point cloud rendered by orbital3d() in JS.
+   Sits behind every other overlay layer so the cards/grid float over it. */
+.orbital3d-starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Subtle additive glow + vignette so the edges fade into darkness */
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 65%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 65%, transparent 100%);
+}
+
+/* Drifting nebula clouds — pure CSS radial-gradient blobs that slowly orbit
+   the viewport. Three layers, each on a different timing + tint, create the
+   illusion of volumetric depth without any GPU shader cost. */
+.orbital3d-nebula {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+.orbital3d-nebula__cloud {
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+.orbital3d-nebula__cloud--a {
+  top: -25vmax;
+  left: -20vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--cyan) 38%, transparent) 0%, transparent 60%);
+  animation: orb-neb-a 38s ease-in-out infinite;
+}
+.orbital3d-nebula__cloud--b {
+  bottom: -25vmax;
+  right: -15vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand) 30%, transparent) 0%, transparent 60%);
+  animation: orb-neb-b 52s ease-in-out infinite;
+}
+.orbital3d-nebula__cloud--c {
+  top: 20vmax;
+  left: 40vmax;
+  width: 55vmax;
+  height: 55vmax;
+  background: radial-gradient(circle, color-mix(in srgb, #b074ff 35%, transparent) 0%, transparent 65%);
+  animation: orb-neb-c 64s ease-in-out infinite;
+}
+@keyframes orb-neb-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(8vmax, 6vmax, 0) scale(1.12); }
+}
+@keyframes orb-neb-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-10vmax, -4vmax, 0) scale(0.92); }
+}
+@keyframes orb-neb-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%      { transform: translate3d(-12vmax, 8vmax, 0) scale(1.18) rotate(60deg); }
+}
+
+/* Energy horizon — a glowing pulse-bar along the grid horizon line. Sells the
+   "stage" feel; cycles like a slow heartbeat. */
+.orbital3d-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + 80px);
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--cyan) 75%, transparent) 50%,
+    transparent 100%);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--cyan) 60%, transparent),
+              0 0 38px color-mix(in srgb, var(--cyan) 35%, transparent);
+  animation: orb-horizon 4.2s ease-in-out infinite;
+}
+@keyframes orb-horizon {
+  0%, 100% { opacity: 0.55; transform: scaleY(1); }
+  50%      { opacity: 1;    transform: scaleY(1.6); }
+}
+
+/* Cyber grid floor — gives the ring a sense of place */
+.orbital3d-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--cyan) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--cyan) 10%, transparent) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: 0 calc(50vh + 80px);
+  mask-image: linear-gradient(180deg, transparent 50%, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 50%, #000 70%, transparent 100%);
+  transform: perspective(900px) rotateX(60deg);
+  transform-origin: 50% 100%;
+  opacity: 0.5;
+}
+
+.orbital3d-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 1400px;
+  cursor: grab;
+  touch-action: none;
+}
+.orbital3d-stage:active { cursor: grabbing; }
+
+.orbital3d-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-8deg) rotateY(var(--rot, 0deg));
+  will-change: transform;
+}
+
+.orbital3d-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 360px;
+  height: 200px;
+  margin: -100px 0 0 -180px;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+  background: #0b1226;
+  box-shadow: 0 0 30px color-mix(in srgb, var(--cyan) 12%, transparent);
+  transform: rotateY(calc(360deg / var(--total) * var(--i))) translateZ(440px);
+  transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+              box-shadow 0.4s ease,
+              border-color 0.4s ease;
+  /* Hide back-facing cards on the far side of the ring — cleaner than
+     letting mirrored text show through from the rear. */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  cursor: pointer;
+}
+.orbital3d-card:hover,
+.orbital3d-card.is-front {
+  border-color: color-mix(in srgb, var(--cyan) 80%, transparent);
+  box-shadow: 0 0 60px color-mix(in srgb, var(--cyan) 35%, transparent),
+              0 0 120px color-mix(in srgb, var(--cyan) 18%, transparent);
+  transform: rotateY(calc(360deg / var(--total) * var(--i))) translateZ(490px);
+}
+.orbital3d-card.is-front {
+  z-index: 2;
+}
+.orbital3d-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.6) contrast(1.05) saturate(1.1);
+  transition: filter 0.4s ease;
+}
+.orbital3d-card.is-front .orbital3d-card__img,
+.orbital3d-card:hover .orbital3d-card__img { filter: brightness(0.95) saturate(1.15); }
+.orbital3d-card__inner {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 12px 16px 14px;
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 8, 20, 0.85) 60%, rgba(5, 8, 20, 0.95) 100%);
+  color: #e6f3ff;
+}
+.orbital3d-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+.orbital3d-card__meta {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--cyan) 70%, white);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--cyan) 30%, transparent);
+}
+
+.orbital3d-hud {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 3;
+  max-width: 80vw;
+}
+.orbital3d-hud__title {
+  display: block;
+  color: var(--cyan);
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--cyan) 60%, transparent);
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.orbital3d-hud__hint {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+.orbital3d-hud__hint kbd {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  margin: 0 1px;
+}
+
+.orbital3d-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--line-strong);
+  color: var(--cyan);
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 4;
+  transition: background 0.15s ease;
+}
+.orbital3d-close:hover { background: rgba(0, 229, 255, 0.16); }
+
+/* Lock the body's scroll while the orbital is open so the underlying page
+   doesn't shift behind us. */
+body.orbital3d-active { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbital3d-overlay { animation: none; }
+  .orbital3d-card { transition: none; }
+  .orbital3d-nebula__cloud,
+  .orbital3d-horizon { animation: none; }
+  .orbital3d-nebula { opacity: 0.32; }
+}
+@media (max-width: 768px) {
+  .orbital3d-card { width: 260px; height: 146px; margin: -73px 0 0 -130px; transform: rotateY(calc(360deg / var(--total) * var(--i))) translateZ(320px); }
+  .orbital3d-card:hover,
+  .orbital3d-card.is-front { transform: rotateY(calc(360deg / var(--total) * var(--i))) translateZ(360px); }
+  .orbital3d-hud { bottom: 22px; }
+  .orbital3d-hud__title { font-size: 14px; }
+}
+
+/* ============================================================================
+   HOLOGRAPHIC SHIMMER — iridescent sweep across palette case-study rows.
+   Activates on hover; layered on top of the existing tilt + thumbnail.
+   ============================================================================ */
+.cmdk__list .cmdk__row[data-section="case-study"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    color-mix(in srgb, var(--cyan) 22%, transparent) 48%,
+    color-mix(in srgb, var(--brand) 18%, transparent) 52%,
+    transparent 65%
+  );
+  background-size: 220% 100%;
+  background-position: 200% 0;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.cmdk__list .cmdk__row[data-section="case-study"] {
+  position: relative;        /* anchor the ::before */
+}
+.cmdk__list .cmdk__row[data-section="case-study"]:hover::before,
+.cmdk__list .cmdk__row[data-section="case-study"].is-active::before {
+  opacity: 1;
+  animation: holo-sweep 1.6s linear infinite;
+}
+@keyframes holo-sweep {
+  from { background-position: 200% 0; }
+  to   { background-position: -50% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk__list .cmdk__row[data-section="case-study"]::before { animation: none; }
+}
+
 /* ---------- Side-rail section navigator ---------- */
 .siderail {
   position: fixed;
-  right: 14px;
+  left: 14px;                                /* moved from right → left to declutter the
+                                                right column (HUD top, chat bottom) */
   top: 50%;
   transform: translateY(-50%);
   z-index: 9996;
@@ -1232,7 +1983,7 @@ body.konami-on {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;               /* was flex-end (right-aligned) */
   cursor: pointer;
   color: rgba(255, 255, 255, 0.4);
   text-decoration: none;
@@ -1249,9 +2000,10 @@ body.konami-on {
 }
 .siderail__label {
   position: absolute;
-  right: 22px;
+  left: 22px;                                /* was right: 22px — label now sits to the right
+                                                of the dot, since the rail is on the left */
   top: 50%;
-  transform: translateY(-50%) translateX(8px);
+  transform: translateY(-50%) translateX(-8px);
   background: rgba(5, 8, 20, 0.85);
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -8514,4 +9266,947 @@ body.pchat-active .viewport-hud {
 /* -- Print: hide it -- */
 @media print {
   .pchat { display: none !important; }
+}
+
+/* ============================================================================
+   3D ACROSS THE PORTFOLIO — magnetic card tilt, hero parallax layers, and
+   3D scroll-reveal entries. All driven by tech-fx.js. CSS handles the
+   transforms + transitions; JS provides the per-frame variable values.
+   ============================================================================ */
+
+/* -- Magnetic 3D tilt -- pointer-driven rotateX/rotateY on cards.
+   --tilt-rx / --tilt-ry / --tilt-z are set per frame by JS.
+   --tilt-gx / --tilt-gy follow the cursor for a soft inner glow. */
+.tilt3d {
+  transform-style: preserve-3d;
+  transform: perspective(900px)
+             rotateX(var(--tilt-rx, 0deg))
+             rotateY(var(--tilt-ry, 0deg))
+             translateZ(var(--tilt-z, 0px));
+  transition: transform var(--tx-base) var(--ez-out),
+              box-shadow var(--tx-base) var(--ez-out);
+  /* will-change moved to :hover so we don't pin a compositor layer per card
+     forever. ~30 cards × always-on will-change was real GPU pressure. */
+  position: relative;
+}
+.tilt3d:hover { will-change: transform; }
+.tilt3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+              color-mix(in srgb, var(--cyan) 20%, transparent) 0%,
+              transparent 45%);
+  opacity: 0;
+  transition: opacity var(--tx-fast) var(--ez-soft);
+  mix-blend-mode: screen;
+  z-index: 1;
+}
+.tilt3d:hover::after { opacity: 0.6; }
+/* When actively tilting, kill the easing so motion follows the cursor 1:1.
+   The pointerleave handler resets variables; the transition then takes
+   over to ease everything back to neutral smoothly. */
+.tilt3d:hover { transition: transform var(--tx-instant) linear; }
+
+/* The card body content needs preserve-3d too so any nested z-translated
+   elements (badges, code-card windows, OG thumbs) pop forward properly. */
+.tilt3d > * { transform-style: preserve-3d; }
+
+/* -- Hero pointer parallax -- each layer is translated by JS via inline
+   transform; we just need transition so the easing feels natural when JS
+   stops updating. JS sets transform directly so we don't need !important. */
+.hero-parallax-layer {
+  transition: transform var(--tx-fast) var(--ez-out);
+  will-change: transform;
+}
+
+/* -- 3D Scroll Reveal -- elements start tilted back + faded, snap forward
+   when they intersect the viewport. The .reveal-delay variable adds a
+   stagger for sibling cards in grids. */
+.reveal3d {
+  opacity: 0;
+  transform: perspective(1200px) translate3d(0, 40px, -180px) rotateX(-10deg);
+  transition:
+    opacity var(--tx-slow) var(--ez-out),
+    transform var(--tx-stage) var(--ez-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal3d-in {
+  opacity: 1;
+  transform: perspective(1200px) translate3d(0, 0, 0) rotateX(0deg);
+  /* Drop will-change after the entry animation — keeping it indefinitely
+     pins a compositor layer per card for no reason. */
+  will-change: auto;
+}
+
+/* A11y rescue: if a keyboard user tabs INTO a card that hasn't yet been
+   revealed (e.g. they tabbed past faster than the IO fired, or JS hiccup),
+   force visibility + cancel the transform so the focus ring is in a
+   reachable spot. Same rescue for headings. */
+.reveal3d:focus-within,
+.reveal3d:has(:focus-visible) {
+  opacity: 1;
+  transform: none;
+}
+.heading3d:focus,
+.heading3d:focus-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reduced motion: skip the 3D entry — just fade in. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal3d { transform: none; }
+  .reveal3d-in { transform: none; }
+  .tilt3d { transition: none; transform: none; }
+  .hero-parallax-layer { transition: none; }
+}
+
+/* Touch/coarse pointer: kill the tilt entirely so taps don't leave cards
+   stuck at an angle waiting for a pointerleave that never comes. */
+@media (hover: none) {
+  .tilt3d { transform: none !important; }
+  .tilt3d::after { display: none; }
+}
+
+/* ============================================================================
+   PAGE DIVE — when navigating to a case-study link, the page tilts back +
+   zooms forward + fades so the load feels like a continuous spatial motion
+   rather than a hard cut. The receiving case-study page picks up the dive
+   intent via sessionStorage and runs the reverse "rise" animation on load.
+   ============================================================================ */
+body.page-dive-out {
+  pointer-events: none;
+  animation: page-dive-out var(--tx-stage) var(--ez-in) forwards;
+  transform-origin: 50% 30%;
+  perspective: 1400px;
+}
+@keyframes page-dive-out {
+  0%   { transform: perspective(1400px) translateZ(0) rotateX(0deg); opacity: 1; filter: blur(0); }
+  100% { transform: perspective(1400px) translateZ(420px) rotateX(6deg); opacity: 0; filter: blur(6px); }
+}
+
+body.page-dive-in {
+  animation: page-dive-in var(--tx-stage) var(--ez-out) both;
+  transform-origin: 50% 70%;
+  perspective: 1400px;
+}
+@keyframes page-dive-in {
+  0%   { transform: perspective(1400px) translateZ(-420px) rotateX(-6deg); opacity: 0; filter: blur(6px); }
+  100% { transform: perspective(1400px) translateZ(0)      rotateX(0deg);  opacity: 1; filter: blur(0); }
+}
+
+/* Dive overlay — a brief flash of cyan light that washes the screen during
+   the dive, providing a perceptual "transition cover" so the navigation's
+   actual page-swap discontinuity is hidden inside the flash. */
+.page-dive-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--cyan) 35%, transparent) 0%, transparent 60%),
+    rgba(3, 5, 12, 0);
+  opacity: 0;
+  animation: dive-flash var(--tx-stage) var(--ez-out) forwards;
+}
+@keyframes dive-flash {
+  0%   { opacity: 0;   transform: scale(0.6); }
+  40%  { opacity: 0.9; }
+  100% { opacity: 0;   transform: scale(1.8); }
+}
+
+/* ============================================================================
+   3D SECTION HEADINGS — every section's <h2> heading gets a dramatic 3D
+   entry as it scrolls in: rotates from rotateY(-30deg) translateZ(-200px)
+   to flat with a slight overshoot. Bigger than the card reveal so the
+   heading feels like the "anchor" of each section.
+   ============================================================================ */
+.heading3d {
+  display: inline-block;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateY(-30deg) translateZ(-200px) translateX(-40px);
+  opacity: 0;
+  transition:
+    transform var(--tx-stage) var(--ez-back),
+    opacity var(--tx-slow) var(--ez-out);
+  will-change: transform, opacity;
+}
+.heading3d.heading3d-in {
+  transform: perspective(1000px) rotateY(0deg) translateZ(0) translateX(0);
+  opacity: 1;
+  /* Headings are static after entry — release the compositor layer. */
+  will-change: auto;
+}
+
+/* ============================================================================
+   3D TECH CHIPS — the hero's tech-chip strip + case-study exp-chips lift
+   forward on hover with a slight rotateY so they feel like physical tokens.
+   ============================================================================ */
+.tech-chip, .exp-chip {
+  transform-style: preserve-3d;
+  transition:
+    transform var(--tx-base) var(--ez-back),
+    box-shadow var(--tx-base) var(--ez-out),
+    background var(--tx-fast) var(--ez-soft),
+    color var(--tx-fast) var(--ez-soft);
+  will-change: transform;
+}
+.tech-chip:hover, .exp-chip:hover {
+  transform: perspective(600px) translateZ(8px) rotateY(-4deg);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--cyan) 28%, transparent),
+              0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================================
+   3D SOCIAL ICONS — hero social row gets a tactile spring-pop on hover.
+   ============================================================================ */
+.fh5co-social-icons li a {
+  display: inline-block;
+  transform-style: preserve-3d;
+  transition: transform var(--tx-base) var(--ez-back),
+              color var(--tx-fast) var(--ez-soft),
+              text-shadow var(--tx-base) var(--ez-out);
+  will-change: transform;
+}
+.fh5co-social-icons li a:hover {
+  transform: perspective(500px) translateZ(14px) rotateY(-12deg) scale(1.18);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 70%, transparent),
+               0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+/* ============================================================================
+   3D HERO CTAs — the primary book-call button gets a forward push on hover.
+   ============================================================================ */
+.hero-cta__primary,
+.hero-cta__secondary {
+  transform-style: preserve-3d;
+  transition:
+    transform var(--tx-base) var(--ez-back),
+    box-shadow var(--tx-base) var(--ez-out),
+    background var(--tx-fast) var(--ez-soft);
+  will-change: transform;
+}
+.hero-cta__primary:hover {
+  transform: perspective(800px) translateZ(20px) translateY(-3px) rotateX(6deg);
+  box-shadow: 0 18px 50px color-mix(in srgb, var(--brand) 45%, transparent),
+              0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.hero-cta__secondary:hover {
+  transform: perspective(800px) translateZ(8px) translateY(-2px);
+}
+
+/* ============================================================================
+   3D NAV LINKS — the sticky top nav gets z-pop on hover too so the whole
+   chrome feels in-system.
+   ============================================================================ */
+#fh5co-nav .menu-1 li a,
+#fh5co-nav .menu-2 li a {
+  transform-style: preserve-3d;
+  transition: transform var(--tx-fast) var(--ez-back),
+              color var(--tx-fast) var(--ez-soft);
+}
+#fh5co-nav .menu-1 li a:hover,
+#fh5co-nav .menu-2 li a:hover {
+  transform: perspective(400px) translateZ(6px) translateY(-1px);
+}
+
+/* Reduced motion: kill all the chip/social/cta/nav 3D so it stays calm. */
+@media (prefers-reduced-motion: reduce) {
+  .tech-chip:hover, .exp-chip:hover,
+  .fh5co-social-icons li a:hover,
+  .hero-cta__primary:hover, .hero-cta__secondary:hover,
+  #fh5co-nav .menu-1 li a:hover, #fh5co-nav .menu-2 li a:hover {
+    transform: none;
+  }
+  body.page-dive-out, body.page-dive-in { animation: none; }
+  .page-dive-flash { display: none; }
+  .heading3d { transform: none; opacity: 1; }
+}
+
+/* ============================================================================
+   CURSOR SPOTLIGHT — global radial-gradient that tracks the cursor across
+   every page. Sits on <html>::before so it's beneath all content but above
+   the body's background. mix-blend-mode: screen adds light without
+   obscuring. Position controlled by --spot-x / --spot-y from JS.
+   ============================================================================ */
+html.has-spotlight::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;            /* above bg, below nav (9998) and modals */
+  /* Reduced gradient (was 360px) — same visible effect at near-zero
+     paint cost. Removed mix-blend-mode: screen — it forced the browser
+     to recomposite the entire viewport every frame because of any
+     animation underneath (marquee, etc), which was the single biggest
+     idle-state fps killer. */
+  background: radial-gradient(
+    circle 260px at var(--spot-x, 50vw) var(--spot-y, 50vh),
+    color-mix(in srgb, var(--cyan) 14%, transparent) 0%,
+    transparent 65%
+  );
+  /* will-change removed too — the gradient repaints when --spot-x/y
+     change, which is fine without a forced compositor layer. */
+  transition: opacity 0.4s var(--ez-soft, ease);
+}
+/* When the orbital is open its overlay (z:10003) already covers the
+   spotlight (z:9997), so no extra hide rule needed. */
+/* Light theme: warmer + dimmer spotlight so it doesn't blow out a bright bg */
+:root[data-theme="light"].has-spotlight::before {
+  background: radial-gradient(
+    circle 320px at var(--spot-x, 50vw) var(--spot-y, 50vh),
+    color-mix(in srgb, var(--brand) 14%, transparent) 0%,
+    color-mix(in srgb, var(--brand) 5%, transparent) 28%,
+    transparent 70%
+  );
+}
+
+/* ============================================================================
+   SIDERAIL 3D DEPTH — active dot pops forward, near-active dots lift
+   slightly less, far dots stay flat. The whole rail also has perspective
+   so the depth reads as real 3D rather than just scale.
+   ============================================================================ */
+.siderail--3d {
+  perspective: 600px;
+  transform-style: preserve-3d;
+}
+.siderail--3d .siderail__item {
+  transform-style: preserve-3d;
+  transition: transform var(--tx-base) var(--ez-back),
+              filter var(--tx-base) var(--ez-out);
+  filter: brightness(0.55);
+}
+.siderail--3d .siderail__item.is-near-2 {
+  transform: translateZ(4px);
+  filter: brightness(0.75);
+}
+.siderail--3d .siderail__item.is-near-1 {
+  transform: translateZ(10px);
+  filter: brightness(0.9);
+}
+.siderail--3d .siderail__item.is-active {
+  transform: translateZ(22px) rotateY(8deg);   /* positive Y — rail is on the left now, so
+                                                  the dot tilts toward the content */
+  filter: brightness(1.2) drop-shadow(0 0 8px color-mix(in srgb, var(--cyan) 60%, transparent));
+}
+.siderail--3d .siderail__item:hover {
+  transform: translateZ(28px) rotateY(12deg);
+  filter: brightness(1.3);
+}
+
+/* ============================================================================
+   SECTION PARALLAX HEADINGS — heading translateZ scales with scroll
+   progress through its section. JS writes --sp-z and --sp-rx per scroll
+   tick. Combined with the .heading3d entry transform, the heading does a
+   continuous 3D motion: rotates in from the side, then drifts back as you
+   scroll past it.
+   ============================================================================ */
+.section-parallax {
+  display: inline-block;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+/* Apply parallax transform only *after* the heading entry has completed.
+   While entering, .heading3d's transform owns the element; once in, the
+   parallax transform takes over with no transition so scroll updates feel
+   1:1 with the wheel. */
+.heading3d.heading3d-in.section-parallax,
+.section-parallax:not(.heading3d) {
+  transform: perspective(1200px)
+             translateZ(var(--sp-z, 0px))
+             rotateX(var(--sp-rx, 0deg));
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-spotlight::before { display: none; }
+  .siderail--3d .siderail__item { transform: none; filter: none; transition: none; }
+  .section-parallax { transform: none; }
+}
+
+/* ============================================================================
+   CUSTOM CURSOR — dot + ring follower. The dot is the actual pointer; the
+   ring lags via JS spring-easing. Hides the OS cursor entirely except over
+   text inputs (where the caret needs to stay visible).
+   ============================================================================ */
+/* Universal selector wins over normal .btn { cursor: pointer } rules.
+   Then restore the text caret on inputs so they remain typeable. */
+html.has-custom-cursor,
+html.has-custom-cursor * { cursor: none; }
+html.has-custom-cursor input,
+html.has-custom-cursor textarea,
+html.has-custom-cursor select,
+html.has-custom-cursor [contenteditable="true"] { cursor: text; }
+
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99996;
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--cyan) 80%, transparent),
+              0 0 22px color-mix(in srgb, var(--cyan) 50%, transparent);
+  mix-blend-mode: screen;
+  transition: width var(--tx-fast) var(--ez-back),
+              height var(--tx-fast) var(--ez-back),
+              background var(--tx-fast) var(--ez-soft);
+}
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid color-mix(in srgb, var(--cyan) 80%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cyan) 4%, transparent);
+  transition: width var(--tx-base) var(--ez-back),
+              height var(--tx-base) var(--ez-back),
+              border-color var(--tx-fast) var(--ez-soft),
+              background var(--tx-fast) var(--ez-soft);
+}
+/* Over interactive elements: ring inflates, dot disappears inward */
+html.cursor-over-link .cursor-ring {
+  width: 56px;
+  height: 56px;
+  border-color: var(--cyan);
+  background: color-mix(in srgb, var(--cyan) 12%, transparent);
+}
+html.cursor-over-link .cursor-dot {
+  width: 3px;
+  height: 3px;
+}
+/* On pointerdown: ring contracts, dot expands */
+html.cursor-down .cursor-ring {
+  width: 24px;
+  height: 24px;
+}
+html.cursor-down .cursor-dot {
+  width: 10px;
+  height: 10px;
+}
+/* When cursor leaves the window, hide both */
+html.cursor-out .cursor-dot,
+html.cursor-out .cursor-ring {
+  opacity: 0;
+  transition: opacity var(--tx-fast) var(--ez-soft);
+}
+
+/* Theme-aware tint: light mode uses brand orange instead of cyan */
+:root[data-theme="light"] .cursor-dot {
+  background: var(--brand);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--brand) 80%, transparent),
+              0 0 22px color-mix(in srgb, var(--brand) 50%, transparent);
+}
+:root[data-theme="light"] .cursor-ring {
+  border-color: color-mix(in srgb, var(--brand) 80%, transparent);
+  background: color-mix(in srgb, var(--brand) 4%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot, .cursor-ring { display: none; }
+  html.has-custom-cursor, html.has-custom-cursor body { cursor: auto; }
+}
+@media (hover: none) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* ============================================================================
+   GLITCH TEXT — RGB-split chromatic aberration via text-shadow on cyan +
+   magenta channels, plus a JS-driven character scramble. The base state
+   has a very subtle 1px split (ambient feel); --active amps it up.
+   ============================================================================ */
+.glitch-text {
+  position: relative;
+  text-shadow:
+    0.5px 0 0 color-mix(in srgb, var(--cyan) 25%, transparent),
+    -0.5px 0 0 color-mix(in srgb, var(--magenta) 25%, transparent);
+  transition: text-shadow var(--tx-fast) var(--ez-soft);
+}
+.glitch-text--active {
+  text-shadow:
+    2px 0 0 var(--cyan),
+    -2px 0 0 var(--magenta),
+    0 0 8px color-mix(in srgb, var(--cyan) 40%, transparent);
+}
+/* Keyframe shake only on elements that DON'T own a 3D transform —
+   otherwise the shake's translate+skew would clobber heading3d's
+   perspective + rotateY mid-entry. Headings still get RGB-split + scramble,
+   just not the physical jolt. */
+.glitch-text--active:not(.heading3d):not(.section-parallax) {
+  animation: glitch-shake 0.42s steps(6, end);
+}
+@keyframes glitch-shake {
+  0%   { transform: translate(0, 0)    skewX(0); }
+  16%  { transform: translate(-2px, 1px) skewX(-2deg); }
+  32%  { transform: translate(2px, -1px) skewX(1deg); }
+  48%  { transform: translate(-1px, 0) skewX(-1deg); }
+  64%  { transform: translate(1px, 1px) skewX(2deg); }
+  82%  { transform: translate(0, -1px) skewX(0); }
+  100% { transform: translate(0, 0)    skewX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-text, .glitch-text--active { text-shadow: none; animation: none; }
+}
+
+/* ============================================================================
+   HUD COORDS ROW — extends the existing HUD with a coordinates field. The
+   row inherits all .hud__row styling; just add a small monospace tweak so
+   coords stay readable (the degree symbol can look weird otherwise).
+   ============================================================================ */
+.hud__row--coords .hud__val {
+  font-feature-settings: 'tnum' 1;  /* tabular nums so the coords don't jiggle */
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   MARQUEE TECH TICKER — continuous-loop horizontal scroller injected
+   between hero and about. Two identical rows side-by-side animate left
+   indefinitely; when the first row exits, the second is already in place.
+   ============================================================================ */
+.tech-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 18px 0;
+  background:
+    linear-gradient(180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--cyan) 4%, transparent) 50%,
+      transparent 100%);
+  border-top: 1px solid color-mix(in srgb, var(--cyan) 14%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--cyan) 14%, transparent);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  z-index: 1;
+}
+.tech-marquee__row {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: marquee-scroll 38s linear infinite;
+  will-change: transform;
+}
+.tech-marquee:hover .tech-marquee__row,
+.tech-marquee.is-paused .tech-marquee__row { animation-play-state: paused; }
+.tech-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--cyan) 75%, white);
+  padding: 0 4px;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 30%, transparent);
+}
+.tech-marquee__sep {
+  display: inline-block;
+  margin: 0 22px;
+  font-size: 11px;
+  color: color-mix(in srgb, var(--cyan) 40%, transparent);
+  transform: translateY(-1px);
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }   /* exactly one row-width */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-marquee__row { animation: none; }
+  .tech-marquee { mask-image: none; -webkit-mask-image: none; }
+}
+@media (max-width: 768px) {
+  .tech-marquee { padding: 12px 0; }
+  .tech-marquee__item { font-size: 11px; letter-spacing: 1.5px; }
+  .tech-marquee__sep { margin: 0 14px; font-size: 10px; }
+}
+
+/* Scroll-velocity boost: the marquee tints brighter + adds a top/bottom
+   highlight when the user is scrolling fast. JS writes --marquee-boost
+   (0..1) per RAF tick during decay. */
+.tech-marquee::before,
+.tech-marquee::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--cyan) 90%, transparent) 50%,
+    transparent 100%);
+  opacity: calc(var(--marquee-boost, 0) * 0.9);
+  pointer-events: none;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--cyan) 60%, transparent);
+  transition: opacity 0.18s var(--ez-soft);
+}
+.tech-marquee::before { top: 0; }
+.tech-marquee::after  { bottom: 0; }
+.tech-marquee__item {
+  transition: text-shadow 0.18s var(--ez-soft);
+}
+.tech-marquee[style*="--marquee-boost"] .tech-marquee__item {
+  text-shadow: 0 0 calc(8px + var(--marquee-boost, 0) * 18px)
+               color-mix(in srgb, var(--cyan) calc(30% + var(--marquee-boost, 0) * 50%), transparent);
+}
+
+/* ============================================================================
+   BOOT SEQUENCE OVERLAY — terminal boot screen on first session visit.
+   Types out a command, reveals status lines, dissolves into the hero.
+   Total duration ~750ms.
+   ============================================================================ */
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: var(--bg-deep, #050814);
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: boot-overlay-fade-in 0.2s var(--ez-out);
+  /* Subtle scanline overlay so it feels like a CRT booting */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 229, 255, 0.025) 3px,
+      rgba(0, 229, 255, 0.025) 4px
+    ),
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--cyan) 8%, transparent) 0%, transparent 60%);
+  background-color: var(--bg-deep, #050814);
+}
+@keyframes boot-overlay-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.boot-overlay--out {
+  animation: boot-overlay-dissolve 0.22s var(--ez-in) forwards;
+}
+@keyframes boot-overlay-dissolve {
+  0%   { opacity: 1; transform: scale(1) translateZ(0); filter: blur(0); }
+  100% { opacity: 0; transform: scale(1.06) translateZ(0); filter: blur(8px); }
+}
+.boot-overlay__inner {
+  width: min(620px, 90vw);
+  padding: 24px 30px;
+  border: 1px solid color-mix(in srgb, var(--cyan) 24%, transparent);
+  border-radius: 6px;
+  background: rgba(5, 8, 20, 0.65);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cyan) 10%, transparent),
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    inset 0 0 40px color-mix(in srgb, var(--cyan) 6%, transparent);
+}
+.boot-overlay__lines {
+  display: block;
+  font-size: 14px;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+.boot-overlay__line {
+  display: block;
+  color: rgba(255, 255, 255, 0.86);
+}
+.boot-overlay__line--out {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.18s var(--ez-out), transform 0.18s var(--ez-out);
+}
+.boot-overlay__line--out.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.boot-overlay__line--final {
+  color: var(--cyan);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--cyan) 60%, transparent);
+}
+.boot-overlay__prompt {
+  color: var(--brand);
+  font-weight: 600;
+  margin-right: 4px;
+}
+.boot-overlay__cmd {
+  color: var(--cyan);
+}
+.boot-overlay__cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--cyan);
+  animation: boot-cursor-blink 0.6s steps(1) infinite;
+}
+@keyframes boot-cursor-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-overlay { display: none; }
+}
+@media (hover: none) {
+  .boot-overlay { display: none; }
+}
+
+/* ============================================================================
+   KONAMI TOAST + DEVELOPER MODE — earned reward for the few who try
+   ↑↑↓↓←→←→BA. Toast slides in from the top-right, amps the global glitch,
+   and reveals an extra HUD line on the right-side widget.
+   ============================================================================ */
+.konami-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99998;
+  min-width: 280px;
+  padding: 14px 18px;
+  background: rgba(5, 8, 20, 0.92);
+  border: 1px solid color-mix(in srgb, var(--cyan) 60%, transparent);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cyan) 18%, transparent),
+    0 20px 50px rgba(0, 0, 0, 0.6),
+    0 0 36px color-mix(in srgb, var(--cyan) 32%, transparent);
+  transform: translate3d(0, -16px, 0) scale(0.96);
+  opacity: 0;
+  transition:
+    transform var(--tx-base) var(--ez-back),
+    opacity var(--tx-fast) var(--ez-soft);
+  pointer-events: none;
+}
+.konami-toast.is-in {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+.konami-toast__title {
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--cyan) 60%, transparent);
+}
+.konami-toast__body {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 8px;
+}
+.konami-toast__hint {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+}
+.konami-toast__hint kbd {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  margin: 0 2px;
+}
+
+/* Developer-mode-on amplifications. Subtle by default — we still want the
+   page to be readable; we just signal that something extra is alive. */
+html.developer-mode-on .glitch-text {
+  text-shadow:
+    1px 0 0 color-mix(in srgb, var(--cyan) 50%, transparent),
+    -1px 0 0 color-mix(in srgb, var(--magenta) 50%, transparent);
+}
+html.developer-mode-on .cursor-dot {
+  box-shadow:
+    0 0 14px var(--cyan),
+    0 0 32px color-mix(in srgb, var(--cyan) 60%, transparent),
+    0 0 60px color-mix(in srgb, var(--magenta) 30%, transparent);
+}
+html.developer-mode-on .cursor-ring {
+  border-color: var(--cyan);
+  background: color-mix(in srgb, var(--cyan) 8%, transparent);
+}
+
+/* Hidden HUD line that only shows in developer mode */
+.hud__row--dev {
+  display: none;
+}
+html.developer-mode-on .hud__row--dev {
+  display: flex;
+  color: var(--brand);
+}
+html.developer-mode-on .hud__row--dev .hud__val {
+  color: var(--brand);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--brand) 60%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .konami-toast { transition: none; }
+}
+
+/* ============================================================================
+   HUD HARDWARE ROWS — subtle differentiation so the new geek rows
+   visually cluster as device info, separate from the live counters.
+   ============================================================================ */
+.hud__row--hw .hud__label {
+  color: rgba(0, 229, 255, 0.55);
+}
+.hud__row--hw .hud__val {
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: 0.5px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ============================================================================
+   IDLE NUDGE — chat bubble pulses after 45s of inactivity; a small
+   tooltip drifts up from the bubble with "still there?". Dismissed on
+   any input.
+   ============================================================================ */
+.pchat__bubble.is-nudging,
+.pchat__fab.is-nudging,
+[data-pchat-toggle].is-nudging {
+  animation: idle-nudge-pulse 1.4s var(--ez-soft) infinite;
+}
+@keyframes idle-nudge-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--cyan) 60%, transparent),
+                0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 14px color-mix(in srgb, var(--cyan) 0%, transparent),
+                0 0 28px color-mix(in srgb, var(--cyan) 50%, transparent),
+                0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.idle-nudge-tip {
+  position: fixed;
+  /* Sit just above the chat bubble (bubble is typically bottom-right) */
+  right: 24px;
+  bottom: 100px;
+  z-index: 99997;
+  padding: 8px 14px;
+  background: rgba(5, 8, 20, 0.92);
+  border: 1px solid color-mix(in srgb, var(--cyan) 45%, transparent);
+  border-radius: 4px;
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 0 18px color-mix(in srgb, var(--cyan) 30%, transparent);
+  transform: translate3d(0, 6px, 0) scale(0.96);
+  opacity: 0;
+  transition: transform var(--tx-base) var(--ez-back),
+              opacity var(--tx-fast) var(--ez-soft);
+  pointer-events: none;
+}
+.idle-nudge-tip.is-in {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+/* Pointer triangle linking the tip to the bubble */
+.idle-nudge-tip::after {
+  content: '';
+  position: absolute;
+  right: 22px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: rgba(5, 8, 20, 0.92);
+  border-right: 1px solid color-mix(in srgb, var(--cyan) 45%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--cyan) 45%, transparent);
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pchat__bubble.is-nudging,
+  .pchat__fab.is-nudging,
+  [data-pchat-toggle].is-nudging { animation: none; }
+  .idle-nudge-tip { transition: none; }
+}
+
+/* ============================================================================
+   SCROLL-STATE PERF — when body.is-scrolling is set (JS adds during active
+   scroll, removes 150ms after the last scroll event), pause the most
+   expensive paint operations so the wheel feels glass-smooth. Effects
+   resume immediately on scroll stop.
+
+   Targets here are the proven expensive ones:
+     - mix-blend-mode: screen pseudos (spotlight, tilt glow, shimmer)
+     - text-shadow on every glitch-text character
+     - filter on heavy mix-blend layers
+   ============================================================================ */
+/* JS adds .is-scrolling on <html> (document.documentElement) during active
+   scroll. CSS uses that as the ancestor signal to pause descendants. */
+html.is-scrolling.has-spotlight::before { opacity: 0; }
+
+html.is-scrolling .tilt3d::after,
+html.is-scrolling .cs-tilt3d::after { opacity: 0; }
+
+html.is-scrolling .glitch-text { text-shadow: none; }
+
+html.is-scrolling .cmdk__row[data-section="case-study"]::before {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+/* Marquee pauses during scroll too — animation contributes to composite
+   cost on every paint. Resumes after scroll stops. */
+html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
+
+/* ============================================================================
+   AGGRESSIVE PERF — browser-native paint scoping
+   ============================================================================
+   These two CSS features let the browser skip work on offscreen / isolated
+   regions. They're free wins on modern Chromium / Safari / Firefox.
+
+   `content-visibility: auto` — sections offscreen are skipped entirely
+   during render (the browser still knows they exist for layout). When they
+   approach the viewport, they're rendered just in time. Combined with
+   `contain-intrinsic-size`, the scrollbar position is preserved.
+
+   `contain: content` — equivalent to `layout style paint`. Tells the
+   browser that a card's internals never affect the rest of the page —
+   repainting a hovered card cannot invalidate the layout/paint of
+   neighbors. Limits the dirty region per paint.
+   ============================================================================ */
+
+/* Long sections — let the browser skip them when far offscreen */
+#fh5co-resume,
+#fh5co-features,
+#fh5co-skills,
+#fh5co-work,
+#fh5co-blog,
+#fh5co-started {
+  content-visibility: auto;
+  /* Approximate height so the scrollbar doesn't jump when sections come
+     into view. Conservative estimates — actual heights vary. */
+  contain-intrinsic-size: 0 1200px;
+}
+
+/* Self-contained cards — paint scope locked in */
+.exp-card,
+.proj-card,
+.svc-card,
+.skill-card,
+.px-card,
+.cta-card,
+.code-card {
+  contain: content;
 }

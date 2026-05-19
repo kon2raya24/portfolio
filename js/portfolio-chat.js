@@ -1165,6 +1165,22 @@
 
     restoreHistory();
     renderSuggestions();
+
+    // Public API — lets the command palette (and anything else) hand a
+    // pre-formed question into the chat without dispatching synthetic clicks.
+    window.PortfolioChat = {
+      open: open,
+      close: close,
+      ask: function (q) {
+        if (panel.hidden) open();
+        if (q && String(q).trim()) send(q);
+      },
+      // Read-only view of FAQ entries — the palette ingests this so we don't
+      // duplicate the curated Q&A array in two places.
+      faq: FAQ.map(function (e) {
+        return { q: e.q, aliases: (e.aliases || []).slice(), category: e.category || 'general' };
+      })
+    };
   }
 
   if (document.readyState === 'loading') {

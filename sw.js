@@ -4,7 +4,7 @@
      - same-origin HTML pages: stale-while-revalidate (cap), falls back to cached index
      - cross-origin api calls (github/counterapi): network-only, no caching
 */
-const VERSION = 'pf-v101-2026-05-18';
+const VERSION = 'pf-v118-2026-05-19';
 const STATIC_CACHE = 'pf-static-' + VERSION;
 const PAGE_CACHE   = 'pf-pages-'  + VERSION;
 
@@ -17,13 +17,35 @@ const STATIC_PRECACHE = [
   '/css/icomoon.css',
   '/css/bootstrap.css',
   '/css/case-study.css',
+  '/css/portfolio-chat.css',
   '/js/main.js',
   '/js/tech-fx.js',
   '/js/case-study.js',
   '/js/portfolio-chat.js',
   '/images/logo.png',
   '/images/logo-192.png',
-  '/manifest.json'
+  '/manifest.json',
+  // Case-study pages — palette deep-links target these; precaching makes
+  // first-hit feel native.
+  '/case-studies/ai-engineer.html',
+  '/case-studies/wms-v2.html',
+  '/case-studies/hris.html',
+  '/case-studies/tms.html',
+  '/case-studies/pamanaland.html',
+  '/case-studies/jbc.html',
+  '/case-studies/wms.html',
+  '/case-studies/llm-wiki.html',
+  // OG images — now rendered inline on palette case-study rows, so they
+  // need to be in the first paint, not lazy-fetched per row.
+  '/images/og-ai-engineer.png',
+  '/images/og-wms-v2.png',
+  '/images/og-hris.png',
+  '/images/og-tms.png',
+  '/images/og-pamanaland.png',
+  '/images/og-jbc.png',
+  '/images/og-wms.png',
+  '/images/og-llm-wiki.png',
+  '/images/og-cover.png'
 ];
 
 self.addEventListener('install', function (event) {

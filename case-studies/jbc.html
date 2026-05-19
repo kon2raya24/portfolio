@@ -51,6 +51,7 @@
 <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../css/case-study.css">
+<link rel="stylesheet" href="../css/portfolio-chat.css">
 <link rel="icon" href="../images/logo.png" type="image/x-icon">
 
 <!-- JSON-LD: Article + BreadcrumbList -->
@@ -200,7 +201,7 @@
 	<!-- TL;DR -->
 	<section class="cs-section">
 		<div class="cs-section__label">tl;dr</div>
-		<h2>What it is</h2>
+		<h2 id="what-it-is">What it is</h2>
 		<p>
 			A platform that runs the day-to-day operations of a real-estate brokerage:
 			<strong>property catalog</strong>, <strong>sales pipeline</strong>,
@@ -219,7 +220,7 @@
 	<!-- Problem -->
 	<section class="cs-section">
 		<div class="cs-section__label">problem</div>
-		<h2>The bottleneck</h2>
+		<h2 id="the-bottleneck">The bottleneck</h2>
 		<p>
 			Real-estate brokerage commissions are unusually messy. A single sale can split
 			payouts across multiple agents, sales teams, and the brokerage itself, with
@@ -250,7 +251,7 @@
 	<!-- Approach -->
 	<section class="cs-section">
 		<div class="cs-section__label">approach</div>
-		<h2>How I broke it down</h2>
+		<h2 id="how-i-broke-it-down">How I broke it down</h2>
 		<ul>
 			<li><strong>Domain modelling first.</strong> Talked through the commission
 				lifecycle with real users before writing schema &mdash; sales record &rarr;
@@ -273,7 +274,7 @@
 	<!-- Solution -->
 	<section class="cs-section">
 		<div class="cs-section__label">solution</div>
-		<h2>What I built</h2>
+		<h2 id="what-i-built">What I built</h2>
 
 		<p><strong>Domain modules:</strong></p>
 		<ul>
@@ -355,7 +356,7 @@
 	<!-- Stack -->
 	<section class="cs-section">
 		<div class="cs-section__label">stack</div>
-		<h2>Tech</h2>
+		<h2 id="tech">Tech</h2>
 		<ul>
 			<li><strong>Frontend:</strong> Vue.js (Vue CLI), Vue Router, state/ store,
 				Vue i18n, Velzon admin theme, SCSS</li>
@@ -375,7 +376,7 @@
 	<!-- Outcome -->
 	<section class="cs-section">
 		<div class="cs-section__label">outcome</div>
-		<h2>Results</h2>
+		<h2 id="results">Results</h2>
 
 		<div class="cs-metrics">
 			<div class="cs-metric">
@@ -413,7 +414,7 @@
 	<!-- Lessons -->
 	<section class="cs-section">
 		<div class="cs-section__label">lessons</div>
-		<h2>What I&rsquo;d do again — and differently</h2>
+		<h2 id="what-id-do-again">What I&rsquo;d do again — and differently</h2>
 		<p><strong>Worked well:</strong></p>
 		<ul>
 			<li><strong>Modeling the commission lifecycle as four explicit nouns</strong>
@@ -478,6 +479,7 @@
 
 </main>
 
+<script src="../js/portfolio-chat.js"></script>
 <script src="../js/case-study.js"></script>
 
 <!-- Viewport HUD -->

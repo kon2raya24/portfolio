@@ -46,6 +46,7 @@
 <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../css/case-study.css">
+<link rel="stylesheet" href="../css/portfolio-chat.css">
 <link rel="icon" href="../images/logo.png" type="image/x-icon">
 
 <!-- JSON-LD: Article + BreadcrumbList -->
@@ -194,7 +195,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">tl;dr</div>
-		<h2>What it is</h2>
+		<h2 id="what-it-is">What it is</h2>
 		<p>
 			A platform the operator&rsquo;s transport team runs every day:
 			<strong>booking</strong> orders from customers, planning the
@@ -217,7 +218,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">problem</div>
-		<h2>The bottleneck</h2>
+		<h2 id="the-bottleneck">The bottleneck</h2>
 		<p>
 			Before the TMS, the transport operations team worked across multiple
 			disconnected tools:
@@ -249,7 +250,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">approach</div>
-		<h2>How I broke it down</h2>
+		<h2 id="how-i-broke-it-down">How I broke it down</h2>
 		<ul>
 			<li><strong>Modelled the booking lifecycle as explicit nouns.</strong>
 				<code>Booking</code> &rarr; <code>BookingDetail</code> &rarr;
@@ -291,7 +292,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">solution</div>
-		<h2>What I built</h2>
+		<h2 id="what-i-built">What I built</h2>
 
 		<p><strong>Domain modules shipped:</strong></p>
 		<ul>
@@ -347,7 +348,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">stack</div>
-		<h2>Tech</h2>
+		<h2 id="tech">Tech</h2>
 		<ul>
 			<li><strong>Backend:</strong> Laravel 11 (PHP 8.2+), MySQL, Eloquent,
 				Sanctum, Spatie Laravel-Permission, DomPDF (barryvdh/laravel-dompdf),
@@ -369,7 +370,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">outcome</div>
-		<h2>Results</h2>
+		<h2 id="results">Results</h2>
 
 		<div class="cs-metrics">
 			<div class="cs-metric">
@@ -408,7 +409,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">lessons</div>
-		<h2>What I&rsquo;d do again — and differently</h2>
+		<h2 id="what-id-do-again">What I&rsquo;d do again — and differently</h2>
 		<p><strong>Worked well:</strong></p>
 		<ul>
 			<li><strong>Spatie Laravel-Permission over a hand-rolled RBAC.</strong> Saved
@@ -473,6 +474,7 @@
 
 </main>
 
+<script src="../js/portfolio-chat.js"></script>
 <script src="../js/case-study.js"></script>
 
 <!-- Viewport HUD -->

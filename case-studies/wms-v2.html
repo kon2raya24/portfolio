@@ -45,6 +45,7 @@
 <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../css/case-study.css">
+<link rel="stylesheet" href="../css/portfolio-chat.css">
 <link rel="icon" href="../images/logo.png" type="image/x-icon">
 
 <!-- JSON-LD: Article + BreadcrumbList -->
@@ -206,7 +207,7 @@
 
 	<section class="cs-section" id="tldr">
 		<div class="cs-section__label">tl;dr</div>
-		<h2>What it is</h2>
+		<h2 id="what-it-is">What it is</h2>
 		<p>
 			A ground-up rewrite of an enterprise WMS that handles receiving, picking,
 			packing, dispatch, validation, count-sheets, stock movement, and audit
@@ -230,7 +231,7 @@
 
 	<section class="cs-section" id="problem">
 		<div class="cs-section__label">problem</div>
-		<h2>The bottleneck</h2>
+		<h2 id="the-bottleneck">The bottleneck</h2>
 		<p>
 			The legacy WMS works &mdash; in production daily, handling real
 			multi-warehouse traffic &mdash; but it&rsquo;s carrying compounding cost:
@@ -262,7 +263,7 @@
 
 	<section class="cs-section" id="approach">
 		<div class="cs-section__label">approach</div>
-		<h2>How I broke it down</h2>
+		<h2 id="how-i-broke-it-down">How I broke it down</h2>
 		<ul>
 			<li><strong>One canonical list-page UI.</strong>
 				<code>wms_v2/src/views/inbound/receiving.vue</code> is the template
@@ -326,7 +327,7 @@
 
 	<section class="cs-section" id="solution">
 		<div class="cs-section__label">solution</div>
-		<h2>What I built</h2>
+		<h2 id="what-i-built">What I built</h2>
 
 		<p><strong>Foundation in place (Phase 0):</strong></p>
 		<ul>
@@ -425,7 +426,7 @@
 
 	<section class="cs-section" id="stack">
 		<div class="cs-section__label">stack</div>
-		<h2>Tech</h2>
+		<h2 id="tech">Tech</h2>
 		<ul>
 			<li><strong>Backend:</strong> Laravel 12 (PHP 8.2+), MySQL, Eloquent,
 				Sanctum, Spatie Laravel-Permission, DomPDF, maatwebsite/excel, Carbon,
@@ -451,7 +452,7 @@
 
 	<section class="cs-section" id="outcome">
 		<div class="cs-section__label">outcome</div>
-		<h2>Results</h2>
+		<h2 id="results">Results</h2>
 
 		<div class="cs-metrics">
 			<div class="cs-metric">
@@ -492,7 +493,7 @@
 
 	<section class="cs-section" id="lessons">
 		<div class="cs-section__label">lessons</div>
-		<h2>What I&rsquo;d do again — and differently</h2>
+		<h2 id="what-id-do-again">What I&rsquo;d do again — and differently</h2>
 		<p><strong>Worked well:</strong></p>
 		<ul>
 			<li><strong>One canonical pattern, mirrored everywhere.</strong>
@@ -565,6 +566,7 @@
 
 </main>
 
+<script src="../js/portfolio-chat.js"></script>
 <script src="../js/case-study.js"></script>
 
 <!-- Viewport HUD -->

@@ -45,6 +45,7 @@
 <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../css/case-study.css">
+<link rel="stylesheet" href="../css/portfolio-chat.css">
 <link rel="icon" href="../images/logo.png" type="image/x-icon">
 
 <!-- JSON-LD: Article + BreadcrumbList -->
@@ -191,7 +192,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">tl;dr</div>
-		<h2>What it is</h2>
+		<h2 id="what-it-is">What it is</h2>
 		<p>
 			A separate Markdown vault that sits next to the WMS source tree
 			(<code>aai-wms-api</code> / <code>aaiwms</code>). Every page has YAML
@@ -215,7 +216,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">problem</div>
-		<h2>The bottleneck</h2>
+		<h2 id="the-bottleneck">The bottleneck</h2>
 		<p>
 			The WMS is a real codebase &mdash; <strong>251 Eloquent models,
 			103 controllers, 315 migrations on the API; 130 Vue pages on the web admin;
@@ -249,7 +250,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">approach</div>
-		<h2>How I broke it down</h2>
+		<h2 id="how-i-broke-it-down">How I broke it down</h2>
 		<ul>
 			<li><strong>Obsidian vault, not a static-site generator.</strong> Editing
 				is plain Markdown in any editor; Obsidian gives the graph view + tags +
@@ -290,7 +291,7 @@
 
 	<section class="cs-section">
 		<div class="cs-section__label">solution</div>
-		<h2>What I built</h2>
+		<h2 id="what-i-built">What I built</h2>
 
 		<p><strong>Vault structure shipped:</strong></p>
 		<ul>
@@ -379,7 +380,7 @@ validates against the master item / location tables, stages serials …</pre>
 
 	<section class="cs-section">
 		<div class="cs-section__label">stack</div>
-		<h2>Tech</h2>
+		<h2 id="tech">Tech</h2>
 		<ul>
 			<li><strong>Format:</strong> Markdown with YAML frontmatter; Obsidian as
 				the human editor; any text editor for ad-hoc updates.</li>
@@ -404,7 +405,7 @@ validates against the master item / location tables, stages serials …</pre>
 
 	<section class="cs-section">
 		<div class="cs-section__label">outcome</div>
-		<h2>Results</h2>
+		<h2 id="results">Results</h2>
 
 		<div class="cs-metrics">
 			<div class="cs-metric">
@@ -442,7 +443,7 @@ validates against the master item / location tables, stages serials …</pre>
 
 	<section class="cs-section">
 		<div class="cs-section__label">lessons</div>
-		<h2>What I&rsquo;d do again — and differently</h2>
+		<h2 id="what-id-do-again">What I&rsquo;d do again — and differently</h2>
 		<p><strong>Worked well:</strong></p>
 		<ul>
 			<li><strong>Frontmatter discipline.</strong> Seven fields, every page,
@@ -505,6 +506,7 @@ validates against the master item / location tables, stages serials …</pre>
 
 </main>
 
+<script src="../js/portfolio-chat.js"></script>
 <script src="../js/case-study.js"></script>
 
 <!-- Viewport HUD -->

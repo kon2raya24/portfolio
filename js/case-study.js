@@ -4,14 +4,283 @@
 // portfolio tech-fx.js bundle (which is index.html-only).
 //
 // Currently:
-//   - last-touched stamp populated from the GitHub commits API
-//
-// Future home for:
+//   - page-dive transition (matched with tech-fx.js)
+//   - 3D systems: cursor spotlight, card tilt, scroll-reveal, heading entries
 //   - reading progress bar
 //   - TOC anchor pulse on click
+//   - last-touched stamp populated from the GitHub commits API
 
 (function () {
   'use strict';
+
+  // ---------- Page-Dive transition ----------
+  //
+  // Matches the index.html dive-in/out. On case-study pages we need:
+  //   - dive-in if we arrived from a portfolio link (sessionStorage signal)
+  //   - dive-out when navigating away to another case study or back to home
+  //
+  // The CSS lives in tech-fx.css but is now also referenced by case-study.css
+  // via a small bridge below.
+  var prefersReduced = window.matchMedia &&
+                        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReduced) {
+    // Incoming dive-in
+    try {
+      if (sessionStorage.getItem('pf-dive') === '1') {
+        sessionStorage.removeItem('pf-dive');
+        document.body.classList.add('page-dive-in');
+        setTimeout(function () {
+          document.body.classList.remove('page-dive-in');
+        }, 1200);
+      }
+    } catch (_) {}
+
+    // Outgoing dive-out for in-portfolio links
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.button !== 0) return;
+      if (a.target && a.target !== '_self') return;
+
+      var href = a.getAttribute('href');
+      if (!href || href[0] === '#') return;
+      if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+
+      try {
+        var url = new URL(a.href, window.location.href);
+        if (url.origin !== window.location.origin) return;
+      } catch (_) { return; }
+
+      // Intercept: any same-origin link going to another case study, or
+      // back to the index. Skip downloads / blob / hash-only.
+      var isCS    = /\/case-studies\//.test(url.pathname) || /^case-studies\//.test(href);
+      var isHome  = url.pathname === '/' || /\/index\.html$/.test(url.pathname) ||
+                    /^(\.\.\/)?(index\.html)?$/.test(href);
+      if (!isCS && !isHome) return;
+
+      e.preventDefault();
+      var flash = document.createElement('div');
+      flash.className = 'page-dive-flash';
+      document.body.appendChild(flash);
+
+      document.body.classList.add('page-dive-out');
+      try { sessionStorage.setItem('pf-dive', '1'); } catch (_) {}
+      setTimeout(function () { window.location.href = a.href; }, 720);
+    }, true);
+
+    // bfcache safety — clear any stale dive state when restored from cache
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) {
+        document.body.classList.remove('page-dive-out', 'page-dive-in');
+        document.querySelectorAll('.page-dive-flash').forEach(function (n) {
+          n.parentNode && n.parentNode.removeChild(n);
+        });
+        try { sessionStorage.removeItem('pf-dive'); } catch (_) {}
+      }
+    });
+  }
+
+  // ---------- 3D systems (case-study pages) ----------
+  //
+  // Slim mirror of the four big 3D systems on the home page, scoped to the
+  // case-study DOM. Keeps the visual language consistent after a dive so
+  // the user doesn't land in a flat space.
+  //   1. Cursor spotlight (global, pointer-tracked)
+  //   2. Magnetic card tilt (.cs-metric, .cs-code, .cs-og-preview, etc.)
+  //   3. Scroll-reveal 3D for .cs-section
+  //   4. 3D heading entry for section h2's
+  //
+  // All four are skipped under prefers-reduced-motion or (hover:none).
+  if (!prefersReduced) {
+    var isTouchOnly = window.matchMedia &&
+                       window.matchMedia('(hover: none)').matches;
+
+    // 1. Cursor spotlight
+    (function cursorSpotlight() {
+      if (isTouchOnly) return;
+      document.documentElement.classList.add('has-spotlight');
+      document.documentElement.style.setProperty('--spot-x', '50vw');
+      document.documentElement.style.setProperty('--spot-y', '50vh');
+      var targetX = window.innerWidth * 0.5;
+      var targetY = window.innerHeight * 0.5;
+      var curX = targetX, curY = targetY;
+      var raf = 0;
+      function tick() {
+        curX += (targetX - curX) * 0.18;
+        curY += (targetY - curY) * 0.18;
+        document.documentElement.style.setProperty('--spot-x', curX.toFixed(1) + 'px');
+        document.documentElement.style.setProperty('--spot-y', curY.toFixed(1) + 'px');
+        if (Math.abs(targetX - curX) > 0.3 || Math.abs(targetY - curY) > 0.3) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          raf = 0;
+        }
+      }
+      window.addEventListener('pointermove', function (e) {
+        targetX = e.clientX; targetY = e.clientY;
+        if (!raf) raf = requestAnimationFrame(tick);
+      }, { passive: true });
+      var lastScrollY = window.scrollY;
+      window.addEventListener('scroll', function () {
+        var dy = window.scrollY - lastScrollY;
+        lastScrollY = window.scrollY;
+        targetY += dy * 0.5;
+        if (!raf) raf = requestAnimationFrame(tick);
+      }, { passive: true });
+    })();
+
+    // 2. Magnetic 3D tilt on case-study cards
+    (function cardTilt3d() {
+      if (isTouchOnly) return;
+      var SEL = '.cs-metric, .cs-code, .cs-og-preview, .cs-cta, ' +
+                '.cs-pager__link, .cs-shot-real, .cs-outcome-row';
+      var MAX_TILT = 7;
+      var LIFT = 5;
+      document.querySelectorAll(SEL).forEach(function (el) {
+        el.classList.add('cs-tilt3d');
+        var raf = 0;
+        var lastX = 0, lastY = 0;
+        function apply() {
+          raf = 0;
+          var r = el.getBoundingClientRect();
+          var px = (lastX - r.left) / r.width;
+          var py = (lastY - r.top)  / r.height;
+          var rx = (0.5 - py) * MAX_TILT * 2;
+          var ry = (px - 0.5) * MAX_TILT * 2;
+          el.style.setProperty('--tilt-rx', rx.toFixed(2) + 'deg');
+          el.style.setProperty('--tilt-ry', ry.toFixed(2) + 'deg');
+          el.style.setProperty('--tilt-z',  LIFT + 'px');
+          el.style.setProperty('--tilt-gx', (px * 100).toFixed(1) + '%');
+          el.style.setProperty('--tilt-gy', (py * 100).toFixed(1) + '%');
+        }
+        el.addEventListener('pointermove', function (e) {
+          lastX = e.clientX; lastY = e.clientY;
+          if (!raf) raf = requestAnimationFrame(apply);
+        });
+        el.addEventListener('pointerleave', function () {
+          if (raf) { cancelAnimationFrame(raf); raf = 0; }
+          el.style.setProperty('--tilt-rx', '0deg');
+          el.style.setProperty('--tilt-ry', '0deg');
+          el.style.setProperty('--tilt-z',  '0px');
+        });
+      });
+    })();
+
+    // 3. Scroll-reveal 3D on .cs-section
+    (function scrollReveal3d() {
+      if (!('IntersectionObserver' in window)) return;
+      var nodes = document.querySelectorAll('.cs-section');
+      if (!nodes.length) return;
+      nodes.forEach(function (n, i) {
+        n.classList.add('cs-reveal3d');
+        n.style.setProperty('--reveal-delay', Math.min(i, 4) * 70 + 'ms');
+      });
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (ent) {
+          if (ent.isIntersecting) {
+            ent.target.classList.add('cs-reveal3d-in');
+            obs.unobserve(ent.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      nodes.forEach(function (n) { obs.observe(n); });
+    })();
+
+    // 5. Scroll-state class — pauses expensive paint during scroll
+    (function scrollStateClass() {
+      var root = document.documentElement;
+      var t = 0;
+      window.addEventListener('scroll', function () {
+        if (t === 0) root.classList.add('is-scrolling');
+        else clearTimeout(t);
+        t = setTimeout(function () {
+          root.classList.remove('is-scrolling');
+          t = 0;
+        }, 150);
+      }, { passive: true });
+    })();
+
+    // 4. 3D heading entry on .cs-section h2
+    (function heading3d() {
+      if (!('IntersectionObserver' in window)) return;
+      var headings = document.querySelectorAll('.cs-section h2');
+      if (!headings.length) return;
+      headings.forEach(function (h) { h.classList.add('cs-heading3d'); });
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (ent) {
+          if (ent.isIntersecting) {
+            ent.target.classList.add('cs-heading3d-in');
+            obs.unobserve(ent.target);
+          }
+        });
+      }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
+      headings.forEach(function (h) { obs.observe(h); });
+    })();
+  }
+
+  // ---------- Reading progress bar ----------
+  //
+  // Top-of-viewport horizontal bar that fills as the user scrolls through
+  // the article. Useful nav signal — at a glance the reader knows how
+  // much is left. Respects reduced-motion only for the easing; the bar
+  // itself stays visible (it's informational, not decorative).
+  (function readingProgress() {
+    var bar = document.createElement('div');
+    bar.className = 'cs-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = '<i class="cs-progress__fill"></i>';
+    document.body.appendChild(bar);
+    var fill = bar.querySelector('.cs-progress__fill');
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var h = document.documentElement;
+      var max = (h.scrollHeight - h.clientHeight) || 1;
+      var p = Math.min(1, Math.max(0, h.scrollTop / max));
+      fill.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+      // Hide entirely when at the very top (cleaner look)
+      bar.classList.toggle('is-active', p > 0.005);
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // ---------- TOC anchor pulse ----------
+  //
+  // When the reader clicks a TOC link, the target section briefly pulses
+  // with a cyan outline glow — visual confirmation that the right
+  // destination was reached. Uses box-shadow rather than transform so it
+  // doesn't clobber any 3D heading entry already in flight.
+  (function tocPulse() {
+    if (prefersReduced) return;
+    var toc = document.querySelector('.cs-toc__nav');
+    if (!toc) return;
+    toc.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var hash = a.getAttribute('href');
+      if (!hash || hash === '#') return;
+      var target;
+      try { target = document.querySelector(hash); } catch (_) { return; }
+      if (!target) return;
+
+      target.classList.remove('is-pulse-target');
+      // Force reflow so the animation restarts even if the same link is
+      // clicked repeatedly.
+      // eslint-disable-next-line no-unused-expressions
+      target.offsetWidth;
+      target.classList.add('is-pulse-target');
+      setTimeout(function () {
+        target.classList.remove('is-pulse-target');
+      }, 1400);
+    });
+  })();
 
   // ---------- "last touched" stamp ----------
   //

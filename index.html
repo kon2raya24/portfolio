@@ -291,7 +291,7 @@
 										<span class="hyperframe__corner hyperframe__corner--br" aria-hidden="true"></span>
 										<span class="hyperframe__halo" aria-hidden="true"></span>
 									</div>
-								<div class="terminal-tag">&gt; ./init_developer.sh<span class="cursor-blink">_</span></div>
+								<div class="terminal-tag">&gt; ./init_developer.sh<span data-tod-arg></span><span class="cursor-blink">_</span></div>
 								<h1><span>Lemmuel Turaya</span></h1>
 								<h2><span class="role-tag">&lt;Full-Stack &amp; Mobile Dev /&gt; &mdash; 8 shipped case studies, AI-assisted delivery</span></h2>
 								<div class="hero-status">
@@ -1981,17 +1981,17 @@
 	</div>
 
 	<!-- Main (vanilla, no jQuery) -->
-	<script src="js/main.js"></script>
+	<script src="js/main.js" defer></script>
 	<!-- Portfolio chat — FAQ-style matcher (no external API) -->
-	<script src="js/portfolio-chat.js"></script>
+	<script src="js/portfolio-chat.js" defer></script>
 	<!-- Tech FX -->
-	<script src="js/tech-fx.js"></script>
+	<script src="js/tech-fx.js" defer></script>
 
 	<!-- Service worker registration (PWA offline support) -->
 	<script>
 		if ('serviceWorker' in navigator) {
 			window.addEventListener('load', function () {
-				navigator.serviceWorker.register('/sw.js').catch(function (err) {
+				navigator.serviceWorker.register('sw.js').catch(function (err) {
 					console.warn('[pwa] sw register failed:', err);
 				});
 			});
