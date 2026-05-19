@@ -5806,10 +5806,27 @@ body.orbital3d-active { overflow: hidden; }
   white-space: nowrap;
 }
 .git-log__loading,
-.git-log__empty {
+.git-log__empty,
+.px-repos__loading {
   color: rgba(255, 255, 255, 0.45);
   padding: 6px 0;
   font-size: 12px;
+}
+/* Live loading cursor — gives the user a rhythm cue while the GitHub API
+   call is in flight (up to 5s timeout). Reuses the existing `blink` keyframe
+   from style.css. Reduced-motion users see a static underscore via the
+   global motion media query already in tech-fx.css. */
+.git-log__loading::after,
+.px-repos__loading::after {
+  content: '_';
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--cyan);
+  animation: blink 1s steps(2, start) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .git-log__loading::after,
+  .px-repos__loading::after { animation: none; }
 }
 .git-log__foot {
   padding: 8px 14px 10px;
@@ -6461,6 +6478,13 @@ body.orbital3d-active { overflow: hidden; }
   .exp-group::before { left: 8px; }
   .exp-item__dot { left: -22px; width: 12px; height: 12px; }
   .commit-cell { width: 9px; height: 9px; }
+  /* "Lemmuel Turaya" at 32px + 2px letter-spacing wraps on a 320px viewport.
+     Drop spacing and font-size one more notch so the name stays on a single line. */
+  #fh5co-header .display-tc h1,
+  .fh5co-cover .display-tc h1 {
+    font-size: 26px !important;
+    letter-spacing: 1px !important;
+  }
 }
 
 
