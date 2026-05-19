@@ -13,6 +13,10 @@
 	<meta name="robots" content="index, follow" />
 	<meta name="keywords" content="Lemmuel Turaya, Full-Stack Developer, Mobile App Developer, Flutter, Vue.js, Laravel, Claude AI, Philippines Developer, Remote Developer, Web Developer" />
 	<meta name="theme-color" content="#050814" />
+	<!-- Tell the browser the page supports both schemes so native UI (scrollbars,
+	     form controls, autofill bg, focus rings) follows the theme picker instead
+	     of always rendering in light when the page is in dark mode. -->
+	<meta name="color-scheme" content="dark light" />
 
 	<!-- Theme bootstrap: applies stored mode + palette before paint to prevent FOUC.
 	     Two separate keys so light/dark mode and the palette tint (cyber/matrix/sunset/xeno)
@@ -161,6 +165,25 @@
 	<link rel="manifest" href="manifest.json">
 	<link rel="alternate" type="application/rss+xml" title="Portfolio Changelog (RSS)" href="/feed.xml">
 	<link rel="author" href="/humans.txt">
+
+	<!-- LCP preload: the hero background is the largest above-the-fold paint.
+	     Without this hint it's only discovered after CSSOM is built, which pushes
+	     LCP later than necessary. fetchpriority makes it jump the queue. -->
+	<link rel="preload" as="image" href="images/cover_bg_3.jpg" fetchpriority="high">
+	<!-- Portrait preload is conditional — on Save-Data / 2g we let it load lazily
+	     via CSS instead of forcing 65KB onto a metered connection. -->
+	<script>
+		(function () {
+			try {
+				var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+				if (c && (c.saveData || /^(slow-2g|2g)$/.test(c.effectiveType || ''))) return;
+				var l = document.createElement('link');
+				l.rel = 'preload'; l.as = 'image'; l.href = 'images/1615352107595.jpg';
+				document.head.appendChild(l);
+			} catch (e) {}
+		})();
+	</script>
+
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="css/animate.css">
 	<!-- Icomoon Icon Fonts-->

@@ -10,6 +10,15 @@
   }
 
   var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Mirror tech-fx.js — also degrade under Save-Data / slow network so the
+  // parallax + smooth-scroll fall back to instant on metered connections.
+  try {
+    var __prefersLessData = window.matchMedia && window.matchMedia('(prefers-reduced-data: reduce)').matches;
+    var __conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (__prefersLessData || (__conn && __conn.saveData) || (__conn && /^(slow-2g|2g)$/.test(__conn.effectiveType || ''))) {
+      prefersReduced = true;
+    }
+  } catch (e) {}
 
   // .js-fullheight — pin to viewport height. Skipped on mobile to avoid the
   // iOS Safari address-bar resize jitter (matches the original's behavior).

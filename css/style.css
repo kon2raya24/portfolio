@@ -1557,10 +1557,12 @@ body {
   transform: scaleX(0);
   transition: transform 0.3s;
 }
-.fh5co-nav-links li a:not(.hire-btn):hover {
+.fh5co-nav-links li a:not(.hire-btn):hover,
+.fh5co-nav-links li a:not(.hire-btn)[aria-current="location"] {
   color: var(--cyan) !important;
 }
-.fh5co-nav-links li a:not(.hire-btn):hover:after {
+.fh5co-nav-links li a:not(.hire-btn):hover:after,
+.fh5co-nav-links li a:not(.hire-btn)[aria-current="location"]:after {
   transform: scaleX(1);
 }
 .fh5co-nav-links li a.hire-btn {
@@ -2379,6 +2381,35 @@ body {
   margin: 0 4px;
 }
 
+/* Hero mobile density — the hero stacks ~9 distinct elements (terminal-tag,
+   portrait, h1, role-tag, status, tech chips, stats, CTA, socials). The
+   desktop margins of 22-26px between each add up to a hero that scrolls
+   well past the fold on phones. Halve the inter-element rhythm and shrink
+   the portrait so the primary CTA stays close to the fold. */
+@media screen and (max-width: 768px) {
+  #fh5co-header .display-tc .profile-thumb {
+    height: 120px !important;
+    width: 120px !important;
+    margin-bottom: 16px !important;
+  }
+  .terminal-tag { margin-top: 4px; margin-bottom: 12px; }
+  #fh5co-header .display-tc h1,
+  .fh5co-cover .display-tc h1 { margin-bottom: 12px !important; }
+  .role-tag {
+    margin-bottom: 14px;
+    font-size: 12.5px !important;
+    letter-spacing: 1px !important;
+    padding: 5px 10px !important;
+    line-height: 1.5;
+    max-width: 92vw;
+  }
+  .hero-status { margin-bottom: 14px; }
+  .tech-stack-strip { margin: 0 0 14px; }
+  .hero-stats { margin-bottom: 14px !important; }
+  .hero-cta { margin-bottom: 12px !important; }
+  #fh5co-header .display-tc .fh5co-social-icons { margin-top: 4px; }
+}
+
 /* Services grid: even row gaps */
 #fh5co-features .row {
   display: flex;
@@ -2536,6 +2567,148 @@ body {
 /* Blog/under-construction: balanced */
 #fh5co-blog .container > .row {
   padding: 18px 0;
+}
+
+/* =========================================================================
+   PRINT STYLES — if a recruiter ctrl-P's the page, give them something they
+   can actually read: white bg, black text, decoration removed, links inlined.
+   Index-specific bits live here; case-study.css + tech-fx.css cover their
+   own scoped widgets (siderail dot-nav, viewport-hud, chat bubble).
+   ========================================================================= */
+@media print {
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* Fixed/decorative chrome we never want on paper */
+  #fh5co-nav,
+  .fh5co-loader,
+  .gototop,
+  .tech-grid,
+  .scanline,
+  .viewport-hud,
+  .siderail,
+  .hud,
+  .pchat,
+  .terminal-tag,
+  .hero-cta,
+  .theme-picker,
+  .fh5co-nav-toggle,
+  .hyperframe__corner,
+  .hyperframe__halo,
+  .skip-link,
+  [aria-hidden="true"] {
+    display: none !important;
+  }
+
+  /* Reveal anything still hidden by scroll-fade-in state */
+  .animate-box,
+  .reveal,
+  .animated-fast {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
+  /* Hero: ditch the dark cover + overlay, keep the type */
+  #fh5co-header {
+    background: none !important;
+    color: #111 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 16pt 0 !important;
+    page-break-after: avoid;
+  }
+  #fh5co-header .overlay { display: none !important; }
+  #fh5co-header h1,
+  #fh5co-header h2 {
+    color: #111 !important;
+    text-shadow: none !important;
+    font-family: Georgia, serif !important;
+  }
+  .role-tag, .status-badge, .tech-chip {
+    color: #111 !important;
+    background: none !important;
+    border-color: #888 !important;
+    text-shadow: none !important;
+  }
+  .profile-thumb {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    width: 110px !important;
+    height: 110px !important;
+  }
+
+  /* Hero stats: inline, no boxes */
+  .hero-stats {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    gap: 18pt;
+  }
+  .hero-stats .stat { color: #111 !important; }
+
+  /* Section headings: readable serif */
+  h1, h2, h3, h4 {
+    color: #111 !important;
+    text-shadow: none !important;
+    font-family: Georgia, serif !important;
+    page-break-after: avoid;
+  }
+
+  /* Cards and panels: flat */
+  .code-card, .about-panel, .px-card, .profile-config,
+  .exp-card, .proj-card, .skill-card, .stack-group {
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+  .code-card__chrome, .px-card__chrome, .profile-config__chrome {
+    background: #f4f4f4 !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  /* Code highlighting → readable black on white */
+  .tk-cmt { color: #6a6a6a !important; font-style: italic; }
+  .tk-str { color: #1a5c1a !important; }
+  .tk-key, .tk-fn { color: #1f2d7a !important; font-weight: 600; }
+  .tk-num, .tk-bool { color: #883300 !important; }
+  .tk-punct { color: #444 !important; }
+
+  /* Links: print URL after, so a paper copy is navigable */
+  a { color: #003fa3 !important; text-decoration: underline; }
+  a[href^="http"]::after,
+  a[href^="mailto:"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+  a[href^="#"]::after,
+  .cfg-copy::after { content: none !important; }
+  .cfg-copy { display: none !important; }
+
+  /* Footer: keep, but trim */
+  #fh5co-footer {
+    background: none !important;
+    color: #111 !important;
+    padding: 12pt 0 !important;
+    border-top: 1px solid #ccc;
+    font-size: 9pt;
+  }
+  .git-log, .live-stats { display: none !important; }
+
+  /* Avoid orphan section breaks */
+  #fh5co-about, #fh5co-resume, #fh5co-features,
+  #fh5co-skills, #fh5co-work, #fh5co-started {
+    page-break-inside: auto;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

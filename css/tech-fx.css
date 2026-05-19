@@ -26,10 +26,13 @@
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
-/* Visible keyboard focus for everything */
+/* Visible keyboard focus for everything. !important is intentional — the
+   legacy a11y-hostile rules in style.css (`a:focus { outline: none }`,
+   `.btn:focus { outline: none !important }`) otherwise win on specificity
+   and wipe keyboard focus indication. */
 *:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 3px;
+  outline: 2px solid var(--cyan) !important;
+  outline-offset: 3px !important;
   border-radius: 4px;
 }
 .btn:focus-visible,
@@ -6893,8 +6896,8 @@ body.orbital3d-active { overflow: hidden; }
 .hero-cta__secondary:focus-visible,
 .btn-ghost:focus-visible,
 a.btn:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 3px;
+  outline: 2px solid var(--brand) !important;
+  outline-offset: 3px !important;
   border-radius: 4px;
 }
 :root[data-theme="light"] .theme-picker__trigger:focus-visible,

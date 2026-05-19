@@ -16,6 +16,17 @@ try {
   'use strict';
 
   var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Collapse heavy decoration (3D systems, star canvas, particles, parallax) onto
+     the same skip path when the user is on Save-Data, prefers-reduced-data, or a
+     slow connection. Same outcome the reduce-motion path already produces; this
+     just widens the trigger so we don't burn data on users who can't afford it. */
+  try {
+    var __prefersLessData = window.matchMedia && window.matchMedia('(prefers-reduced-data: reduce)').matches;
+    var __conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var __saveData = !!(__conn && __conn.saveData);
+    var __slowNet = !!(__conn && /^(slow-2g|2g)$/.test(__conn.effectiveType || ''));
+    if (__prefersLessData || __saveData || __slowNet) prefersReduced = true;
+  } catch (e) { /* matchMedia or navigator.connection unavailable */ }
   var isTouch = matchMedia('(hover: none)').matches || window.innerWidth < 1025;
 
   /* ---------- Shared theme helpers (used by HUD palette picker + nav theme picker) ----------
@@ -3210,6 +3221,17 @@ try {
     });
     document.body.appendChild(nav);
 
+    /* Top-nav scroll-spy — piggyback the siderail's update() so we don't
+       open a second scroll listener. Map each section id to its top-nav
+       anchor (if any) and toggle aria-current="location" in lockstep.
+       Sections without a corresponding nav link (hero, case-studies) are
+       silently skipped. */
+    var topNavLinks = {};
+    document.querySelectorAll('.fh5co-nav-links li a[href^="#"]').forEach(function (a) {
+      var h = a.getAttribute('href');
+      if (h && h.length > 1) topNavLinks[h.slice(1)] = a;
+    });
+
     function update() {
       var mid = (window.scrollY || document.documentElement.scrollTop) + window.innerHeight * 0.35;
       var activeIdx = 0;
@@ -3219,6 +3241,11 @@ try {
       }
       items.forEach(function (it, i) {
         it.el.classList.toggle('is-active', i === activeIdx);
+        var topLink = topNavLinks[it.id];
+        if (topLink) {
+          if (i === activeIdx) topLink.setAttribute('aria-current', 'location');
+          else topLink.removeAttribute('aria-current');
+        }
       });
     }
     window.addEventListener('scroll', update, { passive: true });
