@@ -3,7 +3,7 @@
   "meta": {
     "version": "1.0.0",
     "canonical": "https://kon2raya.netlify.app/resume.json",
-    "lastModified": "2026-05-18"
+    "lastModified": "2026-06-03"
   },
   "basics": {
     "name": "Lemmuel Turaya",
@@ -12,7 +12,7 @@
     "email": "turayalemmuel@gmail.com",
     "phone": "+63 922 778 6152",
     "url": "https://kon2raya.netlify.app",
-    "summary": "Full-stack and mobile developer with 6+ years shipping production platforms across logistics, real estate, marketing, and education — 8 published case studies on the portfolio. Specializes in Vue.js / Nuxt.js + Laravel on the web, Flutter on mobile, and clean REST API design. Pairs daily with Claude Code in a Karpathy-style AI-augmented workflow — prototyping, refactoring, and shipping faster without compromising code review or tests. Also builds autonomous AI-engineer pipelines — a production multi-LLM agent system (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a real ticketing workflow with security gates and independent test verification. Open to remote, hybrid, or onsite roles.",
+    "summary": "Full-stack and mobile developer with 6+ years shipping production platforms across logistics, real estate, marketing, and education — 9 published case studies on the portfolio. Specializes in Vue.js / Nuxt.js + Laravel on the web, Flutter on mobile, and clean REST API design. Pairs daily with Claude Code in a Karpathy-style AI-augmented workflow — prototyping, refactoring, and shipping faster without compromising code review or tests. Also builds autonomous AI-engineer pipelines — a production multi-LLM agent system (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a real ticketing workflow with security gates and independent test verification. Open to remote, hybrid, or onsite roles.",
     "location": {
       "address": "Biñan",
       "postalCode": "4024",
@@ -163,7 +163,7 @@
     {
       "name": "Frontend",
       "level": "Advanced",
-      "keywords": ["Vue.js", "Nuxt.js", "Vuetify", "HTML5", "CSS3", "JavaScript", "TypeScript", "Bootstrap", "jQuery"]
+      "keywords": ["Vue.js", "Nuxt.js", "React", "Vuetify", "HTML5", "CSS3", "JavaScript", "TypeScript", "Bootstrap", "jQuery"]
     },
     {
       "name": "Backend",
@@ -290,16 +290,18 @@
       "type": "platform"
     },
     {
-      "name": "PH Dev Utils",
-      "description": "Open-source utilities for Filipino developers — peso formatting, government ID validators, PH phone helpers, and address data — for both JavaScript/TypeScript and PHP.",
+      "name": "@ph-dev-utils — Filipino Developer Utilities (12-package family)",
+      "description": "Open-source family of 12 focused packages encoding Philippine-specific logic for both JavaScript/TypeScript (npm, @ph-dev-utils/*) and PHP (Packagist, phdevutils/*) — peso formatting and number-words, ~10 government-ID validators, the full PSGC address hierarchy, ZIP codes, payroll (SSS / PhilHealth / Pag-IBIG / BIR withholding to net take-home), BIR tax math, holiday-aware dates, seedable fake data, and a React address picker. 11 of the 12 publish identical behavior on both ecosystems, so a PHP backend and a JS frontend agree by construction. Fronted by a React 19 + TypeScript + Vite live playground (deployed on Vercel) that imports and runs the real published packages, so the showcase doubles as the family's integration test.",
       "highlights": [
-        "Monorepo with npm (@ph-dev-utils/core) and Composer (phdevutils/core) packages",
-        "Modules: Peso, TIN, SSS, PhilHealth, PagIBIG, Phone, Address",
-        "MIT licensed, v0.1.0"
+        "12 packages: core, payroll, bir, dates, faker, address-picker, banks, geo, psic, business, postal, psgc-barangays",
+        "JS / PHP parity — 11 packages dual-published on npm and Packagist with identical behavior",
+        "Datasets: 42,046 barangays (PSA Q4 2024), 2,048 ZIP codes, 1,573 city/municipality coordinates, 158 banks/e-money institutions",
+        "Single typed PACKAGES[] catalog drives every card, badge, and link on the site",
+        "Live in-browser playground runs the real packages — the marketing site is also the smoke test"
       ],
-      "keywords": ["TypeScript", "PHP", "npm", "Composer", "Open Source", "MIT"],
+      "keywords": ["TypeScript", "React 19", "Vite", "PHP", "npm", "Packagist", "Open Source", "PSGC", "Monorepo", "Developer Tooling"],
       "startDate": "2026-01-01",
-      "url": "https://github.com/kon2raya24/ph-dev-utils",
+      "url": "https://kon2raya.netlify.app/case-studies/ph-dev-utils.html",
       "roles": ["Author", "Maintainer"],
       "type": "library"
     },

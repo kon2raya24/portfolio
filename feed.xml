@@ -14,6 +14,30 @@
   <ttl>1440</ttl>
 
   <item>
+    <title>v5.1 — New case study: @ph-dev-utils, a 12-package open-source PH dev-utils family (JS/TS + PHP)</title>
+    <link>https://kon2raya.netlify.app/case-studies/ph-dev-utils.html</link>
+    <guid isPermaLink="false">portfolio-v5.1-2026-06-03</guid>
+    <pubDate>Wed, 03 Jun 2026 12:10:00 +0800</pubDate>
+    <category>case-study</category>
+    <description><![CDATA[
+      First open-source entry in the case-study set. @ph-dev-utils is a family of 12
+      small, focused packages encoding Philippine-specific logic — peso formatting &
+      English/Tagalog number-words, ~10 government-ID validators (TIN/SSS/PhilHealth/
+      Pag-IBIG/PhilSys/UMID/passport/PRC/license/plate), the full PSGC address
+      hierarchy down to 42,046 barangays, 2,048 ZIP codes, 1,573 city/municipality
+      coordinates, 158 banks/e-money institutions, payroll (SSS/PhilHealth/Pag-IBIG/BIR
+      withholding → net take-home), BIR tax math, holiday-aware dates, seedable faker,
+      and a React address picker.
+
+      The distinctive property: 11 of the 12 publish identical behavior on both npm
+      (@ph-dev-utils/*) and Packagist (phdevutils/*), so a PHP backend and a JS frontend
+      agree on the same rules by construction. The showcase site (React 19 + TypeScript
+      + Vite 8, on Vercel) lists the real packages as dependencies and runs ten of them
+      live in the browser — so the playground doubles as the family's integration test.
+    ]]></description>
+  </item>
+
+  <item>
     <title>v5.0 — Audit-driven major: 5 themes, jQuery removed, mobile nav fixed, full a11y sweep</title>
     <link>https://kon2raya.netlify.app/</link>
     <guid isPermaLink="false">portfolio-v5.0-2026-05-18</guid>

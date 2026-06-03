@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Case Study · @ph-dev-utils — Filipino Developer Utilities for JS/TS &amp; PHP — Lemmuel Turaya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="An open-source family of 12 Filipino developer utilities for JavaScript/TypeScript & PHP — peso formatting, government-ID validators, PSGC address data (42,046 barangays), ZIP codes, payroll (SSS/PhilHealth/Pag-IBIG/BIR), tax math, holidays & Tagalog dates, fake data, and a React address picker — with a live in-browser playground that runs the real published packages." />
+<meta name="theme-color" content="#050814">
+<meta name="color-scheme" content="dark light">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kon2raya.netlify.app/case-studies/ph-dev-utils.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Case Study · @ph-dev-utils — Filipino Developer Utilities for JS/TS & PHP — Lemmuel Turaya" />
+<meta property="og:description" content="A 12-package open-source family of Philippine developer utilities with JS ↔ PHP parity — peso, government IDs, PSGC addresses, payroll, BIR tax, holidays, fake data, address picker — plus a live playground that runs the real published packages in the browser." />
+<meta property="og:url" content="https://kon2raya.netlify.app/case-studies/ph-dev-utils.html" />
+<meta property="og:image" content="https://kon2raya.netlify.app/images/og-ph-dev-utils.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@kon2raya24" />
+<meta name="twitter:site" content="@kon2raya24" />
+
+<script>
+	(function () {
+		try {
+			/* Migrate legacy 'portfolio.theme' → split 'portfolio.mode' + 'portfolio.palette' (one-time) */
+			var legacy = localStorage.getItem('portfolio.theme');
+			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
+				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
+				else if (['cyber','matrix','sunset','xeno','crt'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
+			}
+			var mode = localStorage.getItem('portfolio.mode');
+			if (mode !== 'light' && mode !== 'dark') {
+				mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+			}
+			document.documentElement.setAttribute('data-theme', mode);
+			var palette = localStorage.getItem('portfolio.palette');
+			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
+				document.documentElement.classList.add('theme-' + palette);
+			}
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/case-study.css">
+<link rel="stylesheet" href="../css/portfolio-chat.css">
+<link rel="icon" href="../images/logo.png" type="image/x-icon">
+
+<!-- JSON-LD: Article + BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://kon2raya.netlify.app/case-studies/ph-dev-utils.html#article",
+      "headline": "Case Study · @ph-dev-utils — Filipino Developer Utilities for JS/TS & PHP",
+      "description": "An open-source family of 12 Philippine developer utilities for JavaScript/TypeScript & PHP — peso formatting, government-ID validators, PSGC address data (42,046 barangays), ZIP codes, payroll (SSS/PhilHealth/Pag-IBIG/BIR), tax math, holidays & Tagalog dates, seedable fake data, and a React address picker. 11 of 12 packages ship identical behavior on npm and Packagist; a live playground runs the real published packages in the browser.",
+      "image": "https://kon2raya.netlify.app/images/og-ph-dev-utils.png",
+      "datePublished": "2026-06-03T12:00:00+08:00",
+      "dateModified": "2026-06-03T12:10:00+08:00",
+      "inLanguage": "en-US",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://kon2raya.netlify.app/case-studies/ph-dev-utils.html" },
+      "author": { "@type": "Person", "name": "Lemmuel Turaya", "url": "https://kon2raya.netlify.app/" },
+      "publisher": { "@type": "Person", "name": "Lemmuel Turaya", "url": "https://kon2raya.netlify.app/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kon2raya.netlify.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Case Studies", "item": "https://kon2raya.netlify.app/#fh5co-work" },
+        { "@type": "ListItem", "position": 3, "name": "@ph-dev-utils", "item": "https://kon2raya.netlify.app/case-studies/ph-dev-utils.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<nav class="cs-nav">
+	<a class="cs-nav__brand" href="../#fh5co-work">Back to portfolio</a>
+	<span class="cs-nav__breadcrumb">case-studies / <span class="active">ph-dev-utils</span></span>
+</nav>
+
+<main class="cs-wrap">
+
+	<header class="cs-hero">
+		<div class="cs-hero__label">// case-study.md</div>
+		<h1>@ph-dev-utils &mdash; Filipino Developer Utilities<br><span style="font-size:24px;letter-spacing:1.5px;color:var(--cyan)">An open-source family of 12 packages for JS/TS &amp; PHP, with a live in-browser playground</span></h1>
+		<p class="cs-hero__tagline">
+			A cohesive family of small, focused packages that ship the Philippine-specific
+			primitives every local app re-implements from scratch &mdash; peso formatting,
+			government-ID validation, PSGC address data, ZIP codes, statutory payroll, BIR
+			tax, holidays &amp; Tagalog dates, seedable fake data, and a React address
+			picker. Built with <strong>JS &harr; PHP parity</strong> so your backend and
+			frontend agree on the same rules, and fronted by a
+			<a href="https://ph-dev-utils-site.vercel.app/" target="_blank" rel="noopener noreferrer" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan)">live playground</a>
+			where every demo runs the <em>actual published npm package</em> in the browser &mdash;
+			so the showcase doubles as a continuous integration test for the whole family.
+		</p>
+
+		<div class="cs-meta">
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">project</span>
+				<span class="cs-meta__v">Open source &middot; public on npm &amp; Packagist</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">last touched</span>
+				<span class="cs-meta__v"><time class="cs-last-touched" data-cs-slug="ph-dev-utils" data-loading="true">fetching...</time></span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">role</span>
+				<span class="cs-meta__v">Author / Maintainer</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">period</span>
+				<span class="cs-meta__v">2026 &mdash; Present</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">status</span>
+				<span class="cs-meta__v">Published &middot; live demos</span>
+			</div>
+			<div class="cs-meta__item">
+				<span class="cs-meta__k">playground</span>
+				<span class="cs-meta__v"><a href="https://ph-dev-utils-site.vercel.app/" target="_blank" rel="noopener noreferrer">ph-dev-utils-site.vercel.app &nearr;</a></span>
+			</div>
+		</div>
+
+		<div class="cs-hero__chips">
+			<span class="cs-chip">React 19</span>
+			<span class="cs-chip">TypeScript</span>
+			<span class="cs-chip">Vite 8</span>
+			<span class="cs-chip">Tailwind CSS</span>
+			<span class="cs-chip">npm</span>
+			<span class="cs-chip">Packagist (PHP)</span>
+			<span class="cs-chip">PSGC data</span>
+			<span class="cs-chip">Vercel</span>
+		</div>
+	</header>
+
+	<div class="cs-metrics cs-metrics--top hyperframe" aria-label="At a glance">
+		<span class="hyperframe__corner hyperframe__corner--tl" aria-hidden="true"></span>
+		<span class="hyperframe__corner hyperframe__corner--tr" aria-hidden="true"></span>
+		<span class="hyperframe__corner hyperframe__corner--bl" aria-hidden="true"></span>
+		<span class="hyperframe__corner hyperframe__corner--br" aria-hidden="true"></span>
+		<span class="hyperframe__halo" aria-hidden="true"></span>
+		<div class="cs-metrics__label">// receipts &middot; tl;dr</div>
+		<div class="cs-metric">
+			<div class="cs-metric__k">packages in the family</div>
+			<div class="cs-metric__v">12</div>
+		</div>
+		<div class="cs-metric">
+			<div class="cs-metric__k">dual-published (npm + Packagist)</div>
+			<div class="cs-metric__v">11</div>
+		</div>
+		<div class="cs-metric">
+			<div class="cs-metric__k">live in-browser demos</div>
+			<div class="cs-metric__v">10</div>
+		</div>
+		<div class="cs-metric">
+			<div class="cs-metric__k">barangays in the dataset</div>
+			<div class="cs-metric__v">42,046</div>
+		</div>
+	</div>
+
+	<div class="cs-outcomes cs-outcomes--top" data-status="draft" aria-label="What changed">
+		<div class="cs-outcomes__label">// outcome &middot; what changed</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--before">BEFORE</span>
+			<p class="cs-outcome-row__txt cs-outcome-row__txt--before">Every PH project re-implements peso formatting, TIN/SSS validation, and PSGC dropdowns from scratch &mdash; subtly differently each time.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--after">AFTER</span>
+			<p class="cs-outcome-row__txt">One install &mdash; <code>@ph-dev-utils/core</code> &mdash; ships the primitives, versioned and validator-checked.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--before">BEFORE</span>
+			<p class="cs-outcome-row__txt cs-outcome-row__txt--before">Backend (PHP) and frontend (JS) drift on the same rule &mdash; a TIN valid on one side fails on the other.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--after">AFTER</span>
+			<p class="cs-outcome-row__txt">11 of 12 packages publish identical behavior on both npm and Packagist, so the two sides agree by construction.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--before">BEFORE</span>
+			<p class="cs-outcome-row__txt cs-outcome-row__txt--before">A library&rsquo;s README claims it &ldquo;works&rdquo; &mdash; you only find out at runtime, in your app.</p>
+		</div>
+		<div class="cs-outcome-row">
+			<span class="cs-outcome-row__tag cs-outcome-row__tag--after">AFTER</span>
+			<p class="cs-outcome-row__txt">The showcase imports and runs every package live in the browser &mdash; the demos <em>are</em> the integration test.</p>
+		</div>
+	</div>
+
+	<aside class="cs-toc" aria-label="On this page">
+		<div class="cs-toc__label">// on this page:</div>
+		<nav class="cs-toc__nav">
+			<a href="#tldr">tl;dr</a>
+			<a href="#problem">problem</a>
+			<a href="#approach">approach</a>
+			<a href="#solution">solution</a>
+			<a href="#stack">stack</a>
+			<a href="#outcome">outcome</a>
+			<a href="#lessons">lessons</a>
+		</nav>
+	</aside>
+
+	<section class="cs-section" id="tldr">
+		<div class="cs-section__label">tl;dr</div>
+		<h2 id="what-it-is">What it is</h2>
+		<p>
+			<strong>@ph-dev-utils</strong> is a family of 12 open-source packages that
+			encode the Philippine-specific logic local apps keep rebuilding: money,
+			government IDs, addresses, payroll, tax, dates, and reference data. Eleven of
+			the twelve ship twice &mdash; on <strong>npm</strong> (<code>@ph-dev-utils/*</code>)
+			for JavaScript/TypeScript and on <strong>Packagist</strong>
+			(<code>phdevutils/*</code>) for PHP &mdash; with deliberately identical behavior
+			so a value validated in a Laravel API is validated the same way in a React form.
+		</p>
+		<p>
+			The <a href="https://ph-dev-utils-site.vercel.app/" target="_blank" rel="noopener noreferrer">site</a>
+			is two things at once: a landing page that catalogs every package with its
+			version, highlights, and links, and a <em>live playground</em> where ten of the
+			twelve packages run interactively in the browser. Crucially the demos are not
+			mocks &mdash; the React app lists the real
+			<code>@ph-dev-utils/*</code> packages as dependencies and calls them directly,
+			so the showcase is also the family&rsquo;s end-to-end smoke test. Built with
+			React&nbsp;19, TypeScript, Vite&nbsp;8 and Tailwind, deployed on Vercel.
+		</p>
+	</section>
+
+	<section class="cs-section" id="problem">
+		<div class="cs-section__label">problem</div>
+		<h2 id="the-bottleneck">The bottleneck</h2>
+		<p>
+			Almost every app built for the Philippine market needs the same primitives, and
+			almost every team re-implements them &mdash; usually incompletely, and never the
+			same way twice:
+		</p>
+		<ul>
+			<li><strong>Peso &amp; number words.</strong> &ldquo;Format as ₱&rdquo; sounds
+				trivial until you need negative parentheses, parsing back, and the amount
+				spelled out in English <em>and</em> Tagalog for a voucher.</li>
+			<li><strong>Government IDs.</strong> TIN, SSS, PhilHealth, Pag-IBIG, PhilSys,
+				UMID, passport, PRC, driver&rsquo;s license, plate &mdash; each has its own
+				format, check digits, and edge cases. Most projects validate one or two,
+				badly.</li>
+			<li><strong>Addresses.</strong> The PSGC hierarchy (region &rarr; province
+				&rarr; city/municipality &rarr; barangay) is large &mdash; 42,046 barangays
+				&mdash; with NCR, independent cities, and multi-ZIP quirks that naive
+				dropdowns get wrong.</li>
+			<li><strong>Payroll &amp; tax.</strong> SSS, PhilHealth, Pag-IBIG contribution
+				tables, BIR withholding across four payroll periods, 13th-month and de
+				minimis rules &mdash; published in circulars, versioned, and easy to get
+				subtly wrong.</li>
+			<li><strong>JS &harr; PHP drift.</strong> The same business rule gets coded once
+				in the Laravel backend and again in the JS frontend. They drift. A value
+				that passes server-side validation fails client-side, or vice-versa.</li>
+			<li><strong>Trust.</strong> Even when a PH utility library exists, you can&rsquo;t
+				tell from a README whether it actually works for <em>your</em> input without
+				wiring it into your app first.</li>
+		</ul>
+		<p>
+			The goal: <strong>a single, cohesive, parity-checked family</strong> that covers
+			these primitives once, sourced from authoritative data, published on both
+			ecosystems, and demonstrably working &mdash; not asserted-working.
+		</p>
+	</section>
+
+	<section class="cs-section" id="approach">
+		<div class="cs-section__label">approach</div>
+		<h2 id="how-i-broke-it-down">How I broke it down</h2>
+		<ul>
+			<li><strong>Small, focused packages &mdash; not one mega-lib.</strong> Each
+				concern is its own package (<code>core</code>, <code>payroll</code>,
+				<code>bir</code>, <code>dates</code>, <code>banks</code>, <code>geo</code>,
+				<code>psic</code>, <code>business</code>, <code>postal</code>,
+				<code>psgc-barangays</code>, <code>faker</code>, <code>address-picker</code>),
+				so a project pulls in only what it needs and the heavy datasets stay
+				opt-in.</li>
+			<li><strong>JS &harr; PHP parity as a hard rule.</strong> Eleven packages publish
+				on both npm and Packagist with the same function surface and the same
+				outputs. The validators, the peso formatter, the tax math &mdash; identical
+				on both runtimes, so backend and frontend can&rsquo;t disagree.</li>
+			<li><strong>Authoritative data, attributed.</strong> Address/ZIP/coordinate data
+				comes from GeoNames (CC&nbsp;BY&nbsp;4.0); the barangay set is PSA Q4&nbsp;2024;
+				payroll and tax tables follow the published BIR, SSS, PhilHealth, Pag-IBIG and
+				DOLE circulars. Sources are credited; the footer carries a verify-before-prod
+				disclaimer.</li>
+			<li><strong>Versioned, not frozen.</strong> Contribution and tax tables change by
+				circular, so they&rsquo;re versioned inside the packages rather than hard-coded
+				as if permanent.</li>
+			<li><strong>A showcase that is also a test harness.</strong> Rather than write
+				screenshots or recorded demos, the site lists the real packages as
+				dependencies and runs them in the browser. If a published version breaks an
+				API, the playground breaks &mdash; visibly &mdash; on the next build.</li>
+			<li><strong>One source of truth for the catalog.</strong> All package metadata
+				(id, npm name, Packagist name, version, tagline, highlights, live-vs-server
+				flag) lives in a single typed array; adding the 13th package is a single
+				structured entry, and every card, link, and anchor is generated from it.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section" id="solution">
+		<div class="cs-section__label">solution</div>
+		<h2 id="what-i-built">What I built</h2>
+
+		<p><strong>The 12-package family</strong> &mdash; grouped by concern:</p>
+		<ul>
+			<li><strong><code>core</code></strong> (v0.5.0) &mdash; the foundation: peso
+				format/parse, English &amp; Tagalog number-words, the full government-ID
+				validator set, phone parse + E.164/national normalize, PSGC regions/provinces/
+				cities, and PH holidays with DOLE pay multipliers.</li>
+			<li><strong><code>payroll</code></strong> (v0.3.0) &mdash; SSS / PhilHealth /
+				Pag-IBIG contributions, BIR withholding across all four payroll periods,
+				13th-month, de minimis caps, and a single <code>netTakeHome()</code> that
+				goes gross &rarr; deductions &rarr; net.</li>
+			<li><strong><code>bir</code></strong> (v0.2.0) &mdash; VAT add/extract, percentage
+				tax, and individual income tax (graduated TRAIN vs the 8% option), plus a
+				reference list of common BIR forms.</li>
+			<li><strong><code>dates</code></strong> (v0.1.1) &mdash; holiday-aware business-day
+				math (<code>addBusinessDays</code>, <code>businessDaysBetween</code>) and
+				<code>formatFilipino()</code> for Tagalog month/day names.</li>
+			<li><strong><code>faker</code></strong> (v0.3.0) &mdash; seedable Filipino fake
+				data: names, real PSGC addresses, government IDs that pass
+				<code>core</code>&rsquo;s validators, and full payslip fixtures.</li>
+			<li><strong><code>address-picker</code></strong> (v0.3.0) &mdash;
+				<code>&lt;PhAddressPicker&gt;</code> React component (plus a headless core and
+				web component) with a searchable typeahead cascade and lazy-loaded barangays
+				over CDN.</li>
+			<li><strong><code>banks</code></strong> (v0.1.0) &mdash; 158 banks/e-money
+				institutions with SWIFT/BIC codes and InstaPay/PESONet participation flags.</li>
+			<li><strong><code>geo</code></strong> (v0.1.0) &mdash; representative coordinates
+				for all 1,573 PSGC cities/municipalities, haversine <code>distanceKm</code>,
+				and <code>nearestCity</code>/<code>withinRadiusKm</code> helpers.</li>
+			<li><strong><code>psic</code></strong> (v0.1.0) &mdash; the PSIC&nbsp;2009
+				industrial classification (21 sections, 88 divisions) with lookup &amp;
+				search.</li>
+			<li><strong><code>business</code></strong> (v0.1.0) &mdash; validate/parse SEC
+				registration numbers (CS/CN/A/FS/FN/PG prefixes) with canonical formatting.</li>
+			<li><strong><code>postal</code></strong> (v0.2.0) &mdash; 2,048 ZIP/postal codes
+				joined to PSGC cities, zero orphans. <em>Server-side</em> (loads its dataset
+				from disk).</li>
+			<li><strong><code>psgc-barangays</code></strong> (v0.1.0) &mdash; the complete
+				42,046-barangay dataset (PSA Q4&nbsp;2024). <em>Server-side</em> &mdash; too
+				large to bundle in a browser.</li>
+		</ul>
+
+		<p><strong>The parity payoff in one snippet</strong> &mdash; the same call,
+			the same result, on either runtime:</p>
+
+		<div class="cs-code">
+			<header class="cs-code__chrome">
+				<span class="cs-code__dots"><i></i><i></i><i></i></span>
+				<span class="cs-code__file">app/payroll/<span class="active">compute.ts</span></span>
+			</header>
+<pre><span class="tk-key">import</span> <span class="tk-punct">{</span> formatPeso<span class="tk-punct">,</span> validateTIN<span class="tk-punct">,</span> numberToWords <span class="tk-punct">}</span> <span class="tk-key">from</span> <span class="tk-str">'@ph-dev-utils/core'</span>
+<span class="tk-key">import</span> <span class="tk-punct">{</span> netTakeHome <span class="tk-punct">}</span> <span class="tk-key">from</span> <span class="tk-str">'@ph-dev-utils/payroll'</span>
+
+<span class="tk-fn">formatPeso</span><span class="tk-punct">(</span><span class="tk-num">1234567.5</span><span class="tk-punct">)</span>             <span class="tk-cmt">// "₱1,234,567.50"</span>
+<span class="tk-fn">numberToWords</span><span class="tk-punct">(</span><span class="tk-num">1042</span><span class="tk-punct">,</span> <span class="tk-str">'fil'</span><span class="tk-punct">)</span>        <span class="tk-cmt">// "isang libo apatnapu't dalawa"</span>
+<span class="tk-fn">validateTIN</span><span class="tk-punct">(</span><span class="tk-str">'123-456-789-000'</span><span class="tk-punct">)</span>    <span class="tk-cmt">// { valid: true, formatted: '123-456-789-000' }</span>
+
+<span class="tk-cmt">// gross → SSS / PhilHealth / Pag-IBIG / BIR withholding → net, in one call</span>
+<span class="tk-key">const</span> pay <span class="tk-punct">=</span> <span class="tk-fn">netTakeHome</span><span class="tk-punct">(</span><span class="tk-punct">{</span> monthlyGross<span class="tk-punct">:</span> <span class="tk-num">45000</span><span class="tk-punct">,</span> period<span class="tk-punct">:</span> <span class="tk-str">'semi-monthly'</span> <span class="tk-punct">}</span><span class="tk-punct">)</span>
+<span class="tk-cmt">//   → { sss, philhealth, pagibig, withholdingTax, net }</span>
+
+<span class="tk-cmt">// …and the PHP side agrees, byte-for-byte:</span>
+<span class="tk-cmt">//   use PhDevUtils\Core\Money;</span>
+<span class="tk-cmt">//   Money::formatPeso(1234567.5);   // "₱1,234,567.50"</span></pre>
+		</div>
+
+		<figure class="cs-shot-real">
+			<img src="../images/shot-ph-dev-utils.png" alt="The @ph-dev-utils playground — a grid of package cards (core, payroll, bir, dates, faker, address-picker, banks, geo, psic, business, postal, psgc-barangays) each with version and npm/Packagist links, beside a live interactive demo panel computing net take-home pay from a gross salary using the real published payroll package." loading="lazy" decoding="async">
+			<figcaption><span class="tag">MOCK</span>Landing + playground &middot; the package grid on the left (12 cards, version + npm/Packagist/GitHub links), a live demo panel on the right running the real published package in the browser. Rendered mock of the public site.</figcaption>
+		</figure>
+	</section>
+
+	<section class="cs-section" id="stack">
+		<div class="cs-section__label">stack</div>
+		<h2 id="tech">Tech</h2>
+		<ul>
+			<li><strong>Site:</strong> React&nbsp;19.2 + TypeScript&nbsp;6, built with
+				Vite&nbsp;8, styled with Tailwind&nbsp;CSS&nbsp;3.4 (custom PH flag palette),
+				deployed on Vercel as a static SPA.</li>
+			<li><strong>Packages:</strong> TypeScript libraries published to npm under the
+				<code>@ph-dev-utils</code> scope; PHP counterparts published to Packagist
+				under <code>phdevutils/*</code>. Most are zero-dependency.</li>
+			<li><strong>Playground:</strong> the site declares the real
+				<code>@ph-dev-utils/*</code> packages as dependencies and imports them
+				directly &mdash; no stubs &mdash; so the demos exercise published code.</li>
+			<li><strong>Data sources:</strong> GeoNames (CC&nbsp;BY&nbsp;4.0) for
+				address/ZIP/coordinates; PSA Q4&nbsp;2024 for barangays; BIR / SSS /
+				PhilHealth / Pag-IBIG / DOLE circulars for payroll &amp; tax tables.</li>
+			<li><strong>Catalog:</strong> a single typed <code>PACKAGES[]</code> array drives
+				every card, badge, anchor and external link on the site.</li>
+		</ul>
+	</section>
+
+	<section class="cs-section" id="outcome">
+		<div class="cs-section__label">outcome</div>
+		<h2 id="results">Results</h2>
+
+		<div class="cs-metrics">
+			<div class="cs-metric">
+				<div class="cs-metric__k">PSGC barangays</div>
+				<div class="cs-metric__v">42,046</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">ZIP / postal codes</div>
+				<div class="cs-metric__v">2,048</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">city/municipality coordinates</div>
+				<div class="cs-metric__v">1,573</div>
+			</div>
+			<div class="cs-metric">
+				<div class="cs-metric__k">banks &amp; e-money institutions</div>
+				<div class="cs-metric__v">158</div>
+			</div>
+		</div>
+
+		<p>
+			The family covers the PH primitives end-to-end: roughly ten government-ID
+			validators, the full PSGC address hierarchy down to 42,046 barangays, 2,048 ZIP
+			codes, 1,573 city/municipality coordinates, 158 banking institutions, and the
+			21-section / 88-division PSIC classification &mdash; plus payroll and tax math
+			that goes gross to net in a single call. Eleven of the twelve packages give a
+			PHP backend and a JS frontend the same answer, removing an entire class of
+			&ldquo;valid here, invalid there&rdquo; bugs.
+		</p>
+		<p>
+			Because the public playground runs the real packages, it is also the
+			family&rsquo;s smoke test: a breaking change in any published version surfaces
+			as a broken demo on the next deploy, not as a surprise in someone&rsquo;s
+			production app.
+		</p>
+	</section>
+
+	<section class="cs-section" id="lessons">
+		<div class="cs-section__label">lessons</div>
+		<h2 id="what-id-do-again">What I&rsquo;d do again &mdash; and differently</h2>
+		<p><strong>Worked well:</strong></p>
+		<ul>
+			<li><strong>Many small packages over one monolith.</strong> Projects install only
+				what they need; the 42k-barangay dataset stays an opt-in dependency instead
+				of bloating everyone&rsquo;s bundle.</li>
+			<li><strong>JS &harr; PHP parity as a non-negotiable.</strong> Publishing the same
+				behavior on both ecosystems is the single most valuable property &mdash; it
+				deletes the backend/frontend drift bug by design.</li>
+			<li><strong>Demos that run the published package.</strong> Making the showcase
+				import real packages turned marketing into a test harness for free.</li>
+			<li><strong>A single typed catalog.</strong> One <code>PACKAGES[]</code> array as
+				the source of truth keeps the site honest &mdash; versions and links can&rsquo;t
+				drift from the cards.</li>
+			<li><strong>Crediting sources up front.</strong> GeoNames / PSA attribution and a
+				verify-before-prod disclaimer set the right expectations for data that
+				changes by government issuance.</li>
+		</ul>
+		<p><strong>Would tighten:</strong></p>
+		<ul>
+			<li><strong>Automated parity tests.</strong> A shared fixture suite run against
+				both the JS and PHP builds in CI would prove parity continuously instead of
+				relying on discipline.</li>
+			<li><strong>Pin demos to published versions.</strong> The playground tracks the
+				latest packages; pinning each demo to a known-good version would let it double
+				as a regression snapshot per release.</li>
+			<li><strong>Freshness stamps on data.</strong> A visible &ldquo;sourced as of&rdquo;
+				date per dataset (circular version, PSA quarter) would make staleness
+				obvious without reading the changelog.</li>
+			<li><strong>Bring the last two packages in-browser.</strong> <code>postal</code>
+				and <code>psgc-barangays</code> are server-side today; a chunked/CDN loader
+				could give them live demos like the other ten.</li>
+		</ul>
+	</section>
+
+	<aside class="cs-cta">
+		<h3>Need similar?</h3>
+		<p>I design and ship cohesive package families &mdash; small, well-documented, parity-checked libraries with a showcase that proves they work. If your team keeps re-implementing the same domain logic across services and languages, let&rsquo;s talk.</p>
+		<div class="cs-cta__btns">
+			<a class="cs-btn cs-btn--primary" href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer">Book a 15-min call &rarr;</a>
+			<a class="cs-btn cs-btn--ghost" href="mailto:turayalemmuel@gmail.com">Or email me</a>
+			<a class="cs-btn cs-btn--ghost" href="../">View full portfolio</a>
+		</div>
+	</aside>
+
+  <aside class="cs-og-preview" aria-label="Social-share preview">
+    <p class="cs-og-preview__label">// when shared on LinkedIn / X / Slack:</p>
+    <img class="cs-og-preview__frame" src="../images/og-ph-dev-utils.png"
+         alt="Open Graph share card for the @ph-dev-utils case study"
+         loading="lazy" decoding="async">
+    <p class="cs-og-preview__caption">The 1200×630 card that renders in link previews. Generated alongside the case study so the social story matches the deep-read story.</p>
+  </aside>
+
+  <nav class="cs-pager" aria-label="Case study navigation">
+    <a class="cs-pager__link cs-pager__prev" href="llm-wiki.html">
+      <span class="cs-pager__dir">← prev case study</span>
+      <span class="cs-pager__title">LLM-Friendly Wiki</span>
+    </a>
+    <span class="cs-pager__placeholder" aria-hidden="true"></span>
+  </nav>
+
+</main>
+
+<script src="../js/portfolio-chat.js"></script>
+<script src="../js/case-study.js"></script>
+
+<!-- Viewport HUD -->
+<div class="viewport-hud" aria-hidden="true">
+  <span class="viewport-hud__corner viewport-hud__corner--tl"></span>
+  <span class="viewport-hud__corner viewport-hud__corner--tr"></span>
+  <span class="viewport-hud__corner viewport-hud__corner--bl"></span>
+  <span class="viewport-hud__corner viewport-hud__corner--br"></span>
+</div>
+</body>
+</html>

@@ -6,12 +6,12 @@ Drop each section directly into the matching LinkedIn field. Edit anything in **
 
 ## 1) Headline (max 220 characters)
 
-> Full-Stack & Mobile App Developer · AI Engineer · 8 shipped case studies · Vue · Laravel · Flutter · Multi-LLM agent pipelines (Claude · Gemini · OpenAI) · Open to remote · GMT+8
+> Full-Stack & Mobile App Developer · AI Engineer · 9 shipped case studies · Vue · Laravel · Flutter · Multi-LLM agent pipelines (Claude · Gemini · OpenAI) · Open to remote · GMT+8
 
 *Variants depending on what you're optimizing for:*
 
 - **Hiring-funnel focused:**
-  > Full-Stack & AI Engineer · Vue + Laravel + Flutter + Claude/Gemini/OpenAI agent pipelines · 6+ yrs · 8 case studies · Open to remote · GMT+8
+  > Full-Stack & AI Engineer · Vue + Laravel + Flutter + Claude/Gemini/OpenAI agent pipelines · 6+ yrs · 9 case studies · Open to remote · GMT+8
 
 - **Specialist:**
   > Application Developer @ AAI Worldwide Logistics · Built a production multi-LLM autonomous AI engineer · Vue · Laravel · Flutter
@@ -27,7 +27,7 @@ Drop each section directly into the matching LinkedIn field. Edit anything in **
 ## 2) About / Summary (max ~2,600 characters)
 
 ```
-Full-Stack and Mobile App Developer (with growing AI Engineering focus) — 6+ years shipping production platforms across logistics, real estate, marketing, education, and finance, with 8 published case studies on the portfolio.
+Full-Stack and Mobile App Developer (with growing AI Engineering focus) — 6+ years shipping production platforms across logistics, real estate, marketing, education, and finance, with 9 published case studies on the portfolio.
 
 I work end-to-end — requirements, architecture, implementation, testing, deployment — and I build autonomous AI-engineer pipelines that ship alongside the human team, not just chat with it. I also pair daily with Claude Code in a Karpathy-style AI-augmented workflow — prototyping and refactoring at speed without compromising code review, tests, or engineering judgment.
 
@@ -37,6 +37,7 @@ I work end-to-end — requirements, architecture, implementation, testing, deplo
 • Flutter + Dart on mobile, with Bluetooth ESC/POS + barcode scanning
 • Multi-LLM orchestration (Claude / Gemini / OpenAI / OpenRouter / Qwen) behind one agent-service interface
 • Karpathy-style LLM wikis (YAML-frontmatter Obsidian vaults) so agents and humans share the same code context
+• Open-source package authoring — @ph-dev-utils, a 12-package PH dev-utils family on npm + Packagist with JS/PHP parity
 • Multi-tier RBAC, OU-scoped permissions, CASL, Spatie Laravel-Permission
 • Offline-first mobile sync (Hive replay queue) for warehouse-floor reliability
 • Reporting & dashboards with AG Grid Enterprise + jsPDF + DomPDF
@@ -66,7 +67,7 @@ Portfolio: https://kon2raya.netlify.app
 
 ## 3) Featured section — links to pin
 
-Pin in this order (LinkedIn shows up to 6 nicely on the desktop layout):
+Pin in this order (LinkedIn shows up to 6 nicely on the desktop layout — pin your top 6):
 
 1. **Portfolio site** — `https://kon2raya.netlify.app`
    *One-liner:* Cyber-themed hand-built portfolio with case studies, JSON Resume, /now, /uses, RSS, and live GitHub stats.
@@ -80,11 +81,14 @@ Pin in this order (LinkedIn shows up to 6 nicely on the desktop layout):
 4. **Case study — WMS v2 Inventory Rewrite** — `https://kon2raya.netlify.app/case-studies/wms-v2.html`
    *One-liner:* Active rewrite of a legacy enterprise WMS onto Laravel 12 + Vue 3 with a canonical V3 pattern, CI-enforced guardrails, and online schema migrations.
 
-5. **Case study — WMS Mobile App (Flutter)** — `https://kon2raya.netlify.app/case-studies/wms.html`
+5. **Case study — @ph-dev-utils (Open-Source PH Dev Utilities)** — `https://kon2raya.netlify.app/case-studies/ph-dev-utils.html`
+   *One-liner:* A 12-package open-source family of Filipino developer utilities for JS/TS (npm) and PHP (Packagist) — peso, government IDs, PSGC addresses (42,046 barangays), payroll, BIR tax — with a React 19 live playground that runs the real packages.
+
+6. **Case study — WMS Mobile App (Flutter)** — `https://kon2raya.netlify.app/case-studies/wms.html`
    *One-liner:* Hardware-integrated Flutter WMS with Bluetooth ESC/POS label printing on Epson TM-P80II, dual-input scanning, offline replay queue. 108 build releases.
 
-6. **GitHub — `kon2raya24`** — `https://github.com/kon2raya24`
-   *One-liner:* Public repos including the open-source `ph-dev-utils` library (peso formatting, PH government-ID validators) for both JS and PHP.
+7. **GitHub — `kon2raya24`** — `https://github.com/kon2raya24`
+   *One-liner:* Public repos including the @ph-dev-utils family (12 packages, JS + PHP) and the source behind the case studies.
 
 ---
 
@@ -187,7 +191,7 @@ Earned a 1.50 GPA with coursework focused on web development, database managemen
 
 **Add the rest, grouped by category:**
 
-*Frontend:* Vue 3, Nuxt.js, Vuetify, Bootstrap Vue 3, TypeScript, JavaScript, HTML5, CSS3, SCSS, Pinia, Vuex, AG Grid Enterprise, jQuery.
+*Frontend:* Vue 3, Nuxt.js, React, Vuetify, Bootstrap Vue 3, TypeScript, JavaScript, HTML5, CSS3, SCSS, Pinia, Vuex, AG Grid Enterprise, jQuery.
 
 *Backend:* PHP, Laravel 11 / 12, Node.js, MySQL, SQL, REST API Design, Sanctum, JWT, OAuth, SilverStripe, Statamic, WordPress.
 
@@ -197,7 +201,7 @@ Earned a 1.50 GPA with coursework focused on web development, database managemen
 
 *DevOps & Tooling:* Git, GitHub, GitHub Actions, Jenkins, Buddy CI, Docker, Linux, Nginx, Vite, Webpack, Composer, npm, Yarn, VS Code, Postman, Storybook, Playwright, PHPStan, ESLint.
 
-*Architecture & Practices:* Multi-tier RBAC, OU-Scoped Permissions, Spatie Laravel-Permission, CASL, Online Schema Migrations, BaseCrudController pattern, ModuleSchemaInterface, Canonical Pattern Design, Karpathy Guidelines.
+*Architecture & Practices:* Multi-tier RBAC, OU-Scoped Permissions, Spatie Laravel-Permission, CASL, Online Schema Migrations, BaseCrudController pattern, ModuleSchemaInterface, Canonical Pattern Design, Karpathy Guidelines, Open-Source Package Publishing (npm + Packagist), JS/PHP Parity.
 
 *Integrations:* SAP, XML/SFTP pipelines, Xero, Eversign, ABN Lookup, Google Maps API, FAREYE API, SurveyJS, DomPDF, jsPDF.
 
@@ -238,10 +242,10 @@ A great recommendation talks about *behavior* (how you work) more than *output* 
 
 ## 10) Quick checklist before going live
 
-- [ ] Headline updated (AI Engineer + 8 case studies + multi-LLM angle)
-- [ ] About section pasted in (mentions 8 case studies + autonomous AI engineer + Karpathy-style AI-augmented daily workflow + WMS v2 + LLM wiki + 6+ years)
+- [ ] Headline updated (AI Engineer + 9 case studies + multi-LLM angle)
+- [ ] About section pasted in (mentions 9 case studies + autonomous AI engineer + open-source @ph-dev-utils family + Karpathy-style AI-augmented daily workflow + WMS v2 + LLM wiki + 6+ years)
 - [ ] Current role (AAI) bullets refreshed with AI Engineer + WMS v2 + LLM wiki
-- [ ] Featured section: 5 case studies + GitHub (AI Engineer + LLM Wiki pinned highest)
+- [ ] Featured section: 6 case studies + GitHub (AI Engineer + LLM Wiki pinned highest)
 - [ ] Top 5 skills set to Full-Stack / AI Engineering / Vue.js / Laravel / Flutter
 - [ ] “Open to work” badge enabled (recruiter visibility; titles include AI Engineer)
 - [ ] Profile + cover photo refreshed
