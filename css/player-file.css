@@ -1130,6 +1130,13 @@
 .pf-og .pf-boot__start { animation: none; }
 .pf-og .pf-hud__dot { animation: none; }
 
+/* mobile overrides for components defined after the main responsive block —
+   source order matters, so these must live at the end of the file */
+@media (max-width: 860px) {
+	.pf-foot__accents { display: none; }
+	.pf-modal__box { max-height: 78vh; }
+}
+
 /* ==========================================================================
    REDUCED MOTION
    ========================================================================== */
