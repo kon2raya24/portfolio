@@ -23,7 +23,7 @@
 			var legacy = localStorage.getItem('portfolio.theme');
 			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
 				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
-				else if (['cyber','matrix','sunset','xeno','crt'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
+				else if (['cyber','matrix','sunset','xeno','crt','arcade'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
 			}
 			var mode = localStorage.getItem('portfolio.mode');
 			if (mode !== 'light' && mode !== 'dark') {
@@ -31,7 +31,7 @@
 			}
 			document.documentElement.setAttribute('data-theme', mode);
 			var palette = localStorage.getItem('portfolio.palette');
-			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
+			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
 				document.documentElement.classList.add('theme-' + palette);
 			}
 		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
@@ -204,11 +204,27 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v5-2">
+    <li class="log-entry log-entry--latest" id="v5-3">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">5.3</span></span>
+        <span class="log-date">2026-06-11</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        Sixth theme: <strong>arcade</strong> &mdash; the portfolio as a retro game cabinet. Plus the frame-drop fix that landed the same day.
+      </p>
+      <ul>
+        <li>Added the <strong>arcade</strong> palette &mdash; Press Start 2P pixel type (lazy-loaded only when the theme activates, so the other five palettes pay zero font weight), hard pixel drop shadows instead of neon glows, square corners + chunky gold borders, violet attract-mode hero, blinking <code>&#9654; PRESS START</code>, segmented XP-style HUD bar, and arcade glyphs (&hearts;&starf;&#9650;&#9679;) in the rain.</li>
+        <li>Reachable everywhere themes live: nav theme picker (with its own pixel-cabinet hover preview), HUD dots, <code>Alt+T</code> cycle, command palette, and the dev terminal (<code>theme arcade</code> &mdash; <code>theme game</code> works too).</li>
+        <li class="fix">Frame-drop sweep &mdash; canvas glow now baked into cached sprites (per-draw <code>shadowBlur</code> was ~135 CPU blurs per frame), duplicate card-tilt system removed, magnetic hover rAF-batched, hire-btn ripple moved to compositor-only transform/opacity, and an adaptive <code>.fx-lite</code> governor that sheds ambient work only on devices that can&rsquo;t hold ~50fps. Worst-case hero frame: 99.9ms &rarr; 33.7ms, visuals unchanged.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v5-2">
       <div class="log-head">
         <span class="log-version">v<span class="num">5.2</span></span>
         <span class="log-date">2026-06-11</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">maintenance</span>
       </div>
       <p class="log-summary">
         Integrity + freshness pass &mdash; PWA cache sync, clean OG cover regenerated, image payload &minus;65%, ~6&nbsp;MB of dead template freight purged, and this changelog backfilled from the feed.

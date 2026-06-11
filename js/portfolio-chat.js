@@ -184,7 +184,7 @@
     { q: "How was this portfolio built?",
       aliases: ["this site", "this portfolio", "how built", "stack of this site", "tech of this site", "framework"],
       category: "meta",
-      a: "Hand-built. <strong>Zero frameworks</strong> on the cyber-FX layer. Vanilla HTML/CSS/JS — no jQuery, no React, no build step. Theme system with 5 palettes (cyber / matrix / sunset / xeno / crt) toggled via CSS vars + color-mix. Deployed on Netlify. Source: <a href='https://github.com/kon2raya24/portfolio' target='_blank' rel='noopener'>github.com/kon2raya24/portfolio</a>" },
+      a: "Hand-built. <strong>Zero frameworks</strong> on the cyber-FX layer. Vanilla HTML/CSS/JS — no jQuery, no React, no build step. Theme system with 6 palettes (cyber / matrix / sunset / xeno / crt / arcade) toggled via CSS vars + color-mix. Deployed on Netlify. Source: <a href='https://github.com/kon2raya24/portfolio' target='_blank' rel='noopener'>github.com/kon2raya24/portfolio</a>" },
 
     { q: "Can I see the source code?",
       aliases: ["source code", "repository", "github repo", "open source"],
@@ -193,9 +193,9 @@
 
     // -- Easter eggs --------------------------------------------------
     { q: "How do I change theme?",
-      aliases: ["change theme", "dark mode", "light mode", "theme picker", "palettes", "xeno", "crt", "matrix", "sunset"],
+      aliases: ["change theme", "dark mode", "light mode", "theme picker", "palettes", "xeno", "crt", "matrix", "sunset", "arcade", "game theme", "game mode"],
       category: "meta",
-      a: "Click the theme picker in the top-right of the nav (or press <code>Alt+T</code>). 5 palettes: <strong>cyber</strong> (default), <strong>matrix</strong> (green), <strong>sunset</strong> (magenta), <strong>xeno</strong> (alien red), <strong>crt</strong> (retro phosphor)." },
+      a: "Click the theme picker in the top-right of the nav (or press <code>Alt+T</code>). 6 palettes: <strong>cyber</strong> (default), <strong>matrix</strong> (green), <strong>sunset</strong> (magenta), <strong>xeno</strong> (alien red), <strong>crt</strong> (retro phosphor), <strong>arcade</strong> (retro game cabinet — pixel font, hard shadows, PRESS START)." },
 
     { q: "Are there keyboard shortcuts?",
       aliases: ["keyboard", "shortcuts", "hotkeys", "key bindings"],

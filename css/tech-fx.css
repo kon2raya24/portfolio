@@ -2511,6 +2511,7 @@ body.orbital3d-active { overflow: hidden; }
 .theme-pick__btn[data-th="sunset"] { background: #ff2bd6; color: #ff2bd6; }
 .theme-pick__btn[data-th="xeno"]   { background: #ff1840; color: #ff1840; }
 .theme-pick__btn[data-th="crt"]    { background: #33ff33; color: #33ff33; }
+.theme-pick__btn[data-th="arcade"] { background: #ffcc00; color: #ffcc00; }
 
 /* Matrix palette: green-dominant */
 :root.theme-matrix {
@@ -2548,6 +2549,16 @@ body.orbital3d-active { overflow: hidden; }
   --glow-cyan: 0 0 12px rgba(255, 24, 64, 0.6), 0 0 30px rgba(255, 24, 64, 0.25);
   --brand: #00ff85;         /* bio-luminescent green (replaces orange) */
   --magenta: #c050ff;       /* UV cosmic purple */
+}
+/* Arcade palette: retro game cabinet — coin gold + player red + hard pixel shadows */
+:root.theme-arcade {
+  --cyan: #ffcc00;          /* coin gold (replaces cyan accent) */
+  --cyan-dim: #c79a00;
+  --line: rgba(255, 204, 0, 0.28);
+  --line-strong: rgba(255, 204, 0, 0.6);
+  --glow-cyan: 3px 3px 0 rgba(0, 0, 0, 0.55);   /* hard pixel drop shadow instead of neon glow */
+  --brand: #ff3864;         /* player-red */
+  --magenta: #00a8ff;       /* power-up blue */
 }
 /* Xeno-specific visual flourishes — make the theme feel genuinely out-of-this-world,
    not just a recolor. Hero status badge pulses like an intrusion alert, scanline
@@ -3138,6 +3149,7 @@ body.orbital3d-active { overflow: hidden; }
 .theme-picker__dot[data-palette="sunset"] { background: #ff2bd6; color: #ff2bd6; }
 .theme-picker__dot[data-palette="xeno"]   { background: #ff1840; color: #ff1840; }
 .theme-picker__dot[data-palette="crt"]    { background: #33ff33; color: #33ff33; }
+.theme-picker__dot[data-palette="arcade"] { background: #ffcc00; color: #ffcc00; }
 .theme-picker__dot[data-palette="xeno"]::after {
   content: 'NEW';
   position: absolute;
@@ -3344,15 +3356,35 @@ body.orbital3d-active { overflow: hidden; }
   pointer-events: none;
 }
 
+/* Arcade preview — pixel cabinet: gold chrome, hard shadow, no glow blur */
+.theme-picker__preview--arcade {
+  background: linear-gradient(180deg, #1a0b3a, #0d0221);
+  border: 2px solid rgba(255, 204, 0, 0.6);
+  color: #ffcc00;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  border-radius: 0; /* pixel corners — on-brand */
+}
+.theme-picker__preview--arcade .theme-picker__preview-dots i:nth-child(1) { background: #ff3864; }
+.theme-picker__preview--arcade .theme-picker__preview-dots i:nth-child(2) { background: #ffcc00; }
+.theme-picker__preview--arcade .theme-picker__preview-dots i:nth-child(3) { background: #00a8ff; }
+.theme-picker__preview--arcade .theme-picker__preview-dots i { border-radius: 0; }
+.theme-picker__preview--arcade .theme-picker__preview-bar {
+  background: repeating-linear-gradient(90deg, #ffcc00 0 6px, #c79a00 6px 8px);
+  border-radius: 0;
+}
+
 /* Edge-flip: rightmost dots' previews would overflow the popover right edge —
    anchor them to the right of the dot row instead of centered. */
-.theme-picker__dot:nth-last-of-type(1) > .theme-picker__preview {
+.theme-picker__dot:nth-last-of-type(1) > .theme-picker__preview,
+.theme-picker__dot:nth-last-of-type(2) > .theme-picker__preview {
   left: auto;
   right: -6px;
   transform: translateY(6px);
 }
 .theme-picker__dot:nth-last-of-type(1):hover > .theme-picker__preview,
-.theme-picker__dot:nth-last-of-type(1):focus-visible > .theme-picker__preview {
+.theme-picker__dot:nth-last-of-type(1):focus-visible > .theme-picker__preview,
+.theme-picker__dot:nth-last-of-type(2):hover > .theme-picker__preview,
+.theme-picker__dot:nth-last-of-type(2):focus-visible > .theme-picker__preview {
   transform: translateY(0);
 }
 /* Same for leftmost (mirror) */
@@ -10261,4 +10293,207 @@ html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
 :root.fx-lite .tech-grid,
 :root.fx-lite .scanline::before {
   animation-play-state: paused;
+}
+
+/* =========================================================================
+   ARCADE SKIN — the portfolio as a retro game cabinet.
+   Same content, different machine: pixel type, hard-edged chrome, hard
+   drop shadows instead of neon glows, coin-slot status, XP-bar HUD,
+   PRESS START prompt. Activated by :root.theme-arcade only — the other
+   five palettes are untouched.
+   Perf note (see tech-fx perf conventions): no infinite box-shadow/filter
+   loops here — the only ambient animations are steps() opacity blinks on
+   tiny elements, and they pause under .fx-lite.
+   ========================================================================= */
+
+/* -- Cabinet background: deep arcade violet + pixel starfield -- */
+:root.theme-arcade {
+  background: #0d0221;
+}
+:root.theme-arcade body {
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(0, 168, 255, 0.08), transparent 60%),
+    radial-gradient(ellipse 70% 45% at 50% 100%, rgba(255, 56, 100, 0.07), transparent 60%),
+    #0d0221 !important;
+}
+:root.theme-arcade body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(rgba(255, 204, 0, 0.45) 1px, transparent 1.6px),
+    radial-gradient(rgba(255, 255, 255, 0.30) 1px, transparent 1.6px);
+  background-size: 240px 240px, 170px 170px;
+  background-position: 30px 40px, 110px 90px;
+  opacity: 0.5;
+}
+/* Static scanlines over everything — one paint, never animates */
+:root.theme-arcade #page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg,
+    rgba(0, 0, 0, 0.10) 0,
+    rgba(0, 0, 0, 0.10) 1px,
+    transparent 1px,
+    transparent 4px);
+}
+
+/* -- Pixel type: Press Start 2P (lazy-loaded by tech-fx.js on activation).
+      The face is huge per glyph, so every target gets an explicit size. -- */
+:root.theme-arcade #fh5co-header h1 {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: clamp(20px, 4.5vw, 40px) !important;
+  letter-spacing: 2px !important;
+  line-height: 1.35 !important;
+}
+:root.theme-arcade .fh5co-heading h2,
+:root.theme-arcade #fh5co-header h2 .role-tag {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: clamp(12px, 2vw, 19px) !important;
+  letter-spacing: 1px !important;
+  line-height: 1.7 !important;
+}
+:root.theme-arcade #fh5co-header h2 .role-tag { font-size: clamp(9px, 1.4vw, 12px) !important; line-height: 1.9 !important; }
+:root.theme-arcade .fh5co-nav-links li a,
+:root.theme-arcade .terminal-tag,
+:root.theme-arcade .fh5co-heading::before {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+}
+:root.theme-arcade .btn {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  line-height: 1.6 !important;
+  letter-spacing: 1px !important;
+}
+:root.theme-arcade .hud,
+:root.theme-arcade .tech-chip,
+:root.theme-arcade .status-badge {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: 8px !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* -- Pixel chrome: square corners, chunky borders, hard drop shadows -- */
+:root.theme-arcade .exp-card,
+:root.theme-arcade .proj-card,
+:root.theme-arcade .svc-card,
+:root.theme-arcade .skill-card,
+:root.theme-arcade .px-card,
+:root.theme-arcade .cta-card,
+:root.theme-arcade .code-card,
+:root.theme-arcade .about-panel {
+  border: 3px solid rgba(255, 204, 0, 0.45) !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45) !important;
+}
+:root.theme-arcade .btn,
+:root.theme-arcade .tech-chip,
+:root.theme-arcade .status-badge,
+:root.theme-arcade .work,
+:root.theme-arcade .hud,
+:root.theme-arcade .theme-picker__menu,
+:root.theme-arcade .cmdk,
+:root.theme-arcade .cmdk-hint {
+  border-radius: 0 !important;
+}
+:root.theme-arcade .btn {
+  border: 3px solid currentColor !important;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6) !important;
+}
+/* Button press — the whole point of an arcade button */
+:root.theme-arcade .btn:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6) !important;
+}
+
+/* -- Hero: coin-slot status + PRESS START -- */
+:root.theme-arcade .hero-status .status-badge {
+  border: 3px solid rgba(255, 204, 0, 0.6) !important;
+  background: rgba(13, 2, 33, 0.85) !important;
+}
+:root.theme-arcade .hero-status .status-dot {
+  background: #ffcc00 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  animation: arcade-blink 1.1s steps(2, jump-none) infinite;
+}
+:root.theme-arcade .hero-status::after {
+  content: '▶ PRESS START';
+  content: '▶ PRESS START' / '';
+  display: block;
+  margin-top: 14px;
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--brand);
+  text-align: center;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  animation: arcade-blink 1.1s steps(2, jump-none) infinite;
+}
+@keyframes arcade-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.2; }
+}
+
+/* -- Hero: drop the photographic cover — a game cabinet doesn't have a
+      stock photo behind the title screen. Violet attract-mode gradient
+      instead, with the gold rain + grid carrying the texture. -- */
+:root.theme-arcade #fh5co-header {
+  background-image: none !important;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 35%, rgba(0, 168, 255, 0.10), transparent 60%),
+    radial-gradient(ellipse 80% 100% at 50% 100%, rgba(255, 56, 100, 0.10), transparent 60%),
+    linear-gradient(180deg, #150535 0%, #0d0221 60%, #0d0221 100%) !important;
+}
+/* The base theme's .overlay is a warm orange wash for the cover photo —
+   with the photo gone it just muddies the cabinet violet. */
+:root.theme-arcade #fh5co-header .overlay {
+  background: linear-gradient(180deg, rgba(13, 2, 33, 0.25) 0%, rgba(13, 2, 33, 0.7) 100%) !important;
+}
+
+/* -- Hero grid + profile frame in cabinet gold -- */
+:root.theme-arcade .tech-grid {
+  background-image:
+    linear-gradient(rgba(255, 204, 0, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 204, 0, 0.07) 1px, transparent 1px) !important;
+}
+:root.theme-arcade .hyperframe__corner { border-color: rgba(255, 204, 0, 0.8) !important; }
+
+/* -- HUD as game status panel, scroll bar as segmented XP bar -- */
+:root.theme-arcade .hud {
+  border: 3px solid rgba(255, 204, 0, 0.5) !important;
+  background: rgba(13, 2, 33, 0.92) !important;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45) !important;
+}
+:root.theme-arcade .hud__bar {
+  height: 10px !important;
+  border: 2px solid rgba(255, 204, 0, 0.5) !important;
+  border-radius: 0 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+:root.theme-arcade .hud__bar i {
+  background: repeating-linear-gradient(90deg, #ffcc00 0 6px, #c79a00 6px 8px) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* -- Nav hire button ring in gold -- */
+:root.theme-arcade .fh5co-nav-links li a.hire-btn::after { border-color: rgba(255, 204, 0, 0.6); }
+
+/* -- Adaptive + reduced-motion: kill the blinks -- */
+:root.fx-lite.theme-arcade .hero-status .status-dot,
+:root.fx-lite.theme-arcade .hero-status::after {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-arcade .hero-status .status-dot,
+  :root.theme-arcade .hero-status::after { animation: none; }
 }

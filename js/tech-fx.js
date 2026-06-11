@@ -32,7 +32,7 @@ try {
   /* ---------- Shared theme helpers (used by HUD palette picker + nav theme picker) ----------
      Single source of truth for mode (light/dark) and palette (cyber/matrix/sunset/xeno).
      Both UIs sync via 'mode:change' and 'palette:change' custom events. */
-  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno', 'crt'];
+  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno', 'crt', 'arcade'];
 
   function currentMode() {
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
@@ -69,6 +69,25 @@ try {
     } catch (e) {}
     document.dispatchEvent(new CustomEvent('palette:change', { detail: { palette: palette } }));
   }
+
+  /* ---------- Arcade palette: lazy pixel font ----------
+     'Press Start 2P' is only fetched when the arcade skin actually activates,
+     so the other five palettes pay zero font weight for it. */
+  (function arcadeFont() {
+    var loaded = false;
+    function ensure() {
+      if (loaded) return;
+      loaded = true;
+      var l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';
+      document.head.appendChild(l);
+    }
+    if (document.documentElement.classList.contains('theme-arcade')) ensure();
+    document.addEventListener('palette:change', function (e) {
+      if (e.detail && e.detail.palette === 'arcade') ensure();
+    });
+  })();
 
   /* ---------- Calm-mode toggle (injected into the existing .hud) ---------- */
   (function motionToggle() {
@@ -195,6 +214,7 @@ try {
     var ctx = canvas.getContext('2d');
     var CHARS_DEFAULT = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789{}[]<>/=+-*&|';
     var CHARS_XENO    = '◢◤◥◣◇◆▣▤⌬⌷⎔⏣◈⬚⬢⬡▦▩▨ΞΛΔΨΣΦΘΩ0123456789█▓▒░⏃⏄⏅';
+    var CHARS_ARCADE  = '♥★●▲▼◀▶◆■▪01UPHISCORE+×▒█';
     var cols = 0, drops = [], fontSize = 16;
 
     function resize() {
@@ -252,11 +272,12 @@ try {
     function draw(ts) {
       if (visible && document.visibilityState === 'visible' && ts - lastFrame > (fxLite ? 90 : 55)) {
         lastFrame = ts;
-        var xeno = currentPalette() === 'xeno';
-        var chars = xeno ? CHARS_XENO : CHARS_DEFAULT;
-        var trailColor = xeno ? 'rgba(2, 0, 10, 0.20)' : 'rgba(5, 8, 20, 0.18)';
-        var primary   = xeno ? '#ff1840' : '#00e5ff';
-        var accent    = xeno ? '#00ff85' : '#FF9000';
+        var pal = currentPalette();
+        var xeno = pal === 'xeno', arcade = pal === 'arcade';
+        var chars = xeno ? CHARS_XENO : (arcade ? CHARS_ARCADE : CHARS_DEFAULT);
+        var trailColor = xeno ? 'rgba(2, 0, 10, 0.20)' : (arcade ? 'rgba(13, 2, 33, 0.22)' : 'rgba(5, 8, 20, 0.18)');
+        var primary   = xeno ? '#ff1840' : (arcade ? '#ffcc00' : '#00e5ff');
+        var accent    = xeno ? '#00ff85' : (arcade ? '#ff3864' : '#FF9000');
         ctx.fillStyle = trailColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         for (var i = 0; i < cols; i++) {
@@ -763,6 +784,7 @@ try {
         '<button class="theme-pick__btn"       data-th="sunset" aria-label="sunset theme"></button>' +
         '<button class="theme-pick__btn"       data-th="xeno"   aria-label="xeno theme"></button>' +
         '<button class="theme-pick__btn"       data-th="crt"    aria-label="crt theme"></button>' +
+        '<button class="theme-pick__btn"       data-th="arcade" aria-label="arcade theme"></button>' +
       '</div>' +
       '<div class="hud__row"><span class="hud__label">[ sys ]</span><span class="hud__val">online</span></div>' +
       '<div class="hud__row"><span class="hud__label">time</span><span class="hud__val" data-h="time">--:--:--</span></div>' +
@@ -1326,7 +1348,7 @@ try {
       { section: 'action', label: 'Hire Me',                  hash: '#fh5co-started', icon: '$', meta: 'cta',         aliases: ['hire', 'work with me'] },
       { section: 'action', label: 'Explore case studies in 3D',action: 'orbital',     icon: '◎', meta: 'gallery',     aliases: ['3d', 'orbital', 'gallery', 'showcase', 'spin', 'ring', 'explore', 'orbit'] },
       { section: 'action', label: 'Take the 30-second tour',  action: 'tour',         icon: '▶', meta: 'guided',      aliases: ['tour', 'walkthrough', 'demo', 'guided'] },
-      { section: 'action', label: 'Cycle theme (Alt+T)',      action: 'cycleTheme',   icon: '◐', meta: 'theme',       aliases: ['theme', 'palette', 'dark mode', 'cyber', 'matrix', 'sunset', 'xeno', 'crt'] },
+      { section: 'action', label: 'Cycle theme (Alt+T)',      action: 'cycleTheme',   icon: '◐', meta: 'theme',       aliases: ['theme', 'palette', 'dark mode', 'cyber', 'matrix', 'sunset', 'xeno', 'crt', 'arcade', 'game'] },
       { section: 'action', label: 'Toggle Konami Mode',       action: 'konami',       icon: '★', meta: 'easter egg',  aliases: ['konami', 'easter egg', 'secret'] },
       { section: 'action', label: 'Scroll to Top',            action: 'top',          icon: '↑', meta: 'nav',         aliases: ['top', 'scroll to top'] }
     );
@@ -3574,7 +3596,7 @@ try {
       { keys: ['tab'],       desc: 'Jump between palette sections' },
       { keys: ['↵'],         desc: 'Open selected result' },
       { keys: ['`'],         desc: 'Toggle dev terminal' },
-      { keys: ['alt', 't'],  desc: 'Cycle theme palette (cyber → matrix → sunset → xeno → crt)' },
+      { keys: ['alt', 't'],  desc: 'Cycle theme palette (cyber → matrix → sunset → xeno → crt → arcade)' },
       { keys: ['?'],         desc: 'Show this help' },
       { keys: ['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'b', 'a'], desc: 'Konami mode (hue cycle)' },
       { keys: ['esc'],       desc: 'Close any overlay' },
@@ -3842,7 +3864,7 @@ try {
         print('  <span class="ok">sudo hire-me</span>  request immediate hiring');
         print('  <span class="ok">date</span>        current date · time');
         print('  <span class="ok">neofetch</span>    system info');
-        print('  <span class="ok">theme &lt;name&gt;</span>  cyber | matrix | sunset | xeno | crt');
+        print('  <span class="ok">theme &lt;name&gt;</span>  cyber | matrix | sunset | xeno | crt | arcade');
         print('  <span class="ok">go &lt;section&gt;</span>  jump to a section');
         print('  <span class="ok">open &lt;url&gt;</span>     open an https:// URL in a new tab');
         print('  <span class="ok">konami</span>      toggle hue cycle');
@@ -3944,10 +3966,10 @@ try {
       quit:  function () { close(); }
     };
 
-    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno', crt: 'crt' };
+    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno', crt: 'crt', arcade: 'arcade', game: 'arcade' };
     function handleTheme(arg) {
       if (!arg || !themeAliases[arg]) {
-        print('usage: theme &lt;cyber | matrix | sunset | xeno | crt&gt;', 'err');
+        print('usage: theme &lt;cyber | matrix | sunset | xeno | crt | arcade&gt;', 'err');
         return;
       }
       applyPalette(arg);
@@ -4505,7 +4527,7 @@ try {
     document.addEventListener('palette:change', syncUI);
     document.addEventListener('mode:change', syncUI);
 
-    // Alt+T cycles palettes (cyber → matrix → sunset → xeno → cyber).
+    // Alt+T cycles palettes (cyber → matrix → sunset → xeno → crt → arcade → cyber).
     // Ignored when an input/textarea is focused so it doesn't hijack typing.
     document.addEventListener('keydown', function (e) {
       if (!e.altKey || (e.key !== 't' && e.key !== 'T')) return;

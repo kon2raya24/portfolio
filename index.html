@@ -40,7 +40,7 @@
 				html.setAttribute('data-theme', mode);
 
 				var palette = localStorage.getItem('portfolio.palette');
-				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt') {
+				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
 					html.classList.add('theme-' + palette);
 				}
 			} catch (e) {
@@ -282,6 +282,13 @@
 												<span class="theme-picker__preview-dots"><i></i><i></i><i></i></span>
 												<span class="theme-picker__preview-bar"></span>
 												<span class="theme-picker__preview-text">crt · phosphor</span>
+											</span>
+										</button>
+										<button type="button" class="theme-picker__dot" data-palette="arcade" role="menuitemradio" title="arcade · retro game cabinet" aria-label="arcade palette">
+											<span class="theme-picker__preview theme-picker__preview--arcade" aria-hidden="true">
+												<span class="theme-picker__preview-dots"><i></i><i></i><i></i></span>
+												<span class="theme-picker__preview-bar"></span>
+												<span class="theme-picker__preview-text">arcade · game</span>
 											</span>
 										</button>
 									</div>
