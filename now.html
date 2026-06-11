@@ -43,6 +43,11 @@
 			document.documentElement.setAttribute('data-theme', 'dark');
 		}
 	})();
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function () {
+			navigator.serviceWorker.register('/sw.js').catch(function () {});
+		});
+	}
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -129,7 +134,7 @@
 		</p>
 
 		<div class="now-status" role="status" aria-live="polite">open to opportunities · 2026</div>
-		<p class="now-meta"><span class="now-stamp">last updated · 2026-05-14</span></p>
+		<p class="now-meta"><span class="now-stamp">last updated · 2026-06-11</span></p>
 	</header>
 
 	<section class="cs-section">
@@ -137,7 +142,8 @@
 		<h2>Currently shipping</h2>
 		<ul>
 			<li><strong>WMS Mobile App</strong> &mdash; Flutter warehouse management, in active rollout at AAI Worldwide Logistics. Tightening the offline replay queue and operator-feedback loop.</li>
-			<li><strong>This portfolio</strong> &mdash; iterating on case studies, hire funnel UX, and the dark/light theme system. Polishing in public.</li>
+			<li><strong>@ph-dev-utils</strong> &mdash; open-source Filipino dev utilities on npm; just published the <a href="case-studies/ph-dev-utils.html" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;">case study</a> on how it was built.</li>
+			<li><strong>This portfolio</strong> &mdash; nine case studies live; iterating on the hire funnel, PWA caching, and the multi-palette theme system. Polishing in public.</li>
 			<li><strong>Side experiments</strong> &mdash; pairing with Claude on small tools and refactors; pushing the AI-assisted workflow further into real production code.</li>
 		</ul>
 	</section>
@@ -172,7 +178,7 @@
 
 	<aside class="cs-cta">
 		<h3>See the work behind this</h3>
-		<p>Two production case studies live on the site &mdash; full-stack realty platform and a Flutter warehouse app.</p>
+		<p>Nine case studies live on the site &mdash; from a full-stack realty platform and a Flutter warehouse app to an open-source npm library.</p>
 		<div class="cs-cta__btns">
 			<a class="cs-btn cs-btn--primary" href="case-studies/pamanaland.html">Pamanaland RMS &rarr;</a>
 			<a class="cs-btn cs-btn--ghost" href="case-studies/wms.html">WMS Mobile App &rarr;</a>

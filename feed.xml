@@ -10,8 +10,32 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Mon, 18 May 2026 23:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Thu, 11 Jun 2026 11:30:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v5.2 — Integrity + freshness pass: PWA cache sync, clean OG cover, image weight −65%, dead code purge</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v5-2</link>
+    <guid isPermaLink="false">portfolio-v5.2-2026-06-11</guid>
+    <pubDate>Thu, 11 Jun 2026 11:30:00 +0800</pubDate>
+    <category>maintenance</category>
+    <description><![CDATA[
+      Audit-driven maintenance release. PWA: service-worker precache now includes
+      the ph-dev-utils case study + OG card (missed in the v5.1 bump), and the
+      worker now registers on every page — not just the homepage — so deep-link
+      visitors from LinkedIn/search get cached too. Fixed a real share-image bug:
+      the live og-cover.png had the cover.html helper tooltip baked into its
+      top-right corner on every social share; regenerated clean via headless
+      Chrome. All large PNGs palette-quantized (visually lossless) — images/
+      payload 4.3MB → 1.6MB, og-cover alone 550KB → 147KB. Purged ~6MB of dead
+      template freight (unused glyphicons, icomoon demo package, stale sass/
+      tree, template google_map.js, 13 orphaned template images). Fixed the
+      icomoon @font-face path pointing at a nonexistent directory. Refreshed
+      /now (was four weeks stale, still said "two case studies" — there are
+      nine). Backfilled the on-page changelog: v3.9–v5.1 existed only in this
+      feed, and the page's top entry carried v5.0's content under a v3.5 label.
+    ]]></description>
+  </item>
 
   <item>
     <title>v5.1 — New case study: @ph-dev-utils, a 12-package open-source PH dev-utils family (JS/TS + PHP)</title>

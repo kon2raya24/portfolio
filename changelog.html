@@ -36,6 +36,11 @@
 			}
 		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
 	})();
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function () {
+			navigator.serviceWorker.register('/sw.js').catch(function () {});
+		});
+	}
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -199,11 +204,51 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest">
+    <li class="log-entry log-entry--latest" id="v5-2">
       <div class="log-head">
-        <span class="log-version">v<span class="num">3.5</span></span>
-        <span class="log-date">2026-05-18</span>
+        <span class="log-version">v<span class="num">5.2</span></span>
+        <span class="log-date">2026-06-11</span>
         <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        Integrity + freshness pass &mdash; PWA cache sync, clean OG cover regenerated, image payload &minus;65%, ~6&nbsp;MB of dead template freight purged, and this changelog backfilled from the feed.
+      </p>
+      <ul>
+        <li class="fix">Service-worker precache now includes the ph-dev-utils case study + its OG card (missed in the v5.1 bump); cache version &rarr; <code>pf-v123</code>.</li>
+        <li>Service worker now registers on <em>every</em> page (case studies, /now, /uses, /changelog, 404) &mdash; visitors who deep-link from LinkedIn or search get the PWA cache too, not just homepage visitors.</li>
+        <li class="fix">Regenerated <code>og-cover.png</code> &mdash; the live OG card had the cover.html helper tooltip baked into its top-right corner, visible on every social share. Captured clean via headless Chrome.</li>
+        <li>All large PNGs palette-quantized (visually lossless): <code>images/</code> payload 4.3&nbsp;MB &rarr; 1.6&nbsp;MB; og-cover alone 550&nbsp;KB &rarr; 147&nbsp;KB.</li>
+        <li class="fix">Purged ~6&nbsp;MB of dead template freight: unused glyphicons + icomoon demo package, stale <code>sass/</code> tree (the CSS is hand-edited), template-era <code>google_map.js</code>, 13 orphaned template images, tracked <code>.DS_Store</code> files.</li>
+        <li class="fix">icomoon <code>@font-face</code> pointed at a nonexistent <code>css/fonts/</code> directory &mdash; corrected to <code>../fonts/icomoon/</code>.</li>
+        <li>&middot; <a href="now.html" style="color:var(--cyan)">/now</a> refreshed &mdash; was four weeks stale and still claimed &ldquo;two case studies&rdquo; (there are nine).</li>
+        <li>&middot; Backfilled this changelog: v3.9&ndash;v5.1 existed only in <a href="feed.xml" style="color:var(--cyan)">feed.xml</a>, and the previous top entry carried v5.0&rsquo;s content under a v3.5 label &mdash; relabeled below.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v5-1">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">5.1</span></span>
+        <span class="log-date">2026-06-03</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        Ninth case study &mdash; <strong>@ph-dev-utils</strong>, the first open-source entry. Plus the interim UX series shipped since v5.0.
+      </p>
+      <ul>
+        <li>Added <a href="case-studies/ph-dev-utils.html" style="color:var(--cyan)">case-studies/ph-dev-utils.html</a> &mdash; a 12-package Filipino dev-utils family (JS/TS + PHP): peso formatting + EN/Tagalog number-words, ~10 government-ID validators, the full PSGC address hierarchy down to 42,046 barangays, payroll + BIR tax math, holiday-aware dates, seedable faker, and a React address picker.</li>
+        <li>11 of the 12 packages publish identical behavior to both npm and Packagist, so a PHP backend and a JS frontend agree on the same rules by construction; the showcase site runs ten of them live in the browser.</li>
+        <li>Hero stat bumped 8 &rarr; 9; work-tree, sitemap, and feed wired per the publish ritual.</li>
+        <li>Interim series (May 19 &ndash; Jun 3), previously unlogged: <strong>portfolio chat widget</strong> &mdash; zero-API FAQ matcher with chat UX, 95 entries, browse-all view, keyboard nav, did-you-mean rebound.</li>
+        <li>Interim: multi-system 3D overhaul + frame-rate optimization sweep across all five palettes.</li>
+        <li>Interim: perf + a11y sweep &mdash; LCP preload, save-data support, focus polish, tiny-phone + print styles; theme-aware page scrollbar; cross-page consistency pass.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v5-0">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">5.0</span></span>
+        <span class="log-date">2026-05-18</span>
+        <span class="log-tag">major</span>
       </div>
       <p class="log-summary">
         Massive audit-driven pass &mdash; theme picker + 5 palettes, jQuery removed, mobile nav fixed, comprehensive a11y, no-JS fallback. Single biggest day of shipping since the portfolio's first cut.
@@ -241,7 +286,160 @@
       </ul>
     </li>
 
-    <li class="log-entry">
+    <li class="log-entry" id="v4-9">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.9</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">polish</span>
+      </div>
+      <p class="log-summary">
+        SEO + UX + dual-audience reframe &mdash; making the site scan well for recruiters <em>and</em> engineering managers.
+      </p>
+      <ul>
+        <li>Article + BreadcrumbList JSON-LD on every case study; WebSite schema on the index; twitter:creator/site attribution; sitemap + feed dates normalized.</li>
+        <li>Prev/next pager at the foot of every case study for binge-reading; sticky on-page TOC on the three longest writeups (wms-v2, ai-engineer, hris).</li>
+        <li>Hero reframed to surface &ldquo;8 shipped case studies + AI-assisted delivery&rdquo;; &ldquo;1 Vibe Coder&rdquo; stat tile &rarr; &ldquo;AI-Augmented Dev (Karpathy-style)&rdquo; deep-linking the ai-engineer study; green outcome chips on every work-tree row; &starf; start-here badges.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v4-8">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.8</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        Two more case studies &mdash; hero stat 6 &rarr; 8.
+      </p>
+      <ul>
+        <li>Added <strong>LLM-Friendly Wiki</strong> &mdash; hand-maintained Obsidian vault with YAML frontmatter, per-folder <code>_INDEX.md</code> pattern, Decisions/Runbooks/Examples sub-vaults; Karpathy&rsquo;s thesis that the best AI-coding artifact is a well-structured wiki of your own code.</li>
+        <li>Added <strong>WMS v2 Inventory Rewrite</strong> &mdash; legacy warehouse system onto Laravel 12 + Vue 3, canonical V3DataTable + BaseCrud pattern, CI-enforced guardrails, online schema migrations, parity-first rollout. ~103 models, ~121 migrations, ~130 pages.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v4-7">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.7</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        Two new case studies &mdash; proof shelf 4 &rarr; 6.
+      </p>
+      <ul>
+        <li>Added <strong>Transport Management System</strong> &mdash; Vue 3 + Laravel 11, ~68 models, ~324 Vue pages, live GPS, full booking &rarr; dispatch &rarr; costing &rarr; invoice lifecycle.</li>
+        <li>Added <strong>Autonomous AI Engineer</strong> &mdash; multi-LLM agent pipeline (Claude, Gemini, OpenAI, OpenRouter, Qwen) inside a production ticketing system; <code>ai:work</code> picks up tickets, an independent <code>ai:verify</code> runs the real PHPUnit suite before merge.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v4-6">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.6</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">visual</span>
+      </div>
+      <p class="log-summary">
+        Anonymized mock screenshots (1600&times;900) wired into every case study &mdash; mirrors of the real production UI with zero client data, each tagged &ldquo;MOCK&rdquo; in its caption.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v4-5">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.5</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">policy</span>
+      </div>
+      <p class="log-summary">
+        All client names made confidential &mdash; NDA framing with generic titles; tagline, meta, body, and OG images regenerated. Personal GitHub repo links kept as proof of work.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v4-4">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.4</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        Fourth case study &mdash; <strong>Enterprise HRIS</strong>. Laravel 12 + Sanctum + TOTP 2FA API; Vue 3 + Pinia + TypeScript UI. ~54 models, ~95 Vue pages, full HR lifecycle with payroll, OU-scoped RBAC, Storybook + Playwright, dual CI/CD. Hero stat 3 &rarr; 4.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v4-3">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.3</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        Real-Estate Developer Portal polished from the real codebase &mdash; reservation &rarr; sales &rarr; equity &rarr; amortization &rarr; financing &rarr; commission &rarr; collection lifecycle; ~65 models, ~102 Vue views, AG Grid Enterprise, CASL RBAC, 5-tier seller hierarchy.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v4-2">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.2</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        WMS Mobile App enriched with real project metrics &mdash; 13 feature modules, three picking generations, Bluetooth ESC/POS printing on Epson TM-P80II, dual-input scanning, 108 build releases, ~251 models / ~315 migrations on the API.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v4-1">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.1</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">case-study</span>
+      </div>
+      <p class="log-summary">
+        Third case study &mdash; <strong>Brokerage Commission System</strong>. Commission engine with multi-tier shares + approver workflow, multi-OU RBAC; ~22 months of iteration, ~640 commits across api + ui repos. Hero stat 2 &rarr; 3.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v4-0">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">4.0</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">major</span>
+      </div>
+      <p class="log-summary">
+        Round 2: polish, proof, performance.
+      </p>
+      <ul>
+        <li>Work-filter chips wired up (data-tags driven, persisted); &ldquo;Coffee Cups &infin;&rdquo; hero stat &rarr; &ldquo;Case Studies&rdquo;; &ldquo;last shipped&rdquo; footer stamp.</li>
+        <li class="fix">Image weight &minus;3.4&nbsp;MB; light theme contrast audit 163 &rarr; 3 outstanding issues.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v3-9">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.9</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">dev-signal</span>
+      </div>
+      <p class="log-summary">
+        Dev-signal files &mdash; <code>humans.txt</code>, <code>/.well-known/security.txt</code>, curl-able <code>/api/availability.json</code>, this feed&rsquo;s <code>feed.xml</code>, and a real git-log footer pulled from GitHub.
+      </p>
+    </li>
+
+    <li class="log-entry" id="v3-5">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">3.5</span></span>
+        <span class="log-date">2026-05-14</span>
+        <span class="log-tag">major</span>
+      </div>
+      <p class="log-summary">
+        Round 1 employer-attention pass.
+      </p>
+      <ul>
+        <li>Unlocked + indexed both case studies, per-case OG images, DRAFT banners dropped; &ldquo;shipped impact&rdquo; section; 4-step engagement flow + Hiring/Client toggle.</li>
+        <li>Service worker shipped (delivering on the PWA manifest); <code>/now.html</code> added; light-theme toggle with FOUC-prevention bootstrap.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v3-4">
       <div class="log-head">
         <span class="log-version">v<span class="num">3.4</span></span>
         <span class="log-date">2026-05-13</span>
