@@ -127,6 +127,10 @@
 
 	<a class="pf-skip" href="#character">Skip to content</a>
 
+	<!-- Semantic H1 for SEO. The visible game heading is "CHARACTER", so the real
+	     name + role lives here as the single crawler/screen-reader-visible H1. -->
+	<h1 class="pf-sr-only">Lemmuel Turaya — Full-Stack &amp; Mobile App Developer</h1>
+
 	<!-- ============================ TITLE SCREEN ============================ -->
 	<div class="pf-boot" data-boot>
 		<div class="pf-boot__grid" aria-hidden="true"></div>
@@ -211,7 +215,7 @@
 			<!-- ============ 1 · CHARACTER ============ -->
 			<section class="pf-panel is-active" id="character" role="tabpanel" aria-label="Character" data-panel>
 				<header class="pf-panel__head">
-					<h1 class="pf-panel__title">CHARACTER<span class="pf-panel__title-sub">// player profile</span></h1>
+					<h2 class="pf-panel__title">CHARACTER<span class="pf-panel__title-sub">// player profile</span></h2>
 					<p class="pf-panel__flavor">&gt; ./init_developer.sh &mdash; open to remote opportunities &middot; shipping production software with AI-assisted workflows</p>
 				</header>
 
@@ -308,6 +312,19 @@
 								<div><dt>vibeCheck</dt><dd>"focused &middot; curious &middot; shipping"</dd></div>
 								<div><dt>lastUpdated</dt><dd>"2026-05-13"</dd></div>
 							</dl>
+						</div>
+
+						<!-- GitHub activity (live, cached) — proof of work -->
+						<div class="pf-card pf-cut pf-gh">
+							<div class="pf-card__head"><span class="pf-kicker">// proof of work</span><h3>~/github/activity</h3><span class="pf-badge pf-badge--live">LIVE</span></div>
+							<div class="commit-graph-label pf-gh__label">// last 6 months &middot; contribution heatmap</div>
+							<div class="commit-graph" data-commit-graph aria-hidden="true"></div>
+
+							<div class="pf-gh__sub"><span class="pf-kicker">// recent activity &middot; @kon2raya24</span></div>
+							<ul class="px-repos" data-recent-repos>
+								<li class="px-repos__loading">$ fetching latest commits&hellip;</li>
+							</ul>
+							<div class="px-repos__foot"><a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer">view all repos on GitHub &rarr;</a></div>
 						</div>
 
 						<!-- Codex (principles) -->

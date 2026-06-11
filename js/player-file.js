@@ -680,6 +680,13 @@
 		var el = $('[data-views]');
 		if (!el || !window.fetch) return;
 		var BASE = 'https://api.counterapi.dev/v1/kon2raya-portfolio/views';
+		/* Read with a trailing slash. The no-slash URL 301-redirects to the
+		   trailing-slash form, and that redirect response carries no
+		   Access-Control-Allow-Origin header — so a cross-origin fetch following
+		   it is blocked by the browser and the HUD is stuck on "—". Hitting the
+		   trailing-slash URL directly returns 200 with CORS. (/up needs no slash.) */
+		var READ = BASE + '/';
+		var UP = BASE + '/up';
 		var SESS = 'portfolio.views.incremented';
 		function parseCount(data) {
 			if (!data) return null;
@@ -697,11 +704,202 @@
 					var n = parseCount(data);
 					show(n);
 					if (n != null && !incremented) { try { sessionStorage.setItem(SESS, '1'); } catch (e) {} }
-					if (n == null && retry) setTimeout(function () { get(BASE, false); }, 5000);
+					if (n == null && retry) setTimeout(function () { get(READ, false); }, 5000);
 				})
-				.catch(function () { if (retry) setTimeout(function () { get(BASE, false); }, 5000); });
+				.catch(function () { if (retry) setTimeout(function () { get(READ, false); }, 5000); });
 		}
-		get(incremented ? BASE : BASE + '/up', true);
+		get(incremented ? READ : UP, true);
+	})();
+
+	/* ---------------------------------------------------------------------
+	   GitHub activity — contribution heatmap + recent repos (live, cached).
+	   Ported from the classic UI. GitHub exposes no public "contributions" API,
+	   so the heatmap is built from the last ~90 days of public events; a
+	   deterministic synthetic fallback fills in when the API is unavailable or
+	   rate-limited. 30-min cache with stale tolerance so repeat visits are instant.
+	   --------------------------------------------------------------------- */
+	var ghCache = {
+		TTL: 30 * 60 * 1000,
+		get: function (key) {
+			try {
+				var raw = localStorage.getItem('gh.' + key);
+				if (!raw) return null;
+				var p = JSON.parse(raw);
+				if (!p || typeof p.t !== 'number') return null;
+				var age = Date.now() - p.t;
+				return { data: p.d, age: age, fresh: age < this.TTL };
+			} catch (e) { return null; }
+		},
+		set: function (key, data) {
+			try { localStorage.setItem('gh.' + key, JSON.stringify({ t: Date.now(), d: data })); } catch (e) {}
+		}
+	};
+	function ghFetch(url, key, timeoutMs) {
+		timeoutMs = timeoutMs || 4500;
+		var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+		var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, timeoutMs);
+		return fetch(url, ctrl ? { signal: ctrl.signal } : {})
+			.then(function (r) {
+				clearTimeout(t);
+				if (r.status === 403 || r.status === 429) {
+					var reset = r.headers.get('X-RateLimit-Reset');
+					var err = new Error('rate-limit');
+					err.code = 'RATE_LIMIT';
+					err.resetAt = reset ? Number(reset) * 1000 : null;
+					throw err;
+				}
+				if (!r.ok) throw new Error('bad-' + r.status);
+				return r.json();
+			})
+			.then(function (json) { if (key) ghCache.set(key, json); return json; })
+			.catch(function (e) { clearTimeout(t); throw e; });
+	}
+
+	/* recent repos list */
+	(function recentRepos() {
+		var host = $('[data-recent-repos]');
+		if (!host || !window.fetch) return;
+		var USER = 'kon2raya24';
+		function relativeTime(iso) {
+			var d = new Date(iso);
+			var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+			if (diff < 60) return 'just now';
+			if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+			if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+			if (diff < 86400 * 7) return Math.floor(diff / 86400) + 'd ago';
+			if (diff < 86400 * 30) return Math.floor(diff / (86400 * 7)) + 'w ago';
+			if (diff < 86400 * 365) return Math.floor(diff / (86400 * 30)) + 'mo ago';
+			return Math.floor(diff / (86400 * 365)) + 'y ago';
+		}
+		function escapeHtml(s) {
+			return (s == null ? '' : String(s))
+				.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+		}
+		function render(repos, fromCache) {
+			if (!repos || !repos.length) {
+				host.innerHTML = '<li class="px-repos__loading">no public repos found.</li>';
+				return;
+			}
+			var nonFork = repos.filter(function (r) { return !r.fork; });
+			var list = (nonFork.length ? nonFork : repos).slice(0, 4);
+			host.innerHTML = list.map(function (r) {
+				var desc = r.description ? '<p class="px-repo__desc">' + escapeHtml(r.description) + '</p>' : '';
+				var lang = r.language ? '<span class="px-repo__lang">' + escapeHtml(r.language) + '</span>' : '';
+				return '<li>' +
+					'<div class="px-repo__head">' +
+						'<a class="px-repo__name" href="' + escapeHtml(r.html_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.name) + '</a>' +
+						'<span class="px-repo__visibility">' + (r.private ? 'private' : 'public') + '</span>' +
+						lang +
+						'<span class="px-repo__stars"><strong>★</strong> ' + (r.stargazers_count || 0) + '</span>' +
+					'</div>' +
+					desc +
+					'<div class="px-repo__when">updated ' + relativeTime(r.pushed_at || r.updated_at) + (fromCache ? ' · cached' : '') + '</div>' +
+				'</li>';
+			}).join('');
+		}
+		function rateLimitMsg(resetAt) {
+			var minutes = resetAt ? Math.max(1, Math.ceil((resetAt - Date.now()) / 60000)) : null;
+			return '<li class="px-repos__loading">$ GitHub rate-limited for this IP' +
+				(minutes ? ' &mdash; resets in ~' + minutes + ' min' : '') +
+				' &mdash; <a href="https://github.com/' + USER + '" target="_blank" rel="noopener">view profile directly &rarr;</a></li>';
+		}
+		var cached = ghCache.get('repos');
+		if (cached) render(cached.data, !cached.fresh);
+		if (cached && cached.fresh) return;
+		ghFetch('https://api.github.com/users/' + USER + '/repos?sort=updated&per_page=8', 'repos')
+			.then(function (repos) { if (Array.isArray(repos)) render(repos, false); })
+			.catch(function (e) {
+				if (cached) return;
+				if (e && e.code === 'RATE_LIMIT') host.innerHTML = rateLimitMsg(e.resetAt);
+				else host.innerHTML = '<li class="px-repos__loading">$ couldn\'t reach GitHub &mdash; <a href="https://github.com/' + USER + '" target="_blank" rel="noopener">view profile &rarr;</a></li>';
+			});
+	})();
+
+	/* contribution heatmap + profile stats */
+	(function githubStats() {
+		var host = $('[data-commit-graph]');
+		if (!host || !window.fetch) return;
+		var label = $('.commit-graph-label');
+		var WEEKS = 26, DAYS = 7, CELLS = WEEKS * DAYS;
+		var USER = 'kon2raya24';
+		function fmt(n) { return n.toLocaleString('en-US'); }
+		function levelFor(count) {
+			if (!count) return 0;
+			if (count < 2) return 1;
+			if (count < 4) return 2;
+			if (count < 7) return 3;
+			return 4;
+		}
+		function paint(buckets) {
+			var html = '';
+			for (var i = 0; i < CELLS; i++) {
+				var c = buckets[i] || 0;
+				html += '<span class="commit-cell" data-level="' + levelFor(c) + '" title="' + c + ' event' + (c !== 1 ? 's' : '') + '"></span>';
+			}
+			host.innerHTML = html;
+		}
+		function fallbackBuckets() {
+			var seed = 42, buckets = [];
+			function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+			for (var i = 0; i < CELLS; i++) {
+				var v = rnd();
+				buckets.push(v < 0.4 ? 0 : v < 0.65 ? 1 : v < 0.85 ? 3 : v < 0.96 ? 6 : 10);
+			}
+			return buckets;
+		}
+		function eventsToBuckets(events) {
+			var buckets = new Array(CELLS).fill(0);
+			events.forEach(function (e) {
+				var d = new Date(e.created_at); d.setHours(0, 0, 0, 0);
+				var today = new Date(); today.setHours(0, 0, 0, 0);
+				var diffDays = Math.round((today - d) / 86400000);
+				var idx = CELLS - 1 - diffDays;
+				if (idx >= 0 && idx < CELLS) buckets[idx] += 1;
+			});
+			return buckets;
+		}
+		function setLabel(status, stale) {
+			if (!label) return;
+			if (status === 'live') label.innerHTML = '// recent github activity &middot; <span>live</span>' + (stale ? ' <em>(cached)</em>' : '') + ' &middot; @' + USER;
+			else if (status === 'rate') label.innerHTML = '// github rate-limited &middot; <em>retry later</em>';
+		}
+		function setMeta(d, fromCache) {
+			var existing = $('.commit-graph-meta');
+			if (existing) existing.remove();
+			if (!d || !label) return;
+			var meta = document.createElement('div');
+			meta.className = 'commit-graph-meta';
+			meta.innerHTML =
+				'<span><strong>' + fmt(d.public_repos) + '</strong> repos</span>' +
+				'<span class="sep">·</span>' +
+				'<span><strong>' + fmt(d.followers) + '</strong> followers</span>' +
+				'<span class="sep">·</span>' +
+				'<span><strong>' + fmt(d.following) + '</strong> following</span>' +
+				(fromCache ? '<span class="sep">·</span><em>cached</em>' : '') +
+				'<span class="sep">·</span>' +
+				'<a href="https://github.com/' + USER + '" target="_blank" rel="noopener">view profile &rarr;</a>';
+			host.parentNode.insertBefore(meta, host.nextSibling);
+		}
+		var evCache = ghCache.get('events');
+		var usCache = ghCache.get('user');
+		if (evCache) { paint(eventsToBuckets(evCache.data)); setLabel('live', !evCache.fresh); }
+		else { paint(fallbackBuckets()); }
+		if (usCache) setMeta(usCache.data, !usCache.fresh);
+		if (evCache && evCache.fresh && usCache && usCache.fresh) return;
+		ghFetch('https://api.github.com/users/' + USER + '/events/public?per_page=100', 'events')
+			.then(function (events) {
+				if (!Array.isArray(events) || !events.length) return;
+				paint(eventsToBuckets(events));
+				setLabel('live', false);
+			})
+			.catch(function (e) {
+				if (evCache) return;
+				if (e && e.code === 'RATE_LIMIT') setLabel('rate');
+			});
+		ghFetch('https://api.github.com/users/' + USER, 'user')
+			.then(function (d) { if (d) setMeta(d, false); })
+			.catch(function () {});
 	})();
 
 	/* ---------------------------------------------------------------------
