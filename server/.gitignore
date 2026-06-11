@@ -1,0 +1,6 @@
+# Captured contact-form submissions live here — never commit them.
+data/
+*.jsonl
+
+# Local env file holding ADMIN_PASSWORD (use systemd EnvironmentFile in prod)
+.env

@@ -9,6 +9,19 @@
   to = "/.netlify/functions/messages-list"
   status = 200
 
+# The server/ and deploy/ folders are only used by the self-hosted (Linode)
+# deployment. They get published as static files here too, so 404 them to keep
+# the backend source + deploy docs off the public Netlify site.
+[[redirects]]
+  from = "/server/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/deploy/*"
+  to = "/404.html"
+  status = 404
+
 # /admin/* lives at the root path — keep robots out of it
 [[headers]]
   for = "/admin/*"

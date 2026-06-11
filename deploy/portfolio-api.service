@@ -1,0 +1,35 @@
+# systemd unit for the portfolio contact-form backend.
+# Installed at /etc/systemd/system/portfolio-api.service
+#
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now portfolio-api
+#   sudo systemctl status portfolio-api
+#   journalctl -u portfolio-api -f      # live logs
+#
+# Verify the node path first with `which node` — NodeSource installs to
+# /usr/bin/node; nvm installs elsewhere (don't use nvm for a system service).
+
+[Unit]
+Description=Portfolio contact-form backend (Node)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/portfolio/server
+ExecStart=/usr/bin/node /var/www/portfolio/server/server.js
+EnvironmentFile=/etc/portfolio-api.env
+Restart=on-failure
+RestartSec=3
+
+# --- hardening ---
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+# server.js needs to write captured submissions here:
+ReadWritePaths=/var/www/portfolio/server/data
+
+[Install]
+WantedBy=multi-user.target
