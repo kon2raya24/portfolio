@@ -722,3 +722,17 @@
     init();
   }
 })();
+
+/* ---------- PWA: register the service worker ----------
+   index.html registers it inline, but visitors who deep-link straight to a
+   case study (LinkedIn, search) would otherwise never install it. Absolute
+   path because these pages live under /case-studies/. Idempotent if index
+   already registered. */
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function (err) {
+      console.warn('[pwa] sw register failed:', err);
+    });
+  });
+})();

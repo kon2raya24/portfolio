@@ -37,6 +37,11 @@
 			}
 		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
 	})();
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function () {
+			navigator.serviceWorker.register('/sw.js').catch(function () {});
+		});
+	}
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>

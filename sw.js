@@ -4,7 +4,7 @@
      - same-origin HTML pages: stale-while-revalidate (cap), falls back to cached index
      - cross-origin api calls (github/counterapi): network-only, no caching
 */
-const VERSION = 'pf-v122-2026-06-03';
+const VERSION = 'pf-v123-2026-06-11';
 const STATIC_CACHE = 'pf-static-' + VERSION;
 const PAGE_CACHE   = 'pf-pages-'  + VERSION;
 
@@ -35,6 +35,7 @@ const STATIC_PRECACHE = [
   '/case-studies/jbc.html',
   '/case-studies/wms.html',
   '/case-studies/llm-wiki.html',
+  '/case-studies/ph-dev-utils.html',
   // OG images — now rendered inline on palette case-study rows, so they
   // need to be in the first paint, not lazy-fetched per row.
   '/images/og-ai-engineer.png',
@@ -45,6 +46,7 @@ const STATIC_PRECACHE = [
   '/images/og-jbc.png',
   '/images/og-wms.png',
   '/images/og-llm-wiki.png',
+  '/images/og-ph-dev-utils.png',
   '/images/og-cover.png'
 ];
 
