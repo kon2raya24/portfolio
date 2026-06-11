@@ -622,15 +622,15 @@
 		var KEY = 'pf.accent';
 		var host = $('[data-accents]');
 		function apply(name, persist) {
-			html.classList.remove('pf-accent-crimson', 'pf-accent-gold');
-			if (name === 'crimson' || name === 'gold') html.classList.add('pf-accent-' + name);
+			html.classList.remove('pf-accent-crimson', 'pf-accent-plasma');
+			if (name === 'crimson' || name === 'plasma') html.classList.add('pf-accent-' + name);
 			if (host) $$('button', host).forEach(function (b) {
 				b.classList.toggle('is-on', b.getAttribute('data-accent') === name);
 			});
 			if (persist) store(KEY, name);
 		}
 		var saved = read(KEY);
-		if (saved && saved !== 'plasma') apply(saved);
+		if (saved && saved !== 'gold') apply(saved); /* gold is the default — lives in the base vars, no class */
 		if (host) host.addEventListener('click', function (ev) {
 			var b = ev.target.closest('[data-accent]');
 			if (!b) return;

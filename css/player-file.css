@@ -12,12 +12,12 @@
 	--pf-panel: rgba(13, 20, 36, 0.92);
 	--pf-panel-2: rgba(18, 27, 48, 0.85);
 	--pf-line: rgba(116, 148, 200, 0.22);
-	--pf-line-hi: rgba(122, 215, 255, 0.55);
+	--pf-line-hi: rgba(255, 210, 61, 0.55);
 	--pf-text: #dbe6f5;
 	--pf-dim: #8da0bb;
-	--pf-plasma: #5fe7ff;
-	--pf-plasma-2: #9af0ff;
-	--pf-plasma-ink: #04121a;
+	--pf-plasma: #ffd23d;   /* default accent → gold/yellow (cyan is now the .pf-accent-plasma option) */
+	--pf-plasma-2: #ffe9a3;
+	--pf-plasma-ink: #1a1204;
 	--pf-volt: #ffd23d;
 	--pf-good: #3df2a0;
 	--pf-danger: #ff5d7e;
@@ -1110,7 +1110,7 @@
 .pf-boot__continue small { display: block; font-family: var(--pf-font-mono); font-weight: 400; font-size: 9px; letter-spacing: 1.5px; color: var(--pf-dim); margin-top: 4px; }
 
 /* ==========================================================================
-   ACCENT VARIANTS — plasma (default) / crimson / gold
+   ACCENT VARIANTS — gold (default, lives in the base :root.pf vars) / crimson / plasma
    ========================================================================== */
 :root.pf.pf-accent-crimson {
 	--pf-plasma: #ff5d7e;
@@ -1118,11 +1118,11 @@
 	--pf-plasma-ink: #1a040b;
 	--pf-line-hi: rgba(255, 93, 126, 0.55);
 }
-:root.pf.pf-accent-gold {
-	--pf-plasma: #ffd23d;
-	--pf-plasma-2: #ffe9a3;
-	--pf-plasma-ink: #1a1204;
-	--pf-line-hi: rgba(255, 210, 61, 0.55);
+:root.pf.pf-accent-plasma {
+	--pf-plasma: #5fe7ff;
+	--pf-plasma-2: #9af0ff;
+	--pf-plasma-ink: #04121a;
+	--pf-line-hi: rgba(122, 215, 255, 0.55);
 }
 .pf-foot__accents { display: inline-flex; gap: 7px; align-items: center; }
 .pf-foot__accents button {
