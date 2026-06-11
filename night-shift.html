@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="ns-root">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<title>NIGHT SHIFT — Lemmuel Turaya, Full-Stack &amp; Mobile Developer</title>
+	<meta name="description" content="A portfolio you play, not browse. Bring a national logistics network online — nine real engineering case studies as restoration missions. Lemmuel Turaya, full-stack & mobile developer." />
+	<meta name="author" content="Lemmuel Turaya" />
+	<meta name="theme-color" content="#05080f" />
+	<meta name="color-scheme" content="dark" />
+	<link rel="canonical" href="https://kon2raya.netlify.app/night-shift.html" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="NIGHT SHIFT — a portfolio you play" />
+	<meta property="og:description" content="Bring a national logistics network online. Nine real engineering case studies, played as restoration missions." />
+	<meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
+	<meta property="og:url" content="https://kon2raya.netlify.app/night-shift.html" />
+	<meta name="twitter:card" content="summary_large_image" />
+
+	<link rel="stylesheet" href="css/night-shift.css" />
+</head>
+
+<body class="ns-body">
+
+	<!-- Netlify Forms registration: a static copy of the "contact" form so the
+	     JS-rendered transmission composer in comms.js posts to a known form.
+	     (index.html already registers this name; kept here for resilience.) -->
+	<form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+		<input type="hidden" name="form-name" value="contact">
+		<input type="text" name="name"><input type="email" name="email">
+		<input type="text" name="company"><input type="text" name="opportunity_type">
+		<textarea name="message"></textarea>
+		<input name="bot-field">
+	</form>
+
+	<main id="ns-app" aria-label="Night Shift — interactive portfolio"></main>
+
+	<!-- Progressive-enhancement spine: no JS → the full story is one click away. -->
+	<noscript>
+		<div style="max-width:720px;margin:0 auto;padding:40px 24px;font-family:system-ui,sans-serif;color:#d4def2">
+			<h1 style="font-family:ui-monospace,monospace">Lemmuel Turaya — Full-Stack &amp; Mobile Developer</h1>
+			<p><strong>NIGHT SHIFT</strong> is an interactive, playable version of this portfolio — it needs
+			JavaScript. Here is the same story, the traditional way:</p>
+			<ul style="line-height:2">
+				<li><a href="index.html" style="color:#6fd3ff">Full portfolio (classic site)</a></li>
+				<li><a href="resume.pdf" style="color:#6fd3ff">Résumé (PDF)</a></li>
+				<li><a href="case-studies/wms-v2.html" style="color:#6fd3ff">WMS v2 — Inventory Rewrite</a></li>
+				<li><a href="case-studies/tms.html" style="color:#6fd3ff">Transport Management System</a></li>
+				<li><a href="case-studies/ai-engineer.html" style="color:#6fd3ff">Autonomous AI Engineer</a></li>
+				<li><a href="mailto:turayalemmuel@gmail.com" style="color:#6fd3ff">Email me</a></li>
+			</ul>
+		</div>
+	</noscript>
+
+	<script type="module">
+		import { boot } from './js/game/engine.js';
+		boot(document.getElementById('ns-app'));
+	</script>
+
+	<!-- Service worker (same registration as index.html — PWA offline support) -->
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', function () {
+				navigator.serviceWorker.register('sw.js').catch(function (err) {
+					console.warn('[pwa] sw register failed:', err);
+				});
+			});
+		}
+	</script>
+</body>
+
+</html>
