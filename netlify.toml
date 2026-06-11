@@ -12,15 +12,19 @@
 # The server/ and deploy/ folders are only used by the self-hosted (Linode)
 # deployment. They get published as static files here too, so 404 them to keep
 # the backend source + deploy docs off the public Netlify site.
+# NOTE: force = true is REQUIRED — without it, Netlify serves the existing static
+# file and skips the redirect (file matches take priority over non-forced rules).
 [[redirects]]
   from = "/server/*"
   to = "/404.html"
   status = 404
+  force = true
 
 [[redirects]]
   from = "/deploy/*"
   to = "/404.html"
   status = 404
+  force = true
 
 # /admin/* lives at the root path — keep robots out of it
 [[headers]]
