@@ -10497,3 +10497,187 @@ html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
   :root.theme-arcade .hero-status .status-dot,
   :root.theme-arcade .hero-status::after { animation: none; }
 }
+
+/* =========================================================================
+   ARCADE DEEP PASS — every component speaks game.
+   Layered after the base arcade skin: global pixel hardware (square
+   corners everywhere), a two-tier type system (Press Start 2P display,
+   VT323 body), hard-offset logo shadows, dither texture, and pixel chrome
+   for each JS-built widget. Static textures only — no new animation loops.
+   ========================================================================= */
+
+/* -- Pixel hardware: nothing on a cabinet is rounded -- */
+:root.theme-arcade *,
+:root.theme-arcade *::before,
+:root.theme-arcade *::after {
+  border-radius: 0 !important;
+}
+
+/* -- Type tier 2: VT323 for running text (Press Start 2P is unreadable at
+      body sizes; VT323 is the classic terminal pixel face). Sized up a step
+      because it runs small. -- */
+:root.theme-arcade body { font-family: 'VT323', 'JetBrains Mono', monospace; }
+:root.theme-arcade p,
+:root.theme-arcade li,
+:root.theme-arcade td, :root.theme-arcade th,
+:root.theme-arcade dd, :root.theme-arcade dt,
+:root.theme-arcade blockquote, :root.theme-arcade figcaption,
+:root.theme-arcade input, :root.theme-arcade textarea, :root.theme-arcade select,
+:root.theme-arcade .case-tree, :root.theme-arcade .live-stats__item,
+:root.theme-arcade .footer-meta, :root.theme-arcade .footer-stamp,
+:root.theme-arcade .cta-form__hint, :root.theme-arcade .cta-form__label,
+:root.theme-arcade .dev-term, :root.theme-arcade .tech-tag,
+:root.theme-arcade .cmdk__row, :root.theme-arcade .tour-bubble,
+:root.theme-arcade .idle-nudge-tip, :root.theme-arcade .tech-tip {
+  font-family: 'VT323', 'JetBrains Mono', monospace !important;
+  font-size: 17px;
+  line-height: 1.5;
+}
+:root.theme-arcade code, :root.theme-arcade pre {
+  font-family: 'VT323', 'JetBrains Mono', monospace !important;
+  font-size: 16px;
+}
+
+/* -- Type tier 1: Press Start 2P for every display surface -- */
+:root.theme-arcade h3,
+:root.theme-arcade .cmdk__section,
+:root.theme-arcade .work-filter, :root.theme-arcade .case-filter,
+:root.theme-arcade .utm-pill, :root.theme-arcade .konami-toast,
+:root.theme-arcade .tech-toast, :root.theme-arcade .cmdk__toast,
+:root.theme-arcade .siderail, :root.theme-arcade .boot-overlay,
+:root.theme-arcade .cta-form__submit, :root.theme-arcade .scroll-down,
+:root.theme-arcade .commit-graph-meta {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+  line-height: 1.8 !important;
+}
+
+/* -- Arcade-logo glow: hard color offsets, the way cabinets bled phosphor -- */
+:root.theme-arcade #fh5co-header h1 {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+          background-clip: initial !important;
+  color: #ffcc00 !important;
+  text-shadow: 3px 3px 0 #ff3864, 6px 6px 0 rgba(0, 0, 0, 0.55) !important;
+}
+:root.theme-arcade .fh5co-heading h2 {
+  color: #ffcc00 !important;
+  text-shadow: 2px 2px 0 rgba(255, 56, 100, 0.85), 4px 4px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+/* -- Texture: 8px dither checker layered into the fixed starfield (static) -- */
+:root.theme-arcade body::before {
+  background-image:
+    radial-gradient(rgba(255, 204, 0, 0.45) 1px, transparent 1.6px),
+    radial-gradient(rgba(255, 255, 255, 0.30) 1px, transparent 1.6px),
+    repeating-conic-gradient(rgba(255, 255, 255, 0.015) 0% 25%, transparent 0% 50%);
+  background-size: 240px 240px, 170px 170px, 8px 8px;
+  background-position: 30px 40px, 110px 90px, 0 0;
+}
+
+/* -- Selection + keyboard focus: coin-gold block, hard offset -- */
+:root.theme-arcade ::selection { background: #ffcc00; color: #0d0221; text-shadow: none; }
+:root.theme-arcade :focus-visible {
+  outline: 3px solid #ffcc00 !important;
+  outline-offset: 2px !important;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55) !important;
+}
+
+/* -- Command palette as pause-menu -- */
+:root.theme-arcade .cmdk {
+  border: 3px solid rgba(255, 204, 0, 0.55) !important;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5) !important;
+  background: rgba(13, 2, 33, 0.96) !important;
+}
+:root.theme-arcade .cmdk input {
+  border: 2px solid rgba(255, 204, 0, 0.35) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  font-size: 19px;
+}
+:root.theme-arcade .cmdk__row[aria-selected="true"],
+:root.theme-arcade .cmdk__row.is-active {
+  background: rgba(255, 204, 0, 0.14) !important;
+  box-shadow: inset 3px 0 0 #ffcc00 !important;
+}
+
+/* -- Overlays/popovers: dialog-box chrome (terminal, kbd help, ctx menu,
+      toasts, tour, theme menu) -- */
+:root.theme-arcade .dev-term,
+:root.theme-arcade .kbdhelp-overlay > *,
+:root.theme-arcade .ctx-menu,
+:root.theme-arcade .konami-toast,
+:root.theme-arcade .tech-toast,
+:root.theme-arcade .cmdk__toast,
+:root.theme-arcade .idle-nudge-tip,
+:root.theme-arcade .tour-bubble,
+:root.theme-arcade .utm-pill,
+:root.theme-arcade .cmdk-hint,
+:root.theme-arcade .theme-picker__menu {
+  border: 3px solid rgba(255, 204, 0, 0.55) !important;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5) !important;
+  background: rgba(13, 2, 33, 0.96) !important;
+  backdrop-filter: none !important;
+}
+:root.theme-arcade kbd {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 8px !important;
+  border: 2px solid rgba(255, 204, 0, 0.5) !important;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+/* -- Contact form: password-entry styling -- */
+:root.theme-arcade .cta-form input,
+:root.theme-arcade .cta-form textarea {
+  border: 3px solid rgba(255, 204, 0, 0.4) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.45) !important;
+  font-size: 18px !important;
+  caret-color: #ffcc00;
+}
+:root.theme-arcade .cta-form input:focus,
+:root.theme-arcade .cta-form textarea:focus {
+  border-color: #ffcc00 !important;
+}
+:root.theme-arcade .cta-form__submit {
+  border: 3px solid currentColor !important;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6) !important;
+}
+:root.theme-arcade .cta-form__submit:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6) !important;
+}
+
+/* -- Siderail dot-nav: level-select squares -- */
+:root.theme-arcade .siderail__item {
+  border: 2px solid rgba(255, 204, 0, 0.5) !important;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55) !important;
+}
+
+/* -- Work tree + filters: quest-log framing -- */
+:root.theme-arcade .work-filter,
+:root.theme-arcade .case-filter {
+  border: 2px solid rgba(255, 204, 0, 0.45) !important;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+/* -- Marquee chips + tool badges: cartridge labels -- */
+:root.theme-arcade .tech-tag,
+:root.theme-arcade .tech-chip {
+  border: 2px solid rgba(255, 204, 0, 0.45) !important;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5) !important;
+  background: rgba(13, 2, 33, 0.8) !important;
+}
+
+/* -- Profile photo becomes the character-select portrait -- */
+:root.theme-arcade .profile-thumb {
+  border: 4px solid rgba(255, 204, 0, 0.7) !important;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5) !important;
+  image-rendering: pixelated;
+}
+
+/* -- Boot overlay: attract-mode self-test -- */
+:root.theme-arcade .boot-overlay { background: #0d0221 !important; }
+
+/* -- fx-lite / reduced-motion: nothing extra to pause — this pass is static -- */

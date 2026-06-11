@@ -19,14 +19,14 @@
 		}
 		var mode = localStorage.getItem('portfolio.mode');
 		if (mode !== 'light' && mode !== 'dark') {
-			mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+			mode = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
 		}
 		document.documentElement.setAttribute('data-theme', mode);
-		var palette = localStorage.getItem('portfolio.palette');
+		var palette = localStorage.getItem('portfolio.palette') || 'arcade';
 		if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
 			document.documentElement.classList.add('theme-' + palette);
 		}
-	} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+	} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('theme-arcade'); }
 })();
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', function () {
@@ -35,7 +35,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900|JetBrains+Mono:400,500,700|Press+Start+2P|VT323&display=swap" rel="stylesheet">
 <style>
   :root {
     --brand: #FF9000;
@@ -202,6 +202,33 @@ if ('serviceWorker' in navigator) {
   :root.theme-xeno   { --cyan: #ff1840; --brand: #00ff85; --magenta: #c050ff; --line: rgba(255, 24, 64, 0.22); --line-strong: rgba(255, 24, 64, 0.55); }
   :root.theme-crt    { --cyan: #33ff33; --brand: #ffb400; --magenta: #33ff33; --line: rgba(51, 255, 51, 0.22); --line-strong: rgba(51, 255, 51, 0.5); }
   :root.theme-arcade { --cyan: #ffcc00; --brand: #ff3864; --magenta: #00a8ff; --line: rgba(255, 204, 0, 0.25); --line-strong: rgba(255, 204, 0, 0.55); }
+  /* Arcade deep pass: GAME OVER screen */
+  :root.theme-arcade body { background: #0d0221; }
+  :root.theme-arcade * { border-radius: 0 !important; }
+  :root.theme-arcade .terminal {
+    border-width: 3px;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.55);
+  }
+  :root.theme-arcade h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 56px;
+    letter-spacing: 4px;
+    background: none;
+    -webkit-background-clip: initial;
+            background-clip: initial;
+    color: #ffcc00;
+    text-shadow: 4px 4px 0 #ff3864, 8px 8px 0 rgba(0, 0, 0, 0.55);
+  }
+  :root.theme-arcade .tagline { font-family: 'Press Start 2P', monospace; font-size: 11px; letter-spacing: 2px; }
+  :root.theme-arcade .line { font-family: 'VT323', monospace; font-size: 17px; }
+  :root.theme-arcade .btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    border-width: 3px;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  }
+  :root.theme-arcade .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6); }
+  @media (max-width: 480px) { :root.theme-arcade h1 { font-size: 36px; letter-spacing: 2px; } }
 
   /* ---------- Light mode ---------- */
   :root[data-theme="light"] body {

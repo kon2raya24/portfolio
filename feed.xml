@@ -10,8 +10,31 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Thu, 11 Jun 2026 18:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Thu, 11 Jun 2026 21:30:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v5.4 — Arcade is now the default theme, applied to every component</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v5-4</link>
+    <guid isPermaLink="false">portfolio-v5.4-2026-06-11</guid>
+    <pubDate>Thu, 11 Jun 2026 21:30:00 +0800</pubDate>
+    <category>theme</category>
+    <description><![CDATA[
+      Fresh visitors now land on the arcade game-cabinet skin (in dark mode —
+      a cabinet is inherently dark); explicit palette/mode choices still win,
+      and cyber is stored explicitly so choosing it sticks. The skin now
+      reaches every component: a two-tier pixel type system (Press Start 2P
+      for display surfaces, VT323 for running text), square corners globally,
+      hard-offset arcade-logo shadows, 8px dither texture, coin-gold selection
+      and focus states. Component sweep: command palette as pause-menu, chat
+      widget as in-game dialogue box, contact form as password-entry screen,
+      profile photo as character-select portrait, siderail as level-select
+      squares, kbd help / dev terminal / toasts / tour in dialog-box chrome,
+      404 as a GAME OVER screen, and the full treatment on case studies,
+      /now, /uses, and /changelog. The five other palettes remain selectable
+      and unchanged.
+    ]]></description>
+  </item>
 
   <item>
     <title>v5.3 — New arcade theme: the portfolio as a retro game cabinet + frame-drop fix</title>

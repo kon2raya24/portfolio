@@ -63,10 +63,10 @@ try {
     if (PALETTES.indexOf(palette) === -1) palette = 'cyber';
     PALETTES.forEach(function (p) { document.documentElement.classList.remove('theme-' + p); });
     if (palette !== 'cyber') document.documentElement.classList.add('theme-' + palette);
-    try {
-      if (palette === 'cyber') localStorage.removeItem('portfolio.palette');
-      else localStorage.setItem('portfolio.palette', palette);
-    } catch (e) {}
+    // Every choice is stored explicitly — an absent key now means "fresh
+    // visitor", which the bootstraps default to arcade. Removing the key for
+    // cyber (the old behavior) would bounce cyber users back to arcade.
+    try { localStorage.setItem('portfolio.palette', palette); } catch (e) {}
     document.dispatchEvent(new CustomEvent('palette:change', { detail: { palette: palette } }));
   }
 
@@ -78,6 +78,9 @@ try {
     function ensure() {
       if (loaded) return;
       loaded = true;
+      // Pages ship the pixel fonts in their static font link now that arcade
+      // is the default — only inject for any page that might lack it.
+      if (document.querySelector('link[href*="Press+Start"]')) return;
       var l = document.createElement('link');
       l.rel = 'stylesheet';
       l.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';

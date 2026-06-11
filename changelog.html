@@ -27,14 +27,14 @@
 			}
 			var mode = localStorage.getItem('portfolio.mode');
 			if (mode !== 'light' && mode !== 'dark') {
-				mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+				mode = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
 			}
 			document.documentElement.setAttribute('data-theme', mode);
-			var palette = localStorage.getItem('portfolio.palette');
+			var palette = localStorage.getItem('portfolio.palette') || 'arcade';
 			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
 				document.documentElement.classList.add('theme-' + palette);
 			}
-		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('theme-arcade'); }
 	})();
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function () {
@@ -45,7 +45,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700|Press+Start+2P|VT323&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/case-study.css">
 <link rel="icon" href="images/logo.png" type="image/x-icon">
@@ -204,11 +204,29 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v5-3">
+    <li class="log-entry log-entry--latest" id="v5-4">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">5.4</span></span>
+        <span class="log-date">2026-06-11</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        Arcade goes <strong>default</strong> &mdash; fresh visitors now land on the game cabinet, and the skin reaches every component: type, glow, texture, chrome.
+      </p>
+      <ul>
+        <li>Fresh visitors (no stored palette) land on <strong>arcade</strong>, in dark mode &mdash; a cabinet is inherently dark, so the OS light-mode preference no longer overrides the default skin. Anyone who explicitly picks a palette or mode keeps their choice; cyber is now stored explicitly so choosing it sticks.</li>
+        <li>Two-tier pixel type system: <strong>Press Start 2P</strong> for every display surface (headings, nav, buttons, HUD, labels, toasts, boot screen) and <strong>VT323</strong> &mdash; the classic terminal pixel face &mdash; for running text, so body copy keeps the game feel without becoming unreadable. Both fonts now ship in the static font links since they're the default face.</li>
+        <li>Pixel hardware everywhere: square corners globally, hard-offset arcade-logo shadows on headings (gold over player-red, the way cabinets bled phosphor), 8px dither texture in the starfield, coin-gold selection + keyboard focus.</li>
+        <li>Component sweep: command palette as pause-menu, chat widget as in-game dialogue box, contact form as password-entry screen, profile photo as character-select portrait, siderail as level-select squares, kbd/terminal/toasts/tour/ctx-menu in dialog-box chrome, 404 as a GAME OVER screen.</li>
+        <li>Case-study layout (also /now, /uses, /changelog) gets the full treatment &mdash; pixel headings, VT323 body, quest-log card chrome.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v5-3">
       <div class="log-head">
         <span class="log-version">v<span class="num">5.3</span></span>
         <span class="log-date">2026-06-11</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">theme</span>
       </div>
       <p class="log-summary">
         Sixth theme: <strong>arcade</strong> &mdash; the portfolio as a retro game cabinet. Plus the frame-drop fix that landed the same day.

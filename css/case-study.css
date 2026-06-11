@@ -2094,3 +2094,91 @@ html.is-scrolling .cs-heading3d { text-shadow: none; }
 .cs-outcome-row {
   contain: content;
 }
+
+/* =========================================================================
+   ARCADE DEEP PASS (case-study layout — also /now, /uses, /changelog).
+   Mirrors the index deep pass: square pixel hardware, VT323 body type,
+   Press Start 2P display type, hard shadows. Static only.
+   ========================================================================= */
+:root.theme-arcade *,
+:root.theme-arcade *::before,
+:root.theme-arcade *::after {
+  border-radius: 0 !important;
+}
+:root.theme-arcade body { font-family: 'VT323', 'JetBrains Mono', monospace; }
+:root.theme-arcade p,
+:root.theme-arcade li,
+:root.theme-arcade td, :root.theme-arcade th,
+:root.theme-arcade dd, :root.theme-arcade dt,
+:root.theme-arcade blockquote, :root.theme-arcade figcaption,
+:root.theme-arcade .uses-list, :root.theme-arcade .log-summary,
+:root.theme-arcade .now-meta {
+  font-family: 'VT323', 'JetBrains Mono', monospace !important;
+  font-size: 17px;
+  line-height: 1.55;
+}
+:root.theme-arcade code, :root.theme-arcade pre {
+  font-family: 'VT323', 'JetBrains Mono', monospace !important;
+  font-size: 16px;
+}
+:root.theme-arcade .cs-hero h1,
+:root.theme-arcade h1 {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: clamp(15px, 2.8vw, 28px) !important;
+  letter-spacing: 1px !important;
+  line-height: 1.6 !important;
+  color: #ffcc00 !important;
+  text-shadow: 3px 3px 0 rgba(255, 56, 100, 0.85), 5px 5px 0 rgba(0, 0, 0, 0.5) !important;
+}
+:root.theme-arcade h2 {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: clamp(11px, 1.8vw, 17px) !important;
+  letter-spacing: 1px !important;
+  line-height: 1.8 !important;
+}
+:root.theme-arcade .cs-hero__label,
+:root.theme-arcade .cs-section__label,
+:root.theme-arcade .cs-nav__brand,
+:root.theme-arcade .cs-nav__breadcrumb,
+:root.theme-arcade .cs-btn,
+:root.theme-arcade .uses-card__icon,
+:root.theme-arcade .uses-card__title,
+:root.theme-arcade .log-version,
+:root.theme-arcade .log-tag,
+:root.theme-arcade .log-date,
+:root.theme-arcade .now-status,
+:root.theme-arcade .now-stamp,
+:root.theme-arcade .cs-toc__nav {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+  line-height: 1.9 !important;
+}
+
+/* Dialog-box chrome on the card surfaces */
+:root.theme-arcade .cs-metric,
+:root.theme-arcade .cs-code,
+:root.theme-arcade .cs-og-preview,
+:root.theme-arcade .cs-cta,
+:root.theme-arcade .uses-card,
+:root.theme-arcade .cs-toc {
+  border: 3px solid rgba(255, 204, 0, 0.45) !important;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45) !important;
+}
+:root.theme-arcade .cs-btn {
+  border: 3px solid currentColor !important;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6) !important;
+}
+:root.theme-arcade .cs-btn:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6) !important;
+}
+:root.theme-arcade .cs-nav {
+  border-bottom: 3px solid rgba(255, 204, 0, 0.4) !important;
+  backdrop-filter: none !important;
+}
+:root.theme-arcade ::selection { background: #ffcc00; color: #0d0221; text-shadow: none; }
+:root.theme-arcade :focus-visible {
+  outline: 3px solid #ffcc00 !important;
+  outline-offset: 2px !important;
+}

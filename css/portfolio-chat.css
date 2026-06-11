@@ -580,3 +580,50 @@ body.pchat-active .viewport-hud {
 @media print {
   .pchat { display: none !important; }
 }
+
+/* =========================================================================
+   ARCADE — chat widget as in-game dialogue box (theme-arcade only).
+   ========================================================================= */
+:root.theme-arcade .pchat__panel,
+:root.theme-arcade .pchat__bubble,
+:root.theme-arcade .pchat__msg-bubble,
+:root.theme-arcade .pchat__input,
+:root.theme-arcade .pchat__submit,
+:root.theme-arcade .pchat__sugg,
+:root.theme-arcade .pchat__browse-row,
+:root.theme-arcade .pchat__fallback-btn {
+  border-radius: 0 !important;
+}
+:root.theme-arcade .pchat__panel {
+  border: 3px solid rgba(255, 204, 0, 0.55) !important;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5) !important;
+  background: rgba(13, 2, 33, 0.97) !important;
+  backdrop-filter: none !important;
+}
+:root.theme-arcade .pchat__head-title {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+}
+:root.theme-arcade .pchat__msg-bubble,
+:root.theme-arcade .pchat__welcome,
+:root.theme-arcade .pchat__input,
+:root.theme-arcade .pchat__sugg,
+:root.theme-arcade .pchat__browse-row {
+  font-family: 'VT323', 'JetBrains Mono', monospace !important;
+  font-size: 17px !important;
+  line-height: 1.45 !important;
+}
+:root.theme-arcade .pchat__msg-bubble {
+  border: 2px solid rgba(255, 204, 0, 0.35) !important;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45) !important;
+}
+:root.theme-arcade .pchat__bubble {
+  border: 3px solid rgba(255, 204, 0, 0.6) !important;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55) !important;
+}
+:root.theme-arcade .pchat__input {
+  border: 2px solid rgba(255, 204, 0, 0.4) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  caret-color: #ffcc00;
+}

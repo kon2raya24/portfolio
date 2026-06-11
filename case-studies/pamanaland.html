@@ -30,20 +30,20 @@
 			}
 			var mode = localStorage.getItem('portfolio.mode');
 			if (mode !== 'light' && mode !== 'dark') {
-				mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+				mode = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
 			}
 			document.documentElement.setAttribute('data-theme', mode);
-			var palette = localStorage.getItem('portfolio.palette');
+			var palette = localStorage.getItem('portfolio.palette') || 'arcade';
 			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
 				document.documentElement.classList.add('theme-' + palette);
 			}
-		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('theme-arcade'); }
 	})();
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700|Press+Start+2P|VT323&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../css/case-study.css">
 <link rel="stylesheet" href="../css/portfolio-chat.css">
