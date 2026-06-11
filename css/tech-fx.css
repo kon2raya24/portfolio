@@ -8348,7 +8348,23 @@ a.btn:focus-visible {
  * ======================================================= */
 .fh5co-nav-links li a.hire-btn {
   position: relative !important;
+  box-shadow: 0 0 14px rgba(255, 144, 0, 0.35);
+}
+/* Ripple ring — transform/opacity only, so it stays on the compositor.
+   The old version animated box-shadow, which repainted the always-visible
+   nav button on every frame of the 2.8s loop. */
+.fh5co-nav-links li a.hire-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 144, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
   animation: hire-btn-ripple 2.8s ease-out infinite;
+}
+:root.theme-xeno .fh5co-nav-links li a.hire-btn::after {
+  border-color: rgba(255, 24, 64, 0.6);
 }
 .fh5co-nav-links li a.hire-btn::before {
   content: '';
@@ -8365,48 +8381,21 @@ a.btn:focus-visible {
   pointer-events: none;
 }
 @keyframes hire-btn-ripple {
-  0% {
-    box-shadow:
-      0 0 0 0 rgba(255, 144, 0, 0.55),
-      0 0 14px rgba(255, 144, 0, 0.35);
-  }
-  70% {
-    box-shadow:
-      0 0 0 12px rgba(255, 144, 0, 0),
-      0 0 14px rgba(255, 144, 0, 0.35);
-  }
-  100% {
-    box-shadow:
-      0 0 0 0 rgba(255, 144, 0, 0),
-      0 0 14px rgba(255, 144, 0, 0.35);
-  }
+  0%        { opacity: 0.8; transform: scale(1); }
+  70%, 100% { opacity: 0;   transform: scale(1.25, 1.6); }
 }
 @keyframes hire-btn-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%      { opacity: 0.45; transform: scale(0.65); }
 }
 
-/* Light theme: orange-against-cream is fine, just dampen the ripple
+/* Light theme: orange-against-cream is fine, just dampen the glow + ring
    so it doesn't blow out against the brighter background */
 :root[data-theme="light"] .fh5co-nav-links li a.hire-btn {
-  animation-name: hire-btn-ripple-light;
+  box-shadow: 0 0 10px rgba(255, 144, 0, 0.25);
 }
-@keyframes hire-btn-ripple-light {
-  0% {
-    box-shadow:
-      0 0 0 0 rgba(255, 144, 0, 0.45),
-      0 0 10px rgba(255, 144, 0, 0.25);
-  }
-  70% {
-    box-shadow:
-      0 0 0 10px rgba(255, 144, 0, 0),
-      0 0 10px rgba(255, 144, 0, 0.25);
-  }
-  100% {
-    box-shadow:
-      0 0 0 0 rgba(255, 144, 0, 0),
-      0 0 10px rgba(255, 144, 0, 0.25);
-  }
+:root[data-theme="light"] .fh5co-nav-links li a.hire-btn::after {
+  border-color: rgba(255, 144, 0, 0.45);
 }
 :root[data-theme="light"] .fh5co-nav-links li a.hire-btn::before {
   background: #1f8a3e;
@@ -8415,7 +8404,8 @@ a.btn:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .fh5co-nav-links li a.hire-btn,
-  .fh5co-nav-links li a.hire-btn::before { animation: none; }
+  .fh5co-nav-links li a.hire-btn::before,
+  .fh5co-nav-links li a.hire-btn::after { animation: none; }
 }
 
 /* =======================================================
@@ -10256,4 +10246,19 @@ html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
 .cta-card,
 .code-card {
   contain: content;
+}
+
+/* =======================================================
+ *  Adaptive quality — tech-fx.js latches .fx-lite on <html>
+ *  when the device sustains < 48fps. Pauses the ambient
+ *  always-on loops that repaint (the canvases thin out via
+ *  JS); layout, interactions, and hover effects stay intact.
+ * ======================================================= */
+:root.fx-lite .glitch::before,
+:root.fx-lite .glitch::after,
+:root.fx-lite .hud::before,
+:root.fx-lite .fh5co-nav-links li a.hire-btn::after,
+:root.fx-lite .tech-grid,
+:root.fx-lite .scanline::before {
+  animation-play-state: paused;
 }

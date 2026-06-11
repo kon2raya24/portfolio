@@ -149,6 +149,42 @@ try {
 
   /* ---------- Matrix rain (hero) — theme-aware: katakana for cyber/matrix/sunset,
        alien-tech glyphs in xeno mode so the canvas matches the rest of the skin. */
+  /* ---------- Adaptive quality governor ----------
+     Watches the real frame rate; if the device sustains < 48fps across two
+     2-second windows it latches .fx-lite on <html> (and the fxLite flag the
+     canvas systems read) to shed ambient work. Latched for the session —
+     flapping between modes is more visible than staying lite. Capable
+     machines never leave full quality. */
+  var fxLite = false;
+  function fxDebounce(fn, ms) {
+    var t = 0;
+    return function () { clearTimeout(t); t = setTimeout(fn, ms); };
+  }
+  (function fxGovernor() {
+    if (prefersReduced) return;
+    var frames = 0, last = performance.now(), lowStreak = 0;
+    function tick(now) {
+      frames++;
+      if (now - last >= 2000) {
+        var fps = (frames * 1000) / (now - last);
+        frames = 0; last = now;
+        if (document.visibilityState !== 'visible') {
+          lowStreak = 0; // hidden-tab rAF throttling isn't a real signal
+        } else if (fps < 48) {
+          if (++lowStreak >= 2) {
+            fxLite = true;
+            document.documentElement.classList.add('fx-lite');
+            return; // latched — stop sampling
+          }
+        } else {
+          lowStreak = 0;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
   (function matrixRain() {
     if (prefersReduced) return;
     var host = document.getElementById('fh5co-header');
@@ -168,7 +204,9 @@ try {
       drops = new Array(cols).fill(0).map(function () { return Math.random() * -50; });
     }
     resize();
-    window.addEventListener('resize', resize);
+    // Debounced: mobile URL-bar show/hide fires resize mid-scroll, and a full
+    // re-init (new drops array) every frame of that is jank by itself.
+    window.addEventListener('resize', fxDebounce(resize, 150));
 
     // Pause when host scrolls offscreen — saves CPU dramatically on long pages
     var visible = true;
@@ -181,9 +219,38 @@ try {
       visible = visible && document.visibilityState === 'visible';
     });
 
+    // Glyphs are pre-rendered once per (char, color) with the glow baked in.
+    // Canvas shadowBlur is a per-draw CPU gaussian blur — doing it for ~75
+    // glyphs every frame was the single biggest per-frame cost on this page.
+    // drawImage of a cached sprite is the same pixels for ~2% of the work.
+    var SPRITE_PAD = 8;
+    var spriteCache = {};
+    function glyphSprite(ch, color) {
+      var key = color + ch;
+      var s = spriteCache[key];
+      if (!s) {
+        s = document.createElement('canvas');
+        s.width = fontSize + SPRITE_PAD * 2;
+        s.height = fontSize * 2 + SPRITE_PAD * 2;
+        var sc = s.getContext('2d');
+        sc.font = fontSize + 'px "JetBrains Mono", monospace';
+        sc.fillStyle = color;
+        sc.shadowColor = color;
+        sc.shadowBlur = 6;
+        sc.fillText(ch, SPRITE_PAD, fontSize + SPRITE_PAD);
+        spriteCache[key] = s;
+      }
+      return s;
+    }
+    // Sprites rendered before the webfont arrives bake in the fallback font —
+    // flush once JetBrains Mono is actually available.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { spriteCache = {}; });
+    }
+
     var lastFrame = 0;
     function draw(ts) {
-      if (visible && document.visibilityState === 'visible' && ts - lastFrame > 55) {
+      if (visible && document.visibilityState === 'visible' && ts - lastFrame > (fxLite ? 90 : 55)) {
         lastFrame = ts;
         var xeno = currentPalette() === 'xeno';
         var chars = xeno ? CHARS_XENO : CHARS_DEFAULT;
@@ -192,16 +259,12 @@ try {
         var accent    = xeno ? '#00ff85' : '#FF9000';
         ctx.fillStyle = trailColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.font = fontSize + 'px "JetBrains Mono", monospace';
         for (var i = 0; i < cols; i++) {
           var ch = chars.charAt(Math.floor(Math.random() * chars.length));
           var x = i * fontSize;
           var y = drops[i] * fontSize;
           var c = (Math.random() < 0.02) ? accent : primary;
-          ctx.fillStyle = c;
-          ctx.shadowColor = c;
-          ctx.shadowBlur = 6;
-          ctx.fillText(ch, x, y);
+          ctx.drawImage(glyphSprite(ch, c), x - SPRITE_PAD, y - fontSize - SPRITE_PAD);
           if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
           drops[i] += 1;
         }
@@ -265,7 +328,7 @@ try {
     function resize() {
       canvas.width = host.offsetWidth;
       canvas.height = host.offsetHeight;
-      var count = Math.min(60, Math.floor(canvas.width / 28));
+      var count = Math.min(fxLite ? 32 : 60, Math.floor(canvas.width / (fxLite ? 52 : 28)));
       pts = [];
       for (var i = 0; i < count; i++) {
         pts.push({
@@ -278,22 +341,43 @@ try {
       }
     }
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', fxDebounce(resize, 150));
 
+    // Same trick as the matrix rain: the glowing dot is pre-rendered once per
+    // radius bucket instead of paying a shadowBlur per particle per frame.
+    var DOT_PAD = 10;
+    var dotSprites = {};
+    function dotSprite(r) {
+      var key = Math.round(r * 4) / 4;
+      var s = dotSprites[key];
+      if (!s) {
+        var size = Math.ceil((key + DOT_PAD) * 2);
+        s = document.createElement('canvas');
+        s.width = s.height = size;
+        var sc = s.getContext('2d');
+        sc.beginPath();
+        sc.arc(size / 2, size / 2, key, 0, Math.PI * 2);
+        sc.fillStyle = 'rgba(0, 229, 255, 0.55)';
+        sc.shadowColor = '#00e5ff';
+        sc.shadowBlur = 8;
+        sc.fill();
+        dotSprites[key] = s;
+      }
+      return s;
+    }
+
+    var liteApplied = false;
     function draw() {
       if (!visible || document.visibilityState !== 'visible') { requestAnimationFrame(draw); return; }
+      if (fxLite && !liteApplied) { liteApplied = true; resize(); }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (var i = 0; i < pts.length; i++) {
         var p = pts[i];
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 229, 255, 0.55)';
-        ctx.shadowColor = '#00e5ff';
-        ctx.shadowBlur = 8;
-        ctx.fill();
+        var s = dotSprite(p.r);
+        ctx.drawImage(s, p.x - s.width / 2, p.y - s.height / 2);
       }
       for (var a = 0; a < pts.length; a++) {
         for (var b = a + 1; b < pts.length; b++) {
@@ -302,7 +386,6 @@ try {
           if (d2 < 14000) {
             ctx.strokeStyle = 'rgba(0, 229, 255,' + (0.18 * (1 - d2 / 14000)) + ')';
             ctx.lineWidth = 0.6;
-            ctx.shadowBlur = 0;
             ctx.beginPath();
             ctx.moveTo(pts[a].x, pts[a].y);
             ctx.lineTo(pts[b].x, pts[b].y);
@@ -400,13 +483,27 @@ try {
     var targets = document.querySelectorAll('.fh5co-social-icons li a, #fh5co-started .btn, #fh5co-about .btn');
     targets.forEach(function (el) {
       el.classList.add('magnetic');
-      el.addEventListener('mousemove', function (e) {
-        var rect = el.getBoundingClientRect();
-        var dx = e.clientX - (rect.left + rect.width / 2);
-        var dy = e.clientY - (rect.top + rect.height / 2);
+      // Rect is cached on enter (pre-translate, so no feedback loop) and the
+      // write is rAF-batched — the old version forced a layout read + style
+      // write synchronously on every single mousemove event.
+      var rect = null, raf = 0, mx = 0, my = 0;
+      function apply() {
+        raf = 0;
+        if (!rect) rect = el.getBoundingClientRect();
+        var dx = mx - (rect.left + rect.width / 2);
+        var dy = my - (rect.top + rect.height / 2);
         el.style.transform = 'translate(' + (dx * 0.25) + 'px,' + (dy * 0.25) + 'px)';
+      }
+      el.addEventListener('mouseenter', function () { rect = el.getBoundingClientRect(); });
+      el.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        if (!raf) raf = requestAnimationFrame(apply);
       });
-      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+      el.addEventListener('mouseleave', function () {
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        rect = null;
+        el.style.transform = '';
+      });
     });
   })();
 
@@ -1131,31 +1228,11 @@ try {
     });
   })();
 
-  /* ---------- 3D mouse-tilt on cards ---------- */
-  (function tilt() {
-    if (isTouch || prefersReduced) return;
-    var sels = '.code-card, .svc-card, .exp-card, .skill-card';
-    document.querySelectorAll(sels).forEach(function (el) {
-      el.classList.add('tilt');
-      el.style.perspective = '900px';
-      var raf = null;
-      el.addEventListener('mousemove', function (e) {
-        if (raf) return;
-        raf = requestAnimationFrame(function () {
-          var r = el.getBoundingClientRect();
-          var px = (e.clientX - r.left) / r.width;
-          var py = (e.clientY - r.top) / r.height;
-          var ry = (px - 0.5) * 8;   // rotateY
-          var rx = (0.5 - py) * 6;   // rotateX
-          el.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateZ(0)';
-          raf = null;
-        });
-      });
-      el.addEventListener('mouseleave', function () {
-        el.style.transform = '';
-      });
-    });
-  })();
+  /* (Legacy mouse-tilt removed — cardTilt3d further down owns .code-card /
+     .svc-card / .exp-card / .skill-card now. Both systems were attached to
+     the same cards, each forcing a getBoundingClientRect + style write per
+     frame, and this one's inline transform was overriding the 3D system's
+     stylesheet transform anyway.) */
 
   /* ---------- Command palette ----------
    * Sectioned, fuzzy, alias-aware. Ingests the 95-entry FAQ from
