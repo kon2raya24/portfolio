@@ -10358,7 +10358,7 @@ html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
   letter-spacing: 1px !important;
   line-height: 1.7 !important;
 }
-:root.theme-arcade #fh5co-header h2 .role-tag { font-size: clamp(9px, 1.4vw, 12px) !important; line-height: 1.9 !important; }
+:root.theme-arcade #fh5co-header h2 .role-tag { font-size: clamp(10px, 1.5vw, 13px) !important; line-height: 2 !important; }
 :root.theme-arcade .fh5co-nav-links li a,
 :root.theme-arcade .terminal-tag,
 :root.theme-arcade .fh5co-heading::before {
@@ -10681,3 +10681,29 @@ html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
 :root.theme-arcade .boot-overlay { background: #0d0221 !important; }
 
 /* -- fx-lite / reduced-motion: nothing extra to pause — this pass is static -- */
+
+/* -- Readability polish (arcade) ------------------------------------------
+   Pixel faces are thinner per-pixel than antialiased type, so dim grays and
+   tiny sizes that worked in cyber drop below comfortable here. Floors:
+   body 18px VT323 at ~0.92 alpha, labels >= 9px Press Start, no per-char
+   wrapping, HUD capped so max-content sizing can't balloon it. */
+:root.theme-arcade .hud { width: 272px !important; }
+:root.theme-arcade .hud__label { color: rgba(255, 220, 120, 0.75) !important; }
+:root.theme-arcade .fh5co-nav-links li a { white-space: nowrap; }
+:root.theme-arcade p,
+:root.theme-arcade li,
+:root.theme-arcade blockquote {
+  font-size: 18px;
+  line-height: 1.55;
+  color: rgba(238, 240, 255, 0.92);
+}
+:root.theme-arcade .status-badge {
+  font-size: 9px !important;
+  line-height: 2 !important;
+  color: #fff !important;
+}
+:root.theme-arcade .footer-meta,
+:root.theme-arcade .footer-stamp {
+  color: rgba(230, 235, 255, 0.72) !important;
+  font-size: 16px;
+}

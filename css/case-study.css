@@ -2182,3 +2182,19 @@ html.is-scrolling .cs-heading3d { text-shadow: none; }
   outline: 3px solid #ffcc00 !important;
   outline-offset: 2px !important;
 }
+
+/* -- Readability polish (arcade): same floors as the index ---------------- */
+:root.theme-arcade p,
+:root.theme-arcade li,
+:root.theme-arcade blockquote {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(238, 240, 255, 0.92);
+}
+:root.theme-arcade .log-date,
+:root.theme-arcade .now-meta,
+:root.theme-arcade .cs-hero__tagline {
+  color: rgba(230, 235, 255, 0.78) !important;
+}
+:root.theme-arcade .log-summary { color: rgba(238, 240, 255, 0.9) !important; }
+:root.theme-arcade code { font-size: 17px; }
