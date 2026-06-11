@@ -10,8 +10,41 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Thu, 11 Jun 2026 21:30:00 +0800</lastBuildDate>
+  <lastBuildDate>Thu, 11 Jun 2026 23:30:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v6.0 — PLAYER FILE: the portfolio reimagined as a game menu</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-0</link>
+    <guid isPermaLink="false">portfolio-v6.0-2026-06-11</guid>
+    <pubDate>Thu, 11 Jun 2026 23:30:00 +0800</pubDate>
+    <category>feature</category>
+    <description><![CDATA[
+      A completely new UI fronts the portfolio: a full-viewport game-menu
+      shell in the language of a modern RPG pause screen. Persistent top HUD
+      (player tag, LV 6, exploration XP bar, live views, clock) and a menu
+      rail with seven screens — CHARACTER, QUEST LOG, CAREER LOG, SKILL TREE,
+      ABILITIES, TROPHY ROOM, COMMS. Same content, remapped: about becomes a
+      character sheet with lore, passive traits, and active buffs; the nine
+      case studies become rarity-coded quests (two LEGENDARY); experience
+      becomes six cleared acts plus a training arc; skills become tiered
+      skill bars; services become ability cards; projects become
+      gold/silver/bronze trophies; contact becomes a transmission console on
+      the same Netlify form. Skippable PRESS START title screen, keys 1–7 +
+      arrows, achievement toasts, chamfered panels, Orbitron/Rajdhani type —
+      deliberately distinct from the retro arcade skin and the playable
+      NIGHT SHIFT. The long-scroll terminal UI lives on at /classic.html,
+      old #fh5co-* deep links route to the matching screen, and a no-JS
+      fallback stacks every panel as a plain document. Polish pass shipped
+      the same day: quest briefing modals, item tooltips on the equipped
+      loadout, a CONTINUE save slot on the title screen, staggered card
+      entrances with direction-aware panel slides, scramble-decode titles,
+      pointer tilt on cards, a dispatcher NPC on the comms deck, a
+      7-achievement system with HUD counter, optional WebAudio UI sound
+      (muted by default), plasma/crimson/gold accent variants (Konami code
+      unlocks gold), and a game-console bottom tab bar on mobile.
+    ]]></description>
+  </item>
 
   <item>
     <title>v5.4 — Arcade is now the default theme, applied to every component</title>

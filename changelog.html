@@ -204,11 +204,31 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v5-4">
+    <li class="log-entry log-entry--latest" id="v6-0">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">6.0</span></span>
+        <span class="log-date">2026-06-11</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        <strong>PLAYER FILE</strong> &mdash; the portfolio reimagined as a game menu. A completely new UI fronts the site: RPG character screen, quest log, skill tree. Same content, different game. The classic UI lives on at <a href="classic.html" style="color:var(--cyan)">/classic.html</a>.
+      </p>
+      <ul>
+        <li>New index: a full-viewport <strong>game-menu shell</strong> &mdash; persistent top HUD (player tag, LV 6, exploration XP bar, live views, clock, ONLINE status) and a pause-menu rail with seven screens: CHARACTER, QUEST LOG, CAREER LOG, SKILL TREE, ABILITIES, TROPHY ROOM, COMMS.</li>
+        <li>Content remapped, not rewritten: about &rarr; character sheet with lore, passive traits, active buffs (~/.now.json) and codex; case studies &rarr; rarity-coded quests (the two &ldquo;start here&rdquo; entries are <strong>&#9733; LEGENDARY</strong>); experience &rarr; six cleared acts plus a training arc; skills &rarr; tiered skill bars with a tools inventory; services &rarr; ability cards; projects &rarr; gold/silver/bronze trophies; contact &rarr; transmission console (same Netlify form).</li>
+        <li>Game UX throughout: skippable PRESS START title screen (auto-skipped on deep links, repeat sessions, and reduced motion), keys <code>1&ndash;7</code> + arrow keys for navigation, achievement toasts (NEW GAME, 100% MAP EXPLORED, QUEST COMPLETE on form send), chamfered Destiny-style panels, Orbitron/Rajdhani type &mdash; deliberately distinct from both the retro <em>arcade</em> skin and the playable <a href="night-shift.html" style="color:var(--cyan)">NIGHT SHIFT</a>.</li>
+        <li>Old deep links keep working &mdash; <code>#fh5co-started</code> and friends route to the matching screen; legacy anchors map to panels.</li>
+        <li>Polish pass, same day: <strong>quest briefing modals</strong> (skim a case study in-place before deploying to the writeup), item tooltips on the equipped loadout, a <strong>CONTINUE</strong> save slot on the title screen (restores your last section), staggered card entrances + direction-aware panel slides, scramble-decode on section titles, pointer tilt on quest/trophy cards, and a dispatcher NPC line on the comms deck.</li>
+        <li>An <strong>achievements system</strong> (7 to find: First Boot, Cartographer, Legendary Hunter, Direct Line, First Contact, Any% Speedrun, God Mode) with a HUD counter and modal list; optional <strong>WebAudio UI sound</strong> (muted by default, ♪ toggle in the HUD, no audio files); three accent variants &mdash; plasma / crimson / gold &mdash; switchable from the footer (Konami code force-unlocks gold).</li>
+        <li>Mobile gets a <strong>game-console bottom tab bar</strong> (7 thumb-reachable slots with glyphs) instead of a scrolling rail; modal focus trap, roving tabindex on the menu rail, and keyboard-openable quest briefings round out the a11y pass. Composite-only animation budget (transform/opacity, no infinite box-shadow loops, no canvas), no-JS fallback stacks all panels as a plain document, and both UIs share the same view counter. The OG share card was regenerated from the new title screen. SW cache &rarr; <code>pf-v131</code>.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v5-4">
       <div class="log-head">
         <span class="log-version">v<span class="num">5.4</span></span>
         <span class="log-date">2026-06-11</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">theme</span>
       </div>
       <p class="log-summary">
         Arcade goes <strong>default</strong> &mdash; fresh visitors now land on the game cabinet, and the skin reaches every component: type, glow, texture, chrome.

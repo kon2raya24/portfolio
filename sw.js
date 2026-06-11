@@ -4,13 +4,18 @@
      - same-origin HTML pages: stale-while-revalidate (cap), falls back to cached index
      - cross-origin api calls (github/counterapi): network-only, no caching
 */
-const VERSION = 'pf-v126-2026-06-11';
+const VERSION = 'pf-v131-2026-06-11';
 const STATIC_CACHE = 'pf-static-' + VERSION;
 const PAGE_CACHE   = 'pf-pages-'  + VERSION;
 
 const STATIC_PRECACHE = [
   '/',
   '/index.html',
+  // PLAYER FILE — the game-menu UI that now fronts the portfolio (v6.0).
+  // The long-scroll terminal UI lives on at /classic.html.
+  '/css/player-file.css',
+  '/js/player-file.js',
+  '/classic.html',
   '/css/style.css',
   '/css/tech-fx.css',
   '/css/animate.css',
@@ -47,7 +52,25 @@ const STATIC_PRECACHE = [
   '/images/og-wms.png',
   '/images/og-llm-wiki.png',
   '/images/og-ph-dev-utils.png',
-  '/images/og-cover.png'
+  '/images/og-cover.png',
+  // NIGHT SHIFT — the interactive game front door (P1). ES-module game; the
+  // case-study pages above are its diegetic "archive" layer.
+  '/night-shift.html',
+  '/css/night-shift.css',
+  '/js/game/engine.js',
+  '/js/game/state.js',
+  '/js/game/geometry.js',
+  '/js/game/missions.data.js',
+  '/js/game/board.js',
+  '/js/game/mission.js',
+  '/js/game/schematics.js',
+  '/js/game/dispatcher.js',
+  '/js/game/report.js',
+  '/js/game/comms.js',
+  '/js/game/coldopen.js',
+  '/js/game/screens.js',
+  '/js/game/sound.js',
+  '/js/game/util.js'
 ];
 
 self.addEventListener('install', function (event) {
