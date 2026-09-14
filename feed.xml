@@ -29,7 +29,10 @@
       link names; each now carries a descriptive aria-label naming its case
       study, with the visible text unchanged. And robots.txt disallowed
       /resume.pdf while sitemap.xml advertised it at priority 0.8 — the resume
-      is now crawlable and /admin/ is disallowed instead. Menu rail sub-labels
+      is now crawlable and /admin/ is disallowed instead. The home page webfont
+      request also drops from 10 weights to 7 — 164KB to 111KB of latin
+      webfont and three fewer render-blocking requests — after checking each
+      dropped weight is never actually rendered. Menu rail sub-labels
       were also reworded for skimming: lore becomes about, 6 acts becomes work
       experience, tiers/loadout becomes tech stack/tools.
     ]]></description>
