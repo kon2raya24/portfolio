@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /resume.pdf$
+
+# /admin is also sent X-Robots-Tag: noindex via netlify.toml
+Disallow: /admin/
 
 Sitemap: https://kon2raya.netlify.app/sitemap.xml

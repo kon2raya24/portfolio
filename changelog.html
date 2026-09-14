@@ -204,11 +204,30 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v6-0">
+    <li class="log-entry log-entry--latest" id="v6-1">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">6.1</span></span>
+        <span class="log-date">2026-09-14</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+      </div>
+      <p class="log-summary">
+        <strong>Accessibility &amp; discoverability pass</strong> &mdash; the PLAYER FILE UI keeps its look, but
+        keyboard users can now see where they are, screen readers get real link names, and the crawl rules
+        stop fighting the sitemap. No visual change for mouse users.
+      </p>
+      <ul>
+        <li><strong style="color:#28c840;">+</strong> Keyboard <strong>focus ring</strong> across the player-file UI: links, buttons, the menu rail, form fields and the skip link now draw an explicit 2px plasma outline on <code>:focus-visible</code>. Previously these styled <code>:hover</code> only and fell back to the browser default outline, which is nearly invisible on the <code>#05070f</code> background (WCAG 2.4.7).</li>
+        <li><strong style="color:#28c840;">+</strong> The nine QUEST LOG call-to-actions all read <em>&ldquo;OPEN QUEST FILE&rdquo;</em> on screen, which gave screen-reader users nine identical link names with no way to tell them apart. Each now carries a descriptive <code>aria-label</code> naming its case study (WCAG 2.4.4). Visible text is unchanged.</li>
+        <li><strong style="color:var(--brand);">~</strong> <code>robots.txt</code> disallowed <code>/resume.pdf</code> while <code>sitemap.xml</code> advertised the same file at priority 0.8 &mdash; a contradiction that surfaces in Search Console as <em>&ldquo;sitemap contains URLs blocked by robots.txt&rdquo;</em>. The resume is now crawlable; <code>/admin/</code> is disallowed instead, matching the <code>X-Robots-Tag</code> already set in <code>netlify.toml</code>.</li>
+        <li><strong style="color:var(--cyan);">&middot;</strong> Menu rail sub-labels reworded for people skimming for the usual words: <em>lore</em> &rarr; <em>about</em>, <em>6 acts</em> &rarr; <em>work experience</em>, <em>tiers &middot; loadout</em> &rarr; <em>tech stack &middot; tools</em>. The screen names (CHARACTER, CAREER LOG, SKILL TREE) are untouched.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v6-0">
       <div class="log-head">
         <span class="log-version">v<span class="num">6.0</span></span>
         <span class="log-date">2026-06-11</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag log-tag--major">major redesign</span>
       </div>
       <p class="log-summary">
         <strong>PLAYER FILE</strong> &mdash; the portfolio reimagined as a game menu. A completely new UI fronts the site: RPG character screen, quest log, skill tree. Same content, different game. The classic UI lives on at <a href="classic.html" style="color:var(--cyan)">/classic.html</a>.

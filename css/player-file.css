@@ -1235,3 +1235,41 @@
 		transition-duration: 0.01ms !important;
 	}
 }
+
+/* --- Keyboard focus ring -------------------------------------------------
+   The theme styles :hover on every control but relied on the UA default
+   outline for :focus, which is low-contrast against #05070f. Give keyboard
+   users an explicit, theme-matching ring. Mouse users are unaffected
+   (:focus-visible only fires for keyboard/AT interaction). */
+.pf a:focus-visible,
+.pf button:focus-visible,
+.pf [tabindex]:focus-visible,
+.pf input:focus-visible,
+.pf select:focus-visible,
+.pf textarea:focus-visible {
+	outline: 2px solid var(--pf-plasma);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+/* The rail is a tablist with roving tabindex — only the active tab is
+   reachable, so its ring has to read clearly against the active gradient. */
+.pf .pf-rail__item:focus-visible {
+	outline: 2px solid var(--pf-plasma);
+	outline-offset: -2px;
+	background: rgba(255, 210, 61, 0.10);
+}
+
+/* Form fields set outline:none and signal focus with border-color alone;
+   pair that with the ring so the state is not colour-only (WCAG 1.4.1). */
+.pf .pf-form input:focus-visible,
+.pf .pf-form select:focus-visible,
+.pf .pf-form textarea:focus-visible {
+	outline-offset: 1px;
+}
+
+/* Skip link already moves into view on :focus — keep it ringed too. */
+.pf .pf-skip:focus-visible {
+	outline: 2px solid var(--pf-plasma);
+	outline-offset: 3px;
+}

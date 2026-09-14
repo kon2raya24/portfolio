@@ -10,8 +10,30 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Thu, 11 Jun 2026 23:30:00 +0800</lastBuildDate>
+  <lastBuildDate>Mon, 14 Sep 2026 20:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v6.1 — Accessibility &amp; discoverability pass</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-1</link>
+    <guid isPermaLink="false">portfolio-v6.1-2026-09-14</guid>
+    <pubDate>Mon, 14 Sep 2026 20:00:00 +0800</pubDate>
+    <category>accessibility</category>
+    <description><![CDATA[
+      The PLAYER FILE UI keeps its look, but three things that quietly cost it
+      are fixed. Keyboard users now get an explicit 2px focus ring on links,
+      buttons, the menu rail, form fields and the skip link — these styled
+      :hover only and fell back to a browser default outline that is nearly
+      invisible on the #05070f background. The nine QUEST LOG call-to-actions
+      all read "OPEN QUEST FILE", so screen-reader users heard nine identical
+      link names; each now carries a descriptive aria-label naming its case
+      study, with the visible text unchanged. And robots.txt disallowed
+      /resume.pdf while sitemap.xml advertised it at priority 0.8 — the resume
+      is now crawlable and /admin/ is disallowed instead. Menu rail sub-labels
+      were also reworded for skimming: lore becomes about, 6 acts becomes work
+      experience, tiers/loadout becomes tech stack/tools.
+    ]]></description>
+  </item>
 
   <item>
     <title>v6.0 — PLAYER FILE: the portfolio reimagined as a game menu</title>
