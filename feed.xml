@@ -10,8 +10,24 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Mon, 14 Sep 2026 20:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Fri, 25 Sep 2026 17:30:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v6.2 — New prototype: Isang Tira</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-2</link>
+    <guid isPermaLink="false">portfolio-v6.2-2026-09-25</guid>
+    <pubDate>Fri, 25 Sep 2026 17:30:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Isang Tira, a daily Sungka puzzle in early design, joins the TROPHY ROOM
+      as a silver (prototype) trophy and the classic site's project grid. The
+      trophy links to the live browser playtest: ten one-turn Sungka boards
+      with animated sowing, a par for each board proven by an exact solver,
+      and results that testers copy back as text. The service-worker cache is
+      bumped so returning visitors see the new cards.
+    ]]></description>
+  </item>
 
   <item>
     <title>v6.1 — Accessibility &amp; discoverability pass</title>
