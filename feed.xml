@@ -10,8 +10,24 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Fri, 25 Sep 2026 17:30:00 +0800</lastBuildDate>
+  <lastBuildDate>Mon, 28 Sep 2026 10:30:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v6.3 — New game: Huling Byahe</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-3</link>
+    <guid isPermaLink="false">portfolio-v6.3-2026-09-28</guid>
+    <pubDate>Mon, 28 Sep 2026 10:30:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Huling Byahe (The Last Trip), a browser arcade story game, joins the
+      TROPHY ROOM as a gold (live) trophy and the classic site's project grid.
+      You drive the last jeepney of the night through Manila; your passengers
+      are ghosts, and each one has somewhere to be before sunrise. Seven
+      nights, five ghosts, canvas drawing and synthesized sound. The
+      service-worker cache is bumped so returning visitors see the new cards.
+    ]]></description>
+  </item>
 
   <item>
     <title>v6.2 — New prototype: Isang Tira</title>
