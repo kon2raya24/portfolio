@@ -10,8 +10,23 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Mon, 28 Sep 2026 10:30:00 +0800</lastBuildDate>
+  <lastBuildDate>Mon, 28 Sep 2026 16:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v6.4 — New game: Ahas sa Fiesta</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-4</link>
+    <guid isPermaLink="false">portfolio-v6.4-2026-09-28</guid>
+    <pubDate>Mon, 28 Sep 2026 16:00:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Ahas sa Fiesta, classic snake at a Pinoy fiesta, joins the TROPHY ROOM
+      as a gold (live) trophy and the classic site's project grid: street food
+      on a woven banig, a snake in a salakot, and tinikling poles to dodge.
+      Huling Byahe also gets v1.1 with gas, barya, near-miss combos, sakto
+      stops and stars. The service-worker cache is bumped.
+    ]]></description>
+  </item>
 
   <item>
     <title>v6.3 — New game: Huling Byahe</title>
