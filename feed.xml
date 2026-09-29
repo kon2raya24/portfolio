@@ -10,9 +10,23 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Tue, 29 Sep 2026 11:30:00 +0800</lastBuildDate>
+  <lastBuildDate>Tue, 29 Sep 2026 14:30:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v6.6 — New: Tumbang Preso and Bakbakan sa Kanto, in 3D</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-6</link>
+    <guid isPermaLink="false">portfolio-v6.6-2026-09-29</guid>
+    <pubDate>Tue, 29 Sep 2026 14:30:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Two games in 3D join the TROPHY ROOM, both built with Three.js and playable
+      with a controller. Tumbang Preso is the Filipino street game in first person.
+      Bakbakan sa Kanto is a Pinoy street fighter: arnis, sikaran, a tanod and a
+      balut vendor, with the Kapre as the boss. The service-worker cache is bumped
+      to pf-v140.
+    ]]></description>
+  </item>
   <item>
     <title>v6.5 — New: Tambayan Arcade and five more games</title>
     <link>https://kon2raya.netlify.app/changelog.html#v6-5</link>
