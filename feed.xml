@@ -10,9 +10,21 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Tue, 06 Oct 2026 17:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Wed, 07 Oct 2026 14:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v6.8 — New: Lipat-Bahay, a family moves house in 3D</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-8</link>
+    <guid isPermaLink="false">portfolio-v6.8-2026-10-07</guid>
+    <pubDate>Wed, 07 Oct 2026 14:00:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Lipat-Bahay joins the TROPHY ROOM: a story-driven 3D pushing puzzle about a Filipino family moving house,
+      where each member pushes with their own strength and lined-up people push together. 36 rooms in 6 chapters,
+      endless and daily modes made by a room generator, a room editor with share links, and two-player co-op.
+    ]]></description>
+  </item>
   <item>
     <title>v6.7 — Hollow Blocks in English, live on itch.io</title>
     <link>https://kon2raya.netlify.app/changelog.html#v6-7</link>
