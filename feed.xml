@@ -10,9 +10,21 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Wed, 07 Oct 2026 14:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Fri, 09 Oct 2026 08:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v6.9 — New: Kakanin Crush, a 3D match-3 of Filipino rice cakes</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v6-9</link>
+    <guid isPermaLink="false">portfolio-v6.9-2026-10-09</guid>
+    <pubDate>Fri, 09 Oct 2026 08:00:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Kakanin Crush joins the TROPHY ROOM: a 3D match-3 of puto, kutsinta, sapin-sapin, bibingka, ube and suman on
+      Lola Pacing's bilao. 45 levels in 3 towns, each with its own scene, blockers and Lola's ingredients, boosters
+      earned with stars, and difficulty tuned by a human-like bot.
+    ]]></description>
+  </item>
   <item>
     <title>v6.8 — New: Lipat-Bahay, a family moves house in 3D</title>
     <link>https://kon2raya.netlify.app/changelog.html#v6-8</link>
