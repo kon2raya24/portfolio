@@ -10,9 +10,21 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Fri, 09 Oct 2026 08:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Mon, 12 Oct 2026 18:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v7.0 — New front page: a modern, single-scroll redesign</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v7-0</link>
+    <guid isPermaLink="false">portfolio-v7.0-2026-10-12</guid>
+    <pubDate>Mon, 12 Oct 2026 18:00:00 +0800</pubDate>
+    <category>major-redesign</category>
+    <description><![CDATA[
+      The RPG Player File menu is retired for a single scrolling page in an engineered, terminal-grid style. Sticky nav,
+      a Cmd/Ctrl+K assistant, a projects filter, quick recruiter answers by the contact form, and the same case studies,
+      experience and live GitHub activity. Old #fh5co-* and Player File links still land on the right section.
+    ]]></description>
+  </item>
   <item>
     <title>v6.9 — New: Kakanin Crush, a 3D match-3 of Filipino rice cakes</title>
     <link>https://kon2raya.netlify.app/changelog.html#v6-9</link>

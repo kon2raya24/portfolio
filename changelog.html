@@ -204,11 +204,34 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v6-9">
+    <li class="log-entry log-entry--latest" id="v7-0">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">7.0</span></span>
+        <span class="log-date">2026-10-12</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag log-tag--major">major redesign</span>
+      </div>
+      <p class="log-summary">
+        <strong>New front page</strong> &mdash; the RPG &ldquo;Player File&rdquo; menu is retired for a single scrolling page
+        in an engineered, terminal-grid style: one green accent, Inter for reading, JetBrains Mono for labels. Same content,
+        reachable in one scroll with no boot screen or tabs in the way.
+      </p>
+      <ul>
+        <li><strong style="color:#28c840;">+</strong> <strong>Sticky nav</strong> with section links, a resume download and <code>&#8984;K ask</code>, which opens the FAQ assistant (also on <kbd>&#8984;K</kbd> / <kbd>Ctrl+K</kbd>).</li>
+        <li><strong style="color:#28c840;">+</strong> <strong>Projects filter</strong>: all &middot; live &middot; games &middot; prototype &middot; archive. A live game shows under both.</li>
+        <li><strong style="color:#28c840;">+</strong> <strong>Quick answers</strong> for recruiters (notice period, rates, remote, visa) next to the contact form, and local Manila time in the status line.</li>
+        <li><strong style="color:var(--brand);">~</strong> The name and headline are now the page&rsquo;s visible <code>&lt;h1&gt;</code>; every text colour passes WCAG AA; all content still reads with JavaScript off.</li>
+        <li><strong style="color:var(--brand);">~</strong> Old links keep working: <code>#fh5co-*</code> anchors from case studies and the old Player File tabs (<code>#quests</code>, <code>#comms</code>&hellip;) jump to the matching new section.</li>
+        <li><strong style="color:#ff5f57;">&minus;</strong> Retired the game layer: boot screen, LV/XP, achievements, Konami code, UI sound and accent picker. <code>player-file.css</code> and <code>player-file.js</code> are deleted; live GitHub activity, views and patch notes carry over.</li>
+        <li><strong style="color:var(--brand);">~</strong> Service-worker cache bumped to <code>pf-v147</code> so returning visitors get the new page.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v6-9">
       <div class="log-head">
         <span class="log-version">v<span class="num">6.9</span></span>
         <span class="log-date">2026-10-09</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">project</span>
       </div>
       <p class="log-summary">
         <strong>New: Kakanin Crush</strong> &mdash; a 3D match-3 of Filipino rice cakes: puto, kutsinta, sapin-sapin,

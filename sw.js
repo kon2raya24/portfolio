@@ -4,17 +4,17 @@
      - same-origin HTML pages: stale-while-revalidate (cap), falls back to cached index
      - cross-origin api calls (github/counterapi): network-only, no caching
 */
-const VERSION = 'pf-v146-2026-10-09';
+const VERSION = 'pf-v147-2026-10-12';
 const STATIC_CACHE = 'pf-static-' + VERSION;
 const PAGE_CACHE   = 'pf-pages-'  + VERSION;
 
 const STATIC_PRECACHE = [
   '/',
   '/index.html',
-  // PLAYER FILE — the game-menu UI that now fronts the portfolio (v6.0).
-  // The long-scroll terminal UI lives on at /classic.html.
-  '/css/player-file.css',
-  '/js/player-file.js',
+  // Front page (v7.0) — site.css/site.js; the Ask widget (portfolio-chat.*)
+  // is precached below. The long-scroll terminal UI lives on at /classic.html.
+  '/css/site.css',
+  '/js/site.js',
   '/classic.html',
   '/css/style.css',
   '/css/tech-fx.css',

@@ -96,7 +96,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="preconnect" href="https://api.counterapi.dev" crossorigin>
 	<link rel="dns-prefetch" href="https://api.github.com">
-	<link href="https://fonts.googleapis.com/css?family=Orbitron:700,900|Rajdhani:500,600,700|JetBrains+Mono:400,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="icon" href="images/logo.png" type="image/x-icon">
 	<link rel="apple-touch-icon" href="images/logo.png">
 	<link rel="manifest" href="manifest.json">
@@ -105,392 +105,237 @@
 
 	<link rel="preload" as="image" href="images/1615352107595.jpg">
 
-	<!-- Player File — game-menu UI layer -->
-	<link rel="stylesheet" href="css/player-file.css">
-
-	<!-- No-JS fallback: hide the boot screen + menu rail, stack every panel so
-	     all content is reachable as a plain document. -->
-	<noscript>
-		<style>
-			body { overflow: auto !important; }
-			.pf-boot { display: none !important; }
-			.pf-rail, .pf-hud__clock, [data-views-wrap] { display: none !important; }
-			.pf-panel { display: block !important; }
-			.pf-panel[hidden] { display: block !important; }
-			.pf-stage { overflow: visible !important; }
-			.pf-shell { display: block !important; height: auto !important; }
-		</style>
-	</noscript>
+	<link rel="stylesheet" href="css/portfolio-chat.css">
+	<link rel="stylesheet" href="css/site.css">
+	<script>document.documentElement.classList.add('js');</script>
 </head>
 
 <body>
 
-	<a class="pf-skip" href="#character">Skip to content</a>
+	<a class="skip" href="#main">Skip to content</a>
 
-	<!-- Semantic H1 for SEO. The visible game heading is "CHARACTER", so the real
-	     name + role lives here as the single crawler/screen-reader-visible H1. -->
-	<h1 class="pf-sr-only">Lemmuel Turaya — Full-Stack &amp; Mobile App Developer</h1>
-
-	<!-- ============================ TITLE SCREEN ============================ -->
-	<div class="pf-boot" data-boot>
-		<div class="pf-boot__grid" aria-hidden="true"></div>
-		<div class="pf-boot__inner">
-			<div class="pf-boot__sys">KON2RAYA SYSTEMS &middot; PLAYER FILE v6.0 &middot; EST. 2019</div>
-			<div class="pf-boot__name" aria-hidden="true">LEMMUEL<br>TURAYA</div>
-			<div class="pf-boot__class">&lt;FULL-STACK &amp; MOBILE DEV /&gt; &mdash; 8 shipped case studies &middot; AI-assisted delivery</div>
-			<button type="button" class="pf-boot__start" data-boot-start autofocus>&#9654; PRESS START</button>
-			<button type="button" class="pf-boot__continue" data-boot-continue hidden></button>
-			<div class="pf-boot__hint">enter / space / click &mdash; loads player file</div>
+	<!-- ============================ NAV ============================ -->
+	<header class="nav" data-nav>
+		<div class="nav__inner wrap">
+			<a class="nav__logo" href="#top">~/lemmuel-turaya</a>
+			<button type="button" class="nav__toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-links">menu</button>
+			<nav class="nav__links" id="nav-links" aria-label="Sections">
+				<a href="#work">work</a>
+				<a href="#experience">experience</a>
+				<a href="#stack">stack</a>
+				<a href="#services">services</a>
+				<a href="#projects">projects</a>
+				<a href="#contact">contact</a>
+				<button type="button" class="nav__ask" data-ask aria-label="Ask a question about Lemmuel (Ctrl+K)"><kbd>&#8984;K</kbd> ask</button>
+				<a class="nav__resume" href="resume.pdf" download>resume.pdf &darr;</a>
+			</nav>
 		</div>
-	</div>
+	</header>
 
-	<!-- ============================ GAME SHELL ============================ -->
-	<div class="pf-shell" data-shell>
+	<main id="main">
 
-		<!-- ===== TOP HUD ===== -->
-		<header class="pf-hud" role="banner">
-			<div class="pf-hud__player">
-				<span class="pf-hud__avatar" style="background-image:url(images/1615352107595.jpg)" role="img" aria-label="Portrait of Lemmuel Turaya"></span>
-				<span class="pf-hud__id">
-					<strong>LEMMUEL TURAYA</strong>
-					<span>FULL-STACK &amp; MOBILE DEV</span>
-				</span>
+		<!-- ============================ HERO ============================ -->
+		<section class="hero wrap" id="top">
+			<div class="hero__text">
+				<p class="hero__status"><span class="dot" aria-hidden="true"></span>$ whoami &rarr; status: open_to_work &middot; tz: GMT+8<span class="hero__clock" data-clock hidden></span> &middot; remote / hybrid / onsite</p>
+				<h1><span class="hero__name">Lemmuel Turaya</span> Full-stack &amp; mobile developer shipping with AI.</h1>
+				<p class="hero__sub">Vue.js, Laravel and Flutter in production for 6+ years across logistics, real estate, HR and marketing. Claude-assisted, review-gated delivery &mdash; based in Bi&ntilde;an, Laguna, Philippines.</p>
+				<div class="hero__cta">
+					<a class="btn btn--primary" href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer">book_call()</a>
+					<a class="btn" href="resume.pdf" download>resume.pdf &darr;</a>
+					<a class="btn" href="#contact">send_message()</a>
+				</div>
 			</div>
-			<div class="pf-hud__level" aria-label="Exploration progress">
-				<span class="pf-hud__lv">LV&nbsp;6</span>
-				<span class="pf-xpbar" aria-hidden="true"><span class="pf-xpbar__fill" data-xp style="width:14%"></span></span>
-				<span class="pf-hud__xplabel">MAP&nbsp;<span data-explored>1</span>/7</span>
-			</div>
-			<div class="pf-hud__right">
-				<span class="pf-hud__stat" data-views-wrap>VIEWS&nbsp;<strong data-views>&mdash;</strong></span>
-				<span class="pf-hud__clock" data-clock>--:--:--</span>
-				<span class="pf-hud__status"><i class="pf-hud__dot" aria-hidden="true"></i>ONLINE &middot; OPEN TO WORK</span>
-				<button type="button" class="pf-hud__mode" data-ach-open title="Achievements">&#9819;&nbsp;<span data-ach-count>0/7</span></button>
-				<button type="button" class="pf-hud__mode" data-snd title="Toggle UI sound" aria-pressed="false">&#9834;&nbsp;<span data-snd-label>OFF</span></button>
-			</div>
-		</header>
+			<img class="hero__photo" src="images/1615352107595.jpg" alt="Lemmuel Turaya" width="220" height="220">
+			<ul class="stats">
+				<li><strong>6+</strong><span>years shipping</span></li>
+				<li><strong>40+</strong><span>projects</span></li>
+				<li><strong>9</strong><span>case studies</span></li>
+				<li><strong>108</strong><span>app releases</span></li>
+			</ul>
+		</section>
 
-		<!-- ===== MENU RAIL ===== -->
-		<nav class="pf-rail" role="tablist" aria-label="Player file sections" data-rail>
-			<button type="button" class="pf-rail__item is-active" role="tab" aria-selected="true" aria-controls="character" data-tab="character">
-				<span class="pf-rail__hint">1</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#9672;</span>
-				<span class="pf-rail__txt"><strong>CHARACTER</strong><span>about &middot; profile &middot; stats</span></span>
-			</button>
-			<button type="button" class="pf-rail__item" role="tab" aria-selected="false" aria-controls="quests" data-tab="quests">
-				<span class="pf-rail__hint">2</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#9873;&#xFE0E;</span>
-				<span class="pf-rail__txt"><strong>QUEST LOG</strong><span>9 case studies</span></span>
-			</button>
-			<button type="button" class="pf-rail__item" role="tab" aria-selected="false" aria-controls="career" data-tab="career">
-				<span class="pf-rail__hint">3</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#8803;</span>
-				<span class="pf-rail__txt"><strong>CAREER LOG</strong><span>work experience &middot; 2019 &rarr; now</span></span>
-			</button>
-			<button type="button" class="pf-rail__item" role="tab" aria-selected="false" aria-controls="skills" data-tab="skills">
-				<span class="pf-rail__hint">4</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#10022;</span>
-				<span class="pf-rail__txt"><strong>SKILL TREE</strong><span>tech stack &middot; tools</span></span>
-			</button>
-			<button type="button" class="pf-rail__item" role="tab" aria-selected="false" aria-controls="abilities" data-tab="abilities">
-				<span class="pf-rail__hint">5</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#9881;&#xFE0E;</span>
-				<span class="pf-rail__txt"><strong>ABILITIES</strong><span>11 things I build</span></span>
-			</button>
-			<button type="button" class="pf-rail__item" role="tab" aria-selected="false" aria-controls="archives" data-tab="archives">
-				<span class="pf-rail__hint">6</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#9819;</span>
-				<span class="pf-rail__txt"><strong>TROPHY ROOM</strong><span>shipped work</span></span>
-			</button>
-			<button type="button" class="pf-rail__item pf-rail__item--cta" role="tab" aria-selected="false" aria-controls="comms" data-tab="comms">
-				<span class="pf-rail__hint">7</span><span class="pf-rail__cursor" aria-hidden="true">&#9656;</span>
-				<span class="pf-rail__glyph" aria-hidden="true">&#9993;&#xFE0E;</span>
-				<span class="pf-rail__txt"><strong>COMMS</strong><span>hire me &middot; contact</span></span>
-			</button>
-		</nav>
-
-		<!-- ===== STAGE ===== -->
-		<main class="pf-stage" role="main" data-stage>
-
-			<!-- ============ 1 · CHARACTER ============ -->
-			<section class="pf-panel is-active" id="character" role="tabpanel" aria-label="Character" data-panel>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">CHARACTER<span class="pf-panel__title-sub">// player profile</span></h2>
-					<p class="pf-panel__flavor">&gt; ./init_developer.sh &mdash; open to remote opportunities &middot; shipping production software with AI-assisted workflows</p>
-				</header>
-
-				<div class="pf-char">
-					<!-- Portrait + vitals -->
-					<div class="pf-char__card pf-cut">
-						<div class="pf-char__portrait">
-							<span class="pf-char__frame" aria-hidden="true"></span>
-							<img src="images/1615352107595.jpg" alt="Lemmuel Turaya" width="220" height="220">
-							<span class="pf-char__lv">LV&nbsp;6</span>
-						</div>
-						<h2 class="pf-char__name">Lemmuel Turaya</h2>
-						<div class="pf-char__class">&lt;Full-Stack &amp; Mobile Dev /&gt;</div>
-						<div class="pf-char__faction"><i class="pf-hud__dot" aria-hidden="true"></i> Open to remote opportunities</div>
-						<div class="pf-char__equipped">
-							<div class="pf-kicker">// equipped loadout</div>
-							<span class="pf-chip" tabindex="0" data-tip="PRIMARY WEAPON &middot; SPA framework of choice — component libraries, admin panels, dashboards">Vue.js</span>
-							<span class="pf-chip" tabindex="0" data-tip="PRIMARY WEAPON &middot; back-end of choice — clean domain models, REST APIs, queues">Laravel</span>
-							<span class="pf-chip" tabindex="0" data-tip="STRONG &middot; current main quest — the WMS mobile app, 108 releases shipped">Flutter</span>
-							<span class="pf-chip pf-chip--ai" tabindex="0" data-tip="LEGENDARY ITEM &middot; AI pair-programmer — prototyping, refactors, review">Claude AI</span>
-							<span class="pf-chip pf-chip--ai" tabindex="0" data-tip="PASSIVE SKILL &middot; AI-assisted delivery with code review, tests, and judgment kept in the loop">Vibe Coding</span>
-						</div>
-						<div class="pf-char__cta">
-							<a class="pf-btn pf-btn--primary" href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer">&#9654; book a 15-min intro call</a>
-							<a class="pf-btn" href="resume.pdf" download>&#8681; download resume</a>
-							<button type="button" class="pf-btn" data-tab-link="comms">&#9993; send a quick message</button>
-						</div>
-						<ul class="pf-char__social" aria-label="Social links">
-							<li><a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer">GITHUB</a></li>
-							<li><a href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
-							<li><a href="https://www.instagram.com/kon2raya/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
-							<li><a href="https://www.facebook.com/lemmuel.turaya" target="_blank" rel="noopener noreferrer">FACEBOOK</a></li>
-							<li><a href="https://www.deviantart.com/lemmuelturaya" target="_blank" rel="noopener noreferrer">DEVIANTART</a></li>
-						</ul>
-					</div>
-
-					<div class="pf-char__main">
-						<!-- Base stats -->
-						<div class="pf-stats">
-							<div class="pf-stat pf-cut"><strong data-count="6" data-suffix="+">6+</strong><span>YEARS SHIPPING</span></div>
-							<div class="pf-stat pf-cut"><strong data-count="40" data-suffix="+">40+</strong><span>PROJECTS</span></div>
-							<div class="pf-stat pf-cut"><strong data-count="9">9</strong><span>CASE STUDIES</span></div>
-							<a class="pf-stat pf-stat--linked pf-cut" href="case-studies/ai-engineer.html" title="Karpathy-style AI-augmented engineering — see the AI engineer + LLM-wiki case studies"><strong data-count="1">1</strong><span>AI-AUGMENTED DEV<em>(Karpathy-style)</em></span></a>
-						</div>
-
-						<!-- Lore / bio -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// lore</span><h3>Engineer &middot; Builder &middot; Problem-solver</h3></div>
-							<p class="pf-lead">
-								Full-stack developer with <strong>6+ years</strong> shipping production web and
-								mobile applications across logistics, real estate, marketing, and education.
-								I specialize in <strong>Vue.js</strong> and <strong>Laravel</strong> on the web,
-								<strong>Flutter</strong> on mobile, and clean REST API design to tie systems together.
-							</p>
-							<p>
-								I work end-to-end &mdash; from requirements and architecture through implementation,
-								testing, and deployment &mdash; and pair daily with <strong>Claude AI</strong> to
-								accelerate delivery without sacrificing code quality.
-							</p>
-							<div class="pf-kicker" style="margin-top:14px">// passive traits</div>
-							<ul class="pf-traits">
-								<li><span aria-hidden="true">&#10003;</span> Owns features end-to-end, web and mobile</li>
-								<li><span aria-hidden="true">&#10003;</span> Bias for shipping with engineering discipline</li>
-								<li><span aria-hidden="true">&#10003;</span> Strong UX and API design instincts</li>
-								<li><span aria-hidden="true">&#10003;</span> Leaves the codebase healthier than found</li>
-							</ul>
-						</div>
-
-						<!-- Player data -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// player data</span><h3>profile.config</h3><span class="pf-badge pf-badge--live">AVAILABLE</span></div>
-							<dl class="pf-kv">
-								<div><dt>name</dt><dd>"Lemmuel Turaya"</dd></div>
-								<div><dt>role</dt><dd>"Full-Stack &amp; Mobile App Developer"</dd></div>
-								<div><dt>email</dt><dd><a href="mailto:turayalemmuel@gmail.com">"turayalemmuel@gmail.com"</a> <button type="button" class="pf-copy" data-copy="turayalemmuel@gmail.com" aria-label="copy email">copy</button></dd></div>
-								<div><dt>phone</dt><dd><a href="tel:+639227786152">"+63 922 778 6152"</a></dd></div>
-								<div><dt>website</dt><dd><a href="https://kon2raya.netlify.app" target="_blank" rel="noopener noreferrer">"kon2raya.netlify.app"</a></dd></div>
-								<div><dt>location</dt><dd>"Bi&ntilde;an, Laguna &middot; Philippines"</dd></div>
-								<div><dt>timezone</dt><dd>"GMT+8 &middot; PHT"</dd></div>
-								<div><dt>availability</dt><dd>"remote &middot; hybrid &middot; onsite"</dd></div>
-								<div><dt>languages</dt><dd>["English", "Filipino"]</dd></div>
-							</dl>
-						</div>
-
-						<!-- Active buffs (now.json) -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// active buffs</span><h3>~/.now.json</h3><span class="pf-badge pf-badge--live">LIVE</span></div>
-							<dl class="pf-kv">
-								<div><dt>currentlyShipping</dt><dd>"WMS mobile app &middot; Flutter"</dd></div>
-								<div><dt>currentlyReading</dt><dd>"Designing Data-Intensive Applications"</dd></div>
-								<div><dt>currentlyLearning</dt><dd>"n8n agents &middot; Claude tool-use"</dd></div>
-								<div><dt>currentSideQuest</dt><dd>"refining this portfolio"</dd></div>
-								<div><dt>openTo</dt><dd>["full-time", "contract", "freelance"]</dd></div>
-								<div><dt>vibeCheck</dt><dd>"focused &middot; curious &middot; shipping"</dd></div>
-								<div><dt>lastUpdated</dt><dd>"2026-05-13"</dd></div>
-							</dl>
-						</div>
-
-						<!-- GitHub activity (live, cached) — proof of work -->
-						<div class="pf-card pf-cut pf-gh">
-							<div class="pf-card__head"><span class="pf-kicker">// proof of work</span><h3>~/github/activity</h3><span class="pf-badge pf-badge--live">LIVE</span></div>
-							<div class="commit-graph-label pf-gh__label">// last 6 months &middot; contribution heatmap</div>
-							<div class="commit-graph" data-commit-graph aria-hidden="true"></div>
-
-							<div class="pf-gh__sub"><span class="pf-kicker">// recent activity &middot; @kon2raya24</span></div>
-							<ul class="px-repos" data-recent-repos>
-								<li class="px-repos__loading">$ fetching latest commits&hellip;</li>
-							</ul>
-							<div class="px-repos__foot"><a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer">view all repos on GitHub &rarr;</a></div>
-						</div>
-
-						<!-- Codex (principles) -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// codex</span><h3>engineering principles</h3></div>
-							<ol class="pf-codex">
-								<li><span>01</span>Ship the smallest useful version, then iterate.</li>
-								<li><span>02</span>Readable code beats clever code &mdash; future-you is grateful.</li>
-								<li><span>03</span>Test the hard parts. Mock the boundaries, not the logic.</li>
-								<li><span>04</span>Leave the codebase healthier than you found it.</li>
-								<li><span>05</span>Strong opinions, weakly held &mdash; listen, then choose.</li>
-								<li><span>06</span>Logs and types pay rent every single day.</li>
-							</ol>
-						</div>
-
-						<!-- Dialogue / FAQ -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// dialogue options</span><h3>engagement Q&amp;A</h3></div>
-							<ul class="pf-faq">
-								<li><details>
-									<summary>Q. Notice period &amp; earliest start?</summary>
-									<p>30-day notice from current role. Available for a serious offer within ~30&ndash;45 days of signing.</p>
-								</details></li>
-								<li><details>
-									<summary>Q. Salary range / day rate?</summary>
-									<p>Negotiable based on scope and engagement type. Happy to share specifics on a call once the role is clear.</p>
-								</details></li>
-								<li><details>
-									<summary>Q. Remote, hybrid, or onsite?</summary>
-									<p>All three open. Strong async-collaboration habits; based in Bi&ntilde;an (GMT+8) with good overlap to APAC, EU mornings, and US evenings.</p>
-								</details></li>
-								<li><details>
-									<summary>Q. Contract or full-time?</summary>
-									<p>Either &mdash; tell me what you need. Currently full-time at AAI; open to contract on the side or a full move for the right role.</p>
-								</details></li>
-								<li><details>
-									<summary>Q. Visa / work eligibility?</summary>
-									<p>Philippine citizen. Work-from-PH or contract globally without sponsorship. Sponsorship needed for onsite outside PH.</p>
-								</details></li>
-							</ul>
-						</div>
+		<!-- ============================ 01 ABOUT ============================ -->
+		<section class="sec wrap" id="about">
+			<header class="sec__head">
+				<p class="sec__mark">// 01 about</p>
+				<h2>Engineer, builder, problem-solver.</h2>
+			</header>
+			<div class="about">
+				<div class="about__bio">
+					<p class="lead">Full-stack developer with <strong>6+ years</strong> shipping production web and mobile applications across logistics, real estate, marketing, and education. I specialize in <strong>Vue.js</strong> and <strong>Laravel</strong> on the web, <strong>Flutter</strong> on mobile, and clean REST API design to tie systems together.</p>
+					<p>I work end-to-end &mdash; from requirements and architecture through implementation, testing, and deployment &mdash; and pair daily with <strong>Claude AI</strong> to accelerate delivery without sacrificing code quality.</p>
+					<ul class="checks">
+						<li>Owns features end-to-end, web and mobile</li>
+						<li>Bias for shipping with engineering discipline</li>
+						<li>Strong UX and API design instincts</li>
+						<li>Leaves the codebase healthier than found</li>
+					</ul>
+					<div class="chips" aria-label="Main stack">
+						<span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">Flutter</span><span class="chip chip--ai">Claude AI</span><span class="chip chip--ai">Vibe Coding</span>
 					</div>
 				</div>
-			</section>
 
-			<!-- ============ 2 · QUEST LOG ============ -->
-			<section class="pf-panel" id="quests" role="tabpanel" aria-label="Quest log — case studies" data-panel hidden>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">QUEST LOG<span class="pf-panel__title-sub">// case studies</span></h2>
-					<p class="pf-panel__flavor">Selected deep-dives into shipped work &mdash; code, tradeoffs, and what I&rsquo;d do differently. Legendary quests are the best place to start.</p>
-				</header>
-
-				<div class="pf-quests">
-					<article class="pf-quest pf-quest--legendary pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">&#9733; LEGENDARY</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-ai-engineer.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">autonomous-ai-engineer/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>5 LLMs &middot; PHPUnit-verified</p>
-						<div class="pf-quest__tags"><span class="pf-chip pf-chip--ai">Claude</span><span class="pf-chip pf-chip--ai">Gemini</span><span class="pf-chip pf-chip--ai">OpenAI</span><span class="pf-chip">Laravel 11</span></div>
-						<a class="pf-quest__cta" href="case-studies/ai-engineer.html" aria-label="Read the Autonomous AI Engineer case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--legendary pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">&#9733; LEGENDARY</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-wms-v2.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">wms-v2-inventory-rewrite/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>parity rewrite &middot; CI guardrails</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Laravel 12</span><span class="pf-chip">Vue 3</span><span class="pf-chip">Canonical V3</span></div>
-						<a class="pf-quest__cta" href="case-studies/wms-v2.html" aria-label="Read the WMS v2 inventory rewrite case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--epic pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">EPIC</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-wms.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">wms-mobile-app/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>108 releases &middot; BT label printing</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Flutter</span><span class="pf-chip">Dart</span></div>
-						<a class="pf-quest__cta" href="case-studies/wms.html" aria-label="Read the WMS mobile app case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--epic pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">EPIC</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-tms.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">transport-mgmt-system/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>324 pages &middot; live dispatch</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Vue 3</span><span class="pf-chip">Laravel 11</span><span class="pf-chip">Live GPS</span></div>
-						<a class="pf-quest__cta" href="case-studies/tms.html" aria-label="Read the Transport Management System case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--epic pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">EPIC</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-hris.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">enterprise-hris/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>95 pages &middot; TOTP 2FA</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Vue 3</span><span class="pf-chip">Laravel 12</span><span class="pf-chip">Vite</span></div>
-						<a class="pf-quest__cta" href="case-studies/hris.html" aria-label="Read the Enterprise HRIS case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--epic pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">EPIC</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-pamanaland.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">realty-developer-portal/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>65 models &middot; full lifecycle</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span></div>
-						<a class="pf-quest__cta" href="case-studies/pamanaland.html" aria-label="Read the Pamanaland realty portal case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--epic pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">EPIC</span><span class="pf-quest__type">MAIN QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-jbc.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">brokerage-commission-system/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>22 months &middot; 5-tier shares</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span></div>
-						<a class="pf-quest__cta" href="case-studies/jbc.html" aria-label="Read the JBC brokerage commission system case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--rare pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">RARE</span><span class="pf-quest__type">SIDE QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-llm-wiki.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">llm-friendly-wiki/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>Karpathy-pattern &middot; per-folder _INDEX</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Obsidian</span><span class="pf-chip">Markdown</span><span class="pf-chip">Karpathy</span></div>
-						<a class="pf-quest__cta" href="case-studies/llm-wiki.html" aria-label="Read the LLM-friendly wiki case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--rare pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">RARE</span><span class="pf-quest__type">SIDE QUEST</span><span class="pf-badge pf-badge--live">LIVE</span></div>
-						<img class="pf-quest__preview" src="images/og-ph-dev-utils.png" alt="" loading="lazy" decoding="async" width="320" height="168">
-						<h3 class="pf-quest__name">ph-dev-utils-family/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>12 packages &middot; JS&harr;PHP parity</p>
-						<div class="pf-quest__tags"><span class="pf-chip">React 19</span><span class="pf-chip">TypeScript</span><span class="pf-chip">npm + Packagist</span></div>
-						<a class="pf-quest__cta" href="case-studies/ph-dev-utils.html" aria-label="Read the PH Dev Utils open-source case study">OPEN QUEST FILE &rarr;</a>
-					</article>
-
-					<article class="pf-quest pf-quest--locked pf-cut">
-						<div class="pf-quest__top"><span class="pf-quest__rarity">&#128274; LOCKED</span><span class="pf-quest__type">SIDE QUEST</span><span class="pf-badge">PLANNED</span></div>
-						<h3 class="pf-quest__name">uratex-portal-prototype/</h3>
-						<p class="pf-quest__obj"><span>OBJECTIVE</span>writeup in progress</p>
-						<div class="pf-quest__tags"><span class="pf-chip">Figma</span><span class="pf-chip">UI/UX</span></div>
-						<span class="pf-quest__cta pf-quest__cta--off">UNLOCKS SOON</span>
-					</article>
+				<div class="card">
+					<p class="card__mark">profile.config</p>
+					<dl class="kv">
+						<div><dt>name</dt><dd>"Lemmuel Turaya"</dd></div>
+						<div><dt>role</dt><dd>"Full-Stack &amp; Mobile App Developer"</dd></div>
+						<div><dt>email</dt><dd><a href="mailto:turayalemmuel@gmail.com">"turayalemmuel@gmail.com"</a> <button type="button" class="copy" data-copy="turayalemmuel@gmail.com" aria-label="Copy email address">copy</button></dd></div>
+						<div><dt>phone</dt><dd><a href="tel:+639227786152">"+63 922 778 6152"</a></dd></div>
+						<div><dt>location</dt><dd>"Bi&ntilde;an, Laguna &middot; Philippines"</dd></div>
+						<div><dt>timezone</dt><dd>"GMT+8 &middot; PHT"</dd></div>
+						<div><dt>availability</dt><dd>"remote &middot; hybrid &middot; onsite"</dd></div>
+						<div><dt>languages</dt><dd>["English", "Filipino"]</dd></div>
+					</dl>
 				</div>
 
-				<p class="pf-panel__foot">&gt; For source samples, code walkthroughs, or references &mdash; reach out directly.
-					<a class="pf-btn" href="mailto:turayalemmuel@gmail.com">Request samples</a></p>
-			</section>
+				<div class="card">
+					<p class="card__mark">~/.now.json <span class="live">live</span></p>
+					<dl class="kv">
+						<div><dt>currentlyShipping</dt><dd>"WMS mobile app &middot; Flutter"</dd></div>
+						<div><dt>currentlyReading</dt><dd>"Designing Data-Intensive Applications"</dd></div>
+						<div><dt>currentlyLearning</dt><dd>"n8n agents &middot; Claude tool-use"</dd></div>
+						<div><dt>currentSideQuest</dt><dd>"refining this portfolio"</dd></div>
+						<div><dt>openTo</dt><dd>["full-time", "contract", "freelance"]</dd></div>
+						<div><dt>lastUpdated</dt><dd>"2026-05-13"</dd></div>
+					</dl>
+				</div>
 
-			<!-- ============ 3 · CAREER LOG ============ -->
-			<section class="pf-panel" id="career" role="tabpanel" aria-label="Career log — experience" data-panel hidden>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">CAREER LOG<span class="pf-panel__title-sub">// experience.log &middot; 6 acts</span></h2>
-					<p class="pf-panel__flavor">Every act cleared since 2019. Objectives marked &#10003; shipped to production.</p>
-				</header>
+				<div class="card about__principles">
+					<p class="card__mark">engineering principles</p>
+					<ol class="principles">
+						<li>Ship the smallest useful version, then iterate.</li>
+						<li>Readable code beats clever code &mdash; future-you is grateful.</li>
+						<li>Test the hard parts. Mock the boundaries, not the logic.</li>
+						<li>Leave the codebase healthier than you found it.</li>
+						<li>Strong opinions, weakly held &mdash; listen, then choose.</li>
+						<li>Logs and types pay rent every single day.</li>
+					</ol>
+				</div>
+			</div>
+		</section>
 
-				<ol class="pf-acts">
-					<li class="pf-act pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">ACT&nbsp;VI</span>
-							<div class="pf-act__title">
-								<h3>Application Developer</h3>
-								<span class="pf-act__co">AAI Worldwide Logistics &middot; Philippines</span>
-							</div>
-							<span class="pf-act__period"><span class="pf-badge pf-badge--live">CURRENT</span> Nov 2024 &mdash; Now</span>
-						</header>
-						<p class="pf-act__summary">Contribute to the development and enhancement of the company&rsquo;s Financial Management System, connected logistics platforms, and a new <strong>Flutter-based Warehouse Management mobile app</strong> &mdash; integrating SAP and third-party services with internal applications.</p>
-						<ul class="pf-act__objectives">
+		<!-- ============================ 02 WORK ============================ -->
+		<section class="sec wrap" id="work">
+			<header class="sec__head">
+				<p class="sec__mark">// 02 selected work</p>
+				<h2>Case studies</h2>
+				<p class="sec__intro">Deep-dives into shipped work &mdash; code, tradeoffs, and what I&rsquo;d do differently. The two featured ones are the best place to start.</p>
+			</header>
+
+			<div class="cases">
+				<article class="case case--featured">
+					<img src="images/og-ai-engineer.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<p class="case__meta">featured &middot; live</p>
+						<h3><a href="case-studies/ai-engineer.html">autonomous-ai-engineer/</a></h3>
+						<p>5 LLMs &middot; PHPUnit-verified</p>
+						<div class="chips"><span class="chip chip--ai">Claude</span><span class="chip chip--ai">Gemini</span><span class="chip chip--ai">OpenAI</span><span class="chip">Laravel 11</span></div>
+					</div>
+				</article>
+
+				<article class="case case--featured">
+					<img src="images/og-wms-v2.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<p class="case__meta">featured &middot; live</p>
+						<h3><a href="case-studies/wms-v2.html">wms-v2-inventory-rewrite/</a></h3>
+						<p>parity rewrite &middot; CI guardrails</p>
+						<div class="chips"><span class="chip">Laravel 12</span><span class="chip">Vue 3</span><span class="chip">Canonical V3</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-wms.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/wms.html">wms-mobile-app/</a></h3>
+						<p>108 releases &middot; BT label printing</p>
+						<div class="chips"><span class="chip">Flutter</span><span class="chip">Dart</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-tms.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/tms.html">transport-mgmt-system/</a></h3>
+						<p>324 pages &middot; live dispatch</p>
+						<div class="chips"><span class="chip">Vue 3</span><span class="chip">Laravel 11</span><span class="chip">Live GPS</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-hris.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/hris.html">enterprise-hris/</a></h3>
+						<p>95 pages &middot; TOTP 2FA</p>
+						<div class="chips"><span class="chip">Vue 3</span><span class="chip">Laravel 12</span><span class="chip">Vite</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-pamanaland.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/pamanaland.html">realty-developer-portal/</a></h3>
+						<p>65 models &middot; full lifecycle</p>
+						<div class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-jbc.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/jbc.html">brokerage-commission-system/</a></h3>
+						<p>22 months &middot; 5-tier shares</p>
+						<div class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-llm-wiki.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/llm-wiki.html">llm-friendly-wiki/</a></h3>
+						<p>Karpathy-pattern &middot; per-folder _INDEX</p>
+						<div class="chips"><span class="chip">Obsidian</span><span class="chip">Markdown</span><span class="chip">Karpathy</span></div>
+					</div>
+				</article>
+
+				<article class="case">
+					<img src="images/og-ph-dev-utils.png" alt="" loading="lazy" decoding="async" width="320" height="168">
+					<div class="case__body">
+						<h3><a href="case-studies/ph-dev-utils.html">ph-dev-utils-family/</a></h3>
+						<p>12 packages &middot; JS&harr;PHP parity</p>
+						<div class="chips"><span class="chip">React 19</span><span class="chip">TypeScript</span><span class="chip">npm + Packagist</span></div>
+					</div>
+				</article>
+
+				<article class="case case--soon">
+					<div class="case__body">
+						<p class="case__meta">writeup in progress</p>
+						<h3>uratex-portal-prototype/</h3>
+						<p>Internal portal prototype</p>
+						<div class="chips"><span class="chip">Figma</span><span class="chip">UI/UX</span></div>
+					</div>
+				</article>
+			</div>
+			<p class="sec__foot">For source samples, code walkthroughs, or references &mdash; <a href="mailto:turayalemmuel@gmail.com">request samples by email &rarr;</a></p>
+		</section>
+
+		<!-- ============================ 03 EXPERIENCE ============================ -->
+		<section class="sec wrap" id="experience">
+			<header class="sec__head">
+				<p class="sec__mark">// 03 experience &middot; 2019 &rarr; now</p>
+				<h2>Experience</h2>
+			</header>
+
+			<ol class="timeline">
+				<li>
+					<details open>
+						<summary>
+							<span class="role"><strong>Application Developer</strong> <span class="role__co">AAI Worldwide Logistics &middot; Philippines</span></span>
+							<span class="role__period"><span class="live">current</span> Nov 2024 &mdash; Now</span>
+						</summary>
+						<p>Contribute to the development and enhancement of the company&rsquo;s Financial Management System, connected logistics platforms, and a new <strong>Flutter-based Warehouse Management mobile app</strong> &mdash; integrating SAP and third-party services with internal applications.</p>
+						<ul>
 							<li>Designing and shipping a <strong>WMS mobile app in Flutter</strong> from concept to production, enabling real-time inventory, receiving, and pick/pack operations on the warehouse floor.</li>
 							<li>Adopted <strong>Vibe Coding</strong> &mdash; AI-assisted delivery with <strong>Claude AI</strong> &mdash; to compress prototyping and refactoring cycles while keeping code review, tests, and engineering judgment in the loop.</li>
 							<li>Designed and implemented key <strong>FMS</strong> features &mdash; journal voucher creation, sundry expense invoice processing, inventory management, and reporting using <strong>Ag-Grid</strong> for data visualization and <strong>jsPDF</strong> for advanced reports.</li>
@@ -499,750 +344,645 @@
 							<li>Developed a Trucking Rates module within the <strong>TMS</strong> using <strong>Vuetify</strong> for the front-end and <strong>Laravel</strong> for back-end logic.</li>
 							<li>Stack: <strong>Flutter, Dart, PHP, Laravel, Nuxt.js, Vuetify, Vue.js</strong> with AI-augmented workflows and third-party API integrations.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">Flutter</span><span class="pf-chip">Dart</span><span class="pf-chip">Laravel</span><span class="pf-chip">Nuxt.js</span><span class="pf-chip">Vue.js</span><span class="pf-chip">Vuetify</span><span class="pf-chip">Ag-Grid</span><span class="pf-chip">jsPDF</span><span class="pf-chip">SurveyJS</span><span class="pf-chip">SAP API</span><span class="pf-chip pf-chip--ai">Claude AI</span><span class="pf-chip pf-chip--ai">Vibe Coding</span></div>
-					</li>
+						<div class="chips"><span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Laravel</span><span class="chip">Nuxt.js</span><span class="chip">Vue.js</span><span class="chip">Vuetify</span><span class="chip">Ag-Grid</span><span class="chip">jsPDF</span><span class="chip">SurveyJS</span><span class="chip">SAP API</span><span class="chip chip--ai">Claude AI</span><span class="chip chip--ai">Vibe Coding</span></div>
+					</details>
+				</li>
 
-					<li class="pf-act pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">ACT&nbsp;V</span>
-							<div class="pf-act__title">
-								<h3>Software Developer</h3>
-								<span class="pf-act__co">Octal Philippines Inc. &middot; Assigned to AAI Worldwide Logistics &middot; PH</span>
-							</div>
-							<span class="pf-act__period">Oct 2022 &mdash; Oct 2024</span>
-						</header>
-						<p class="pf-act__summary">Assigned to the AAI Worldwide Logistics IT department, contributing to core systems &mdash; <strong>FMS</strong>, <strong>CRM</strong>, <strong>TMS</strong>, and <strong>WMS</strong> &mdash; across two years of continuous delivery.</p>
-						<ul class="pf-act__objectives">
+				<li>
+					<details>
+						<summary>
+							<span class="role"><strong>Software Developer</strong> <span class="role__co">Octal Philippines Inc. &middot; Assigned to AAI Worldwide Logistics &middot; PH</span></span>
+							<span class="role__period">Oct 2022 &mdash; Oct 2024</span>
+						</summary>
+						<p>Assigned to the AAI Worldwide Logistics IT department, contributing to core systems &mdash; <strong>FMS</strong>, <strong>CRM</strong>, <strong>TMS</strong>, and <strong>WMS</strong> &mdash; across two years of continuous delivery.</p>
+						<ul>
 							<li>Developed the Trucking Rates module for the TMS using <strong>Vuetify</strong> on the front-end and <strong>Laravel</strong> for back-end logic.</li>
 							<li>Built a TMS dashboard for the transport team to monitor truck availability, deployed-truck counts, and booking frequencies, with integrated graphs, filters, and other data-visualization tools.</li>
 							<li>Enhanced the Logistics Execution System (<strong>LES</strong>) UI using <strong>Vue.js</strong> for dynamic interactions, <strong>Ag-Grid</strong> for flexible data presentation, and <strong>jsPDF</strong> for report generation.</li>
 							<li>Integrated the <strong>FAREYE API</strong> for real-time package status updates from third-party providers, and shipped a single-page <strong>package tracker</strong> for end-user delivery monitoring.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span><span class="pf-chip">Vuetify</span><span class="pf-chip">Ag-Grid</span><span class="pf-chip">jsPDF</span><span class="pf-chip">FAREYE API</span></div>
-					</li>
+						<div class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">Vuetify</span><span class="chip">Ag-Grid</span><span class="chip">jsPDF</span><span class="chip">FAREYE API</span></div>
+					</details>
+				</li>
 
-					<li class="pf-act pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">ACT&nbsp;IV</span>
-							<div class="pf-act__title">
-								<h3>Full-Stack Developer</h3>
-								<span class="pf-act__co">Uratex Philippines &middot; Philippines</span>
-							</div>
-							<span class="pf-act__period">Mar &mdash; Oct 2022</span>
-						</header>
-						<p class="pf-act__summary">Built internal tools, surveys, and brand landing pages supporting operations and marketing teams at Uratex.</p>
-						<ul class="pf-act__objectives">
+				<li>
+					<details>
+						<summary>
+							<span class="role"><strong>Full-Stack Developer</strong> <span class="role__co">Uratex Philippines &middot; Philippines</span></span>
+							<span class="role__period">Mar &mdash; Oct 2022</span>
+						</summary>
+						<p>Built internal tools, surveys, and brand landing pages supporting operations and marketing teams at Uratex.</p>
+						<ul>
 							<li>Designed and developed surveys in <strong>Laravel</strong> with detailed reporting to analyze demographics and other critical survey factors.</li>
 							<li>Created a <strong>Trip Management System</strong> for efficient scheduling and booking of company vehicles, improving resource management and accessibility.</li>
 							<li>Collaborated with cross-functional teams to design and develop the company&rsquo;s corporate landing page, aligned with brand objectives.</li>
 							<li>Shipped a dynamic landing page for the company&rsquo;s basketball association featuring a live countdown timer, built on the <strong>Statamic</strong> CMS for easy content updates.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">Laravel</span><span class="pf-chip">Statamic</span><span class="pf-chip">PHP</span><span class="pf-chip">JavaScript</span></div>
-					</li>
+						<div class="chips"><span class="chip">Laravel</span><span class="chip">Statamic</span><span class="chip">PHP</span><span class="chip">JavaScript</span></div>
+					</details>
+				</li>
 
-					<li class="pf-act pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">ACT&nbsp;III</span>
-							<div class="pf-act__title">
-								<h3>Marketing Staff <small>(Full-Stack Developer)</small></h3>
-								<span class="pf-act__co">Lumina Homes, Inc. &middot; Philippines</span>
-							</div>
-							<span class="pf-act__period">Mar 2021 &mdash; Mar 2022</span>
-						</header>
-						<p class="pf-act__summary">Hybrid role combining full-stack development with digital marketing &mdash; building the technology and SEO that powered the marketing team&rsquo;s lead pipeline.</p>
-						<ul class="pf-act__objectives">
+				<li>
+					<details>
+						<summary>
+							<span class="role"><strong>Marketing Staff (Full-Stack Developer)</strong> <span class="role__co">Lumina Homes, Inc. &middot; Philippines</span></span>
+							<span class="role__period">Mar 2021 &mdash; Mar 2022</span>
+						</summary>
+						<p>Hybrid role combining full-stack development with digital marketing &mdash; building the technology and SEO that powered the marketing team&rsquo;s lead pipeline.</p>
+						<ul>
 							<li>Develop, maintain, and optimize websites, landing pages, and applications that support marketing campaigns.</li>
 							<li>Enhanced the property-listing <strong>loan calculator</strong>, enabling public users to compute amortization details and receive the results via email.</li>
 							<li>Optimized and maintained the real-estate website on <strong>SilverStripe</strong>, ensuring a seamless user experience.</li>
 							<li>Implemented SEO best practices using <strong>SEMrush</strong> and <strong>Ahrefs</strong> to manage and improve site visibility.</li>
 							<li>Continuously evaluate emerging technologies and marketing tools to recommend solutions aligned with business goals.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">SilverStripe</span><span class="pf-chip">PHP</span><span class="pf-chip">SEMrush</span><span class="pf-chip">Ahrefs</span><span class="pf-chip">SEO</span></div>
-					</li>
+						<div class="chips"><span class="chip">SilverStripe</span><span class="chip">PHP</span><span class="chip">SEMrush</span><span class="chip">Ahrefs</span><span class="chip">SEO</span></div>
+					</details>
+				</li>
 
-					<li class="pf-act pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">ACT&nbsp;II</span>
-							<div class="pf-act__title">
-								<h3>Junior Web Developer</h3>
-								<span class="pf-act__co">Switch Connect Pty Ltd &middot; Australia &middot; Remote</span>
-							</div>
-							<span class="pf-act__period">Aug 2019 &mdash; Sep 2020</span>
-						</header>
-						<p class="pf-act__summary">Contributed to the company&rsquo;s ERP system, integrating multiple third-party APIs to streamline accounting, validation, and document workflows.</p>
-						<ul class="pf-act__objectives">
+				<li>
+					<details>
+						<summary>
+							<span class="role"><strong>Junior Web Developer</strong> <span class="role__co">Switch Connect Pty Ltd &middot; Australia &middot; Remote</span></span>
+							<span class="role__period">Aug 2019 &mdash; Sep 2020</span>
+						</summary>
+						<p>Contributed to the company&rsquo;s ERP system, integrating multiple third-party APIs to streamline accounting, validation, and document workflows.</p>
+						<ul>
 							<li>Developed ERP modules that enhanced functionality and optimized day-to-day business processes.</li>
 							<li>Integrated <strong>Google Maps API</strong> for address validation in user accounts, ensuring accurate location data.</li>
 							<li>Implemented <strong>ABN Lookup</strong> for verifying Australian-based companies through an authorized API.</li>
 							<li>Integrated <strong>Xero</strong> for financial management &mdash; receipt generation and order monitoring &mdash; and <strong>Eversign</strong> for multi-party digital document signing.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">PHP</span><span class="pf-chip">JavaScript</span><span class="pf-chip">Google Maps API</span><span class="pf-chip">Xero</span><span class="pf-chip">Eversign</span><span class="pf-chip">ABN Lookup</span></div>
-					</li>
+						<div class="chips"><span class="chip">PHP</span><span class="chip">JavaScript</span><span class="chip">Google Maps API</span><span class="chip">Xero</span><span class="chip">Eversign</span><span class="chip">ABN Lookup</span></div>
+					</details>
+				</li>
 
-					<li class="pf-act pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">ACT&nbsp;I</span>
-							<div class="pf-act__title">
-								<h3>Graphic Designer</h3>
-								<span class="pf-act__co">Trimex Colleges &middot; Philippines</span>
-							</div>
-							<span class="pf-act__period">2019</span>
-						</header>
-						<p class="pf-act__summary">Produced visual collateral for institutional campaigns, events, and publications during my final years at Trimex Colleges.</p>
-						<ul class="pf-act__objectives">
+				<li>
+					<details>
+						<summary>
+							<span class="role"><strong>Graphic Designer</strong> <span class="role__co">Trimex Colleges &middot; Philippines</span></span>
+							<span class="role__period">2019</span>
+						</summary>
+						<p>Produced visual collateral for institutional campaigns, events, and publications during my final years at Trimex Colleges.</p>
+						<ul>
 							<li>Designed posters, banners, social-media creatives, and event branding on tight deadlines using the Adobe Suite.</li>
 							<li>Refined the design fundamentals &mdash; typography, layout, hierarchy &mdash; that still inform my approach to UI and UX today.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">Photoshop</span><span class="pf-chip">Illustrator</span><span class="pf-chip">Branding</span><span class="pf-chip">Typography</span></div>
-					</li>
+						<div class="chips"><span class="chip">Photoshop</span><span class="chip">Illustrator</span><span class="chip">Branding</span><span class="chip">Typography</span></div>
+					</details>
+				</li>
 
-					<li class="pf-act pf-act--edu pf-cut">
-						<header class="pf-act__head">
-							<span class="pf-act__num">TRAINING&nbsp;ARC</span>
-							<div class="pf-act__title">
-								<h3>B.S. Information Technology <small>GPA 1.50</small></h3>
-								<span class="pf-act__co">Trimex Colleges &middot; Philippines</span>
-							</div>
-							<span class="pf-act__period">2015 &mdash; 2019</span>
-						</header>
-						<p class="pf-act__summary">Earned a <strong>1.50 GPA</strong> with coursework focused on web development, database management, and programming.</p>
-						<ul class="pf-act__objectives">
+				<li class="timeline__edu">
+					<details>
+						<summary>
+							<span class="role"><strong>B.S. Information Technology &middot; GPA 1.50</strong> <span class="role__co">Trimex Colleges &middot; Philippines</span></span>
+							<span class="role__period">2015 &mdash; 2019</span>
+						</summary>
+						<p>Earned a <strong>1.50 GPA</strong> with coursework focused on web development, database management, and programming.</p>
+						<ul>
 							<li>Completed a capstone project applying the full development lifecycle &mdash; requirements, design, implementation, presentation.</li>
 							<li>Built side projects in HTML, CSS, JavaScript, and PHP that bridged coursework with real-world web development.</li>
 						</ul>
-						<div class="pf-act__loot"><span class="pf-kicker">// loot</span><span class="pf-chip">Web Development</span><span class="pf-chip">Databases</span><span class="pf-chip">Programming</span></div>
-					</li>
-				</ol>
-			</section>
+						<div class="chips"><span class="chip">Web Development</span><span class="chip">Databases</span><span class="chip">Programming</span></div>
+					</details>
+				</li>
+			</ol>
+		</section>
 
-			<!-- ============ 4 · SKILL TREE ============ -->
-			<section class="pf-panel" id="skills" role="tabpanel" aria-label="Skill tree" data-panel hidden>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">SKILL TREE<span class="pf-panel__title-sub">// tiers &middot; loadout</span></h2>
-					<p class="pf-panel__flavor">Grouped by where it sits in the stack. Tier reflects hands-on production reach &mdash; <span class="pf-tierkey pf-tierkey--primary">PRIMARY</span> daily &middot; <span class="pf-tierkey pf-tierkey--strong">STRONG</span> current &middot; <span class="pf-tierkey pf-tierkey--working">WORKING</span> trusted but lighter use.</p>
-				</header>
+		<!-- ============================ 04 STACK ============================ -->
+		<section class="sec wrap" id="stack">
+			<header class="sec__head">
+				<p class="sec__mark">// 04 stack</p>
+				<h2>Stack</h2>
+				<p class="sec__intro">Grouped by where it sits in the stack. Tier reflects hands-on production reach: <span class="tier tier--3" aria-hidden="true"></span> primary, daily &middot; <span class="tier tier--2" aria-hidden="true"></span> strong, current &middot; <span class="tier tier--1" aria-hidden="true"></span> working, trusted but lighter use.</p>
+			</header>
 
-				<div class="pf-skillgrid">
-					<section class="pf-card pf-cut">
-						<div class="pf-card__head"><span class="pf-kicker">[ FE ]</span><h3>Frontend</h3><span class="pf-badge">6</span></div>
-						<ul class="pf-skills">
-							<li><span class="pf-skill__name">Vue.js</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">Nuxt.js</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Vuetify</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">HTML5 / CSS3</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">JavaScript</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">Bootstrap</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-						</ul>
-					</section>
-
-					<section class="pf-card pf-cut">
-						<div class="pf-card__head"><span class="pf-kicker">[ BE ]</span><h3>Backend</h3><span class="pf-badge">7</span></div>
-						<ul class="pf-skills">
-							<li><span class="pf-skill__name">Laravel</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">PHP</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">SQL / MySQL</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Node.js</span><span class="pf-skill__bar"><i style="width:55%" class="pf-skill__fill--working"></i></span><span class="pf-tierkey pf-tierkey--working">WORKING</span></li>
-							<li><span class="pf-skill__name">REST &amp; API Integration</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">SilverStripe</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Statamic</span><span class="pf-skill__bar"><i style="width:55%" class="pf-skill__fill--working"></i></span><span class="pf-tierkey pf-tierkey--working">WORKING</span></li>
-						</ul>
-					</section>
-
-					<section class="pf-card pf-cut">
-						<div class="pf-card__head"><span class="pf-kicker">[ MB ]</span><h3>Mobile</h3><span class="pf-badge">3</span></div>
-						<ul class="pf-skills">
-							<li><span class="pf-skill__name">Flutter</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Dart</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Firebase</span><span class="pf-skill__bar"><i style="width:55%" class="pf-skill__fill--working"></i></span><span class="pf-tierkey pf-tierkey--working">WORKING</span></li>
-						</ul>
-					</section>
-
-					<section class="pf-card pf-cut">
-						<div class="pf-card__head"><span class="pf-kicker">[ AI ]</span><h3>AI &amp; Automation</h3><span class="pf-badge">6</span></div>
-						<ul class="pf-skills">
-							<li><span class="pf-skill__name">Claude AI</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">AI-Assisted Delivery</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">n8n Workflows</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Zapier / Make.com</span><span class="pf-skill__bar"><i style="width:74%" class="pf-skill__fill--strong"></i></span><span class="pf-tierkey pf-tierkey--strong">STRONG</span></li>
-							<li><span class="pf-skill__name">Git / GitHub</span><span class="pf-skill__bar"><i style="width:92%" class="pf-skill__fill--primary"></i></span><span class="pf-tierkey pf-tierkey--primary">PRIMARY</span></li>
-							<li><span class="pf-skill__name">Adobe Suite</span><span class="pf-skill__bar"><i style="width:55%" class="pf-skill__fill--working"></i></span><span class="pf-tierkey pf-tierkey--working">WORKING</span></li>
-						</ul>
-					</section>
+			<div class="stack">
+				<div class="card">
+					<p class="card__mark">frontend</p>
+					<ul class="skills">
+						<li>Vue.js<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>Nuxt.js<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Vuetify<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>HTML5 / CSS3<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>JavaScript<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>Bootstrap<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+					</ul>
 				</div>
-
-				<div class="pf-card pf-cut" style="margin-top:18px">
-					<div class="pf-card__head"><span class="pf-kicker">// inventory</span><h3>Tools &amp; Stack</h3></div>
-					<div class="pf-inv">
-						<div class="pf-inv__group"><span class="pf-inv__label"># ai &middot; assistants</span><span class="pf-chip pf-chip--ai">Claude AI</span><span class="pf-chip pf-chip--ai">Claude Code</span><span class="pf-chip pf-chip--ai">GitHub Copilot</span><span class="pf-chip pf-chip--ai">OpenAI API</span><span class="pf-chip pf-chip--ai">AI-Assisted Dev</span></div>
-						<div class="pf-inv__group"><span class="pf-inv__label"># automation &middot; no-code</span><span class="pf-chip pf-chip--ai">n8n</span><span class="pf-chip pf-chip--ai">Zapier</span><span class="pf-chip pf-chip--ai">Make.com</span><span class="pf-chip pf-chip--ai">Pipedream</span><span class="pf-chip pf-chip--ai">Webhooks</span><span class="pf-chip pf-chip--ai">Cron Jobs</span></div>
-						<div class="pf-inv__group"><span class="pf-inv__label"># mobile</span><span class="pf-chip">Flutter</span><span class="pf-chip">Dart</span><span class="pf-chip">Android Studio</span><span class="pf-chip">Firebase</span></div>
-						<div class="pf-inv__group"><span class="pf-inv__label"># dev &middot; tooling</span><span class="pf-chip">VS Code</span><span class="pf-chip">Git</span><span class="pf-chip">GitHub</span><span class="pf-chip">Docker</span><span class="pf-chip">npm / Vite</span><span class="pf-chip">Composer</span><span class="pf-chip">Linux</span></div>
-						<div class="pf-inv__group"><span class="pf-inv__label"># design &middot; api</span><span class="pf-chip">Figma</span><span class="pf-chip">Postman</span><span class="pf-chip">REST APIs</span></div>
-						<div class="pf-inv__group"><span class="pf-inv__label"># libraries &middot; integrations</span><span class="pf-chip">Ag-Grid</span><span class="pf-chip">jsPDF</span><span class="pf-chip">SurveyJS</span><span class="pf-chip">Vuetify</span><span class="pf-chip">SAP API</span><span class="pf-chip">XERO</span><span class="pf-chip">Eversign</span><span class="pf-chip">ABN Lookup</span><span class="pf-chip">Google Maps</span></div>
-						<div class="pf-inv__group"><span class="pf-inv__label"># seo &middot; marketing</span><span class="pf-chip">SEMrush</span><span class="pf-chip">Ahrefs</span><span class="pf-chip">SEO</span></div>
-					</div>
+				<div class="card">
+					<p class="card__mark">backend</p>
+					<ul class="skills">
+						<li>Laravel<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>PHP<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>SQL / MySQL<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Node.js<span class="tier tier--1" title="working"><span class="sr">working</span></span></li>
+						<li>REST &amp; API Integration<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>SilverStripe<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Statamic<span class="tier tier--1" title="working"><span class="sr">working</span></span></li>
+					</ul>
 				</div>
-			</section>
-
-			<!-- ============ 5 · ABILITIES ============ -->
-			<section class="pf-panel" id="abilities" role="tabpanel" aria-label="Abilities — what I build" data-panel hidden>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">ABILITIES<span class="pf-panel__title-sub">// what I build</span></h2>
-					<p class="pf-panel__flavor">End-to-end engineering across the modern web and mobile stack, with AI-assisted workflows where they create real leverage. Same capabilities whether I&rsquo;m joining a full-time team or running a focused engagement.</p>
-				</header>
-
-				<div class="pf-abilities">
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">01</span><div><span class="pf-ability__cmd">$ build &mdash;web</span><h3>Full-Stack Web Development</h3></div></header>
-						<p>Production web applications, end-to-end &mdash; from schema to deploy.</p>
-						<ul>
-							<li>Vue.js single-page apps &amp; component libraries</li>
-							<li>Laravel back-ends with clean domain models</li>
-							<li>Database design, migrations, and query tuning</li>
-							<li>Authentication, authorization, and audit logging</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span><span class="pf-chip">MySQL</span><span class="pf-chip">REST</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">02</span><div><span class="pf-ability__cmd">$ flutter &mdash;ship</span><h3>Mobile App Development <span class="pf-badge">Flutter</span></h3></div></header>
-						<p>Single-codebase mobile apps that feel native on iOS and Android.</p>
-						<ul>
-							<li>Flutter / Dart cross-platform builds</li>
-							<li>Offline-first sync &amp; local storage strategies</li>
-							<li>REST / GraphQL backend integration</li>
-							<li>Play Store &amp; App Store release pipelines</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">Flutter</span><span class="pf-chip">Dart</span><span class="pf-chip">Firebase</span><span class="pf-chip">CI/CD</span></div>
-					</article>
-
-					<article class="pf-ability pf-ability--ai pf-cut">
-						<header><span class="pf-ability__num">03</span><div><span class="pf-ability__cmd">$ claude &mdash;pair</span><h3>AI-Assisted Delivery <span class="pf-badge pf-badge--ai">Claude</span></h3></div></header>
-						<p>Compress delivery timelines without compromising on quality.</p>
-						<ul>
-							<li>Pair-programming with Claude &amp; agentic tools</li>
-							<li>Rapid prototyping from a spec or rough idea</li>
-							<li>Large-scale refactors with safety nets</li>
-							<li>AI-augmented code review &amp; documentation</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip pf-chip--ai">Claude AI</span><span class="pf-chip">Copilot</span><span class="pf-chip">Vibe Coding</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">04</span><div><span class="pf-ability__cmd">$ api &mdash;design</span><h3>API Design &amp; Integration</h3></div></header>
-						<p>Reliable contracts that let teams and systems move independently.</p>
-						<ul>
-							<li>RESTful API design &amp; documentation (OpenAPI)</li>
-							<li>Token-based auth (JWT, OAuth flows)</li>
-							<li>Third-party integrations &amp; webhooks</li>
-							<li>Versioning, rate-limiting, and error contracts</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">REST</span><span class="pf-chip">JSON</span><span class="pf-chip">OAuth</span><span class="pf-chip">Postman</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">05</span><div><span class="pf-ability__cmd">$ ui &mdash;ship</span><h3>UI / UX Implementation</h3></div></header>
-						<p>Translate Figma designs into accessible, responsive, performant interfaces.</p>
-						<ul>
-							<li>Pixel-accurate Figma-to-code conversion</li>
-							<li>Responsive layouts &amp; design-system components</li>
-							<li>WCAG-aware accessibility &amp; keyboard support</li>
-							<li>Performance tuning (Core Web Vitals)</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">Figma</span><span class="pf-chip">HTML5</span><span class="pf-chip">CSS3</span><span class="pf-chip">a11y</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">06</span><div><span class="pf-ability__cmd">$ ops &mdash;maintain</span><h3>Maintenance &amp; Performance</h3></div></header>
-						<p>Post-launch engineering that keeps products healthy and fast.</p>
-						<ul>
-							<li>Bug triage &amp; targeted fixes</li>
-							<li>Security patches &amp; dependency upgrades</li>
-							<li>Performance audits &amp; optimization</li>
-							<li>Incremental feature work &amp; backlog grooming</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">Git</span><span class="pf-chip">Docker</span><span class="pf-chip">Linux</span><span class="pf-chip">Monitoring</span></div>
-					</article>
-
-					<article class="pf-ability pf-ability--ai pf-cut">
-						<header><span class="pf-ability__num">07</span><div><span class="pf-ability__cmd">$ automate &mdash;flow</span><h3>Workflow Automation &amp; AI <span class="pf-badge pf-badge--ai">n8n</span></h3></div></header>
-						<p>Connect tools, eliminate manual work, and bolt LLMs onto existing processes.</p>
-						<ul>
-							<li>n8n / Zapier / Make.com flow design &amp; deployment</li>
-							<li>Webhook-driven event pipelines &amp; cron jobs</li>
-							<li>LLM-powered automations with Claude &amp; OpenAI APIs</li>
-							<li>System-to-system data sync (SaaS &harr; internal DBs)</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip pf-chip--ai">n8n</span><span class="pf-chip pf-chip--ai">Zapier</span><span class="pf-chip pf-chip--ai">Make.com</span><span class="pf-chip">Webhooks</span><span class="pf-chip pf-chip--ai">Claude API</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">08</span><div><span class="pf-ability__cmd">$ viz &mdash;ship</span><h3>Dashboards &amp; Data Visualization</h3></div></header>
-						<p>Turn raw operational data into decisions teams can act on.</p>
-						<ul>
-							<li>Admin panels with sortable, filterable Ag-Grid tables</li>
-							<li>Real-time KPI tiles, charts, and trend lines</li>
-							<li>Custom report builders with drill-down + export</li>
-							<li>Role-based views &amp; permission-aware UI</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">Ag-Grid</span><span class="pf-chip">Vue.js</span><span class="pf-chip">Chart.js</span><span class="pf-chip">jsPDF</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">09</span><div><span class="pf-ability__cmd">$ integrate &mdash;connect</span><h3>System Integrations &amp; API Bridges</h3></div></header>
-						<p>Make SaaS A talk to system B &mdash; reliably and observably.</p>
-						<ul>
-							<li>REST / SOAP / webhook integrations (SAP, XERO, Stripe&hellip;)</li>
-							<li>Resilient sync pipelines with retries &amp; dead-letter queues</li>
-							<li>OAuth, API-key, JWT auth flows &amp; token rotation</li>
-							<li>Audit logging, monitoring, and replay tooling</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">REST</span><span class="pf-chip">SAP API</span><span class="pf-chip">XERO</span><span class="pf-chip">Webhooks</span><span class="pf-chip">OAuth</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">10</span><div><span class="pf-ability__cmd">$ pdf &mdash;generate</span><h3>PDF Generation &amp; Reporting</h3></div></header>
-						<p>Pixel-precise documents from your data &mdash; invoices, quotes, audit-ready reports.</p>
-						<ul>
-							<li>jsPDF &amp; Laravel DOMPDF templated documents</li>
-							<li>Multi-column layouts, embedded charts &amp; images</li>
-							<li>Email delivery, signed URLs, archive workflows</li>
-							<li>Branded letterheads &amp; multi-language output</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">jsPDF</span><span class="pf-chip">DOMPDF</span><span class="pf-chip">Laravel</span><span class="pf-chip">Templates</span></div>
-					</article>
-
-					<article class="pf-ability pf-cut">
-						<header><span class="pf-ability__num">11</span><div><span class="pf-ability__cmd">$ migrate &mdash;modernize</span><h3>Legacy Modernization</h3></div></header>
-						<p>Rescue ageing codebases &mdash; jQuery / PHP into Vue.js + Laravel &mdash; without halting the business.</p>
-						<ul>
-							<li>Incremental, strangler-pattern migrations</li>
-							<li>Framework, PHP, and dependency version upgrades</li>
-							<li>Parallel-run validation &amp; safe cutovers</li>
-							<li>Test coverage added during rewrites</li>
-						</ul>
-						<div class="pf-ability__stack"><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span><span class="pf-chip">Migration</span><span class="pf-chip">Testing</span></div>
-					</article>
+				<div class="card">
+					<p class="card__mark">mobile</p>
+					<ul class="skills">
+						<li>Flutter<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Dart<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Firebase<span class="tier tier--1" title="working"><span class="sr">working</span></span></li>
+					</ul>
 				</div>
+				<div class="card">
+					<p class="card__mark">ai &amp; automation</p>
+					<ul class="skills">
+						<li>Claude AI<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>AI-Assisted Delivery<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>n8n Workflows<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Zapier / Make.com<span class="tier tier--2" title="strong"><span class="sr">strong</span></span></li>
+						<li>Git / GitHub<span class="tier tier--3" title="primary"><span class="sr">primary</span></span></li>
+						<li>Adobe Suite<span class="tier tier--1" title="working"><span class="sr">working</span></span></li>
+					</ul>
+				</div>
+			</div>
 
-				<p class="pf-panel__foot">&gt; Want to know if a specific stack or pattern is in scope? Let&rsquo;s talk &mdash; I&rsquo;ll be straight about what I&rsquo;d lead vs. learn alongside.
-					<button type="button" class="pf-btn" data-tab-link="comms">Start a conversation &rarr;</button></p>
-			</section>
+			<div class="card tools">
+				<p class="card__mark">tools &amp; integrations</p>
+				<dl class="tools__list">
+					<div><dt># ai &middot; assistants</dt><dd class="chips"><span class="chip chip--ai">Claude AI</span><span class="chip chip--ai">Claude Code</span><span class="chip chip--ai">GitHub Copilot</span><span class="chip chip--ai">OpenAI API</span><span class="chip chip--ai">AI-Assisted Dev</span></dd></div>
+					<div><dt># automation &middot; no-code</dt><dd class="chips"><span class="chip chip--ai">n8n</span><span class="chip chip--ai">Zapier</span><span class="chip chip--ai">Make.com</span><span class="chip chip--ai">Pipedream</span><span class="chip chip--ai">Webhooks</span><span class="chip chip--ai">Cron Jobs</span></dd></div>
+					<div><dt># mobile</dt><dd class="chips"><span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Android Studio</span><span class="chip">Firebase</span></dd></div>
+					<div><dt># dev &middot; tooling</dt><dd class="chips"><span class="chip">VS Code</span><span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">Docker</span><span class="chip">npm / Vite</span><span class="chip">Composer</span><span class="chip">Linux</span></dd></div>
+					<div><dt># design &middot; api</dt><dd class="chips"><span class="chip">Figma</span><span class="chip">Postman</span><span class="chip">REST APIs</span></dd></div>
+					<div><dt># libraries &middot; integrations</dt><dd class="chips"><span class="chip">Ag-Grid</span><span class="chip">jsPDF</span><span class="chip">SurveyJS</span><span class="chip">Vuetify</span><span class="chip">SAP API</span><span class="chip">XERO</span><span class="chip">Eversign</span><span class="chip">ABN Lookup</span><span class="chip">Google Maps</span></dd></div>
+					<div><dt># seo &middot; marketing</dt><dd class="chips"><span class="chip">SEMrush</span><span class="chip">Ahrefs</span><span class="chip">SEO</span></dd></div>
+				</dl>
+			</div>
+		</section>
 
-			<!-- ============ 6 · TROPHY ROOM ============ -->
-			<section class="pf-panel" id="archives" role="tabpanel" aria-label="Trophy room — shipped work" data-panel hidden>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">TROPHY ROOM<span class="pf-panel__title-sub">// shipped work</span></h2>
-					<p class="pf-panel__flavor">Selected projects across web, mobile, and design &mdash; production builds, internal platforms, and prototypes. Gold = live in production &middot; silver = prototype &middot; bronze = archive.</p>
-				</header>
+		<!-- ============================ 05 SERVICES ============================ -->
+		<section class="sec wrap" id="services">
+			<header class="sec__head">
+				<p class="sec__mark">// 05 what I build</p>
+				<h2>Services</h2>
+				<p class="sec__intro">End-to-end engineering across the modern web and mobile stack, with AI-assisted workflows where they create real leverage. Same capabilities whether I&rsquo;m joining a full-time team or running a focused engagement.</p>
+			</header>
 
-				<div class="pf-trophies">
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://portal.pamanaland.com/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/website-background-photo_pamanaland.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Pamanaland Realty MS</h3>
-								<p>Realty management portal &middot; Full-stack</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span><span class="pf-chip">MySQL</span></div>
-								<span class="pf-trophy__cta">Open portal &rarr;</span>
-							</div>
-						</a>
-					</article>
+			<div class="services">
+				<article class="card service">
+					<p class="card__mark">01 &middot; $ build --web</p>
+					<h3>Full-Stack Web Development</h3>
+					<p>Production web applications, end-to-end &mdash; from schema to deploy.</p>
+					<ul><li>Vue.js single-page apps &amp; component libraries</li><li>Laravel back-ends with clean domain models</li><li>Database design, migrations, and query tuning</li><li>Authentication, authorization, and audit logging</li></ul>
+					<div class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">MySQL</span><span class="chip">REST</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">02 &middot; $ flutter --ship</p>
+					<h3>Mobile App Development</h3>
+					<p>Single-codebase mobile apps that feel native on iOS and Android.</p>
+					<ul><li>Flutter / Dart cross-platform builds</li><li>Offline-first sync &amp; local storage strategies</li><li>REST / GraphQL backend integration</li><li>Play Store &amp; App Store release pipelines</li></ul>
+					<div class="chips"><span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Firebase</span><span class="chip">CI/CD</span></div>
+				</article>
+				<article class="card service service--ai">
+					<p class="card__mark">03 &middot; $ claude --pair</p>
+					<h3>AI-Assisted Delivery</h3>
+					<p>Compress delivery timelines without compromising on quality.</p>
+					<ul><li>Pair-programming with Claude &amp; agentic tools</li><li>Rapid prototyping from a spec or rough idea</li><li>Large-scale refactors with safety nets</li><li>AI-augmented code review &amp; documentation</li></ul>
+					<div class="chips"><span class="chip chip--ai">Claude AI</span><span class="chip">Copilot</span><span class="chip">Vibe Coding</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">04 &middot; $ api --design</p>
+					<h3>API Design &amp; Integration</h3>
+					<p>Reliable contracts that let teams and systems move independently.</p>
+					<ul><li>RESTful API design &amp; documentation (OpenAPI)</li><li>Token-based auth (JWT, OAuth flows)</li><li>Third-party integrations &amp; webhooks</li><li>Versioning, rate-limiting, and error contracts</li></ul>
+					<div class="chips"><span class="chip">REST</span><span class="chip">JSON</span><span class="chip">OAuth</span><span class="chip">Postman</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">05 &middot; $ ui --ship</p>
+					<h3>UI / UX Implementation</h3>
+					<p>Translate Figma designs into accessible, responsive, performant interfaces.</p>
+					<ul><li>Pixel-accurate Figma-to-code conversion</li><li>Responsive layouts &amp; design-system components</li><li>WCAG-aware accessibility &amp; keyboard support</li><li>Performance tuning (Core Web Vitals)</li></ul>
+					<div class="chips"><span class="chip">Figma</span><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">a11y</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">06 &middot; $ ops --maintain</p>
+					<h3>Maintenance &amp; Performance</h3>
+					<p>Post-launch engineering that keeps products healthy and fast.</p>
+					<ul><li>Bug triage &amp; targeted fixes</li><li>Security patches &amp; dependency upgrades</li><li>Performance audits &amp; optimization</li><li>Incremental feature work &amp; backlog grooming</li></ul>
+					<div class="chips"><span class="chip">Git</span><span class="chip">Docker</span><span class="chip">Linux</span><span class="chip">Monitoring</span></div>
+				</article>
+				<article class="card service service--ai">
+					<p class="card__mark">07 &middot; $ automate --flow</p>
+					<h3>Workflow Automation &amp; AI</h3>
+					<p>Connect tools, eliminate manual work, and bolt LLMs onto existing processes.</p>
+					<ul><li>n8n / Zapier / Make.com flow design &amp; deployment</li><li>Webhook-driven event pipelines &amp; cron jobs</li><li>LLM-powered automations with Claude &amp; OpenAI APIs</li><li>System-to-system data sync (SaaS &harr; internal DBs)</li></ul>
+					<div class="chips"><span class="chip chip--ai">n8n</span><span class="chip chip--ai">Zapier</span><span class="chip chip--ai">Make.com</span><span class="chip">Webhooks</span><span class="chip chip--ai">Claude API</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">08 &middot; $ viz --ship</p>
+					<h3>Dashboards &amp; Data Visualization</h3>
+					<p>Turn raw operational data into decisions teams can act on.</p>
+					<ul><li>Admin panels with sortable, filterable Ag-Grid tables</li><li>Real-time KPI tiles, charts, and trend lines</li><li>Custom report builders with drill-down + export</li><li>Role-based views &amp; permission-aware UI</li></ul>
+					<div class="chips"><span class="chip">Ag-Grid</span><span class="chip">Vue.js</span><span class="chip">Chart.js</span><span class="chip">jsPDF</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">09 &middot; $ integrate --connect</p>
+					<h3>System Integrations &amp; API Bridges</h3>
+					<p>Make SaaS A talk to system B &mdash; reliably and observably.</p>
+					<ul><li>REST / SOAP / webhook integrations (SAP, XERO, Stripe&hellip;)</li><li>Resilient sync pipelines with retries &amp; dead-letter queues</li><li>OAuth, API-key, JWT auth flows &amp; token rotation</li><li>Audit logging, monitoring, and replay tooling</li></ul>
+					<div class="chips"><span class="chip">REST</span><span class="chip">SAP API</span><span class="chip">XERO</span><span class="chip">Webhooks</span><span class="chip">OAuth</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">10 &middot; $ pdf --generate</p>
+					<h3>PDF Generation &amp; Reporting</h3>
+					<p>Pixel-precise documents from your data &mdash; invoices, quotes, audit-ready reports.</p>
+					<ul><li>jsPDF &amp; Laravel DOMPDF templated documents</li><li>Multi-column layouts, embedded charts &amp; images</li><li>Email delivery, signed URLs, archive workflows</li><li>Branded letterheads &amp; multi-language output</li></ul>
+					<div class="chips"><span class="chip">jsPDF</span><span class="chip">DOMPDF</span><span class="chip">Laravel</span><span class="chip">Templates</span></div>
+				</article>
+				<article class="card service">
+					<p class="card__mark">11 &middot; $ migrate --modernize</p>
+					<h3>Legacy Modernization</h3>
+					<p>Rescue ageing codebases &mdash; jQuery / PHP into Vue.js + Laravel &mdash; without halting the business.</p>
+					<ul><li>Incremental, strangler-pattern migrations</li><li>Framework, PHP, and dependency version upgrades</li><li>Parallel-run validation &amp; safe cutovers</li><li>Test coverage added during rewrites</li></ul>
+					<div class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">Migration</span><span class="chip">Testing</span></div>
+				</article>
+			</div>
+			<p class="sec__foot">Want to know if a specific stack or pattern is in scope? I&rsquo;ll be straight about what I&rsquo;d lead vs. learn alongside &mdash; <a href="#contact">start a conversation &rarr;</a></p>
+		</section>
 
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://portal.jbcmarketing.com.ph/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/website-background-photo.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>JBC Commission MS</h3>
-								<p>Sales commission management system</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Vue.js</span><span class="pf-chip">Laravel</span><span class="pf-chip">REST</span></div>
-								<span class="pf-trophy__cta">Open portal &rarr;</span>
-							</div>
-						</a>
-					</article>
+		<!-- ============================ 06 PROJECTS ============================ -->
+		<section class="sec wrap" id="projects">
+			<header class="sec__head">
+				<p class="sec__mark">// 06 shipped projects</p>
+				<h2>Projects</h2>
+				<p class="sec__intro">Selected projects across web, mobile, games and design &mdash; production builds, internal platforms, and prototypes.</p>
+			</header>
 
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://uphdjgtmedicaluniversity.edu.ph/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/Website-cover-photos.jpg)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>UPHDJGT Medical University</h3>
-								<p>Institutional website &middot; CMS</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Vue.js</span><span class="pf-chip">PHP</span><span class="pf-chip">CMS</span></div>
-								<span class="pf-trophy__cta">Visit site &rarr;</span>
-							</div>
-						</a>
-					</article>
+			<div class="filters" role="group" aria-label="Filter projects" data-filters>
+				<button type="button" class="filter" data-filter="all" aria-pressed="true">all <span data-filter-count></span></button>
+				<button type="button" class="filter" data-filter="live" aria-pressed="false">live <span data-filter-count></span></button>
+				<button type="button" class="filter" data-filter="games" aria-pressed="false">games <span data-filter-count></span></button>
+				<button type="button" class="filter" data-filter="prototype" aria-pressed="false">prototype <span data-filter-count></span></button>
+				<button type="button" class="filter" data-filter="archive" aria-pressed="false">archive <span data-filter-count></span></button>
+			</div>
 
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://github.com/kon2raya24/ph-dev-utils" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb pf-trophy__thumb--code"><pre>// @ph-dev-utils/core
+			<div class="projects" data-projects>
+				<article class="project" data-tags="live">
+					<a href="https://portal.pamanaland.com/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/website-background-photo_pamanaland.webp)"></span>
+						<span class="project__status">live</span>
+						<h3>Pamanaland Realty MS</h3>
+						<p>Realty management portal &middot; Full-stack</p>
+						<span class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">MySQL</span></span>
+						<span class="project__cta">Open portal &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live">
+					<a href="https://portal.jbcmarketing.com.ph/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/website-background-photo.webp)"></span>
+						<span class="project__status">live</span>
+						<h3>JBC Commission MS</h3>
+						<p>Sales commission management system</p>
+						<span class="chips"><span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">REST</span></span>
+						<span class="project__cta">Open portal &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live">
+					<a href="https://uphdjgtmedicaluniversity.edu.ph/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/Website-cover-photos.jpg)"></span>
+						<span class="project__status">live</span>
+						<h3>UPHDJGT Medical University</h3>
+						<p>Institutional website &middot; CMS</p>
+						<span class="chips"><span class="chip">Vue.js</span><span class="chip">PHP</span><span class="chip">CMS</span></span>
+						<span class="project__cta">Visit site &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live">
+					<a href="https://github.com/kon2raya24/ph-dev-utils" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb project__thumb--code"><code>// @ph-dev-utils/core
 formatPHP(1234.5);
 // &rarr; "&#8369;1,234.50"
 parseMobile('09171234567');
-// &rarr; network: 'Globe'</pre><span class="pf-trophy__medal">&#127942; v0.1 &middot; MIT</span></div>
-							<div class="pf-trophy__body">
-								<h3>PH Dev Utils <span class="pf-badge pf-badge--ai">Open Source</span></h3>
-								<p>Filipino dev utilities &middot; JS + PHP monorepo</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">TypeScript</span><span class="pf-chip">PHP</span><span class="pf-chip">npm</span><span class="pf-chip">Composer</span><span class="pf-chip">MIT</span></div>
-								<span class="pf-trophy__cta">View on GitHub &rarr;</span>
-							</div>
-						</a>
-					</article>
+// &rarr; network: 'Globe'</code></span>
+						<span class="project__status">live &middot; open source</span>
+						<h3>PH Dev Utils</h3>
+						<p>Filipino dev utilities &middot; JS + PHP monorepo &middot; v0.1 &middot; MIT</p>
+						<span class="chips"><span class="chip">TypeScript</span><span class="chip">PHP</span><span class="chip">npm</span><span class="chip">Composer</span><span class="chip">MIT</span></span>
+						<span class="project__cta">View on GitHub &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live">
+					<a href="https://kon2raya.netlify.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/thumb-3.png)"></span>
+						<span class="project__status">live</span>
+						<h3>This Portfolio</h3>
+						<p>Hand-crafted HTML / CSS / JS &middot; Netlify</p>
+						<span class="chips"><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JS</span></span>
+						<span class="project__cta">View live &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live">
+					<a href="https://jbcmarketing.com.ph/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/website-background-photo.webp)"></span>
+						<span class="project__status">live</span>
+						<h3>JBC Marketing</h3>
+						<p>Corporate website &middot; WordPress</p>
+						<span class="chips"><span class="chip">WordPress</span><span class="chip">PHP</span></span>
+						<span class="project__cta">Visit site &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://huling-byahe.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-huling-byahe.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Huling Byahe</h3>
+						<p>Jeepney ghost-story arcade game &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">Web Audio</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://ahas-sa-fiesta.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-ahas.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Ahas sa Fiesta</h3>
+						<p>Pinoy fiesta snake game &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">Web Audio</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://tambayan-arcade.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-tambayan.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Tambayan Arcade</h3>
+						<p>Pinoy browser game portal &middot; 8 games</p>
+						<span class="chips"><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span></span>
+						<span class="project__cta">Open arcade &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://bantay-kubo.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-bantay-kubo.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Bantay Kubo</h3>
+						<p>Jeepney tank game guarding the bahay kubo &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">PWA</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://habulan.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-habulan.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Habulan sa Palengke</h3>
+						<p>Palengke maze-chase game &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">Game AI</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://bagong-taon.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-bagong-taon.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Bagong Taon</h3>
+						<p>New Year&rsquo;s Eve maze-bomber &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">Web Audio</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://tawid-edsa.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-tawid-edsa.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Tawid EDSA</h3>
+						<p>Rainy EDSA lane-crossing game &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">Pathfinding</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://lipat-bahay.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-lipat-bahay.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Lipat-Bahay</h3>
+						<p>Story-driven 3D pushing puzzle &middot; browser</p>
+						<span class="chips"><span class="chip">Three.js</span><span class="chip">A* solver</span><span class="chip">PWA</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://kakanin-crush.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-kakanin-crush.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Kakanin Crush</h3>
+						<p>3D match-3 of Filipino rice cakes &middot; browser</p>
+						<span class="chips"><span class="chip">Three.js</span><span class="chip">Bot-tuned levels</span><span class="chip">PWA</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://hollow-blocks.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-hollow-blocks.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Hollow Blocks</h3>
+						<p>Construction-site falling-block game &middot; browser &middot; on itch.io</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Three.js</span><span class="chip">PWA</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://tumbang-preso-3d.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-tumbang-preso.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Tumbang Preso</h3>
+						<p>First-person Filipino street game in 3D &middot; browser</p>
+						<span class="chips"><span class="chip">Three.js</span><span class="chip">WebGL</span><span class="chip">Gamepad</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://bakbakan.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-bakbakan.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Bakbakan sa Kanto</h3>
+						<p>3D Pinoy street fighter &middot; browser</p>
+						<span class="chips"><span class="chip">Three.js</span><span class="chip">Game AI</span><span class="chip">Gamepad</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="live games">
+					<a href="https://isang-tira.vercel.app/" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/trophy-isang-tira.webp)"></span>
+						<span class="project__status">live &middot; game</span>
+						<h3>Isang Tira</h3>
+						<p>Daily Sungka puzzle &middot; browser</p>
+						<span class="chips"><span class="chip">JavaScript</span><span class="chip">Animation</span><span class="chip">Solver</span></span>
+						<span class="project__cta">Play game &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="prototype">
+					<a href="https://www.figma.com/proto/z7exUfwlkLGhuFIf9PQuNh/Wireframe?node-id=276-298&amp;p=f&amp;t=HDccOUdPqOuEzcTL-0&amp;scaling=min-zoom&amp;content-scaling=fixed&amp;page-id=0%3A1&amp;starting-point-node-id=196%3A1141" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/15-astounding-facts-about-figma-1695676043.jpg)"></span>
+						<span class="project__status project__status--dim">prototype</span>
+						<h3>Uratex New Portal</h3>
+						<p>Internal portal prototype &middot; Figma</p>
+						<span class="chips"><span class="chip">Figma</span><span class="chip">UI/UX</span></span>
+						<span class="project__cta">View prototype &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="archive">
+					<a href="https://www.deviantart.com/lemmuelturaya" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/vexel.jpg)"></span>
+						<span class="project__status project__status--dim">archive</span>
+						<h3>Vexel Portraits &amp; Designs</h3>
+						<p>Personal art collection &middot; DeviantArt</p>
+						<span class="chips"><span class="chip">Illustrator</span><span class="chip">Vexel Art</span></span>
+						<span class="project__cta">View on DeviantArt &rarr;</span>
+					</a>
+				</article>
+				<article class="project" data-tags="archive">
+					<a href="https://www.deviantart.com/lemmuelturaya/art/BPC-BINAN-PRESS-CORPS-LOGO-804539305" target="_blank" rel="noopener noreferrer">
+						<span class="project__thumb" style="background-image:url(images/bpc__binan_press_corps__logo_by_lemmuelturaya_ddb02i1-pre.jpg)"></span>
+						<span class="project__status project__status--dim">archive</span>
+						<h3>Bi&ntilde;an Press Corps</h3>
+						<p>Logo &amp; brand identity</p>
+						<span class="chips"><span class="chip">Branding</span><span class="chip">Illustrator</span></span>
+						<span class="project__cta">View case &rarr;</span>
+					</a>
+				</article>
+			</div>
+		</section>
 
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://kon2raya.netlify.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/thumb-3.png)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>This Portfolio</h3>
-								<p>Hand-crafted HTML / CSS / JS &middot; Netlify</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">HTML5</span><span class="pf-chip">CSS3</span><span class="pf-chip">JS</span></div>
-								<span class="pf-trophy__cta">View live &rarr;</span>
-							</div>
-						</a>
-					</article>
+		<!-- ============================ 07 ACTIVITY ============================ -->
+		<section class="sec wrap" id="activity">
+			<header class="sec__head">
+				<p class="sec__mark">// 07 activity &middot; @kon2raya24 <span class="live">live</span></p>
+				<h2>Proof of work</h2>
+			</header>
 
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://jbcmarketing.com.ph/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/website-background-photo.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>JBC Marketing</h3>
-								<p>Corporate website &middot; WordPress</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">WordPress</span><span class="pf-chip">PHP</span></div>
-								<span class="pf-trophy__cta">Visit site &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://huling-byahe.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-huling-byahe.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Huling Byahe</h3>
-								<p>Jeepney ghost-story arcade game &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">Web Audio</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://ahas-sa-fiesta.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-ahas.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Ahas sa Fiesta</h3>
-								<p>Pinoy fiesta snake game &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">Web Audio</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://tambayan-arcade.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-tambayan.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Tambayan Arcade</h3>
-								<p>Pinoy browser game portal &middot; 8 games</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">HTML5</span><span class="pf-chip">CSS3</span><span class="pf-chip">JavaScript</span></div>
-								<span class="pf-trophy__cta">Open arcade &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://bantay-kubo.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-bantay-kubo.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Bantay Kubo</h3>
-								<p>Jeepney tank game guarding the bahay kubo &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">PWA</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://habulan.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-habulan.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Habulan sa Palengke</h3>
-								<p>Palengke maze-chase game &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">Game AI</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://bagong-taon.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-bagong-taon.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Bagong Taon</h3>
-								<p>New Year&rsquo;s Eve maze-bomber &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">Web Audio</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://tawid-edsa.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-tawid-edsa.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Tawid EDSA</h3>
-								<p>Rainy EDSA lane-crossing game &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">Pathfinding</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://lipat-bahay.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-lipat-bahay.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Lipat-Bahay</h3>
-								<p>Story-driven 3D pushing puzzle &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Three.js</span><span class="pf-chip">A* solver</span><span class="pf-chip">PWA</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://kakanin-crush.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-kakanin-crush.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Kakanin Crush</h3>
-								<p>3D match-3 of Filipino rice cakes &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Three.js</span><span class="pf-chip">Bot-tuned levels</span><span class="pf-chip">PWA</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://hollow-blocks.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-hollow-blocks.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Hollow Blocks</h3>
-								<p>Construction-site falling-block game &middot; browser &middot; on itch.io</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Three.js</span><span class="pf-chip">PWA</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://tumbang-preso-3d.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-tumbang-preso.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Tumbang Preso</h3>
-								<p>First-person Filipino street game in 3D &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Three.js</span><span class="pf-chip">WebGL</span><span class="pf-chip">Gamepad</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://bakbakan.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-bakbakan.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Bakbakan sa Kanto</h3>
-								<p>3D Pinoy street fighter &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Three.js</span><span class="pf-chip">Game AI</span><span class="pf-chip">Gamepad</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--gold pf-cut">
-						<a href="https://isang-tira.vercel.app/" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/trophy-isang-tira.webp)"><span class="pf-trophy__medal">&#127942; LIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Isang Tira</h3>
-								<p>Daily Sungka puzzle &middot; browser</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">JavaScript</span><span class="pf-chip">Animation</span><span class="pf-chip">Solver</span></div>
-								<span class="pf-trophy__cta">Play game &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--silver pf-cut">
-						<a href="https://www.figma.com/proto/z7exUfwlkLGhuFIf9PQuNh/Wireframe?node-id=276-298&p=f&t=HDccOUdPqOuEzcTL-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=196%3A1141" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/15-astounding-facts-about-figma-1695676043.jpg)"><span class="pf-trophy__medal">&#129352; PROTOTYPE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Uratex New Portal</h3>
-								<p>Internal portal prototype &middot; Figma</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Figma</span><span class="pf-chip">UI/UX</span></div>
-								<span class="pf-trophy__cta">View prototype &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--bronze pf-cut">
-						<a href="https://www.deviantart.com/lemmuelturaya" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/vexel.jpg)"><span class="pf-trophy__medal">&#129353; ARCHIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Vexel Portraits &amp; Designs</h3>
-								<p>Personal art collection &middot; DeviantArt</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Illustrator</span><span class="pf-chip">Vexel Art</span></div>
-								<span class="pf-trophy__cta">View on DeviantArt &rarr;</span>
-							</div>
-						</a>
-					</article>
-
-					<article class="pf-trophy pf-trophy--bronze pf-cut">
-						<a href="https://www.deviantart.com/lemmuelturaya/art/BPC-BINAN-PRESS-CORPS-LOGO-804539305" target="_blank" rel="noopener noreferrer">
-							<div class="pf-trophy__thumb" style="background-image:url(images/bpc__binan_press_corps__logo_by_lemmuelturaya_ddb02i1-pre.jpg)"><span class="pf-trophy__medal">&#129353; ARCHIVE</span></div>
-							<div class="pf-trophy__body">
-								<h3>Bi&ntilde;an Press Corps</h3>
-								<p>Logo &amp; brand identity</p>
-								<div class="pf-trophy__stack"><span class="pf-chip">Branding</span><span class="pf-chip">Illustrator</span></div>
-								<span class="pf-trophy__cta">View case &rarr;</span>
-							</div>
-						</a>
-					</article>
+			<div class="activity">
+				<div class="card activity__graph">
+					<p class="card__mark commit-graph-label">// last 6 months &middot; contribution heatmap</p>
+					<div class="commit-graph" data-commit-graph aria-hidden="true"></div>
+					<p class="activity__views">site views: <strong data-views>&mdash;</strong></p>
 				</div>
-			</section>
-
-			<!-- ============ 7 · COMMS ============ -->
-			<section class="pf-panel" id="comms" role="tabpanel" aria-label="Comms — hire me" data-panel hidden>
-				<header class="pf-panel__head">
-					<h2 class="pf-panel__title">COMMS<span class="pf-panel__title-sub">// hire-me &middot; open to opportunities &middot; 2026</span></h2>
-					<p class="pf-panel__flavor">Available for <strong>full-time</strong>, <strong>contract</strong>, or <strong>freelance</strong> engagements &mdash; <strong>remote</strong>, hybrid, or onsite. If you&rsquo;re hiring a full-stack or mobile developer who can own features end-to-end and ship reliably, I&rsquo;d be glad to talk.</p>
-				</header>
-
-				<div class="pf-dialogue pf-cut">
-					<span class="pf-dialogue__who">DISPATCHER</span>
-					<p>&ldquo;You made it to the comms deck. Pick a channel below &mdash; every transmission gets answered within 24 hours, whatever your timezone.&rdquo;</p>
+				<div class="card">
+					<p class="card__mark">recent repos</p>
+					<ul class="repos" data-recent-repos>
+						<li class="muted">$ fetching latest repos&hellip;</li>
+					</ul>
+					<p class="card__foot"><a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer">view all repos on GitHub &rarr;</a></p>
 				</div>
+				<div class="card">
+					<p class="card__mark">$ git log -5 --oneline &middot; this site</p>
+					<ul class="gitlog" data-git-log>
+						<li class="muted">$ fetching latest commits&hellip;</li>
+					</ul>
+					<p class="card__foot"><a href="https://github.com/kon2raya24/portfolio/commits/main" target="_blank" rel="noopener noreferrer">view full history on GitHub &rarr;</a></p>
+				</div>
+			</div>
+		</section>
 
-				<div class="pf-comms">
-					<div class="pf-comms__main">
-						<!-- Quest chain -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// quest chain</span><h3>what happens next</h3></div>
-							<ol class="pf-chain">
-								<li><span>01</span><div><strong>you reach out</strong><em>email, form, or cal.com &middot; reply within 24h</em></div></li>
-								<li><span>02</span><div><strong>15-min intro call</strong><em>cal.com &middot; quick fit check, no pressure</em></div></li>
-								<li><span>03</span><div><strong>role brief or scoping doc</strong><em>async &middot; pinned-down expectations</em></div></li>
-								<li><span>04</span><div><strong>trial week or offer</strong><em>whichever fits the engagement</em></div></li>
-							</ol>
-						</div>
+		<!-- ============================ 08 CONTACT ============================ -->
+		<section class="sec wrap" id="contact">
+			<header class="sec__head">
+				<p class="sec__mark">// 08 contact &middot; open to full-time / contract / freelance</p>
+				<h2>Let&rsquo;s talk</h2>
+				<p class="sec__intro">Available for <strong>full-time</strong>, <strong>contract</strong>, or <strong>freelance</strong> engagements &mdash; <strong>remote</strong>, hybrid, or onsite. If you&rsquo;re hiring a full-stack or mobile developer who can own features end-to-end and ship reliably, I&rsquo;d be glad to talk. Every message gets a reply within 24 hours.</p>
+			</header>
 
-						<!-- Transmission console (Netlify form) -->
-						<div class="pf-card pf-cut" id="transmission">
-							<div class="pf-card__head"><span class="pf-kicker">// transmission console</span><h3>send a message</h3><span class="pf-badge pf-badge--live">CHANNEL OPEN</span></div>
+			<ol class="steps">
+				<li><strong>you reach out</strong><span>email, form, or cal.com &middot; reply within 24h</span></li>
+				<li><strong>15-min intro call</strong><span>cal.com &middot; quick fit check, no pressure</span></li>
+				<li><strong>role brief or scoping doc</strong><span>async &middot; pinned-down expectations</span></li>
+				<li><strong>trial week or offer</strong><span>whichever fits the engagement</span></li>
+			</ol>
 
-							<div class="pf-form-success" data-form-success hidden role="status" aria-live="polite">
-								<span aria-hidden="true">&#10003;</span>
-								<div><strong>TRANSMISSION SENT.</strong> Thanks &mdash; I&rsquo;ll reply within 24 hours.</div>
-							</div>
+			<div class="contact">
+				<div class="card" id="transmission">
+					<p class="card__mark">send a message</p>
 
-							<form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?sent=1" class="pf-form">
-								<input type="hidden" name="form-name" value="contact">
-								<p class="pf-form__honey" aria-hidden="true">
-									<label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-								</p>
-								<div class="pf-form__grid">
-									<label><span>name</span><input type="text" name="name" required placeholder="Your name" autocomplete="name"></label>
-									<label><span>email</span><input type="email" name="email" required placeholder="you@company.com" autocomplete="email"></label>
-									<label><span>company / role</span><input type="text" name="company" placeholder="Acme Inc. &middot; Engineering Manager" autocomplete="organization"></label>
-									<label><span>type</span><select name="opportunity_type">
-										<option value="">Select&hellip;</option>
-										<option>Full-time role</option>
-										<option>Contract / Freelance</option>
-										<option>Short project</option>
-										<option>Just chatting</option>
-									</select></label>
-								</div>
-								<label class="pf-form__wide"><span>message</span><textarea name="message" required rows="4" placeholder="A few lines about the role or project&hellip;"></textarea></label>
-								<div class="pf-form__foot">
-									<button type="submit" class="pf-btn pf-btn--primary">&#9654; SEND TRANSMISSION</button>
-									<span class="pf-form__hint">$ POST /contact &middot; usually a reply within 24h</span>
-								</div>
-							</form>
-						</div>
-
-						<!-- Patch notes (git log) -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// patch notes</span><h3>$ git log -5 --oneline</h3></div>
-							<ul class="pf-gitlog" data-git-log>
-								<li class="pf-gitlog__loading">$ fetching latest commits&hellip;</li>
-							</ul>
-							<p class="pf-gitlog__foot"><a href="https://github.com/kon2raya24/portfolio/commits/main" target="_blank" rel="noopener">view full history on GitHub &rarr;</a></p>
-						</div>
+					<div class="form-ok" data-form-success hidden role="status" aria-live="polite">
+						<strong>Message sent.</strong> Thanks &mdash; I&rsquo;ll reply within 24 hours.
 					</div>
 
-					<aside class="pf-comms__side">
-						<!-- Direct channels -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// direct channels</span><h3>reach me</h3></div>
-							<div class="pf-email">
-								<a href="mailto:turayalemmuel@gmail.com">turayalemmuel@gmail.com</a>
-								<button type="button" class="pf-copy" data-copy="turayalemmuel@gmail.com" aria-label="copy email">copy</button>
-							</div>
-							<div class="pf-channels">
-								<a class="pf-channel" href="mailto:turayalemmuel@gmail.com"><strong>@ Get in touch</strong><span>primary channel &middot; fastest reply</span></a>
-								<a class="pf-channel" href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer"><strong>&#9654; Book a 15-min intro call</strong><span>cal.com &middot; pick any open slot</span></a>
-								<a class="pf-channel" href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank" rel="noopener noreferrer"><strong>in View LinkedIn</strong><span>profile &middot; recommendations</span></a>
-								<a class="pf-channel" href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer"><strong>&lt;/&gt; View GitHub</strong><span>@kon2raya24</span></a>
-								<a class="pf-channel" href="resume.pdf" download><strong>&#8681; Download Resume</strong><span>PDF &middot; one-pager</span></a>
-							</div>
+					<form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?sent=1" class="form">
+						<input type="hidden" name="form-name" value="contact">
+						<p class="form__honey" aria-hidden="true">
+							<label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+						</p>
+						<div class="form__grid">
+							<label><span>name</span><input type="text" name="name" required placeholder="Your name" autocomplete="name"></label>
+							<label><span>email</span><input type="email" name="email" required placeholder="you@company.com" autocomplete="email"></label>
+							<label><span>company / role</span><input type="text" name="company" placeholder="Acme Inc. &middot; Engineering Manager" autocomplete="organization"></label>
+							<label><span>type</span><select name="opportunity_type">
+								<option value="">Select&hellip;</option>
+								<option>Full-time role</option>
+								<option>Contract / Freelance</option>
+								<option>Short project</option>
+								<option>Just chatting</option>
+							</select></label>
 						</div>
-
-						<!-- Server status -->
-						<div class="pf-card pf-cut">
-							<div class="pf-card__head"><span class="pf-kicker">// server status</span><h3>meta</h3></div>
-							<dl class="pf-kv">
-								<div><dt>timezone</dt><dd>GMT+8 &middot; PHT</dd></div>
-								<div><dt>location</dt><dd>Bi&ntilde;an, Laguna &middot; PH</dd></div>
-								<div><dt>stack</dt><dd>vue &middot; laravel &middot; flutter</dd></div>
-								<div><dt>response</dt><dd>&lt; 24 hours</dd></div>
-							</dl>
+						<label class="form__wide"><span>message</span><textarea name="message" required rows="5" placeholder="A few lines about the role or project&hellip;"></textarea></label>
+						<div class="form__foot">
+							<button type="submit" class="btn btn--primary">send_message()</button>
+							<span class="muted">usually a reply within 24h</span>
 						</div>
-					</aside>
+					</form>
 				</div>
-			</section>
 
-		</main>
+				<aside class="contact__side">
+					<div class="card">
+						<p class="card__mark">direct channels</p>
+						<p class="email"><a href="mailto:turayalemmuel@gmail.com">turayalemmuel@gmail.com</a> <button type="button" class="copy" data-copy="turayalemmuel@gmail.com" aria-label="Copy email address">copy</button></p>
+						<ul class="channels">
+							<li><a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer"><strong>Book a 15-min intro call</strong><span>cal.com &middot; pick any open slot</span></a></li>
+							<li><a href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank" rel="noopener noreferrer"><strong>LinkedIn</strong><span>profile &middot; recommendations</span></a></li>
+							<li><a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>@kon2raya24</span></a></li>
+							<li><a href="resume.pdf" download><strong>Download resume</strong><span>PDF &middot; one-pager</span></a></li>
+							<li><a href="tel:+639227786152"><strong>+63 922 778 6152</strong><span>phone</span></a></li>
+						</ul>
+						<dl class="kv kv--tight">
+							<div><dt>timezone</dt><dd>GMT+8 &middot; PHT</dd></div>
+							<div><dt>location</dt><dd>Bi&ntilde;an, Laguna &middot; PH</dd></div>
+							<div><dt>response</dt><dd>&lt; 24 hours</dd></div>
+						</dl>
+					</div>
 
-		<!-- ===== FOOTER STRIP ===== -->
-		<footer class="pf-foot" role="contentinfo">
-			<span class="pf-foot__legal">&copy; 2026 LEMMUEL TURAYA &middot; designed and built from scratch &middot; open to opportunities worldwide</span>
-			<nav class="pf-foot__links" aria-label="Meta links">
+					<div class="card">
+						<p class="card__mark">quick answers</p>
+						<div class="faq">
+							<details><summary>Notice period &amp; earliest start?</summary><p>30-day notice from current role. Available for a serious offer within ~30&ndash;45 days of signing.</p></details>
+							<details><summary>Salary range / day rate?</summary><p>Negotiable based on scope and engagement type. Happy to share specifics on a call once the role is clear.</p></details>
+							<details><summary>Remote, hybrid, or onsite?</summary><p>All three open. Strong async-collaboration habits; based in Bi&ntilde;an (GMT+8) with good overlap to APAC, EU mornings, and US evenings.</p></details>
+							<details><summary>Contract or full-time?</summary><p>Either &mdash; tell me what you need. Currently full-time at AAI; open to contract on the side or a full move for the right role.</p></details>
+							<details><summary>Visa / work eligibility?</summary><p>Philippine citizen. Work-from-PH or contract globally without sponsorship. Sponsorship needed for onsite outside PH.</p></details>
+						</div>
+						<p class="card__foot">More questions? <button type="button" class="linkish" data-ask>ask the assistant &rarr;</button></p>
+					</div>
+				</aside>
+			</div>
+		</section>
+	</main>
+
+	<!-- ============================ FOOTER ============================ -->
+	<footer class="foot">
+		<div class="wrap foot__inner">
+			<p>&copy; 2026 Lemmuel Turaya &middot; designed and built from scratch &middot; open to opportunities worldwide</p>
+			<nav aria-label="Meta links">
 				<a href="now.html">/now</a>
 				<a href="uses.html">/uses</a>
 				<a href="changelog.html">/changelog</a>
+				<a href="night-shift.html">/night-shift</a>
+				<a href="classic.html">/classic</a>
 				<a href="resume.json">resume.json</a>
 				<a href="api/availability.json">availability.json</a>
 				<a href="feed.xml">rss</a>
 				<a href="humans.txt">humans</a>
-				<a href="https://github.com/kon2raya24" target="_blank" rel="noopener">source</a>
+				<a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer">source</a>
 			</nav>
-			<span class="pf-foot__accents" data-accents aria-label="Accent color">
-				<button type="button" data-accent="plasma" title="plasma accent" aria-label="plasma accent"></button>
-				<button type="button" data-accent="crimson" title="crimson accent" aria-label="crimson accent"></button>
-				<button type="button" data-accent="gold" class="is-on" title="gold accent" aria-label="gold accent"></button>
-			</span>
-			<span class="pf-foot__coin" aria-hidden="true">&#9679; INSERT COIN</span>
-		</footer>
-	</div>
-
-	<!-- Modal — quest briefings + achievements -->
-	<div class="pf-modal" data-modal hidden>
-		<div class="pf-modal__box pf-cut" role="dialog" aria-modal="true" aria-label="Detail view">
-			<button type="button" class="pf-modal__close" data-modal-close aria-label="Close">&#10005;</button>
-			<div class="pf-modal__content" data-modal-content></div>
 		</div>
-	</div>
+	</footer>
 
-	<!-- Achievement toast -->
-	<div class="pf-toast" data-toast aria-live="polite"></div>
-
-	<script src="js/player-file.js" defer></script>
+	<script src="js/portfolio-chat.js" defer></script>
+	<script src="js/site.js" defer></script>
 
 	<!-- Service worker registration (PWA offline support) -->
 	<script>

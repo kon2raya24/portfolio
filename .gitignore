@@ -16,3 +16,6 @@ Thumbs.db
 *.swo
 .vscode/
 .idea/
+
+# Brainstorm mockups (visual companion), local only
+.superpowers/

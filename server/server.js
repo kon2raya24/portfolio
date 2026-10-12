@@ -159,7 +159,7 @@ async function handleContact(req, res) {
 }
 
 // Native browser form submit -> 303 redirect back to the form's action URL,
-// which already carries ?sent=1 (so the existing tech-fx.js / player-file.js
+// which already carries ?sent=1 (so the existing tech-fx.js / site.js
 // success state fires). req.url is same-origin by construction. fetch() callers
 // (the game console) send Accept: */* and just want a small JSON ack.
 function respondSubmit(req, res, jsonStatus, jsonPayload) {
