@@ -59,6 +59,8 @@
 		var x = -100, y = -100, cx = x, cy = y;
 		d.addEventListener('pointermove', function (e) {
 			x = e.clientX; y = e.clientY;
+			h.style.setProperty('--mx', x + 'px');
+			h.style.setProperty('--my', y + 'px');
 			var hot = e.target.closest && e.target.closest('a, button, summary, input, textarea, select, label, canvas, [data-tilt]');
 			c.classList.toggle('is-hover', !!hot);
 		}, { passive: true });
@@ -176,7 +178,13 @@
 		var wrap = $('[data-hscroll]'), track = $('[data-hscroll-track]');
 		if (!wrap || !track || reduced) return;
 		var mq = w.matchMedia('(min-width: 861px)');
-		var pin = track.parentNode, dist = 0;
+		var pin = track.parentNode, dist = 0, count = track.children.length;
+		var meta = d.createElement('div');
+		meta.className = 'hs-meta';
+		meta.setAttribute('aria-hidden', 'true');
+		meta.innerHTML = 'N&deg;<b>01</b>/ ' + String(count).padStart(2, '0') + '<span class="hs-bar"><i></i></span>';
+		pin.appendChild(meta);
+		var num = meta.querySelector('b');
 		/* the transform does the moving; stop focus/scroll-restore from scrolling the pin too */
 		pin.addEventListener('scroll', function () { if (mq.matches && pin.scrollLeft) pin.scrollLeft = 0; });
 		function measure() {
@@ -191,6 +199,8 @@
 			if (!mq.matches) return;
 			var p = clamp(-wrap.getBoundingClientRect().top / (dist || 1), 0, 1);
 			track.style.setProperty('--hx', (-p * dist).toFixed(1) + 'px');
+			meta.style.setProperty('--hp', p.toFixed(3));
+			num.textContent = String(Math.min(count, Math.floor(p * count) + 1)).padStart(2, '0');
 		}
 		w.addEventListener('resize', measure);
 		w.addEventListener('load', measure);
@@ -233,6 +243,101 @@
 			entries.forEach(function (en) { if (en.isIntersecting) { io.unobserve(en.target); scramble(en.target); } });
 		}, { rootMargin: '0px 0px -15% 0px' });
 		marks.forEach(function (m) { io.observe(m); });
+	})();
+
+	/* ---------------------------------------------------------------------
+	   6b. Split identity portrait: the right side of the divider shows the
+	       same photo rendered as live ASCII. The divider follows the cursor
+	       (touch: a slow sweep). Adapted from adhamdannaway.com.
+	   --------------------------------------------------------------------- */
+	(function splitPortrait() {
+		var fig = $('[data-split]'), cv = $('[data-ascii]'), img = fig && $('img', fig);
+		if (!fig || !cv || !img || !cv.getContext) return;
+		var RAMP = ' .:-=+*#%@', grid = [], cols = 0, rows = 0, cell = 0, rowH = 0, size = 0, ctx = cv.getContext('2d');
+		function sample() {
+			size = fig.getBoundingClientRect().width;
+			if (!size || !img.naturalWidth) return false;
+			var dpr = Math.min(2, w.devicePixelRatio || 1);
+			cv.width = size * dpr; cv.height = size * dpr;
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			cols = Math.round(size / 6.4); cell = size / cols; rowH = cell * 1.7; rows = Math.ceil(size / rowH);
+			var off = d.createElement('canvas'), o = off.getContext('2d');
+			off.width = cols; off.height = rows;
+			o.drawImage(img, 0, 0, cols, rows);
+			var px = o.getImageData(0, 0, cols, rows).data;
+			grid = [];
+			for (var i = 0; i < cols * rows; i++) {
+				var lum = (px[i * 4] * 0.299 + px[i * 4 + 1] * 0.587 + px[i * 4 + 2] * 0.114) / 255;
+				grid.push(clamp((lum - 0.07) * 1.45, 0, 1));
+			}
+			return true;
+		}
+		function draw(noise) {
+			ctx.fillStyle = '#0b0a0f';
+			ctx.fillRect(0, 0, size, size);
+			ctx.font = '500 ' + (cell * 1.55).toFixed(1) + 'px "JetBrains Mono", monospace';
+			ctx.textBaseline = 'top';
+			for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
+				var v = grid[y * cols + x], k = Math.round(v * (RAMP.length - 1));
+				if (!k) continue;
+				if (noise && Math.random() < noise) k = 1 + ((Math.random() * (RAMP.length - 1)) | 0);
+				ctx.fillStyle = 'rgba(196,181,253,' + (0.3 + v * 0.7).toFixed(2) + ')';
+				ctx.fillText(RAMP[k], x * cell, y * rowH);
+			}
+		}
+		function build() { if (sample()) draw(0); }
+		if (img.complete) build(); else img.addEventListener('load', build);
+		var t;
+		w.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(build, 150); });
+		if (reduced) return;
+
+		/* divider: follows the cursor over the hero, otherwise rests at 50% */
+		var stage = $('.hero__stage') || fig, target = 50, cur = 50, over = false, visible = true;
+		if (finePointer) {
+			stage.addEventListener('pointermove', function (e) {
+				var r = fig.getBoundingClientRect();
+				over = e.clientX > r.left - 40 && e.clientX < r.right + 40;
+				target = over ? clamp((e.clientX - r.left) / r.width * 100, 6, 94) : 50;
+			});
+			stage.addEventListener('pointerleave', function () { over = false; target = 50; });
+		}
+		if ('IntersectionObserver' in w) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(fig);
+		var lastShimmer = 0;
+		(function loop(now) {
+			if (visible) {
+				if (!finePointer) target = 50 + 32 * Math.sin(now / 1600);
+				cur += (target - cur) * 0.14;
+				fig.style.setProperty('--split', cur.toFixed(2) + '%');
+				if (grid.length && now - lastShimmer > 140) { lastShimmer = now; draw(0.035); }
+			}
+			requestAnimationFrame(loop);
+		})(0);
+	})();
+
+	/* ---------------------------------------------------------------------
+	   6c. Section index: numbered lines on the left edge; the current
+	       section's line grows. Adapted from brittanychiang.com.
+	   --------------------------------------------------------------------- */
+	(function sectionIndex() {
+		var secs = $$('main > section.sec[id]');
+		if (!secs.length || !('IntersectionObserver' in w)) return;
+		var nav = d.createElement('nav');
+		nav.className = 'sindex';
+		nav.setAttribute('aria-label', 'Page sections');
+		nav.innerHTML = '<ol>' + secs.map(function (sec, i) {
+			return '<li><a href="#' + sec.id + '"><b>' + String(i + 1).padStart(2, '0') + '</b><span>' + esc(sec.id) + '</span></a></li>';
+		}).join('') + '</ol>';
+		d.body.appendChild(nav);
+		var links = $$('a', nav);
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (en) {
+				if (!en.isIntersecting) return;
+				links.forEach(function (a) {
+					if (a.getAttribute('href') === '#' + en.target.id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+				});
+			});
+		}, { rootMargin: '-45% 0px -50% 0px' });
+		secs.forEach(function (sec) { io.observe(sec); });
 	})();
 
 	/* ---------------------------------------------------------------------

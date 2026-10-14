@@ -602,6 +602,79 @@ html:not(.js) .filters { display: none; }
 
 .confetti { position: fixed; inset: 0; z-index: 260; pointer-events: none; }
 
+/* ==========================================================================
+   v8.1 — components adapted from the developer-portfolios list
+   ========================================================================== */
+
+/* split identity portrait: photo | live ASCII (after adhamdannaway.com) */
+.portrait { --split: 50%; }
+.portrait__ascii {
+	position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+	clip-path: inset(0 0 0 var(--split));
+	-webkit-mask-image: radial-gradient(closest-side at 50% 46%, #000 62%, transparent 100%);
+	mask-image: radial-gradient(closest-side at 50% 46%, #000 62%, transparent 100%);
+}
+.portrait__divider {
+	position: absolute; top: 6%; bottom: 14%; left: var(--split); width: 1px; pointer-events: none;
+	background: linear-gradient(transparent, var(--accent) 18%, var(--accent) 82%, transparent);
+	box-shadow: 0 0 14px 1px rgba(167, 139, 250, 0.8);
+}
+.portrait__divider::before {
+	content: '\2039\2009\203A'; position: absolute; top: 46%; left: 0; transform: translate(-50%, -50%);
+	display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+	border: 1px solid var(--accent); background: rgba(11, 10, 15, 0.75); color: var(--accent);
+	font: 600 14px/1 var(--font); backdrop-filter: blur(4px);
+}
+.portrait__tags { position: absolute; left: 14%; right: 14%; bottom: 7%; display: flex; justify-content: space-between; margin: 0; font: 500 11px var(--mono); color: var(--dim); letter-spacing: 0.04em; pointer-events: none; }
+.portrait__tags span:last-child { color: var(--accent); }
+html:not(.js) .portrait__ascii, html:not(.js) .portrait__divider, html:not(.js) .portrait__tags { display: none; }
+
+/* big soft spotlight that trails the cursor (after brittanychiang.com) */
+body::after {
+	content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+	background: radial-gradient(640px circle at var(--mx, -999px) var(--my, -999px), rgba(124, 58, 237, 0.13), transparent 70%);
+}
+
+/* hover one, dim the rest (after brittanychiang.com) */
+@media (hover: hover) and (pointer: fine) {
+	.timeline > li, .services > .service, .projects > .project, .stack > .card { transition: opacity 0.35s var(--ease), transform 0.6s var(--ease); }
+	.timeline:hover > li:not(:hover), .services:hover > .service:not(:hover),
+	.projects:hover > .project:not(:hover), .stack:hover > .card:not(:hover) { opacity: 0.38; }
+	[data-stagger]:hover > * { transition-delay: 0s !important; }
+}
+
+/* section index with a growing line (after brittanychiang.com / ilans.net) */
+.sindex { display: none; }
+@media (min-width: 1440px) {
+	.sindex { position: fixed; left: 34px; top: 50%; transform: translateY(-50%); z-index: 40; display: block; }
+	.sindex ol { list-style: none; display: grid; gap: 12px; }
+	.sindex a { display: flex; align-items: center; gap: 10px; font: 500 11px var(--mono); color: var(--dim); text-transform: uppercase; letter-spacing: 0.12em; }
+	.sindex a::before { content: ''; width: 14px; height: 1px; background: currentColor; transition: width 0.45s var(--ease), background-color 0.3s; }
+	.sindex b { font-weight: 500; }
+	.sindex span { opacity: 0; transform: translateX(-6px); transition: opacity 0.3s, transform 0.4s var(--ease); }
+	.sindex a:hover, .sindex a[aria-current] { color: var(--heading); }
+	.sindex a[aria-current]::before { width: 40px; background: var(--accent); box-shadow: 0 0 8px var(--accent-2); }
+	.sindex a:hover::before { width: 40px; }
+	.sindex a:hover span { opacity: 1; transform: none; }
+}
+
+/* italic serif accents against the sans (after ilans.net) */
+.sec h2 .hl, .foot__big .hl, .hero__hello, .hero__a {
+	font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em;
+}
+.sec h2 .hl, .foot__big .hl { font-size: 1.08em; padding-right: 0.04em; }
+.hero__hello, .hero__a { font-size: clamp(26px, 2.6vw, 38px); }
+
+/* work track counter + progress (after carterogunsola.com) */
+.hs-meta { display: none; }
+html.hs-on .hs-meta {
+	position: absolute; left: max(24px, calc(50vw - 576px)); bottom: 7vh; display: flex; align-items: center; gap: 14px;
+	font: 500 13px var(--mono); color: var(--dim);
+}
+.hs-meta b { font: 600 30px/1 var(--font); color: var(--heading); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.hs-bar { position: relative; width: 180px; height: 2px; overflow: hidden; background: var(--line); border-radius: 2px; }
+.hs-bar i { position: absolute; inset: 0; background: var(--grad); transform-origin: 0 50%; transform: scaleX(var(--hp, 0)); }
+
 /* ---------- reveal on scroll (js/fx.js adds .reveal / .is-in) ---------- */
 .reveal .sec__head > * { opacity: 0; transform: translateY(30px); filter: blur(8px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), filter 0.9s var(--ease); }
 .reveal .sec__head > :nth-child(2) { transition-delay: 0.08s; }
