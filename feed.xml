@@ -10,9 +10,21 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Wed, 14 Oct 2026 10:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Wed, 14 Oct 2026 12:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v8.0 — A front page with some play in it</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v8-0</link>
+    <guid isPermaLink="false">portfolio-v8.0-2026-10-14</guid>
+    <pubDate>Wed, 14 Oct 2026 12:00:00 +0800</pubDate>
+    <category>major-redesign</category>
+    <description><![CDATA[
+      Near-black stage, lavender accent and big type. An intro loader, a portrait that follows your cursor, rotating
+      roles, a type-into terminal, a drag-and-throw skills playground, a pinned sideways case-study track and a
+      scroll-lit career timeline. Reduced motion and no-JS still get the full content.
+    ]]></description>
+  </item>
   <item>
     <title>v7.1 — Case studies, /now, /uses and 404 match the new front page</title>
     <link>https://kon2raya.netlify.app/changelog.html#v7-1</link>

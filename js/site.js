@@ -84,6 +84,7 @@
 		var bar = $('[data-filters]');
 		var cards = $$('[data-projects] > [data-tags]');
 		if (!bar || !cards.length) return;
+		cards.forEach(function (c, i) { c.style.viewTransitionName = 'pj-' + i; });
 		function matches(card, tag) { return tag === 'all' || card.getAttribute('data-tags').split(' ').indexOf(tag) !== -1; }
 		$$('[data-filter]', bar).forEach(function (btn) {
 			var tag = btn.getAttribute('data-filter');
@@ -91,7 +92,9 @@
 			if (count) count.textContent = cards.filter(function (c) { return matches(c, tag); }).length;
 			btn.addEventListener('click', function () {
 				$$('[data-filter]', bar).forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
-				cards.forEach(function (c) { c.hidden = !matches(c, tag); });
+				function apply() { cards.forEach(function (c) { c.hidden = !matches(c, tag); }); }
+				/* native View Transitions morph the grid when supported */
+				if (d.startViewTransition && !reducedMotion) d.startViewTransition(apply); else apply();
 			});
 		});
 	})();
@@ -121,6 +124,11 @@
 				if (en.isIntersecting) { en.target.classList.add('is-in'); revealIO.unobserve(en.target); }
 			});
 		}, { rootMargin: '0px 0px -10% 0px' });
+		/* grids whose children enter one after another (css: [data-stagger]) */
+		$$('.about, .stack, .services, .projects, .activity, .contact, .steps, .timeline').forEach(function (g) {
+			g.setAttribute('data-stagger', '');
+			Array.prototype.forEach.call(g.children, function (c, i) { c.style.setProperty('--i', Math.min(i, 8)); });
+		});
 		$$('main > .sec').forEach(function (s) {
 			var r = s.getBoundingClientRect();
 			if (r.top < window.innerHeight) return; /* already on screen — don't hide it */
@@ -286,7 +294,7 @@
 			var html = '';
 			for (var i = 0; i < CELLS; i++) {
 				var c = buckets[i] || 0;
-				html += '<span class="commit-cell" data-level="' + levelFor(c) + '" title="' + c + ' event' + (c !== 1 ? 's' : '') + '"></span>';
+				html += '<span class="commit-cell" style="--c:' + Math.floor(i / 7) + '" data-level="' + levelFor(c) + '" title="' + c + ' event' + (c !== 1 ? 's' : '') + '"></span>';
 			}
 			host.innerHTML = html;
 		}

@@ -4,26 +4,26 @@
 :root {
   /* v7 engineered palette — same tokens as css/site.css. The legacy names
      (--cyan, --brand, --magenta) are kept because every rule below uses them. */
-  --bg: #0b0d0c;
-  --text: #d7e0da;
-  --dim: #8a978f;
+  --bg: #0b0a0f;
+  --text: #e9e6f0;
+  --dim: #9d97ab;
   --heading: #ffffff;
-  --accent: #4ade80;
-  --accent-soft: #86efac;
-  --accent-ink: #0b0d0c;
+  --accent: #c4b5fd;
+  --accent-soft: #e9d5ff;
+  --accent-ink: #0b0a0f;
   --ai: #a78bfa;
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
   --brand: var(--accent);
   --brand-2: var(--accent-soft);
   --cyan: var(--accent);
-  --cyan-dim: #22a35a;
+  --cyan-dim: #a78bfa;
   --magenta: var(--ai);
-  --bg-dark: #0f1311;
+  --bg-dark: #14121c;
   --bg-deep: var(--bg);
-  --surface: #0f1311;
-  --line: #26302a;
-  --line-strong: #3a4a40;
+  --surface: #14121c;
+  --line: #24202e;
+  --line-strong: #3a3448;
   --glow-cyan: none;
 
   /* Motion vocabulary — mirrored from style.css so case-study pages have
@@ -54,8 +54,8 @@ body::before {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(74, 222, 128, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74, 222, 128, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(167, 139, 250, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(167, 139, 250, 0.06) 1px, transparent 1px);
   background-size: 60px 60px;
   -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 80%);
           mask-image: radial-gradient(ellipse at center, #000 25%, transparent 80%);
@@ -84,7 +84,7 @@ body::before {
   letter-spacing: 1px;
   color: var(--cyan);
   text-decoration: none;
-  text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
 }
 .cs-nav__brand {
   position: relative;
@@ -207,14 +207,14 @@ body::before {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(74, 222, 128, 0.55) 25%,
-    rgba(74, 222, 128, 0.7) 50%,
-    rgba(74, 222, 128, 0.55) 75%,
+    rgba(167, 139, 250, 0.55) 25%,
+    rgba(167, 139, 250, 0.7) 50%,
+    rgba(167, 139, 250, 0.55) 75%,
     transparent 100%
   );
   box-shadow:
-    0 0 14px rgba(74, 222, 128, 0.5),
-    0 0 30px rgba(74, 222, 128, 0.18);
+    0 0 14px rgba(167, 139, 250, 0.5),
+    0 0 30px rgba(167, 139, 250, 0.18);
   filter: blur(0.5px);
   opacity: 0;
   pointer-events: none;
@@ -261,7 +261,7 @@ body::before {
           background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 28px rgba(74, 222, 128, 0.2);
+  text-shadow: 0 0 28px rgba(167, 139, 250, 0.2);
   animation: cs-hero-shimmer 7s ease-in-out infinite;
 }
 @keyframes cs-hero-shimmer {
@@ -295,12 +295,12 @@ body::before {
 }
 @keyframes cs-meta-hue-cycle {
   0%, 100% {
-    border-color: rgba(74, 222, 128, 0.22);
-    box-shadow: 0 0 14px rgba(74, 222, 128, 0.14), inset 0 0 6px rgba(74, 222, 128, 0.05);
+    border-color: rgba(167, 139, 250, 0.22);
+    box-shadow: 0 0 14px rgba(167, 139, 250, 0.14), inset 0 0 6px rgba(167, 139, 250, 0.05);
   }
   33% {
-    border-color: rgba(74, 222, 128, 0.28);
-    box-shadow: 0 0 14px rgba(74, 222, 128, 0.14), inset 0 0 6px rgba(74, 222, 128, 0.05);
+    border-color: rgba(167, 139, 250, 0.28);
+    box-shadow: 0 0 14px rgba(167, 139, 250, 0.14), inset 0 0 6px rgba(167, 139, 250, 0.05);
   }
   66% {
     border-color: rgba(167, 139, 250, 0.24);
@@ -330,7 +330,7 @@ body::before {
   font-size: 10px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  background: rgba(74, 222, 128, 0.06);
+  background: rgba(167, 139, 250, 0.06);
   border: 1px solid var(--line);
   color: rgba(215, 224, 218, 0.8);
   padding: 4px 9px;
@@ -352,7 +352,7 @@ body::before {
   width: 60%;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(74, 222, 128, 0.45) 50%,
+    rgba(167, 139, 250, 0.45) 50%,
     transparent 100%);
   transform: translateX(-200%);
   pointer-events: none;
@@ -364,7 +364,7 @@ body::before {
 .cs-chip--ai:hover::after {
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(74, 222, 128, 0.55) 50%,
+    rgba(167, 139, 250, 0.55) 50%,
     transparent 100%);
 }
 @keyframes cs-chip-sheen {
@@ -376,8 +376,8 @@ body::before {
   .cs-chip:hover { transform: none; }
 }
 .cs-chip--ai {
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.12), rgba(167, 139, 250, 0.1));
-  border-color: rgba(74, 222, 128, 0.4);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(167, 139, 250, 0.1));
+  border-color: rgba(167, 139, 250, 0.4);
   color: #ffb352;
 }
 
@@ -418,7 +418,7 @@ body::before {
   height: 2px;
   background: linear-gradient(90deg, var(--cyan), var(--brand), var(--magenta), transparent);
   background-size: 110% 100%;
-  filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.5));
+  filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.5));
   border-radius: 2px;
   transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
 }
@@ -458,7 +458,7 @@ body::before {
   left: 4px;
   top: 5px;
   color: var(--cyan);
-  text-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
+  text-shadow: 0 0 6px rgba(167, 139, 250, 0.5);
 }
 
 /* Code block */
@@ -502,7 +502,7 @@ body::before {
   font-size: 9.5px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  background: rgba(74, 222, 128, 0.10);
+  background: rgba(167, 139, 250, 0.10);
   color: var(--cyan);
   border: 0;
   padding: 4px 14px;
@@ -515,11 +515,11 @@ body::before {
     0 50%
   );
   cursor: pointer;
-  text-shadow: 0 0 5px rgba(74, 222, 128, 0.35);
+  text-shadow: 0 0 5px rgba(167, 139, 250, 0.35);
   transition: background 0.18s, color 0.18s, text-shadow 0.18s;
 }
 .cs-code__copy:hover {
-  background: rgba(74, 222, 128, 0.28);
+  background: rgba(167, 139, 250, 0.28);
   color: #fff;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
 }
@@ -559,7 +559,7 @@ body::before {
 
 /* Screenshot placeholder */
 .cs-shot {
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.08), rgba(74, 222, 128, 0.05));
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(167, 139, 250, 0.05));
   border: 1px dashed var(--line-strong);
   border-radius: 8px;
   padding: 60px 24px;
@@ -588,7 +588,7 @@ body::before {
   border: 1px solid var(--line-strong);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(74, 222, 128, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(167, 139, 250, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 .cs-shot-real img {
   display: block;
@@ -597,7 +597,7 @@ body::before {
 }
 .cs-shot-real figcaption {
   padding: 12px 18px;
-  border-top: 1px solid rgba(74, 222, 128, 0.10);
+  border-top: 1px solid rgba(167, 139, 250, 0.10);
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.8px;
@@ -609,8 +609,8 @@ body::before {
   margin-right: 8px;
   padding: 2px 8px;
   border-radius: 3px;
-  background: rgba(74, 222, 128, 0.12);
-  border: 1px solid rgba(74, 222, 128, 0.4);
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.4);
   color: var(--brand);
   font-size: 9px;
   letter-spacing: 1.5px;
@@ -633,7 +633,7 @@ body::before {
 }
 .cs-metric:hover {
   border-color: var(--line-strong);
-  box-shadow: 0 6px 22px rgba(74, 222, 128, 0.15);
+  box-shadow: 0 6px 22px rgba(167, 139, 250, 0.15);
   transform: translateY(-2px);
 }
 .cs-metric__k {
@@ -649,14 +649,14 @@ body::before {
   font-size: 22px;
   letter-spacing: 1px;
   color: var(--cyan);
-  text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
 }
 
 /* Editor-only TODO marker (kept for when the page is being filled in;
    when public-facing, the page should use .cs-pending instead) */
 .cs-todo {
   display: inline-block;
-  background: rgba(74, 222, 128, 0.15);
+  background: rgba(167, 139, 250, 0.15);
   border: 1px dashed var(--brand);
   color: var(--brand);
   padding: 2px 7px;
@@ -670,8 +670,8 @@ body::before {
 /* Public-safe "in progress" inline tag — neutral, intentional */
 .cs-pending {
   display: inline-block;
-  background: rgba(74, 222, 128, 0.06);
-  border: 1px solid rgba(74, 222, 128, 0.25);
+  background: rgba(167, 139, 250, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.25);
   color: var(--cyan-dim);
   padding: 1px 7px;
   border-radius: 3px;
@@ -689,15 +689,15 @@ body::before {
   margin: 0 0 36px;
   padding: 18px 22px 18px 22px;
   background:
-    linear-gradient(90deg, rgba(74, 222, 128, 0.12), rgba(74, 222, 128, 0.04));
-  border: 1px solid rgba(74, 222, 128, 0.4);
+    linear-gradient(90deg, rgba(167, 139, 250, 0.12), rgba(167, 139, 250, 0.04));
+  border: 1px solid rgba(167, 139, 250, 0.4);
   border-left: 4px solid var(--brand);
   border-radius: 8px;
   display: flex;
   align-items: flex-start;
   gap: 14px;
   font-family: 'JetBrains Mono', monospace;
-  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.08);
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.08);
 }
 .cs-draft__badge {
   font-size: 10px;
@@ -710,7 +710,7 @@ body::before {
   font-weight: 700;
   flex-shrink: 0;
   margin-top: 2px;
-  box-shadow: 0 0 12px rgba(74, 222, 128, 0.45);
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
 }
 .cs-draft__txt {
   font-size: 13px;
@@ -725,12 +725,12 @@ body::before {
   text-decoration: none;
   padding-bottom: 1px;
 }
-.cs-draft__txt a:hover { background: rgba(74, 222, 128, 0.1); }
+.cs-draft__txt a:hover { background: rgba(167, 139, 250, 0.1); }
 
 /* Cleaner screenshot placeholder — reads as intentional, not "missing" */
 .cs-shot--coming {
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.05), rgba(74, 222, 128, 0.02));
-  border: 1px solid rgba(74, 222, 128, 0.2);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.05), rgba(167, 139, 250, 0.02));
+  border: 1px solid rgba(167, 139, 250, 0.2);
   border-radius: 8px;
   padding: 50px 24px;
   text-align: center;
@@ -746,7 +746,7 @@ body::before {
   font-size: 26px;
   color: var(--cyan);
   margin-bottom: 8px;
-  text-shadow: 0 0 12px rgba(74, 222, 128, 0.45);
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
 }
 .cs-shot--coming .cs-shot__title {
   display: block;
@@ -767,11 +767,11 @@ body::before {
 .cs-cta {
   margin-top: 64px;
   padding: 32px 32px;
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.08), rgba(74, 222, 128, 0.06));
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(167, 139, 250, 0.06));
   border: 1px solid var(--line-strong);
   border-radius: 10px;
   text-align: center;
-  box-shadow: 0 6px 30px rgba(74, 222, 128, 0.12);
+  box-shadow: 0 6px 30px rgba(167, 139, 250, 0.12);
 }
 .cs-cta h3 {
   font-family: monospace;
@@ -807,7 +807,7 @@ body::before {
   background: linear-gradient(135deg, var(--cyan), var(--brand));
   color: var(--bg-dark);
   font-weight: 700;
-  box-shadow: 0 4px 18px rgba(74, 222, 128, 0.25);
+  box-shadow: 0 4px 18px rgba(167, 139, 250, 0.25);
 }
 .cs-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px color-mix(in srgb, var(--cyan) 40%, transparent); }
 .cs-btn--ghost {
@@ -840,7 +840,7 @@ body::before {
   right: 0;
   height: 3px;
   z-index: 70;
-  background: rgba(74, 222, 128, 0.06);
+  background: rgba(167, 139, 250, 0.06);
   pointer-events: none;
   overflow: hidden;
 }
@@ -849,7 +849,7 @@ body::before {
   position: absolute;
   inset: 0;
   background: linear-gradient(90deg, var(--cyan) 0%, var(--brand) 60%, var(--magenta) 100%);
-  box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
   transform-origin: left;
   transform: scaleX(var(--read-progress, 0));
   transition: transform 0.12s linear;
@@ -897,7 +897,7 @@ body::before {
   letter-spacing: 1.4px;
   text-transform: uppercase;
   text-decoration: none;
-  background: rgba(74, 222, 128, 0.10);
+  background: rgba(167, 139, 250, 0.10);
   color: var(--cyan);
   border: 0;
   padding: 6px 18px;
@@ -993,7 +993,7 @@ body::before {
   letter-spacing: 2px;
   text-transform: lowercase;
   color: var(--cyan);
-  text-shadow: 0 0 8px rgba(74, 222, 128, 0.35);
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.35);
 }
 .cs-pager__title {
   font-size: 15px;
@@ -1054,7 +1054,7 @@ body::before {
 .cs-toc__nav a:hover {
   color: var(--cyan);
   border-color: var(--line-strong);
-  background: rgba(74, 222, 128, 0.06);
+  background: rgba(167, 139, 250, 0.06);
 }
 .cs-toc__nav a:focus-visible {
   outline: 2px solid var(--cyan);
@@ -1083,7 +1083,7 @@ body::before {
   gap: 14px;
   margin: 0 0 40px;
   padding: 22px;
-  background: linear-gradient(180deg, rgba(74, 222, 128, 0.04), rgba(15, 19, 17, 0.55));
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.04), rgba(15, 19, 17, 0.55));
   border: 1px solid var(--line);
   border-radius: 8px;
 }
@@ -1112,8 +1112,8 @@ body::before {
   gap: 12px;
   margin: 0 0 40px;
   padding: 22px;
-  background: linear-gradient(180deg, rgba(74, 222, 128, 0.05), rgba(15, 19, 17, 0.55));
-  border: 1px solid rgba(74, 222, 128, 0.22);
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.05), rgba(15, 19, 17, 0.55));
+  border: 1px solid rgba(167, 139, 250, 0.22);
   border-radius: 8px;
 }
 .cs-outcomes--top[data-status="draft"] {
@@ -1158,7 +1158,7 @@ body::before {
 }
 .cs-outcome-row__tag--after {
   color: var(--cyan);
-  text-shadow: 0 0 6px rgba(74, 222, 128, 0.4);
+  text-shadow: 0 0 6px rgba(167, 139, 250, 0.4);
 }
 .cs-outcome-row__txt {
   font-family: 'Inter', sans-serif;
@@ -1338,14 +1338,14 @@ body::before {
   font-size: 10px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: rgba(74, 222, 128, 0.7);
+  color: rgba(167, 139, 250, 0.7);
   background: rgba(11, 13, 12, 0.85);
   border: 1px solid var(--line);
   padding: 5px 12px;
   border-radius: 3px;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  text-shadow: 0 0 6px rgba(74, 222, 128, 0.3);
+  text-shadow: 0 0 6px rgba(167, 139, 250, 0.3);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -1360,7 +1360,7 @@ body::before {
   outline-offset: 2px;
 }
 .motion-toggle--standalone[aria-pressed="true"] {
-  border-color: rgba(74, 222, 128, 0.45);
+  border-color: rgba(167, 139, 250, 0.45);
   color: var(--brand);
 }
 .motion-toggle__dot {
@@ -1431,7 +1431,7 @@ body.page-dive-in {
   z-index: 99999;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--cyan, #4ade80) 35%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--cyan, #c4b5fd) 35%, transparent) 0%, transparent 60%),
     rgba(3, 5, 12, 0);
   opacity: 0;
   animation: dive-flash var(--tx-stage, 1.1s) var(--ez-out, cubic-bezier(0.2, 0.9, 0.2, 1)) forwards;

@@ -4,7 +4,7 @@
      - same-origin HTML pages: stale-while-revalidate (cap), falls back to cached index
      - cross-origin api calls (github/counterapi): network-only, no caching
 */
-const VERSION = 'pf-v148-2026-10-14';
+const VERSION = 'pf-v149-2026-10-14';
 const STATIC_CACHE = 'pf-static-' + VERSION;
 const PAGE_CACHE   = 'pf-pages-'  + VERSION;
 
@@ -15,6 +15,7 @@ const STATIC_PRECACHE = [
   // is precached below. The long-scroll terminal UI lives on at /classic.html.
   '/css/site.css',
   '/js/site.js',
+  '/js/fx.js',
   '/classic.html',
   '/css/style.css',
   '/css/tech-fx.css',

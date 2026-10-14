@@ -5,7 +5,7 @@
 <title>Changelog — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="What's new on lemmuel-turaya.dev / kon2raya portfolio — versioned log of features, fixes, and content updates." />
-<meta name="theme-color" content="#0b0d0c">
+<meta name="theme-color" content="#0b0a0f">
 <meta name="color-scheme" content="dark light">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/changelog.html" />
@@ -41,7 +41,7 @@
     bottom: 8px;
     width: 2px;
     background: linear-gradient(180deg, var(--cyan), var(--brand));
-    box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
     opacity: 0.5;
   }
   .log-entry {
@@ -58,7 +58,7 @@
     border-radius: 50%;
     background: var(--bg-deep);
     border: 2px solid var(--cyan);
-    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12), 0 0 12px var(--cyan);
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.12), 0 0 12px var(--cyan);
     z-index: 2;
   }
   .log-entry--latest::before {
@@ -82,7 +82,7 @@
     letter-spacing: 1.5px;
     color: #fff;
   }
-  .log-version .num { color: var(--cyan); text-shadow: 0 0 8px rgba(74, 222, 128, 0.4); }
+  .log-version .num { color: var(--cyan); text-shadow: 0 0 8px rgba(167, 139, 250, 0.4); }
   .log-date {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -93,15 +93,15 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 1.5px;
-    background: rgba(74, 222, 128, 0.08);
+    background: rgba(167, 139, 250, 0.08);
     border: 1px solid var(--line-strong);
     color: var(--cyan);
     padding: 2px 7px;
     border-radius: 0;
     text-transform: uppercase;
   }
-  .log-tag--major { background: rgba(74, 222, 128, 0.12); border-color: rgba(74, 222, 128, 0.5); color: var(--brand); }
-  .log-tag--latest { background: linear-gradient(135deg, var(--cyan), var(--brand)); color: var(--bg-dark); border-color: transparent; font-weight: 700; box-shadow: 0 0 10px rgba(74, 222, 128, 0.45); }
+  .log-tag--major { background: rgba(167, 139, 250, 0.12); border-color: rgba(167, 139, 250, 0.5); color: var(--brand); }
+  .log-tag--latest { background: linear-gradient(135deg, var(--cyan), var(--brand)); color: var(--bg-dark); border-color: transparent; font-weight: 700; box-shadow: 0 0 10px rgba(167, 139, 250, 0.45); }
   .log-summary {
     font-family: 'Inter', sans-serif;
     color: rgba(215, 224, 218, 0.78);
@@ -127,16 +127,16 @@
     position: absolute;
     left: 4px;
     top: 4px;
-    color: #4ade80;
+    color: #c4b5fd;
     font-weight: 700;
   }
-  .log-list ul li.fix::before  { content: '~'; color: var(--brand); text-shadow: 0 0 6px rgba(74, 222, 128, 0.5); }
+  .log-list ul li.fix::before  { content: '~'; color: var(--brand); text-shadow: 0 0 6px rgba(167, 139, 250, 0.5); }
   .log-list ul li.docs::before { content: '·'; color: var(--cyan); }
   /* Newer entries carry their own coloured marker inline. */
   .log-list ul li:has(> strong[style]:first-child)::before { content: none; }
   .log-list ul li code {
-    background: rgba(74, 222, 128, 0.08);
-    border: 1px solid rgba(74, 222, 128, 0.18);
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.18);
     color: var(--cyan);
     padding: 1px 6px;
     border-radius: 0;
@@ -146,7 +146,7 @@
   .log-foot {
     margin-top: 24px;
     padding-top: 18px;
-    border-top: 1px dashed rgba(74, 222, 128, 0.18);
+    border-top: 1px dashed rgba(167, 139, 250, 0.18);
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.55);
@@ -186,11 +186,31 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v7-1">
+    <li class="log-entry log-entry--latest" id="v8-0">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">8.0</span></span>
+        <span class="log-date">2026-10-14</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag log-tag--major">major redesign</span>
+      </div>
+      <p class="log-summary">
+        <strong>A front page with some play in it</strong> &mdash; near-black stage, lavender accent, purple edge glows and big
+        Geist type. The same content, now with motion everywhere and a few things to poke at.
+      </p>
+      <ul>
+        <li><strong style="color:#28c840;">+</strong> <strong>Intro</strong>: a once-per-session loader with a giant role marquee, then a hero with the name, a portrait that leans toward your cursor and rotating roles.</li>
+        <li><strong style="color:#28c840;">+</strong> <strong>Things to play with</strong>: a terminal you can type into (<code>help</code>, <code>work</code>, <code>ask &hellip;</code>, <code>hire</code>), and a skills playground where every skill is a ball you can drag and throw.</li>
+        <li><strong style="color:#28c840;">+</strong> <strong>Scroll motion</strong>: case studies slide sideways while the section is pinned, the about statement lights up word by word, the career line fills as you read, and section labels decode in.</li>
+        <li><strong style="color:#28c840;">+</strong> Cursor blob, glowing cards that tilt, magnetic buttons, count-up stats, animated project filters (View Transitions) and a fixed social dock.</li>
+        <li><strong style="color:var(--brand);">~</strong> Case studies, /now, /uses, this changelog and the 404 page move to the same lavender palette.</li>
+        <li><strong style="color:var(--brand);">~</strong> Every effect switches off under reduced motion, and the page still reads in full with JavaScript off. Service-worker cache bumped to <code>pf-v149</code>.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v7-1">
       <div class="log-head">
         <span class="log-version">v<span class="num">7.1</span></span>
         <span class="log-date">2026-10-14</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
         <span class="log-tag">redesign</span>
       </div>
       <p class="log-summary">

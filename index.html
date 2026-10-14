@@ -12,7 +12,7 @@
 	<meta name="author" content="Lemmuel Turaya" />
 	<meta name="robots" content="index, follow" />
 	<meta name="keywords" content="Lemmuel Turaya, Full-Stack Developer, Mobile App Developer, Flutter, Vue.js, Laravel, Claude AI, Philippines Developer, Remote Developer, Web Developer" />
-	<meta name="theme-color" content="#05070f" />
+	<meta name="theme-color" content="#0b0a0f" />
 	<meta name="color-scheme" content="dark" />
 
 	<meta property="og:type" content="website" />
@@ -96,7 +96,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="preconnect" href="https://api.counterapi.dev" crossorigin>
 	<link rel="dns-prefetch" href="https://api.github.com">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="icon" href="images/logo.png" type="image/x-icon">
 	<link rel="apple-touch-icon" href="images/logo.png">
 	<link rel="manifest" href="manifest.json">
@@ -107,17 +107,45 @@
 
 	<link rel="stylesheet" href="css/portfolio-chat.css">
 	<link rel="stylesheet" href="css/site.css">
-	<script>document.documentElement.classList.add('js');</script>
+	<script>
+		(function (h) {
+			h.classList.add('js');
+			try {
+				if (!sessionStorage.getItem('lt.intro') && !location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches) h.classList.add('is-loading');
+			} catch (e) {}
+			/* failsafe: never leave the intro hidden if js/fx.js fails to run */
+			setTimeout(function () { h.classList.remove('is-loading'); h.classList.add('is-ready'); }, 3500);
+		})(document.documentElement);
+	</script>
 </head>
 
 <body>
 
 	<a class="skip" href="#main">Skip to content</a>
 
+	<div class="loader" data-loader aria-hidden="true">
+		<div class="loader__marquee"><div class="loader__track">
+			<span>Full-stack developer</span><span>Mobile developer</span><span>AI-assisted builder</span>
+			<span>Full-stack developer</span><span>Mobile developer</span><span>AI-assisted builder</span>
+		</div></div>
+		<div class="loader__pill"><span>Loading</span><span class="loader__pct" data-loader-pct>0%</span></div>
+	</div>
+
+	<div class="progress" aria-hidden="true"></div>
+
+	<aside class="dock" aria-label="Elsewhere">
+		<a href="https://github.com/kon2raya24" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+		<a href="https://www.linkedin.com/in/lemmuel-turaya/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a>
+		<a href="mailto:turayalemmuel@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a>
+		<a href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer" aria-label="Book a call"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 5h16v15H4zM4 10h16M8 3v4M16 3v4"/></svg></a>
+	</aside>
+	<a class="dock-resume" href="resume.pdf" download>Resume <span aria-hidden="true">&rarr;</span></a>
+
 	<!-- ============================ NAV ============================ -->
 	<header class="nav" data-nav>
 		<div class="nav__inner wrap">
-			<a class="nav__logo" href="#top">~/lemmuel-turaya</a>
+			<a class="nav__logo" href="#top" aria-label="Lemmuel Turaya, back to top">LT</a>
+			<a class="nav__email" href="mailto:turayalemmuel@gmail.com">turayalemmuel@gmail.com</a>
 			<button type="button" class="nav__toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-links">menu</button>
 			<nav class="nav__links" id="nav-links" aria-label="Sections">
 				<a href="#work">work</a>
@@ -135,32 +163,54 @@
 	<main id="main">
 
 		<!-- ============================ HERO ============================ -->
-		<section class="hero wrap" id="top">
-			<div class="hero__text">
-				<p class="hero__status"><span class="dot" aria-hidden="true"></span>$ whoami &rarr; status: open_to_work &middot; tz: GMT+8<span class="hero__clock" data-clock hidden></span> &middot; remote / hybrid / onsite</p>
-				<h1><span class="hero__name">Lemmuel Turaya</span> Full-stack &amp; mobile developer shipping with AI.</h1>
-				<p class="hero__sub">Vue.js, Laravel and Flutter in production for 6+ years across logistics, real estate, HR and marketing. Claude-assisted, review-gated delivery &mdash; based in Bi&ntilde;an, Laguna, Philippines.</p>
-				<div class="hero__cta">
-					<a class="btn btn--primary" href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer">book_call()</a>
-					<a class="btn" href="resume.pdf" download>resume.pdf &darr;</a>
-					<a class="btn" href="#contact">send_message()</a>
+		<section class="hero" id="top">
+			<div class="hero__stage">
+				<div class="hero__left">
+					<p class="hero__hello">Hello! I&rsquo;m</p>
+					<h1 class="hero__title"><span class="hero__first">Lemmuel</span> <span class="hero__last">Turaya</span><span class="sr"> &mdash; full-stack &amp; mobile developer shipping with AI</span></h1>
+				</div>
+
+				<figure class="portrait" data-follow>
+					<span class="portrait__glow" aria-hidden="true"></span>
+					<img src="images/1615352107595.jpg" alt="Lemmuel Turaya" width="800" height="800" fetchpriority="high">
+				</figure>
+
+				<div class="hero__right" aria-hidden="true">
+					<p class="hero__a">A</p>
+					<p class="roles"><span>Full-stack dev</span><span>Mobile dev</span><span>AI builder</span></p>
 				</div>
 			</div>
-			<img class="hero__photo" src="images/1615352107595.jpg" alt="Lemmuel Turaya" width="220" height="220">
-			<ul class="stats">
-				<li><strong>6+</strong><span>years shipping</span></li>
-				<li><strong>40+</strong><span>projects</span></li>
-				<li><strong>9</strong><span>case studies</span></li>
-				<li><strong>108</strong><span>app releases</span></li>
+
+			<div class="hero__bar wrap">
+				<p class="hero__status"><span class="dot" aria-hidden="true"></span>open_to_work &middot; GMT+8<span class="hero__clock" data-clock hidden></span> &middot; remote / hybrid / onsite</p>
+				<div class="hero__cta">
+					<a class="btn btn--primary" href="https://cal.com/lemmuel-turaya/intro" target="_blank" rel="noopener noreferrer" data-magnetic>Book a call <span aria-hidden="true">&rarr;</span></a>
+					<a class="btn" href="#work" data-magnetic>See my work</a>
+				</div>
+			</div>
+
+			<ul class="stats wrap">
+				<li><strong data-count>6+</strong><span>years shipping</span></li>
+				<li><strong data-count>40+</strong><span>projects</span></li>
+				<li><strong data-count>9</strong><span>case studies</span></li>
+				<li><strong data-count>108</strong><span>app releases</span></li>
 			</ul>
 		</section>
+
+		<div class="marquee" aria-hidden="true">
+			<div class="marquee__track">
+				<span>Vue.js</span><span>Laravel</span><span>Flutter</span><span>Claude Code</span><span>MySQL</span><span>Node.js</span><span>AG Grid</span><span>REST APIs</span><span>Firebase</span><span>n8n</span><span>Three.js</span><span>Google Maps</span>
+				<span>Vue.js</span><span>Laravel</span><span>Flutter</span><span>Claude Code</span><span>MySQL</span><span>Node.js</span><span>AG Grid</span><span>REST APIs</span><span>Firebase</span><span>n8n</span><span>Three.js</span><span>Google Maps</span>
+			</div>
+		</div>
 
 		<!-- ============================ 01 ABOUT ============================ -->
 		<section class="sec wrap" id="about">
 			<header class="sec__head">
 				<p class="sec__mark">// 01 about</p>
-				<h2>Engineer, builder, problem-solver.</h2>
+				<h2>Engineer, builder, <span class="hl">problem-solver.</span></h2>
 			</header>
+			<p class="statement" data-words>I build production web and mobile apps end to end &mdash; Vue.js and Laravel on the web, Flutter in the warehouse, Claude in the loop &mdash; for teams in logistics, real estate, HR and marketing. Bi&ntilde;an, Laguna is home; GMT+8 is my clock.</p>
 			<div class="about">
 				<div class="about__bio">
 					<p class="lead">Full-stack developer with <strong>6+ years</strong> shipping production web and mobile applications across logistics, real estate, marketing, and education. I specialize in <strong>Vue.js</strong> and <strong>Laravel</strong> on the web, <strong>Flutter</strong> on mobile, and clean REST API design to tie systems together.</p>
@@ -202,6 +252,21 @@
 					</dl>
 				</div>
 
+				<div class="term" data-term>
+					<div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">lemmuel@portfolio: ~</span><span class="term__hint">try me</span></div>
+					<div class="term__out" data-term-out role="log" aria-live="polite" aria-label="Terminal output">
+						<p><span class="term__ps">$</span> whoami</p>
+						<p>Lemmuel Turaya &mdash; full-stack &amp; mobile developer, GMT+8.</p>
+						<p><span class="term__ps">$</span> ls ./highlights</p>
+						<p>ai-engineer/ &nbsp;wms-v2/ &nbsp;wms-mobile/ &nbsp;tms/ &nbsp;hris/</p>
+					</div>
+					<form class="term__in" data-term-form autocomplete="off">
+						<label class="sr" for="term-input">Type a command, for example help</label>
+						<span class="term__ps" aria-hidden="true">$</span>
+						<input id="term-input" type="text" spellcheck="false" autocapitalize="off" placeholder="type help and press enter" data-term-input>
+					</form>
+				</div>
+
 				<div class="card about__principles">
 					<p class="card__mark">engineering principles</p>
 					<ol class="principles">
@@ -220,11 +285,13 @@
 		<section class="sec wrap" id="work">
 			<header class="sec__head">
 				<p class="sec__mark">// 02 selected work</p>
-				<h2>Case studies</h2>
+				<h2>Selected <span class="hl">work</span></h2>
 				<p class="sec__intro">Deep-dives into shipped work &mdash; code, tradeoffs, and what I&rsquo;d do differently. The two featured ones are the best place to start.</p>
 			</header>
 
-			<div class="cases">
+			<div class="hscroll" data-hscroll>
+			<div class="hscroll__pin">
+			<div class="cases" data-hscroll-track>
 				<article class="case case--featured">
 					<img src="images/og-ai-engineer.png" alt="" loading="lazy" decoding="async" width="320" height="168">
 					<div class="case__body">
@@ -317,6 +384,8 @@
 					</div>
 				</article>
 			</div>
+			</div>
+			</div>
 			<p class="sec__foot">For source samples, code walkthroughs, or references &mdash; <a href="mailto:turayalemmuel@gmail.com">request samples by email &rarr;</a></p>
 		</section>
 
@@ -324,7 +393,7 @@
 		<section class="sec wrap" id="experience">
 			<header class="sec__head">
 				<p class="sec__mark">// 03 experience &middot; 2019 &rarr; now</p>
-				<h2>Experience</h2>
+				<h2>My career &amp; <span class="hl">experience</span></h2>
 			</header>
 
 			<ol class="timeline">
@@ -453,9 +522,14 @@
 		<section class="sec wrap" id="stack">
 			<header class="sec__head">
 				<p class="sec__mark">// 04 stack</p>
-				<h2>Stack</h2>
+				<h2>Tech <span class="hl">stack</span></h2>
 				<p class="sec__intro">Grouped by where it sits in the stack. Tier reflects hands-on production reach: <span class="tier tier--3" aria-hidden="true"></span> primary, daily &middot; <span class="tier tier--2" aria-hidden="true"></span> strong, current &middot; <span class="tier tier--1" aria-hidden="true"></span> working, trusted but lighter use.</p>
 			</header>
+
+			<div class="play" data-play>
+				<canvas data-play-canvas aria-hidden="true"></canvas>
+				<p class="play__hint"><span aria-hidden="true">&#9675;</span> drag and throw the skills &mdash; they&rsquo;re physical</p>
+			</div>
 
 			<div class="stack">
 				<div class="card">
@@ -520,7 +594,7 @@
 		<section class="sec wrap" id="services">
 			<header class="sec__head">
 				<p class="sec__mark">// 05 what I build</p>
-				<h2>Services</h2>
+				<h2>What I <span class="hl">build</span></h2>
 				<p class="sec__intro">End-to-end engineering across the modern web and mobile stack, with AI-assisted workflows where they create real leverage. Same capabilities whether I&rsquo;m joining a full-time team or running a focused engagement.</p>
 			</header>
 
@@ -610,7 +684,7 @@
 		<section class="sec wrap" id="projects">
 			<header class="sec__head">
 				<p class="sec__mark">// 06 shipped projects</p>
-				<h2>Projects</h2>
+				<h2>Shipped <span class="hl">projects</span></h2>
 				<p class="sec__intro">Selected projects across web, mobile, games and design &mdash; production builds, internal platforms, and prototypes.</p>
 			</header>
 
@@ -854,7 +928,7 @@ parseMobile('09171234567');
 		<section class="sec wrap" id="activity">
 			<header class="sec__head">
 				<p class="sec__mark">// 07 activity &middot; @kon2raya24 <span class="live">live</span></p>
-				<h2>Proof of work</h2>
+				<h2>Proof of <span class="hl">work</span></h2>
 			</header>
 
 			<div class="activity">
@@ -884,7 +958,7 @@ parseMobile('09171234567');
 		<section class="sec wrap" id="contact">
 			<header class="sec__head">
 				<p class="sec__mark">// 08 contact &middot; open to full-time / contract / freelance</p>
-				<h2>Let&rsquo;s talk</h2>
+				<h2>Let&rsquo;s <span class="hl">talk</span></h2>
 				<p class="sec__intro">Available for <strong>full-time</strong>, <strong>contract</strong>, or <strong>freelance</strong> engagements &mdash; <strong>remote</strong>, hybrid, or onsite. If you&rsquo;re hiring a full-stack or mobile developer who can own features end-to-end and ship reliably, I&rsquo;d be glad to talk. Every message gets a reply within 24 hours.</p>
 			</header>
 
@@ -964,6 +1038,11 @@ parseMobile('09171234567');
 
 	<!-- ============================ FOOTER ============================ -->
 	<footer class="foot">
+		<div class="wrap foot__cta">
+			<p class="foot__kicker">Got a project or a role in mind?</p>
+			<a class="foot__big" href="#contact">Let&rsquo;s work <span class="hl">together</span><span aria-hidden="true"> &#8599;</span></a>
+		</div>
+		<p class="foot__name" aria-hidden="true">Lemmuel Turaya</p>
 		<div class="wrap foot__inner">
 			<p>&copy; 2026 Lemmuel Turaya &middot; designed and built from scratch &middot; open to opportunities worldwide</p>
 			<nav aria-label="Meta links">
@@ -983,6 +1062,7 @@ parseMobile('09171234567');
 
 	<script src="js/portfolio-chat.js" defer></script>
 	<script src="js/site.js" defer></script>
+	<script src="js/fx.js" defer></script>
 
 	<!-- Service worker registration (PWA offline support) -->
 	<script>
