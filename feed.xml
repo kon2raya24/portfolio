@@ -10,9 +10,20 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Wed, 14 Oct 2026 13:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Wed, 14 Oct 2026 14:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v8.2 — The loading screen is gone; the portrait decodes from ASCII instead</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v8-2</link>
+    <guid isPermaLink="false">portfolio-v8.2-2026-10-14</guid>
+    <pubDate>Wed, 14 Oct 2026 14:00:00 +0800</pubDate>
+    <category>intro</category>
+    <description><![CDATA[
+      The full-screen loader is removed. The hero portrait now opens as static that resolves into an ASCII face,
+      then splits to reveal the photo, while the page is already usable.
+    ]]></description>
+  </item>
   <item>
     <title>v8.1 — Split ASCII portrait, cursor spotlight, section index and serif accents</title>
     <link>https://kon2raya.netlify.app/changelog.html#v8-1</link>

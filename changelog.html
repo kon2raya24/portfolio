@@ -186,11 +186,28 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v8-1">
+    <li class="log-entry log-entry--latest" id="v8-2">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">8.2</span></span>
+        <span class="log-date">2026-10-14</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">intro</span>
+      </div>
+      <p class="log-summary">
+        <strong>No more loading screen.</strong> The page is usable from the first frame; the intro now happens inside the hero
+        portrait instead.
+      </p>
+      <ul>
+        <li><strong style="color:#28c840;">+</strong> The portrait opens as a field of static that resolves into an ASCII drawing of my face, then the divider sweeps across to uncover the photo (about 2.3s, nothing blocked meanwhile).</li>
+        <li><strong style="color:#ff5f57;">&minus;</strong> Removed the full-screen &ldquo;LOADING %&rdquo; overlay and its once-per-session logic.</li>
+        <li><strong style="color:var(--brand);">~</strong> Rotating roles scaled down a touch so &ldquo;FULL-STACK DEV&rdquo; never clips on 1536px screens. Service-worker cache bumped to <code>pf-v151</code>.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v8-1">
       <div class="log-head">
         <span class="log-version">v<span class="num">8.1</span></span>
         <span class="log-date">2026-10-14</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
         <span class="log-tag">craft</span>
       </div>
       <p class="log-summary">

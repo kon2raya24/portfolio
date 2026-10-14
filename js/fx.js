@@ -22,31 +22,8 @@
 		fn();
 	}
 
-	/* ---------------------------------------------------------------------
-	   1. Intro loader: count to 100 while the page loads, then wipe away.
-	   Shown once per session (the <head> script decides), 1.6s at most.
-	   --------------------------------------------------------------------- */
-	(function loader() {
-		var el = $('[data-loader]');
-		function ready() { h.classList.remove('is-loading'); h.classList.add('is-ready'); }
-		if (!h.classList.contains('is-loading') || !el) { ready(); return; }
-		var pct = $('[data-loader-pct]', el);
-		var start = performance.now(), loaded = d.readyState === 'complete';
-		w.addEventListener('load', function () { loaded = true; });
-		(function tick(now) {
-			var t = (now - start) / 1300;
-			var p = loaded ? Math.min(1, t) : Math.min(0.9, t);
-			if (now - start > 1600) p = 1;
-			pct.textContent = Math.round(p * 100) + '%';
-			if (p < 1) return requestAnimationFrame(tick);
-			try { sessionStorage.setItem('lt.intro', '1'); } catch (e) {}
-			setTimeout(function () {
-				el.classList.add('is-done');
-				h.classList.add('is-ready');
-				setTimeout(ready, 900);
-			}, 180);
-		})(start);
-	})();
+	/* 1. Start the hero entrance (the <head> script has a failsafe for this). */
+	h.classList.add('is-ready');
 
 	/* ---------------------------------------------------------------------
 	   2. Cursor blob that trails the pointer and swells over links.
@@ -253,7 +230,7 @@
 	(function splitPortrait() {
 		var fig = $('[data-split]'), cv = $('[data-ascii]'), img = fig && $('img', fig);
 		if (!fig || !cv || !img || !cv.getContext) return;
-		var RAMP = ' .:-=+*#%@', grid = [], cols = 0, rows = 0, cell = 0, rowH = 0, size = 0, ctx = cv.getContext('2d');
+		var RAMP = ' .:-=+*#%@', GLYPHS = '01<>/{}[]=+*#$%&', grid = [], cols = 0, rows = 0, cell = 0, rowH = 0, size = 0, ctx = cv.getContext('2d');
 		function sample() {
 			size = fig.getBoundingClientRect().width;
 			if (!size || !img.naturalWidth) return false;
@@ -272,6 +249,8 @@
 			}
 			return true;
 		}
+		/* noise: share of characters drawn as random glyphs; during the intro
+		   it starts at 1 (a field of static) and falls to 0 as the face resolves */
 		function draw(noise) {
 			ctx.fillStyle = '#0b0a0f';
 			ctx.fillRect(0, 0, size, size);
@@ -279,9 +258,16 @@
 			ctx.textBaseline = 'top';
 			for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
 				var v = grid[y * cols + x], k = Math.round(v * (RAMP.length - 1));
+				var a = 0.3 + v * 0.7;
+				if (noise > 0.08 && Math.random() < noise * (k ? 1 : 0.85)) {
+					/* static: same glyph weight everywhere, so no silhouette shows yet */
+					ctx.fillStyle = 'rgba(196,181,253,' + ((k ? a * (1 - noise) : 0) + 0.45 * noise).toFixed(2) + ')';
+					ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], x * cell, y * rowH);
+					continue;
+				}
 				if (!k) continue;
 				if (noise && Math.random() < noise) k = 1 + ((Math.random() * (RAMP.length - 1)) | 0);
-				ctx.fillStyle = 'rgba(196,181,253,' + (0.3 + v * 0.7).toFixed(2) + ')';
+				ctx.fillStyle = 'rgba(196,181,253,' + a.toFixed(2) + ')';
 				ctx.fillText(RAMP[k], x * cell, y * rowH);
 			}
 		}
@@ -291,8 +277,13 @@
 		w.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(build, 150); });
 		if (reduced) return;
 
-		/* divider: follows the cursor over the hero, otherwise rests at 50% */
-		var stage = $('.hero__stage') || fig, target = 50, cur = 50, over = false, visible = true;
+		/* intro: static resolves into the face (1.4s), then the divider sweeps
+		   from the left edge to the middle, uncovering the photo (0.9s). After that the divider
+		   follows the cursor over the hero, otherwise it rests at 50%. */
+		var DECODE = 1400, SWEEP = 900, introAt = null, introDone = false;
+		var stage = $('.hero__stage') || fig, target = 50, cur = 0, over = false, visible = true;
+		fig.style.setProperty('--split', '0%');
+		fig.classList.add('is-decoding');
 		if (finePointer) {
 			stage.addEventListener('pointermove', function (e) {
 				var r = fig.getBoundingClientRect();
@@ -304,11 +295,24 @@
 		if ('IntersectionObserver' in w) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(fig);
 		var lastShimmer = 0;
 		(function loop(now) {
-			if (visible) {
-				if (!finePointer) target = 50 + 32 * Math.sin(now / 1600);
+			if (!introDone) {
+				if (grid.length) {
+					if (introAt === null) introAt = now;
+					var t = now - introAt;
+					if (t < DECODE) { var q = t / DECODE; draw(q < 0.25 ? 1 : 1 - Math.pow((q - 0.25) / 0.75, 1.4)); }
+					else if (t < DECODE + SWEEP) {
+						var e = 1 - Math.pow(1 - (t - DECODE) / SWEEP, 3);
+						cur = 50 * e;
+						fig.classList.remove('is-decoding');
+						fig.style.setProperty('--split', cur.toFixed(2) + '%');
+						if (t - DECODE < 40) draw(0);
+					} else { introDone = true; cur = 50; }
+				}
+			} else if (visible) {
+				if (!finePointer) target = 50 + 32 * Math.sin((now - introAt - DECODE - SWEEP) / 1600);
 				cur += (target - cur) * 0.14;
 				fig.style.setProperty('--split', cur.toFixed(2) + '%');
-				if (grid.length && now - lastShimmer > 140) { lastShimmer = now; draw(0.035); }
+				if (now - lastShimmer > 140) { lastShimmer = now; draw(0.035); }
 			}
 			requestAnimationFrame(loop);
 		})(0);

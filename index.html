@@ -110,11 +110,8 @@
 	<script>
 		(function (h) {
 			h.classList.add('js');
-			try {
-				if (!sessionStorage.getItem('lt.intro') && !location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches) h.classList.add('is-loading');
-			} catch (e) {}
-			/* failsafe: never leave the intro hidden if js/fx.js fails to run */
-			setTimeout(function () { h.classList.remove('is-loading'); h.classList.add('is-ready'); }, 3500);
+			/* failsafe: never leave the intro paused if js/fx.js fails to run */
+			setTimeout(function () { h.classList.add('is-ready'); }, 2500);
 		})(document.documentElement);
 	</script>
 </head>
@@ -122,14 +119,6 @@
 <body>
 
 	<a class="skip" href="#main">Skip to content</a>
-
-	<div class="loader" data-loader aria-hidden="true">
-		<div class="loader__marquee"><div class="loader__track">
-			<span>Full-stack developer</span><span>Mobile developer</span><span>AI-assisted builder</span>
-			<span>Full-stack developer</span><span>Mobile developer</span><span>AI-assisted builder</span>
-		</div></div>
-		<div class="loader__pill"><span>Loading</span><span class="loader__pct" data-loader-pct>0%</span></div>
-	</div>
 
 	<div class="progress" aria-hidden="true"></div>
 
