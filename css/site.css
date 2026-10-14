@@ -609,6 +609,8 @@ html:not(.js) .portrait__ascii, html:not(.js) .portrait__divider, html:not(.js) 
 .portrait__divider, .portrait__tags { transition: opacity 0.5s var(--ease); }
 /* the photo only ever shows left of the divider, the ASCII only right of it */
 html.js .portrait img { clip-path: inset(0 calc(100% - var(--split)) 0 0); }
+/* until js/fx.js starts the decode (or the <head> failsafe fires), keep the photo covered */
+html.js:not(.is-ready) .portrait { --split: 0%; }
 .portrait.is-decoding .portrait__divider, .portrait.is-decoding .portrait__tags { opacity: 0; }
 
 /* big soft spotlight that trails the cursor (after brittanychiang.com) */
