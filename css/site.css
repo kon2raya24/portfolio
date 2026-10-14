@@ -607,8 +607,9 @@ html:not(.js) .filters { display: none; }
 .portrait__tags span:last-child { color: var(--accent); }
 html:not(.js) .portrait__ascii, html:not(.js) .portrait__divider, html:not(.js) .portrait__tags { display: none; }
 .portrait__divider, .portrait__tags { transition: opacity 0.5s var(--ease); }
-.portrait img { transition: opacity 0.4s var(--ease); }
-.portrait.is-decoding img, .portrait.is-decoding .portrait__divider, .portrait.is-decoding .portrait__tags { opacity: 0; }
+/* the photo only ever shows left of the divider, the ASCII only right of it */
+html.js .portrait img { clip-path: inset(0 calc(100% - var(--split)) 0 0); }
+.portrait.is-decoding .portrait__divider, .portrait.is-decoding .portrait__tags { opacity: 0; }
 
 /* big soft spotlight that trails the cursor (after brittanychiang.com) */
 body::after {

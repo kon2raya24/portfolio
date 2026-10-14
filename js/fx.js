@@ -294,7 +294,7 @@
 		}
 		if ('IntersectionObserver' in w) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(fig);
 		var lastShimmer = 0;
-		(function loop(now) {
+		function loop(now) {
 			if (!introDone) {
 				if (grid.length) {
 					if (introAt === null) introAt = now;
@@ -306,7 +306,11 @@
 						fig.classList.remove('is-decoding');
 						fig.style.setProperty('--split', cur.toFixed(2) + '%');
 						if (t - DECODE < 40) draw(0);
-					} else { introDone = true; cur = 50; }
+					} else {
+						introDone = true; cur = 50;
+						fig.classList.remove('is-decoding');
+						fig.style.setProperty('--split', '50%');
+					}
 				}
 			} else if (visible) {
 				if (!finePointer) target = 50 + 32 * Math.sin((now - introAt - DECODE - SWEEP) / 1600);
@@ -315,7 +319,11 @@
 				if (now - lastShimmer > 140) { lastShimmer = now; draw(0.035); }
 			}
 			requestAnimationFrame(loop);
-		})(0);
+		}
+		/* start on a real frame timestamp: calling loop(0) directly made the
+		   first measured interval huge and skipped the intro when the photo
+		   was already cached */
+		requestAnimationFrame(loop);
 	})();
 
 	/* ---------------------------------------------------------------------
