@@ -5,7 +5,7 @@
 <title>/now — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="What I'm working on right now — current focus, what I'm learning, and availability. Updated regularly." />
-<meta name="theme-color" content="#050814">
+<meta name="theme-color" content="#0b0d0c">
 <meta name="color-scheme" content="dark light">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/now.html" />
@@ -19,30 +19,6 @@
 
 <!-- Theme bootstrap: applies stored/preferred theme before paint to prevent FOUC -->
 <script>
-	(function () {
-		try {
-			/* Migrate legacy 'portfolio.theme' → split 'portfolio.mode' + 'portfolio.palette' (one-time) */
-			var legacy = localStorage.getItem('portfolio.theme');
-			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
-				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
-				else if (['cyber','matrix','sunset','xeno','crt','arcade'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
-			}
-			var mode = localStorage.getItem('portfolio.mode');
-			var theme;
-			if (mode === 'light' || mode === 'dark') {
-				theme = mode;
-			} else {
-				theme = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
-			}
-			document.documentElement.setAttribute('data-theme', theme);
-			var palette = localStorage.getItem('portfolio.palette') || 'arcade';
-			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
-				document.documentElement.classList.add('theme-' + palette);
-			}
-		} catch (e) {
-			document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('theme-arcade');
-		}
-	})();
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function () {
 			navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -52,7 +28,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700|Press+Start+2P|VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/case-study.css">
 <link rel="icon" href="images/logo.png" type="image/x-icon">
@@ -73,22 +49,21 @@
 		align-items: center;
 		gap: 8px;
 		padding: 6px 14px;
-		border-radius: 999px;
-		background: rgba(120, 255, 140, 0.10);
-		border: 1px solid rgba(120, 255, 140, 0.55);
-		color: #7cff8c;
+		border-radius: 0;
+		background: rgba(74, 222, 128, 0.10);
+		border: 1px solid rgba(74, 222, 128, 0.55);
+		color: #4ade80;
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 12px;
 		letter-spacing: 1px;
 		text-transform: uppercase;
-		text-shadow: 0 0 6px rgba(120, 255, 140, 0.35);
 	}
 	.now-status::before {
 		content: "";
 		width: 7px; height: 7px;
 		border-radius: 50%;
-		background: #7cff8c;
-		box-shadow: 0 0 8px #7cff8c;
+		background: #4ade80;
+		box-shadow: 0 0 8px #4ade80;
 		animation: now-pulse 1.6s ease-in-out infinite;
 	}
 	@keyframes now-pulse {
@@ -105,9 +80,9 @@
 		display: inline-block;
 		margin-top: 6px;
 		padding: 4px 10px;
-		border-radius: 4px;
-		background: rgba(0, 229, 255, 0.06);
-		border: 1px solid rgba(0, 229, 255, 0.25);
+		border-radius: 0;
+		background: rgba(74, 222, 128, 0.06);
+		border: 1px solid rgba(74, 222, 128, 0.25);
 		color: var(--cyan);
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 11px;
@@ -143,7 +118,7 @@
 		<ul>
 			<li><strong>WMS Mobile App</strong> &mdash; Flutter warehouse management, in active rollout at AAI Worldwide Logistics. Tightening the offline replay queue and operator-feedback loop.</li>
 			<li><strong>@ph-dev-utils</strong> &mdash; open-source Filipino dev utilities on npm; just published the <a href="case-studies/ph-dev-utils.html" style="color:var(--cyan);border-bottom:1px dashed var(--cyan);text-decoration:none;">case study</a> on how it was built.</li>
-			<li><strong>This portfolio</strong> &mdash; nine case studies live; iterating on the hire funnel, PWA caching, and the multi-palette theme system. Polishing in public.</li>
+			<li><strong>This portfolio</strong> &mdash; nine case studies live; iterating on the hire funnel, PWA caching, and carrying the v7 engineered design across every page. Polishing in public.</li>
 			<li><strong>Side experiments</strong> &mdash; pairing with Claude on small tools and refactors; pushing the AI-assisted workflow further into real production code.</li>
 		</ul>
 	</section>
@@ -154,7 +129,7 @@
 		<ul>
 			<li><strong>Flutter testing patterns</strong> &mdash; widget tests, golden tests, and integration tests against a real Laravel backend.</li>
 			<li><strong>Observability</strong> &mdash; structured logging and tracing on the WMS backend so production behavior stops being a guessing game.</li>
-			<li><strong>Design systems</strong> &mdash; formalizing the cyberpunk tokens used here into a small, reusable kit.</li>
+			<li><strong>Design systems</strong> &mdash; formalizing the engineered tokens used here into a small, reusable kit.</li>
 		</ul>
 	</section>
 

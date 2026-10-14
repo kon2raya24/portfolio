@@ -5,7 +5,7 @@
 <title>Changelog — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="What's new on lemmuel-turaya.dev / kon2raya portfolio — versioned log of features, fixes, and content updates." />
-<meta name="theme-color" content="#050814">
+<meta name="theme-color" content="#0b0d0c">
 <meta name="color-scheme" content="dark light">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/changelog.html" />
@@ -17,25 +17,6 @@
 <meta property="og:image" content="https://kon2raya.netlify.app/images/og-cover.png" />
 
 <script>
-	(function () {
-		try {
-			/* Migrate legacy 'portfolio.theme' → split 'portfolio.mode' + 'portfolio.palette' (one-time) */
-			var legacy = localStorage.getItem('portfolio.theme');
-			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
-				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
-				else if (['cyber','matrix','sunset','xeno','crt','arcade'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
-			}
-			var mode = localStorage.getItem('portfolio.mode');
-			if (mode !== 'light' && mode !== 'dark') {
-				mode = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
-			}
-			document.documentElement.setAttribute('data-theme', mode);
-			var palette = localStorage.getItem('portfolio.palette') || 'arcade';
-			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
-				document.documentElement.classList.add('theme-' + palette);
-			}
-		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('theme-arcade'); }
-	})();
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function () {
 			navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -45,7 +26,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700|Press+Start+2P|VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/case-study.css">
 <link rel="icon" href="images/logo.png" type="image/x-icon">
@@ -60,7 +41,7 @@
     bottom: 8px;
     width: 2px;
     background: linear-gradient(180deg, var(--cyan), var(--brand));
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
     opacity: 0.5;
   }
   .log-entry {
@@ -77,7 +58,7 @@
     border-radius: 50%;
     background: var(--bg-deep);
     border: 2px solid var(--cyan);
-    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.12), 0 0 12px var(--cyan);
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12), 0 0 12px var(--cyan);
     z-index: 2;
   }
   .log-entry--latest::before {
@@ -96,12 +77,12 @@
     margin-bottom: 6px;
   }
   .log-version {
-    font-family: 'Orbitron', monospace;
+    font-family: monospace;
     font-size: 18px;
     letter-spacing: 1.5px;
     color: #fff;
   }
-  .log-version .num { color: var(--cyan); text-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
+  .log-version .num { color: var(--cyan); text-shadow: 0 0 8px rgba(74, 222, 128, 0.4); }
   .log-date {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -112,18 +93,18 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 1.5px;
-    background: rgba(0, 229, 255, 0.08);
+    background: rgba(74, 222, 128, 0.08);
     border: 1px solid var(--line-strong);
     color: var(--cyan);
     padding: 2px 7px;
-    border-radius: 3px;
+    border-radius: 0;
     text-transform: uppercase;
   }
-  .log-tag--major { background: rgba(255, 144, 0, 0.12); border-color: rgba(255, 144, 0, 0.5); color: var(--brand); }
-  .log-tag--latest { background: linear-gradient(135deg, var(--cyan), var(--brand)); color: var(--bg-dark); border-color: transparent; font-weight: 700; box-shadow: 0 0 10px rgba(0, 229, 255, 0.45); }
+  .log-tag--major { background: rgba(74, 222, 128, 0.12); border-color: rgba(74, 222, 128, 0.5); color: var(--brand); }
+  .log-tag--latest { background: linear-gradient(135deg, var(--cyan), var(--brand)); color: var(--bg-dark); border-color: transparent; font-weight: 700; box-shadow: 0 0 10px rgba(74, 222, 128, 0.45); }
   .log-summary {
     font-family: 'Inter', sans-serif;
-    color: rgba(230, 243, 255, 0.78);
+    color: rgba(215, 224, 218, 0.78);
     font-size: 14.5px;
     line-height: 1.65;
     margin: 0 0 12px;
@@ -138,7 +119,7 @@
     padding: 4px 0 4px 22px;
     font-family: 'Inter', sans-serif;
     font-size: 13.5px;
-    color: rgba(230, 243, 255, 0.82);
+    color: rgba(215, 224, 218, 0.82);
     line-height: 1.55;
   }
   .log-list ul li::before {
@@ -146,25 +127,26 @@
     position: absolute;
     left: 4px;
     top: 4px;
-    color: #28c840;
+    color: #4ade80;
     font-weight: 700;
-    text-shadow: 0 0 6px rgba(40, 200, 64, 0.5);
   }
-  .log-list ul li.fix::before  { content: '~'; color: var(--brand); text-shadow: 0 0 6px rgba(255, 144, 0, 0.5); }
+  .log-list ul li.fix::before  { content: '~'; color: var(--brand); text-shadow: 0 0 6px rgba(74, 222, 128, 0.5); }
   .log-list ul li.docs::before { content: '·'; color: var(--cyan); }
+  /* Newer entries carry their own coloured marker inline. */
+  .log-list ul li:has(> strong[style]:first-child)::before { content: none; }
   .log-list ul li code {
-    background: rgba(0, 229, 255, 0.08);
-    border: 1px solid rgba(0, 229, 255, 0.18);
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.18);
     color: var(--cyan);
     padding: 1px 6px;
-    border-radius: 3px;
+    border-radius: 0;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
   }
   .log-foot {
     margin-top: 24px;
     padding-top: 18px;
-    border-top: 1px dashed rgba(0, 229, 255, 0.18);
+    border-top: 1px dashed rgba(74, 222, 128, 0.18);
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.55);
@@ -204,11 +186,31 @@
   <ol class="log-list">
 
     <!-- LATEST -->
-    <li class="log-entry log-entry--latest" id="v7-0">
+    <li class="log-entry log-entry--latest" id="v7-1">
+      <div class="log-head">
+        <span class="log-version">v<span class="num">7.1</span></span>
+        <span class="log-date">2026-10-14</span>
+        <span class="log-tag log-tag--latest">LATEST</span>
+        <span class="log-tag">redesign</span>
+      </div>
+      <p class="log-summary">
+        <strong>Every page matches the front page</strong> &mdash; the nine case studies, <a href="now.html">/now</a>,
+        <a href="uses.html">/uses</a>, this changelog and the 404 page move off the arcade pixel theme onto v7&rsquo;s
+        engineered style: Inter for reading, JetBrains Mono for labels, one green accent, square edges, a faint grid.
+      </p>
+      <ul>
+        <li><strong style="color:var(--brand);">~</strong> Headings drop the pixel font and shimmer for solid Inter; metric tiles, meta panels, chips and buttons use the same tokens as the front page.</li>
+        <li><strong style="color:#ff5f57;">&minus;</strong> Retired the palette switcher on these pages (arcade, CRT, matrix, sunset, xeno), the HUD corner brackets, glows and looping animations &mdash; about 1,100 lines of CSS gone. <a href="classic.html">classic</a> keeps its own picker.</li>
+        <li><strong style="color:var(--brand);">~</strong> The 404 page is rebuilt in the same style and its shortcuts point straight at the new sections.</li>
+        <li><strong style="color:var(--brand);">~</strong> Fixed doubled <code>+</code> markers on recent changelog entries.</li>
+        <li><strong style="color:var(--brand);">~</strong> Service-worker cache bumped to <code>pf-v148</code> so returning visitors get the new styles.</li>
+      </ul>
+    </li>
+
+    <li class="log-entry" id="v7-0">
       <div class="log-head">
         <span class="log-version">v<span class="num">7.0</span></span>
         <span class="log-date">2026-10-12</span>
-        <span class="log-tag log-tag--latest">LATEST</span>
         <span class="log-tag log-tag--major">major redesign</span>
       </div>
       <p class="log-summary">

@@ -10,9 +10,21 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Mon, 12 Oct 2026 18:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Wed, 14 Oct 2026 10:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v7.1 — Case studies, /now, /uses and 404 match the new front page</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v7-1</link>
+    <guid isPermaLink="false">portfolio-v7.1-2026-10-14</guid>
+    <pubDate>Wed, 14 Oct 2026 10:00:00 +0800</pubDate>
+    <category>redesign</category>
+    <description><![CDATA[
+      The nine case studies, /now, /uses, the changelog and the 404 page leave the arcade pixel theme for v7's engineered
+      style: Inter for reading, JetBrains Mono for labels, one green accent and square edges. The palette switcher, HUD
+      brackets, glows and looping animations are gone from these pages.
+    ]]></description>
+  </item>
   <item>
     <title>v7.0 — New front page: a modern, single-scroll redesign</title>
     <link>https://kon2raya.netlify.app/changelog.html#v7-0</link>

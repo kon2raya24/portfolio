@@ -5,7 +5,7 @@
 <title>Case Study · WMS v2 — Inventory Rewrite with Canonical V3 Pattern — Lemmuel Turaya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="WMS v2 — active rewrite of a legacy enterprise warehouse / inventory system onto Laravel 12 + Vue 3, with a canonical V3DataTable + BaseCrud pattern, CI-enforced guardrails, parity-first data migration, and Karpathy coding guidelines baked into the agent guide." />
-<meta name="theme-color" content="#050814">
+<meta name="theme-color" content="#0b0d0c">
 <meta name="color-scheme" content="dark light">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kon2raya.netlify.app/case-studies/wms-v2.html" />
@@ -19,31 +19,10 @@
 <meta name="twitter:creator" content="@kon2raya24" />
 <meta name="twitter:site" content="@kon2raya24" />
 
-<script>
-	(function () {
-		try {
-			/* Migrate legacy 'portfolio.theme' → split 'portfolio.mode' + 'portfolio.palette' (one-time) */
-			var legacy = localStorage.getItem('portfolio.theme');
-			if (legacy && !localStorage.getItem('portfolio.mode') && !localStorage.getItem('portfolio.palette')) {
-				if (legacy === 'light' || legacy === 'dark') localStorage.setItem('portfolio.mode', legacy);
-				else if (['cyber','matrix','sunset','xeno','crt','arcade'].indexOf(legacy) !== -1) localStorage.setItem('portfolio.palette', legacy);
-			}
-			var mode = localStorage.getItem('portfolio.mode');
-			if (mode !== 'light' && mode !== 'dark') {
-				mode = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
-			}
-			document.documentElement.setAttribute('data-theme', mode);
-			var palette = localStorage.getItem('portfolio.palette') || 'arcade';
-			if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
-				document.documentElement.classList.add('theme-' + palette);
-			}
-		} catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('theme-arcade'); }
-	})();
-</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Orbitron:400,500,700,900|JetBrains+Mono:400,500,700|Press+Start+2P|VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../css/case-study.css">
 <link rel="stylesheet" href="../css/portfolio-chat.css">
@@ -571,11 +550,5 @@
 <script src="../js/case-study.js"></script>
 
 <!-- Viewport HUD -->
-<div class="viewport-hud" aria-hidden="true">
-  <span class="viewport-hud__corner viewport-hud__corner--tl"></span>
-  <span class="viewport-hud__corner viewport-hud__corner--tr"></span>
-  <span class="viewport-hud__corner viewport-hud__corner--bl"></span>
-  <span class="viewport-hud__corner viewport-hud__corner--br"></span>
-</div>
 </body>
 </html>
