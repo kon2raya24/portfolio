@@ -40,6 +40,7 @@
 			h.style.setProperty('--my', y + 'px');
 			var hot = e.target.closest && e.target.closest('a, button, summary, input, textarea, select, label, canvas, [data-tilt]');
 			c.classList.toggle('is-hover', !!hot);
+			c.classList.toggle('is-view', !!(e.target.closest && e.target.closest('.case, .project a')));
 		}, { passive: true });
 		d.addEventListener('pointerdown', function () { c.classList.add('is-down'); });
 		d.addEventListener('pointerup', function () { c.classList.remove('is-down'); });
@@ -67,27 +68,39 @@
 		}, { passive: true });
 
 		d.addEventListener('pointermove', function (e) {
-			var el = e.target.closest && e.target.closest('.card, .project a');
+			var el = e.target.closest && e.target.closest('.card, .project a, .case');
 			if (!el) return;
 			var r = el.getBoundingClientRect();
 			var px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
 			el.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
 			el.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
-			if (el.matches('.project a')) {
-				el.style.setProperty('--ry', ((px - 0.5) * 10).toFixed(2) + 'deg');
-				el.style.setProperty('--rx', ((0.5 - py) * 8).toFixed(2) + 'deg');
+			if (el.matches('.project a, .service, .case')) {
+				var k = el.matches('.project a') ? 1 : 0.6;
+				el.style.setProperty('--ry', ((px - 0.5) * 10 * k).toFixed(2) + 'deg');
+				el.style.setProperty('--rx', ((0.5 - py) * 8 * k).toFixed(2) + 'deg');
 			}
 		}, { passive: true });
-		$$('.project a').forEach(function (a) {
+		$$('.project a, .service, .case').forEach(function (a) {
 			a.addEventListener('pointerleave', function () { a.style.setProperty('--rx', '0deg'); a.style.setProperty('--ry', '0deg'); });
 		});
 
-		$$('[data-magnetic]').forEach(function (b) {
+		$$('[data-magnetic], .btn, .nav__ask, .filter').forEach(function (b) {
 			b.addEventListener('pointermove', function (e) {
 				var r = b.getBoundingClientRect();
 				b.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * 0.25).toFixed(1) + 'px,' + ((e.clientY - r.top - r.height / 2) * 0.35).toFixed(1) + 'px)';
 			});
 			b.addEventListener('pointerleave', function () { b.style.transform = ''; });
+		});
+
+		/* nav links scramble on hover; width is locked so neighbours don't shift */
+		$$('.nav__links > a').forEach(function (a) {
+			var last = 0;
+			a.addEventListener('pointerenter', function () {
+				if (Date.now() - last < 800) return;
+				last = Date.now();
+				a.style.width = a.getBoundingClientRect().width + 'px';
+				scramble(a, function () { a.style.width = ''; });
+			});
 		});
 	}
 
@@ -161,22 +174,33 @@
 		meta.setAttribute('aria-hidden', 'true');
 		meta.innerHTML = 'N&deg;<b>01</b>/ ' + String(count).padStart(2, '0') + '<span class="hs-bar"><i></i></span>';
 		pin.appendChild(meta);
-		var num = meta.querySelector('b');
+		/* giant outlined title drifting behind the cards, slower than they move */
+		var ghost = d.createElement('div');
+		ghost.className = 'hs-ghost';
+		ghost.setAttribute('aria-hidden', 'true');
+		ghost.innerHTML = 'Selected <em>work</em> &middot; shipped';
+		pin.appendChild(ghost);
+		var num = meta.querySelector('b'), cards = Array.prototype.slice.call(track.children), mids = [];
 		/* the transform does the moving; stop focus/scroll-restore from scrolling the pin too */
 		pin.addEventListener('scroll', function () { if (mq.matches && pin.scrollLeft) pin.scrollLeft = 0; });
 		function measure() {
 			h.classList.toggle('hs-on', mq.matches);
-			if (!mq.matches) { wrap.style.height = ''; track.style.removeProperty('--hx'); return; }
+			if (!mq.matches) { wrap.style.height = ''; track.style.removeProperty('--hx'); cards.forEach(function (c) { c.style.removeProperty('--focus'); }); return; }
 			pin.scrollLeft = 0;
 			dist = Math.max(0, track.scrollWidth - w.innerWidth);
 			wrap.style.height = (w.innerHeight + dist) + 'px';
+			mids = cards.map(function (c) { return c.offsetLeft + c.offsetWidth / 2; });
 			update();
 		}
 		function update() {
 			if (!mq.matches) return;
-			var p = clamp(-wrap.getBoundingClientRect().top / (dist || 1), 0, 1);
+			var p = clamp(-wrap.getBoundingClientRect().top / (dist || 1), 0, 1), vw = w.innerWidth;
 			track.style.setProperty('--hx', (-p * dist).toFixed(1) + 'px');
-			meta.style.setProperty('--hp', p.toFixed(3));
+			pin.style.setProperty('--hp', p.toFixed(3));
+			/* the card nearest the middle is in focus; the rest recede */
+			cards.forEach(function (c, i) {
+				c.style.setProperty('--focus', (1 - clamp(Math.abs(mids[i] - p * dist - vw / 2) / (vw * 0.7), 0, 1)).toFixed(3));
+			});
 			num.textContent = String(Math.min(count, Math.floor(p * count) + 1)).padStart(2, '0');
 		}
 		w.addEventListener('resize', measure);
@@ -196,26 +220,26 @@
 	/* ---------------------------------------------------------------------
 	   6. Section labels decode from random glyphs when they scroll in.
 	   --------------------------------------------------------------------- */
+	function scramble(el, done) {
+		var GLYPHS = '!<>-_\\/[]{}=+*^?#01', nodes = [], left = 0;
+		(function walk(n) { n.childNodes.forEach(function (c) { if (c.nodeType === 3) nodes.push(c); else if (!c.classList || !c.classList.contains('live')) walk(c); }); })(el);
+		nodes.forEach(function (node) {
+			var text = node.nodeValue, t0 = null, dur = Math.min(900, 300 + text.length * 22);
+			left++;
+			requestAnimationFrame(function step(t) {
+				if (t0 === null) t0 = t;
+				var p = (t - t0) / dur, out = '';
+				for (var i = 0; i < text.length; i++) {
+					out += (p * text.length > i || text[i] === ' ') ? text[i] : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+				}
+				node.nodeValue = p >= 1 ? text : out;
+				if (p < 1) requestAnimationFrame(step); else if (!--left && done) done();
+			});
+		});
+	}
 	(function decode() {
 		var marks = $$('.sec__mark');
 		if (reduced || !marks.length || !('IntersectionObserver' in w)) return;
-		var GLYPHS = '!<>-_\\/[]{}=+*^?#01';
-		function scramble(el) {
-			var nodes = [];
-			(function walk(n) { n.childNodes.forEach(function (c) { if (c.nodeType === 3) nodes.push(c); else if (!c.classList || !c.classList.contains('live')) walk(c); }); })(el);
-			nodes.forEach(function (node) {
-				var text = node.nodeValue, t0 = null, dur = Math.min(900, 300 + text.length * 22);
-				requestAnimationFrame(function step(t) {
-					if (t0 === null) t0 = t;
-					var p = (t - t0) / dur, out = '';
-					for (var i = 0; i < text.length; i++) {
-						out += (p * text.length > i || text[i] === ' ') ? text[i] : GLYPHS[(Math.random() * GLYPHS.length) | 0];
-					}
-					node.nodeValue = p >= 1 ? text : out;
-					if (p < 1) requestAnimationFrame(step);
-				});
-			});
-		}
 		var io = new IntersectionObserver(function (entries) {
 			entries.forEach(function (en) { if (en.isIntersecting) { io.unobserve(en.target); scramble(en.target); } });
 		}, { rootMargin: '0px 0px -15% 0px' });
@@ -350,6 +374,166 @@
 			});
 		}, { rootMargin: '-45% 0px -50% 0px' });
 		secs.forEach(function (sec) { io.observe(sec); });
+	})();
+
+	/* ---------------------------------------------------------------------
+	   6d. Hero dot field: dots brighten and part around the pointer, a click
+	       (or the end of the portrait intro) sends a shockwave. Draws only
+	       while something is moving and the hero is on screen.
+	   --------------------------------------------------------------------- */
+	(function heroField() {
+		var hero = $('.hero'), fig = $('[data-split]');
+		if (!hero || reduced) return;
+		var cv = d.createElement('canvas'), ctx = cv.getContext('2d');
+		if (!ctx) return;
+		cv.className = 'hero__field';
+		cv.setAttribute('aria-hidden', 'true');
+		hero.insertBefore(cv, hero.firstChild);
+		var GAP = 26, REACH = 170, W = 0, H = 0, dots = [], mx = -9999, my = -9999, waves = [], visible = true, raf = 0, movedAt = 0;
+		function size() {
+			var r = hero.getBoundingClientRect(), dpr = Math.min(2, w.devicePixelRatio || 1);
+			W = r.width; H = r.height;
+			cv.width = W * dpr; cv.height = H * dpr;
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			/* leave a hole behind the portrait so the dots never show through the photo */
+			var pr = fig ? fig.getBoundingClientRect() : null, pcx = pr ? pr.left - r.left + pr.width / 2 : -1e4, pcy = pr ? pr.top - r.top + pr.height / 2 : -1e4, hole = pr ? pr.width * 0.5 : 0;
+			dots = [];
+			for (var y = GAP / 2; y < H; y += GAP) for (var x = GAP / 2; x < W; x += GAP) {
+				if (Math.hypot(x - pcx, y - pcy) > hole) dots.push(x, y);
+			}
+			kick();
+		}
+		function draw(now) {
+			ctx.clearRect(0, 0, W, H);
+			waves = waves.filter(function (v) { return now - v.t < 1500; });
+			var hot = [];
+			ctx.fillStyle = 'rgba(196,181,253,0.17)';
+			ctx.beginPath();
+			for (var i = 0; i < dots.length; i += 2) {
+				var x = dots[i], y = dots[i + 1], dx = x - mx, dy = y - my, dist = Math.sqrt(dx * dx + dy * dy), a = 0, s = 0, ox = 0, oy = 0;
+				if (dist < REACH) { var f = 1 - dist / REACH; a = f * f * 0.8; s = f * 1.8; ox = dx / (dist || 1) * f * 9; oy = dy / (dist || 1) * f * 9; }
+				for (var j = 0; j < waves.length; j++) {
+					var v = waves[j], age = now - v.t, off = Math.abs(Math.hypot(x - v.x, y - v.y) - age * 0.75);
+					if (off < 46) { var k = (1 - off / 46) * (1 - age / 1500); a += k * 0.85; s += k * 2.2; }
+				}
+				if (a > 0.02) hot.push(x + ox, y + oy, Math.min(1, 0.17 + a), 1.4 + s);
+				else ctx.rect(x - 0.7, y - 0.7, 1.4, 1.4);
+			}
+			ctx.fill();
+			for (var n = 0; n < hot.length; n += 4) {
+				ctx.fillStyle = 'rgba(196,181,253,' + hot[n + 2].toFixed(2) + ')';
+				ctx.fillRect(hot[n] - hot[n + 3] / 2, hot[n + 1] - hot[n + 3] / 2, hot[n + 3], hot[n + 3]);
+			}
+		}
+		function loop(now) {
+			draw(now);
+			raf = visible && (waves.length || now - movedAt < 900) ? requestAnimationFrame(loop) : 0;
+		}
+		function kick() { movedAt = performance.now(); if (!raf) raf = requestAnimationFrame(loop); }
+		hero.addEventListener('pointermove', function (e) {
+			var r = hero.getBoundingClientRect();
+			mx = e.clientX - r.left; my = e.clientY - r.top;
+			kick();
+		}, { passive: true });
+		hero.addEventListener('pointerleave', function () { mx = my = -9999; kick(); });
+		hero.addEventListener('pointerdown', function (e) {
+			var r = hero.getBoundingClientRect();
+			waves.push({ x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now() });
+			kick();
+		});
+		if ('IntersectionObserver' in w) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) kick(); }).observe(hero);
+		var t;
+		w.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(size, 150); });
+		size();
+		/* one pulse from the portrait as the photo is uncovered */
+		if (fig) setTimeout(function () {
+			var r = hero.getBoundingClientRect(), pr = fig.getBoundingClientRect();
+			waves.push({ x: pr.left - r.left + pr.width / 2, y: pr.top - r.top + pr.height / 2, t: performance.now() });
+			kick();
+		}, 2300);
+	})();
+
+	/* ---------------------------------------------------------------------
+	   6e. Section titles split into letters so they can rise out of a mask
+	       (css: .is-split). Only titles that start off screen get it.
+	   --------------------------------------------------------------------- */
+	(function splitTitles() {
+		if (reduced) return;
+		var i;
+		$$('.reveal .sec__head h2').forEach(function (h2) {
+			h2.setAttribute('aria-label', h2.textContent.replace(/\s+/g, ' ').trim());
+			i = 0;
+			(function walk(n) {
+				Array.prototype.slice.call(n.childNodes).forEach(function (c) {
+					if (c.nodeType === 1) return walk(c);
+					if (c.nodeType !== 3) return;
+					var frag = d.createDocumentFragment();
+					c.nodeValue.split(/(\s+)/).forEach(function (word) {
+						if (!word) return;
+						if (/^\s+$/.test(word)) return frag.appendChild(d.createTextNode(word));
+						var span = d.createElement('span');
+						span.className = 'w';
+						span.setAttribute('aria-hidden', 'true');
+						span.innerHTML = word.split('').map(function (ch) { return '<span class="ch" style="--d:' + (i++) + '">' + esc(ch) + '</span>'; }).join('');
+						frag.appendChild(span);
+					});
+					n.replaceChild(frag, c);
+				});
+			})(h2);
+			h2.classList.add('is-split');
+		});
+	})();
+
+	/* ---------------------------------------------------------------------
+	   6f. Marquee follows the scroll: faster and skewed while you scroll,
+	       reversing when you scroll up.
+	   --------------------------------------------------------------------- */
+	(function marqueeVelocity() {
+		var band = $('.marquee'), track = band && $('.marquee__track', band);
+		if (!track || reduced || !track.getAnimations || !('IntersectionObserver' in w)) return;
+		var anim = track.getAnimations()[0];
+		if (!anim) return;
+		var lastY = w.scrollY, rate = 1, dir = 1, skew = 0, raf = 0;
+		function tick() {
+			var v = w.scrollY - lastY;
+			lastY = w.scrollY;
+			if (v) dir = v > 0 ? 1 : -1;
+			rate += (dir * (1 + Math.min(10, Math.abs(v) * 0.22)) - rate) * 0.08;
+			skew += (clamp(-v * 0.35, -14, 14) - skew) * 0.15;
+			anim.playbackRate = rate;
+			band.style.setProperty('--skew', skew.toFixed(2) + 'deg');
+			raf = requestAnimationFrame(tick);
+		}
+		new IntersectionObserver(function (en) {
+			if (en[0].isIntersecting && !raf) { lastY = w.scrollY; raf = requestAnimationFrame(tick); }
+			else if (!en[0].isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+		}).observe(band);
+	})();
+
+	/* ---------------------------------------------------------------------
+	   6g. Footer name: letters rise in, then lift and light up near the
+	       pointer.
+	   --------------------------------------------------------------------- */
+	(function footName() {
+		var el = $('.foot__name'), foot = $('.foot');
+		if (!el || !foot || reduced || !('IntersectionObserver' in w)) return;
+		el.innerHTML = el.textContent.split('').map(function (ch, i) {
+			return ch === ' ' ? ' ' : '<span style="--i:' + i + '">' + esc(ch) + '</span>';
+		}).join('');
+		el.classList.add('is-split');
+		var letters = $$('span', el);
+		var io = new IntersectionObserver(function (en) {
+			if (en[0].isIntersecting) { el.classList.add('is-in'); io.disconnect(); }
+		}, { threshold: 0.4 });
+		io.observe(el);
+		if (!finePointer) return;
+		foot.addEventListener('pointermove', function (e) {
+			letters.forEach(function (s) {
+				var r = s.getBoundingClientRect(), dx = (e.clientX - r.left - r.width / 2) / 180;
+				s.style.setProperty('--lift-n', Math.exp(-dx * dx).toFixed(3));
+			});
+		}, { passive: true });
+		foot.addEventListener('pointerleave', function () { letters.forEach(function (s) { s.style.setProperty('--lift-n', 0); }); });
 	})();
 
 	/* ---------------------------------------------------------------------

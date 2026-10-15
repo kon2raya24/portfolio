@@ -10,9 +10,21 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Wed, 14 Oct 2026 14:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Thu, 15 Oct 2026 14:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v8.3 — Interactive hero field, cinematic work track, letter-by-letter titles</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v8-3</link>
+    <guid isPermaLink="false">portfolio-v8.3-2026-10-15</guid>
+    <pubDate>Thu, 15 Oct 2026 14:00:00 +0800</pubDate>
+    <category>motion</category>
+    <description><![CDATA[
+      A motion layer across the front page: a cursor-reactive dot field with shockwaves, a focus-pulling work track
+      with 3D tilt, titles that rise letter by letter, a scroll-reactive marquee, magnetic buttons and a footer name
+      that lifts under the cursor. All of it is off for reduced motion.
+    ]]></description>
+  </item>
   <item>
     <title>v8.2 — The loading screen is gone; the portrait decodes from ASCII instead</title>
     <link>https://kon2raya.netlify.app/changelog.html#v8-2</link>
