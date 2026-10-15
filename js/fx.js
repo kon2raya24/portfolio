@@ -45,6 +45,7 @@
 		d.addEventListener('pointerdown', function () { c.classList.add('is-down'); });
 		d.addEventListener('pointerup', function () { c.classList.remove('is-down'); });
 		d.addEventListener('pointerleave', function () { x = y = -100; });
+		d.addEventListener('mouseout', function (e) { if (!e.relatedTarget) { x = y = -100; cx = cy = -100; } });
 		(function loop() {
 			cx += (x - cx) * 0.18; cy += (y - cy) * 0.18;
 			c.style.setProperty('--cx', cx.toFixed(1) + 'px');
@@ -571,7 +572,7 @@
 		var form = $('[data-term-form]'), out = $('[data-term-out]'), input = $('[data-term-input]');
 		if (!form || !out || !input) return;
 		var history = [], hi = 0;
-		var SECTIONS = { about: 'about', work: 'work', experience: 'experience', stack: 'stack', skills: 'stack', services: 'services', projects: 'projects', activity: 'activity', contact: 'contact' };
+		var SECTIONS = { about: 'about', work: 'work', experience: 'experience', stack: 'stack', skills: 'stack', services: 'services', projects: 'projects', arcade: 'arcade', games: 'arcade', play: 'arcade', activity: 'activity', contact: 'contact' };
 		function line(html, cls) {
 			var p = d.createElement('p');
 			p.className = 'is-new' + (cls ? ' ' + cls : '');
@@ -611,7 +612,7 @@
 			},
 			sudo: function () { line('permission denied: nice try. &#128578;', 't-err'); },
 			clear: function () { out.innerHTML = ''; },
-			ls: function () { line('about/  work/  experience/  stack/  services/  projects/  contact/  resume.pdf'); },
+			ls: function () { line('about/  work/  experience/  stack/  services/  projects/  arcade/  contact/  resume.pdf'); },
 			coffee: function () { line('brewing&hellip; &#9749; while you wait, type "work".', 't-warn'); }
 		};
 		function run(raw) {

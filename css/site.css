@@ -507,6 +507,63 @@ html:not(.js) .filters { display: none; }
 .project a:hover .project__cta::after { width: 6px; }
 ::view-transition-group(*) { animation-duration: 0.5s; animation-timing-function: var(--ease); }
 
+/* arcade — games play in an on-demand iframe (js/site.js) */
+.arcade { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.arcade__screen {
+	position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--r); background: #000;
+	border: 1px solid rgba(196, 181, 253, 0.28);
+	box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.02), 0 40px 90px -40px rgba(124, 58, 237, 0.8);
+}
+.arcade__screen:fullscreen { border: 0; border-radius: 0; }
+.arcade__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) brightness(0.55); transition: filter 0.5s var(--ease), transform 1.2s var(--ease); }
+.arcade__screen:hover .arcade__poster { filter: saturate(1) brightness(0.7); transform: scale(1.03); }
+.arcade__screen::after { /* scanlines over the poster only */
+	content: ''; position: absolute; inset: 0; pointer-events: none;
+	background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px), radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55));
+}
+.arcade__play {
+	position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+	width: 100%; background: none; border: 0; cursor: pointer; color: var(--heading); font: 500 15px var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.arcade__play b { font-weight: 700; color: var(--accent); }
+.arcade__btn {
+	display: grid; place-items: center; width: 88px; height: 88px; border-radius: 50%; padding-left: 6px;
+	background: linear-gradient(180deg, #d8ccff, var(--accent-2)); color: var(--accent-ink); font-size: 30px;
+	box-shadow: 0 0 0 0 rgba(196, 181, 253, 0.55), 0 18px 40px -12px rgba(167, 139, 250, 0.9);
+	animation: coin 2.2s var(--ease) infinite; transition: transform 0.4s var(--spring);
+}
+.arcade__play:hover .arcade__btn, .arcade__play:focus-visible .arcade__btn { transform: scale(1.1); }
+@keyframes coin { 70%, 100% { box-shadow: 0 0 0 26px rgba(196, 181, 253, 0), 0 18px 40px -12px rgba(167, 139, 250, 0.9); } }
+.arcade__screen iframe { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; border: 0; background: #000; }
+.arcade.is-playing .arcade__screen::after, .arcade.is-playing .arcade__play { display: none; }
+html:not(.js) .arcade__play { display: none; }
+.arcade__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-top: 14px; }
+.arcade__now { margin: 0; font-size: 15px; color: var(--heading); }
+.arcade__now span { margin-left: 8px; font: 400 12px var(--mono); color: var(--dim); }
+.arcade__tools { display: flex; gap: 8px; }
+.arcade__tool { background: none; border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px; font: 500 12px var(--mono); color: var(--dim); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.arcade__tool:hover { color: var(--heading); border-color: var(--accent); }
+.arcade__side { border: 1px solid var(--line); border-radius: var(--r); padding: 14px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)); }
+.arcade__label { margin: 4px 8px 8px; font: 500 11px var(--mono); color: var(--dim); text-transform: uppercase; letter-spacing: 0.12em; }
+.arcade__list { list-style: none; counter-reset: g; margin: 0 0 14px; }
+.arcade__list:last-child { margin-bottom: 0; }
+.arcade__list a {
+	counter-increment: g; position: relative; display: grid; grid-template-columns: 28px 1fr auto; column-gap: 8px; align-items: baseline;
+	padding: 8px; border-radius: 10px; color: var(--text); transition: background-color 0.25s, color 0.25s;
+}
+.arcade__list a::before { content: counter(g, decimal-leading-zero); grid-row: span 2; font: 500 11px var(--mono); color: var(--dim); }
+.arcade__list b { font-weight: 600; font-size: 14px; }
+.arcade__list span { grid-column: 2; font-size: 12px; color: var(--dim); line-height: 1.4; }
+.arcade__list i { grid-row: 1; grid-column: 3; font-style: normal; color: var(--dim); }
+.arcade__list a:hover, .arcade__list a:focus-visible { background: rgba(196, 181, 253, 0.08); color: var(--heading); }
+.arcade__list a[aria-current] { background: rgba(196, 181, 253, 0.14); }
+.arcade__list a[aria-current]::before { content: '\25B6'; color: var(--accent); }
+@media (max-width: 960px) {
+	.arcade { grid-template-columns: 1fr; }
+	.arcade__btn { width: 68px; height: 68px; font-size: 24px; }
+}
+@media (max-width: 600px) { .arcade__screen { aspect-ratio: 4 / 3; } }
+
 /* activity */
 .activity { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 16px; }
 .commit-graph { display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }

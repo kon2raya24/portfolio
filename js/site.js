@@ -138,6 +138,67 @@
 	}
 
 	/* ---------------------------------------------------------------------
+	   Arcade: games play in an iframe that only loads on demand. Picking a
+	   game starts it; scrolling the section out of view unloads it so no
+	   audio keeps playing. Games that refuse to be framed stay plain links.
+	   --------------------------------------------------------------------- */
+	(function arcade() {
+		var box = document.querySelector('[data-arcade]');
+		if (!box) return;
+		var screen = box.querySelector('[data-arcade-screen]'), poster = box.querySelector('[data-arcade-poster]');
+		var open = box.querySelector('[data-arcade-open]'), full = box.querySelector('[data-arcade-full]'), stopBtn = box.querySelector('[data-arcade-stop]');
+		var games = $$('[data-game]:not([data-external])', box), cur = games[0], frame = null;
+		function show(a) {
+			poster.src = a.getAttribute('data-thumb');
+			$$('[data-arcade-title]', box).forEach(function (el) { el.textContent = a.querySelector('b').textContent; });
+			box.querySelector('[data-arcade-controls]').textContent = a.getAttribute('data-controls');
+		}
+		function stop() {
+			if (!frame) return;
+			frame.remove(); frame = null;
+			box.classList.remove('is-playing');
+			stopBtn.hidden = true;
+		}
+		function play(a) {
+			stop();
+			cur = a;
+			show(a);
+			open.href = a.href;
+			games.forEach(function (g) { if (g === a) g.setAttribute('aria-current', 'true'); else g.removeAttribute('aria-current'); });
+			frame = document.createElement('iframe');
+			frame.src = a.href;
+			frame.title = a.querySelector('b').textContent + ' (game)';
+			frame.allow = 'fullscreen; gamepad; autoplay';
+			frame.setAttribute('allowfullscreen', '');
+			frame.addEventListener('load', function () { frame && frame.focus(); });
+			screen.appendChild(frame);
+			box.classList.add('is-playing');
+			stopBtn.hidden = false;
+			frame.focus();
+		}
+		box.querySelector('[data-arcade-play]').addEventListener('click', function () { play(cur); });
+		games.forEach(function (a) {
+			a.addEventListener('click', function (e) { e.preventDefault(); play(a); screen.scrollIntoView({ block: 'nearest', behavior: reducedMotion ? 'auto' : 'smooth' }); });
+		});
+		/* hovering a game previews its poster while nothing is playing */
+		$$('[data-game]', box).forEach(function (a) {
+			a.addEventListener('pointerenter', function () { if (!frame) show(a); });
+		});
+		box.querySelector('.arcade__side').addEventListener('pointerleave', function () { if (!frame) show(cur); });
+		stopBtn.addEventListener('click', stop);
+		if (document.fullscreenEnabled) {
+			full.hidden = false;
+			full.addEventListener('click', function () {
+				if (!frame) play(cur);
+				screen.requestFullscreen().catch(function () {});
+			});
+		}
+		if ('IntersectionObserver' in window) new IntersectionObserver(function (en) {
+			if (!en[0].isIntersecting && !document.fullscreenElement) stop();
+		}).observe(screen);
+	})();
+
+	/* ---------------------------------------------------------------------
 	   Copy buttons
 	   --------------------------------------------------------------------- */
 	$$('[data-copy]').forEach(function (btn) {
