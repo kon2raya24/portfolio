@@ -10,9 +10,20 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Thu, 15 Oct 2026 18:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Thu, 15 Oct 2026 21:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
 
+  <item>
+    <title>v8.5 — Aswang Apocalypse: endless horde survival with a replay-verified daily leaderboard</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v8-5</link>
+    <guid isPermaLink="false">portfolio-v8.5-2026-10-15</guid>
+    <pubDate>Thu, 15 Oct 2026 21:00:00 +0800</pubDate>
+    <category>project</category>
+    <description><![CDATA[
+      Aswang Apocalypse joins the work track: Lola Nena against Philippine folklore monsters, with a story campaign, nine
+      heroes, four modes and a Daily Challenge whose leaderboard the server verifies by replaying each run.
+    ]]></description>
+  </item>
   <item>
     <title>v8.4 — Insert coin: play the Tambayan Arcade games right on the portfolio</title>
     <link>https://kon2raya.netlify.app/changelog.html#v8-4</link>
