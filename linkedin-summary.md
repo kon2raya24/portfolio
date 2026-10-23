@@ -14,7 +14,7 @@ Drop each section directly into the matching LinkedIn field. Edit anything in **
   > Full-Stack & AI Engineer · Vue + Laravel + Flutter + Claude/Gemini/OpenAI agent pipelines · 6+ yrs · 9 case studies · Open to remote · GMT+8
 
 - **Specialist:**
-  > Application Developer @ AAI Worldwide Logistics · Built a production multi-LLM autonomous AI engineer · Vue · Laravel · Flutter
+  > Senior Software Developer @ Suhay OPC · Built a production multi-LLM autonomous AI engineer · Vue · Laravel · Flutter
 
 - **Punchier:**
   > I ship full-stack + mobile production software, and I build autonomous AI engineers that ship alongside the human team
@@ -94,15 +94,21 @@ Pin in this order (LinkedIn shows up to 6 nicely on the desktop layout — pin y
 
 ## 4) Experience descriptions (paste into each role on LinkedIn)
 
-### AAI Worldwide Logistics — Application Developer · Nov 2024 – Present
+### Suhay OPC — Senior Software Developer · Jul 2026 – Present
 
 ```
-Owning end-to-end work across the company’s Financial Management System (FMS), Warehouse Management System (WMS) — mobile and web — Transport Management System (TMS), CRM, and an autonomous AI-engineer pipeline that ships alongside the human team. Heavy integration with SAP and third-party services.
+Senior software developer building web and mobile applications end to end.
+```
+
+### AAI Worldwide Logistics — Application Developer · Nov 2024 – Jul 2026
+
+```
+Owned end-to-end work across the company’s Financial Management System (FMS), Warehouse Management System (WMS) — mobile and web — Transport Management System (TMS), CRM, and an autonomous AI-engineer pipeline that ships alongside the human team. Heavy integration with SAP and third-party services.
 
 • Shipped a hardware-integrated Flutter WMS mobile app — 13 feature modules, 108 build releases — with Bluetooth ESC/POS label printing on Epson TM-P80II, dual-input scanning (camera + keyboard-wedge), Hive-backed offline replay queue, Cloudflare Turnstile re-auth.
 • Built a production multi-LLM autonomous AI engineer wired into the ticketing system: `php artisan ai:work {ref}` picks up ASSIGNED tickets, dispatches to Claude / Gemini / OpenAI / OpenRouter / Qwen, persists chat memory, and an independent verifier runs PHPUnit before merge.
-• Authoring a Karpathy-style LLM-friendly Obsidian wiki that gives both human engineers and AI agents the same context for a complex codebase (frontmatter-tagged pages, per-folder _INDEX.md, same-turn-update discipline).
-• Leading the WMS v2 rewrite onto Laravel 12 + Vue 3 — canonical V3 list-page pattern, BaseCrudController + ModuleSchemaInterface foundation, CI-enforced guardrails (ESLint + PHPStan), online schema migrations.
+• Authored a Karpathy-style LLM-friendly Obsidian wiki that gives both human engineers and AI agents the same context for a complex codebase (frontmatter-tagged pages, per-folder _INDEX.md, same-turn-update discipline).
+• Led the WMS v2 rewrite onto Laravel 12 + Vue 3 — canonical V3 list-page pattern, BaseCrudController + ModuleSchemaInterface foundation, CI-enforced guardrails (ESLint + PHPStan), online schema migrations.
 • Designed and implemented key FMS features — journal vouchers, sundry expenses, inventory, AG Grid-driven reports, jsPDF / DomPDF document generation.
 • Facilitated SAP-to-WMS order integration via XML → JSON conversion + secure SFTP pipelines.
 • Built CRM maintenance modules (Airline Rates, IATA Rates, charges) with SurveyJS customer-service forms.
@@ -244,7 +250,7 @@ A great recommendation talks about *behavior* (how you work) more than *output* 
 
 - [ ] Headline updated (AI Engineer + 9 case studies + multi-LLM angle)
 - [ ] About section pasted in (mentions 9 case studies + autonomous AI engineer + open-source @ph-dev-utils family + Karpathy-style AI-augmented daily workflow + WMS v2 + LLM wiki + 6+ years)
-- [ ] Current role (AAI) bullets refreshed with AI Engineer + WMS v2 + LLM wiki
+- [ ] Current role (Suhay OPC) added; AAI end date set to Jul 2026; AAI bullets refreshed with AI Engineer + WMS v2 + LLM wiki
 - [ ] Featured section: 6 case studies + GitHub (AI Engineer + LLM Wiki pinned highest)
 - [ ] Top 5 skills set to Full-Stack / AI Engineering / Vue.js / Laravel / Flutter
 - [ ] “Open to work” badge enabled (recruiter visibility; titles include AI Engineer)

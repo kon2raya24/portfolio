@@ -3,7 +3,7 @@
   "meta": {
     "version": "1.0.0",
     "canonical": "https://kon2raya.netlify.app/resume.json",
-    "lastModified": "2026-06-03"
+    "lastModified": "2026-10-23"
   },
   "basics": {
     "name": "Lemmuel Turaya",
@@ -55,15 +55,26 @@
   },
   "work": [
     {
+      "name": "Suhay OPC",
+      "location": "Philippines",
+      "position": "Senior Software Developer",
+      "url": "",
+      "startDate": "2026-07-01",
+      "endDate": "",
+      "summary": "Senior software developer building web and mobile applications end to end.",
+      "highlights": [],
+      "keywords": []
+    },
+    {
       "name": "AAI Worldwide Logistics",
       "location": "Philippines",
       "position": "Application Developer",
       "url": "",
       "startDate": "2024-11-01",
-      "endDate": "",
-      "summary": "Contribute to the development and enhancement of the company's Financial Management System, connected logistics platforms, and a new Flutter-based Warehouse Management mobile app — integrating SAP and third-party services with internal applications.",
+      "endDate": "2026-07-01",
+      "summary": "Contributed to the development and enhancement of the company's Financial Management System, connected logistics platforms, and a new Flutter-based Warehouse Management mobile app — integrating SAP and third-party services with internal applications.",
       "highlights": [
-        "Designing and shipping a Flutter-based Warehouse Management System (WMS) mobile app from concept to production, enabling real-time inventory, receiving, and pick/pack operations on the warehouse floor.",
+        "Designed and shipped a Flutter-based Warehouse Management System (WMS) mobile app from concept to production, enabling real-time inventory, receiving, and pick/pack operations on the warehouse floor.",
         "Adopted Vibe Coding — AI-assisted delivery with Claude AI — to compress prototyping and refactoring cycles while keeping code review, tests, and engineering judgment in the loop.",
         "Designed and implemented key FMS features — journal voucher creation, sundry expense invoice processing, inventory management, and reporting using Ag-Grid for data visualization and jsPDF for advanced reports.",
         "Facilitated SAP-to-WMS order integration by converting XML payloads to JSON, generating updated XML files, and managing secure SFTP transfers for SAP validation.",

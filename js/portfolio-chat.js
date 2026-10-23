@@ -121,7 +121,7 @@
     { q: "Are you available?",
       aliases: ["open to work", "looking for work", "hiring", "for hire", "availability", "open to opportunities", "current status"],
       category: "hire",
-      a: "<strong>Yes — open to remote, hybrid, or onsite</strong>. Currently full-time at AAI Worldwide Logistics; available for a serious offer within ~30-45 days. <a href='https://cal.com/lemmuel-turaya/intro' target='_blank' rel='noopener'>Book a 15-min intro call</a>." },
+      a: "<strong>Yes — open to remote, hybrid, or onsite</strong>. Currently full-time at Suhay OPC; available for a serious offer within ~30-45 days. <a href='https://cal.com/lemmuel-turaya/intro' target='_blank' rel='noopener'>Book a 15-min intro call</a>." },
 
     { q: "What's your notice period?",
       aliases: ["notice period", "start date", "when can you start", "earliest start"],
@@ -211,7 +211,7 @@
     { q: "How many years of experience do you have?",
       aliases: ["how many years", "years of experience", "experience level", "years coding", "how long coding", "tenure"],
       category: "about",
-      a: "<strong>6+ years</strong> shipping production work — from junior web dev (Switch Connect, Australia · 2019) through full-stack and mobile at current role (AAI Worldwide Logistics · since Nov 2024). Full timeline in the <a href='#fh5co-resume'>resume section ↓</a>" },
+      a: "<strong>6+ years</strong> shipping production work — from junior web dev (Switch Connect, Australia · 2019) through full-stack and mobile at AAI Worldwide Logistics (Nov 2024 – Jul 2026), now Senior Software Developer at Suhay OPC (since Jul 2026). Full timeline in the <a href='#fh5co-resume'>resume section ↓</a>" },
 
     { q: "Where did you study?",
       aliases: ["education", "university", "college", "school", "degree", "where did you go to school", "alma mater"],
@@ -435,7 +435,7 @@
     { q: "Where do you work now?",
       aliases: ["current job", "current employer", "currently work", "current role", "current company"],
       category: "work",
-      a: "<strong>AAI Worldwide Logistics</strong> · Application Developer · Nov 2024 – Present. FMS, WMS (mobile + web), TMS, CRM, autonomous AI engineer pipeline. SAP integration + heavy logistics-domain work." },
+      a: "<strong>Suhay OPC</strong> · Senior Software Developer · Jul 2026 – Present. Before that: <strong>AAI Worldwide Logistics</strong> · Application Developer · Nov 2024 – Jul 2026 — FMS, WMS (mobile + web), TMS, CRM, autonomous AI engineer pipeline, SAP integration + heavy logistics-domain work." },
 
     { q: "Tell me about your time at Octal",
       aliases: ["octal", "octal philippines"],
