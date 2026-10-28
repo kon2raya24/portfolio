@@ -32,7 +32,7 @@ try {
   /* ---------- Shared theme helpers (used by HUD palette picker + nav theme picker) ----------
      Single source of truth for mode (light/dark) and palette (cyber/matrix/sunset/xeno).
      Both UIs sync via 'mode:change' and 'palette:change' custom events. */
-  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno', 'crt', 'arcade'];
+  var PALETTES = ['cyber', 'matrix', 'sunset', 'xeno', 'crt', 'arcade', 'brutal'];
 
   function currentMode() {
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
@@ -63,6 +63,7 @@ try {
     if (PALETTES.indexOf(palette) === -1) palette = 'cyber';
     PALETTES.forEach(function (p) { document.documentElement.classList.remove('theme-' + p); });
     if (palette !== 'cyber') document.documentElement.classList.add('theme-' + palette);
+    if (palette === 'brutal') applyMode('light'); // brutal is paper-white only
     // Every choice is stored explicitly — an absent key now means "fresh
     // visitor", which the bootstraps default to arcade. Removing the key for
     // cyber (the old behavior) would bounce cyber users back to arcade.
@@ -788,6 +789,7 @@ try {
         '<button class="theme-pick__btn"       data-th="xeno"   aria-label="xeno theme"></button>' +
         '<button class="theme-pick__btn"       data-th="crt"    aria-label="crt theme"></button>' +
         '<button class="theme-pick__btn"       data-th="arcade" aria-label="arcade theme"></button>' +
+        '<button class="theme-pick__btn"       data-th="brutal" aria-label="brutal theme"></button>' +
       '</div>' +
       '<div class="hud__row"><span class="hud__label">[ sys ]</span><span class="hud__val">online</span></div>' +
       '<div class="hud__row"><span class="hud__label">time</span><span class="hud__val" data-h="time">--:--:--</span></div>' +
@@ -1351,7 +1353,7 @@ try {
       { section: 'action', label: 'Hire Me',                  hash: '#fh5co-started', icon: '$', meta: 'cta',         aliases: ['hire', 'work with me'] },
       { section: 'action', label: 'Explore case studies in 3D',action: 'orbital',     icon: '◎', meta: 'gallery',     aliases: ['3d', 'orbital', 'gallery', 'showcase', 'spin', 'ring', 'explore', 'orbit'] },
       { section: 'action', label: 'Take the 30-second tour',  action: 'tour',         icon: '▶', meta: 'guided',      aliases: ['tour', 'walkthrough', 'demo', 'guided'] },
-      { section: 'action', label: 'Cycle theme (Alt+T)',      action: 'cycleTheme',   icon: '◐', meta: 'theme',       aliases: ['theme', 'palette', 'dark mode', 'cyber', 'matrix', 'sunset', 'xeno', 'crt', 'arcade', 'game'] },
+      { section: 'action', label: 'Cycle theme (Alt+T)',      action: 'cycleTheme',   icon: '◐', meta: 'theme',       aliases: ['theme', 'palette', 'dark mode', 'cyber', 'matrix', 'sunset', 'xeno', 'crt', 'arcade', 'brutal', 'game'] },
       { section: 'action', label: 'Toggle Konami Mode',       action: 'konami',       icon: '★', meta: 'easter egg',  aliases: ['konami', 'easter egg', 'secret'] },
       { section: 'action', label: 'Scroll to Top',            action: 'top',          icon: '↑', meta: 'nav',         aliases: ['top', 'scroll to top'] }
     );
@@ -3969,10 +3971,10 @@ try {
       quit:  function () { close(); }
     };
 
-    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno', crt: 'crt', arcade: 'arcade', game: 'arcade' };
+    var themeAliases = { cyber: 'cyber', matrix: 'matrix', sunset: 'sunset', xeno: 'xeno', crt: 'crt', arcade: 'arcade', game: 'arcade', brutal: 'brutal' };
     function handleTheme(arg) {
       if (!arg || !themeAliases[arg]) {
-        print('usage: theme &lt;cyber | matrix | sunset | xeno | crt | arcade&gt;', 'err');
+        print('usage: theme &lt;cyber | matrix | sunset | xeno | crt | arcade | brutal&gt;', 'err');
         return;
       }
       applyPalette(arg);

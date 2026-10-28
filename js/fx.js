@@ -13,6 +13,9 @@
 	function $(s, r) { return (r || d).querySelector(s); }
 	function $$(s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); }
 	function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+	/* brutalist theme (toggled in site.js): canvases repaint in its colours */
+	function brutal() { return h.dataset.theme === 'brutal'; }
+	function onTheme(fn) { new MutationObserver(function () { fn(); }).observe(h, { attributeFilter: ['data-theme'] }); }
 	function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
 	function onScroll(fn) {
 		var queued = false;
@@ -277,7 +280,8 @@
 		/* noise: share of characters drawn as random glyphs; during the intro
 		   it starts at 1 (a field of static) and falls to 0 as the face resolves */
 		function draw(noise) {
-			ctx.fillStyle = '#0b0a0f';
+			var ink = brutal() ? '255,255,255' : '196,181,253';
+			ctx.fillStyle = brutal() ? '#000' : '#0b0a0f';
 			ctx.fillRect(0, 0, size, size);
 			ctx.font = '500 ' + (cell * 1.55).toFixed(1) + 'px "JetBrains Mono", monospace';
 			ctx.textBaseline = 'top';
@@ -286,18 +290,19 @@
 				var a = 0.3 + v * 0.7;
 				if (noise > 0.08 && Math.random() < noise * (k ? 1 : 0.85)) {
 					/* static: same glyph weight everywhere, so no silhouette shows yet */
-					ctx.fillStyle = 'rgba(196,181,253,' + ((k ? a * (1 - noise) : 0) + 0.45 * noise).toFixed(2) + ')';
+					ctx.fillStyle = 'rgba(' + ink + ',' + ((k ? a * (1 - noise) : 0) + 0.45 * noise).toFixed(2) + ')';
 					ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], x * cell, y * rowH);
 					continue;
 				}
 				if (!k) continue;
 				if (noise && Math.random() < noise) k = 1 + ((Math.random() * (RAMP.length - 1)) | 0);
-				ctx.fillStyle = 'rgba(196,181,253,' + a.toFixed(2) + ')';
+				ctx.fillStyle = 'rgba(' + ink + ',' + a.toFixed(2) + ')';
 				ctx.fillText(RAMP[k], x * cell, y * rowH);
 			}
 		}
 		function build() { if (sample()) draw(0); }
 		if (img.complete) build(); else img.addEventListener('load', build);
+		onTheme(build);
 		var t;
 		w.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(build, 150); });
 		if (reduced) return;
@@ -407,8 +412,8 @@
 		function draw(now) {
 			ctx.clearRect(0, 0, W, H);
 			waves = waves.filter(function (v) { return now - v.t < 1500; });
-			var hot = [];
-			ctx.fillStyle = 'rgba(196,181,253,0.17)';
+			var hot = [], ink = brutal() ? '0,0,238' : '196,181,253';
+			ctx.fillStyle = 'rgba(' + ink + ',0.17)';
 			ctx.beginPath();
 			for (var i = 0; i < dots.length; i += 2) {
 				var x = dots[i], y = dots[i + 1], dx = x - mx, dy = y - my, dist = Math.sqrt(dx * dx + dy * dy), a = 0, s = 0, ox = 0, oy = 0;
@@ -422,7 +427,7 @@
 			}
 			ctx.fill();
 			for (var n = 0; n < hot.length; n += 4) {
-				ctx.fillStyle = 'rgba(196,181,253,' + hot[n + 2].toFixed(2) + ')';
+				ctx.fillStyle = 'rgba(' + ink + ',' + hot[n + 2].toFixed(2) + ')';
 				ctx.fillRect(hot[n] - hot[n + 3] / 2, hot[n + 1] - hot[n + 3] / 2, hot[n + 3], hot[n + 3]);
 			}
 		}
@@ -445,6 +450,7 @@
 		if ('IntersectionObserver' in w) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) kick(); }).observe(hero);
 		var t;
 		w.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(size, 150); });
+		onTheme(kick);
 		size();
 		/* one pulse from the portrait as the photo is uncovered */
 		if (fig) setTimeout(function () {
@@ -675,6 +681,7 @@
 			return { label: li.firstChild.textContent.trim(), tier: tier };
 		}).filter(function (s) { return s.label; });
 		var FILL = { 3: '#c4b5fd', 2: '#7c5cd6', 1: '#2d2540' }, INK = { 3: '#120d1f', 2: '#f6f4fb', 1: '#d7d1e4' };
+		var BFILL = { 3: '#0000ee', 2: '#000', 1: '#fff' }, BINK = { 3: '#fff', 2: '#fff', 1: '#000' };
 		function size() {
 			var r = box.getBoundingClientRect();
 			W = r.width; H = r.height;
@@ -715,12 +722,13 @@
 		}
 		function draw() {
 			ctx.clearRect(0, 0, W, H);
+			var raw = brutal();
 			balls.forEach(function (b) {
 				ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-				ctx.fillStyle = FILL[b.s.tier]; ctx.fill();
-				if (b.s.tier === 3) { ctx.shadowColor = 'rgba(167,139,250,0.6)'; ctx.shadowBlur = 24; ctx.fill(); ctx.shadowBlur = 0; }
-				ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.stroke();
-				ctx.fillStyle = INK[b.s.tier];
+				ctx.fillStyle = (raw ? BFILL : FILL)[b.s.tier]; ctx.fill();
+				if (b.s.tier === 3 && !raw) { ctx.shadowColor = 'rgba(167,139,250,0.6)'; ctx.shadowBlur = 24; ctx.fill(); ctx.shadowBlur = 0; }
+				ctx.lineWidth = raw ? 3 : 1; ctx.strokeStyle = raw ? '#000' : 'rgba(255,255,255,0.12)'; ctx.stroke();
+				ctx.fillStyle = (raw ? BINK : INK)[b.s.tier];
 				ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 				/* shrink the label until it fits inside the ball, then trim as a last resort */
 				var label = b.s.label, max = b.r * 1.7, fs = Math.min(15, b.r * 0.32);
@@ -749,6 +757,7 @@
 		cv.addEventListener('pointercancel', drop);
 		w.addEventListener('resize', function () { size(); balls.forEach(function (b) { b.x = clamp(b.x, b.r, W - b.r); b.y = Math.min(b.y, H - b.r); }); });
 		size(); spawn();
+		onTheme(draw);
 		if (reduced) { for (var k = 0; k < 600; k++) step(); draw(); return; } /* settled, static */
 		if (!('IntersectionObserver' in w)) { visible = true; loop(); return; }
 		new IntersectionObserver(function (en) {

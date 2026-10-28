@@ -76,11 +76,7 @@
       });
       batch.forEach(function (el, i) {
         setTimeout(function () {
-          var effect = el.getAttribute('data-animate-effect');
-          var cls = 'fadeInUp';
-          if (effect === 'fadeIn') cls = 'fadeIn';
-          else if (effect === 'fadeInLeft') cls = 'fadeInLeft';
-          else if (effect === 'fadeInRight') cls = 'fadeInRight';
+          var cls = el.getAttribute('data-animate-effect') === 'fadeIn' ? 'fadeIn' : 'fadeInUp';
           el.classList.add(cls, 'animated-fast');
         }, i * 100);
       });

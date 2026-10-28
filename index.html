@@ -110,6 +110,8 @@
 	<script>
 		(function (h) {
 			h.classList.add('js');
+			/* brutalist theme before first paint (toggle lives in js/site.js) */
+			try { if (localStorage.getItem('pf.theme') === 'brutal') h.dataset.theme = 'brutal'; } catch (e) {}
 			/* failsafe: never leave the intro paused if js/fx.js fails to run */
 			setTimeout(function () { h.classList.add('is-ready'); }, 2500);
 		})(document.documentElement);
@@ -145,6 +147,7 @@
 				<a href="#arcade">arcade</a>
 				<a href="#contact">contact</a>
 				<button type="button" class="nav__ask" data-ask aria-label="Ask a question about Lemmuel (Ctrl+K)"><kbd>&#8984;K</kbd> ask</button>
+				<button type="button" class="nav__ask" data-theme-toggle aria-pressed="false" hidden>brutal</button>
 				<a class="nav__resume" href="resume.pdf" download>resume.pdf &darr;</a>
 			</nav>
 		</div>

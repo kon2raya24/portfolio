@@ -232,7 +232,7 @@ html:not(.js) .nav__toggle { display: none; }
 	6%, 28% { opacity: 1; transform: none; filter: none; color: var(--heading); }
 	34%, 100% { opacity: 0; transform: translateY(-45%); filter: blur(10px); }
 }
-html:not(.js) .roles span:first-child, .roles.is-static span:first-child { opacity: 1; animation: none; }
+html:not(.js) .roles span:first-child { opacity: 1; animation: none; }
 @media (min-width: 961px) {
 	/* roles size to their column so the longest one never runs off screen */
 	.hero__right { container-type: inline-size; width: 100%; }
@@ -888,4 +888,64 @@ html.hs-on .hs-ghost em { font: italic 400 1.08em/1 'Instrument Serif', Georgia,
 	.stats li { padding-left: 16px; }
 	.stats strong { font-size: 36px; }
 	.play { height: 320px; }
+}
+
+/* ==========================================================================
+   Brutalist theme — raw HTML: paper white, black ink, default link blue,
+   3px rules and hard offset shadows. No glow, gradient, blur or radius.
+   Toggled from the nav (js/site.js); set pre-paint in index.html <head>.
+   ========================================================================== */
+:root[data-theme="brutal"] {
+	--bg: #fff; --bg-2: #fff; --surface: #fff; --surface-solid: #fff;
+	--line: #000; --line-strong: #000;
+	--text: #000; --dim: #3a3a3a; --heading: #000;
+	--accent: #0000ee; --accent-2: #0000ee; --accent-deep: #0000ee; --pink: #0000ee;
+	--ok: #00873c; --accent-ink: #fff; --ai: #0000ee;
+	--grad: linear-gradient(#0000ee, #0000ee);
+	--font: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+	--display: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+	--r: 0;
+	--hard: 6px 6px 0 #000;
+	color-scheme: light;
+
+	& *, & *::before, & *::after { border-radius: 0 !important; text-shadow: none !important; backdrop-filter: none !important; }
+	& body::before, & body::after, & .portrait__glow, & .portrait::after, & .card::before,
+	& .project a::before, & .project a::after, & .case::before, & .cursor { display: none; }
+	& ::selection { background: #ffe600; color: #000; }
+	& a:hover { color: #000; background: #ffe600; }
+	& p a, & .term__out a { text-decoration: underline; text-underline-offset: 3px; }
+	& :focus-visible { outline: 3px solid #000; outline-offset: 2px; }
+
+	& h1, & h2, & h3, & .hero__title, & .stats strong, & .foot__big, & .foot__name, & .marquee span, & .roles {
+		font-family: var(--display); font-weight: 900; letter-spacing: -0.04em;
+	}
+	& .sec h2 .hl, & .foot__big .hl, & .hero__hello, & .hero__a { font-family: var(--display); font-style: normal; font-weight: 900; }
+	& .portrait img, & .portrait__ascii { -webkit-mask-image: none; mask-image: none; }
+	& .hero__last { -webkit-text-stroke: 2px #000; }
+	& .marquee span:nth-child(even) { -webkit-text-stroke: 2px #000; }
+	& .marquee { border-block: 3px solid #000; }
+	& .foot__name { background: none; color: transparent; -webkit-text-stroke: 2px #000; }
+	& .nav { background: #fff; border-bottom: 3px solid #000; }
+
+	/* boxes: hard border + hard shadow, yellow when pointed at */
+	& .card, & .btn, & .term, & .play, & .project a, & .timeline details, & .arcade__screen, & .arcade__side,
+	& .case img, & .portrait img, & .form input, & .form select, & .form textarea {
+		background: #fff; border: 3px solid #000; box-shadow: var(--hard); filter: none;
+	}
+	& .btn--primary { background: #0000ee; color: #fff; }
+	& .btn::after { display: none; }
+	& .btn:hover, & .project a:hover, & .card:hover, & .service:hover {
+		background: #ffe600; color: #000; border-color: #000; box-shadow: 9px 9px 0 #000; transform: translate(-3px, -3px);
+	}
+	& .chip, & .filter, & .nav__ask, & .nav__toggle { border: 2px solid #000; background: #fff; color: #000; }
+	& .filter[aria-pressed="true"], & .nav__ask[aria-pressed="true"] { background: #000; color: #fff; }
+	& .portrait img, & .case img, & .project__thumb, & .arcade__poster { filter: grayscale(1) contrast(1.15); }
+	& .term__bar { background: #fff; border-bottom: 3px solid #000; }
+	& .timeline::after, & .timeline > li.is-lit::before { box-shadow: none; }
+	& .commit-cell { background: #eee; }
+	& .commit-cell[data-level="1"] { background: #b3b3ff; }
+	& .commit-cell[data-level="2"] { background: #6666ff; }
+	& .commit-cell[data-level="3"] { background: #0000ee; }
+	& .commit-cell[data-level="4"] { background: #000; }
+	& .foot__inner { border-top: 3px solid #000; }
 }

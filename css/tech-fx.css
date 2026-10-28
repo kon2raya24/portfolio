@@ -179,8 +179,6 @@ html, body {
     var(--bg-dark) !important;
 }
 #fh5co-about::before { opacity: 0.25; }
-#fh5co-about .info li .first-block { color: var(--cyan-dim) !important; }
-#fh5co-about .info li .second-block { color: rgba(230, 243, 255, 0.85) !important; }
 
 /* Resume: already dark via the new exp-card layer, but enforce */
 #fh5co-resume.fh5co-bg-color,
@@ -269,16 +267,12 @@ html, body {
   box-shadow: 0 0 12px var(--brand);
 }
 
-/* Dead-style cleanup: any leftover timeline-panel from style.css can't render here anyway */
-.timeline-panel { background: transparent !important; }
-
 /* Body text default contrast on dark */
 p, li { color: rgba(230, 243, 255, 0.82); }
 strong { color: var(--cyan); }
 
 /* Make sure the loader area is fully dark while visible */
 .fh5co-loader { color: var(--cyan); }
-
 
 /* ---------- Scroll progress bar ---------- */
 .scroll-progress {
@@ -1039,9 +1033,6 @@ body.konami-on {
   transform-style: preserve-3d;
   transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
   will-change: transform;
-}
-.tilt-inner {
-  transform: translateZ(0);
 }
 
 /* ---------- Command palette ---------- */
@@ -2512,6 +2503,7 @@ body.orbital3d-active { overflow: hidden; }
 .theme-pick__btn[data-th="xeno"]   { background: #ff1840; color: #ff1840; }
 .theme-pick__btn[data-th="crt"]    { background: #33ff33; color: #33ff33; }
 .theme-pick__btn[data-th="arcade"] { background: #ffcc00; color: #ffcc00; }
+.theme-pick__btn[data-th="brutal"] { background: #fff; color: #000; border: 2px solid #000; border-radius: 0; }
 
 /* Matrix palette: green-dominant */
 :root.theme-matrix {
@@ -2560,6 +2552,10 @@ body.orbital3d-active { overflow: hidden; }
   --brand: #ff3864;         /* player-red */
   --magenta: #00a8ff;       /* power-up blue */
 }
+.theme-picker__preview--brutal { background: #fff; border: 3px solid #000; color: #000; box-shadow: 4px 4px 0 #000; border-radius: 0; }
+.theme-picker__preview--brutal .theme-picker__preview-dots i { background: #000; border-radius: 0; }
+.theme-picker__preview--brutal .theme-picker__preview-bar { background: #0000ee; border-radius: 0; }
+
 /* Xeno-specific visual flourishes — make the theme feel genuinely out-of-this-world,
    not just a recolor. Hero status badge pulses like an intrusion alert, scanline
    gains a red tint, body gets a deep-void radial wash. */
@@ -3150,6 +3146,7 @@ body.orbital3d-active { overflow: hidden; }
 .theme-picker__dot[data-palette="xeno"]   { background: #ff1840; color: #ff1840; }
 .theme-picker__dot[data-palette="crt"]    { background: #33ff33; color: #33ff33; }
 .theme-picker__dot[data-palette="arcade"] { background: #ffcc00; color: #ffcc00; }
+.theme-picker__dot[data-palette="brutal"] { background: #fff; color: #000; border: 2px solid #000; border-radius: 0; }
 .theme-picker__dot[data-palette="xeno"]::after {
   content: 'NEW';
   position: absolute;
@@ -4893,29 +4890,13 @@ body.orbital3d-active { overflow: hidden; }
   border-radius: 3px;
   white-space: nowrap;
 }
-.case-status--wip {
-  background: rgba(255, 144, 0, 0.1);
-  border: 1px solid rgba(255, 144, 0, 0.4);
-  color: var(--brand);
-}
+
 .case-status--planned {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.55);
 }
-.case-status--draft {
-  background: rgba(0, 229, 255, 0.10);
-  border: 1px solid rgba(0, 229, 255, 0.55);
-  color: var(--cyan);
-  text-decoration: none;
-  transition: 0.22s;
-  text-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
-}
-.case-status--draft:hover {
-  background: var(--cyan);
-  color: var(--bg-dark);
-  box-shadow: 0 0 12px var(--cyan);
-}
+
 .case-status--live {
   background: rgba(120, 255, 140, 0.10);
   border: 1px solid rgba(120, 255, 140, 0.55);
@@ -5291,8 +5272,7 @@ body.orbital3d-active { overflow: hidden; }
 }
 .cta-card__body { display: block; }
 .cta-card__body > .cta-track { display: inline-flex; }
-/* center the track via wrapper */
-.cta-track-wrap { display: flex; justify-content: center; }
+
 .cta-track__tab {
   background: transparent;
   border: 0;
@@ -6539,7 +6519,6 @@ body.orbital3d-active { overflow: hidden; }
   }
 }
 
-
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .glitch::before, .glitch::after { animation: none; }
@@ -6829,11 +6808,6 @@ body.orbital3d-active { overflow: hidden; }
 :root[data-theme="light"] .proj-card__title { color: #1a1f2e !important; text-shadow: none !important; }
 :root[data-theme="light"] .proj-card__meta { color: rgba(10, 30, 60, 0.55) !important; }
 :root[data-theme="light"] .proj-card__path { color: rgba(10, 30, 60, 0.55) !important; }
-:root[data-theme="light"] .proj-card__chip {
-  background: rgba(0, 122, 144, 0.08) !important;
-  color: #007a90 !important;
-  border-color: rgba(0, 122, 144, 0.35) !important;
-}
 
 /* case-studies inline list */
 :root[data-theme="light"] .case-studies__lead { color: rgba(10, 30, 60, 0.7) !important; }
@@ -6887,23 +6861,9 @@ body.orbital3d-active { overflow: hidden; }
 :root[data-theme="light"] .progress {
   background: rgba(10, 30, 60, 0.08) !important;
 }
-:root[data-theme="light"] .progress-bar { color: #fff !important; }
+
 :root[data-theme="light"] .progress + p,
 :root[data-theme="light"] .pgb-text { color: #1a1f2e !important; }
-
-/* Services / features */
-:root[data-theme="light"] .feature-left,
-:root[data-theme="light"] .feature-center {
-  background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
-  border: 1px solid rgba(10, 30, 60, 0.1) !important;
-  color: #1a1f2e !important;
-}
-:root[data-theme="light"] .feature-left h3,
-:root[data-theme="light"] .feature-center h3 { color: #1a1f2e !important; }
-:root[data-theme="light"] .feature-left p,
-:root[data-theme="light"] .feature-center p { color: rgba(10, 30, 60, 0.75) !important; }
-:root[data-theme="light"] .feature-left .icon,
-:root[data-theme="light"] .feature-center .icon { color: var(--brand) !important; }
 
 /* CTA buttons within sections */
 :root[data-theme="light"] .cta-btn {
@@ -7065,14 +7025,11 @@ a.btn:focus-visible {
 
 /* Skills section */
 :root[data-theme="light"] .skill-name { color: #1a1f2e !important; }
-:root[data-theme="light"] .skill-level,
-:root[data-theme="light"] .skill-meta { color: rgba(10, 30, 60, 0.6) !important; }
 
 /* Services / services-card */
 :root[data-theme="light"] .svc-card__cmd { color: rgba(10, 30, 60, 0.55) !important; }
 :root[data-theme="light"] .svc-card__title { color: #1a1f2e !important; text-shadow: none !important; }
-:root[data-theme="light"] .svc-card__desc,
-:root[data-theme="light"] .svc-card__body { color: rgba(20, 30, 50, 0.78) !important; }
+
 :root[data-theme="light"] .svc-card {
   background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
   border-color: rgba(10, 30, 60, 0.12) !important;
@@ -7139,7 +7096,6 @@ a.btn:focus-visible {
 
 /* Profile-config path/key (about JSON card) */
 :root[data-theme="light"] .profile-config__path { color: rgba(10, 30, 60, 0.55) !important; }
-:root[data-theme="light"] .profile-config__cmd { color: #1f8a3e !important; }
 
 /* Code card outside pre block */
 /* ============================================================
@@ -7167,7 +7123,6 @@ a.btn:focus-visible {
   color: #00667a !important;
   border-bottom-color: #00667a !important;
 }
-:root[data-theme="light"] .code-card__cmd { color: #1f8a3e !important; }
 
 /* Code-card body: light editor pane */
 :root[data-theme="light"] .code-card__gutter {
@@ -7437,23 +7392,6 @@ a.btn:focus-visible {
 :root[data-theme="light"] .case-studies__cmd,
 :root[data-theme="light"] .cta-card__cmd { color: #1f8a3e !important; }
 
-/* case-status--draft and --planned pills */
-:root[data-theme="light"] .case-status--draft {
-  background: rgba(0, 122, 144, 0.08) !important;
-  border-color: rgba(0, 122, 144, 0.5) !important;
-  color: #00667a !important;
-  text-shadow: none !important;
-}
-:root[data-theme="light"] .case-status--draft:hover {
-  background: #00667a !important;
-  color: #fff !important;
-  box-shadow: 0 0 12px rgba(0, 122, 144, 0.4) !important;
-}
-:root[data-theme="light"] .case-status--wip {
-  background: rgba(255, 144, 0, 0.10) !important;
-  border-color: rgba(184, 92, 0, 0.5) !important;
-  color: #b85c00 !important;
-}
 :root[data-theme="light"] .case-status--planned {
   background: rgba(10, 30, 60, 0.04) !important;
   border-color: rgba(10, 30, 60, 0.2) !important;
@@ -7530,18 +7468,13 @@ a.btn:focus-visible {
   background: linear-gradient(180deg, #ffffff 0%, #fbf9f3 100%) !important;
   border-color: rgba(10, 30, 60, 0.12) !important;
 }
-:root[data-theme="light"] .dev-term__chrome {
-  background: linear-gradient(180deg, #f0ece2 0%, #e6e0d2 100%) !important;
-  border-color: rgba(10, 30, 60, 0.1) !important;
-}
+
 :root[data-theme="light"] .dev-term__path { color: rgba(10, 30, 60, 0.55) !important; }
 :root[data-theme="light"] .dev-term__body { color: rgba(20, 30, 50, 0.82) !important; }
 :root[data-theme="light"] .dev-term__line { color: rgba(20, 30, 50, 0.82) !important; }
 :root[data-theme="light"] .dev-term__user,
 :root[data-theme="light"] .user { color: #00667a !important; }
 :root[data-theme="light"] .dev-term__prompt { color: #1f8a3e !important; }
-:root[data-theme="light"] .dev-term__cmd { color: #b16fc6 !important; }
-:root[data-theme="light"] .dev-term__output { color: rgba(20, 30, 50, 0.78) !important; }
 
 /* ============================================================
    Hotfix #5 — commit graph meta + btn-ghost.magnetic
@@ -7602,48 +7535,21 @@ a.btn:focus-visible {
 :root[data-theme="light"] .hud__row { color: #1a1f2e !important; }
 :root[data-theme="light"] .hud__label { color: rgba(10, 30, 60, 0.55) !important; }
 :root[data-theme="light"] .hud__val { color: #00667a !important; text-shadow: none !important; }
-:root[data-theme="light"] .hud__val--online { color: #1f8a3e !important; }
-:root[data-theme="light"] .hud__val--warn,
-:root[data-theme="light"] .hud__val--fps { color: #c66a00 !important; }
-:root[data-theme="light"] .hud__dot {
-  background: var(--brand) !important;
-}
+
 :root[data-theme="light"] .hud__bar {
   background: rgba(10, 30, 60, 0.08) !important;
 }
-:root[data-theme="light"] .hud__bar-fill {
-  background: linear-gradient(90deg, var(--brand), #c66a00) !important;
-}
+
 :root[data-theme="light"] .hud__foot,
 :root[data-theme="light"] .hud__now {
   color: rgba(10, 30, 60, 0.7) !important;
   border-top-color: rgba(10, 30, 60, 0.08) !important;
 }
 :root[data-theme="light"] .hud__now-label { color: #1f8a3e !important; }
-:root[data-theme="light"] .hud__now-pulse { background: #1f8a3e !important; box-shadow: 0 0 6px #1f8a3e !important; }
-
-/* Scroll-indicator dots on right edge */
-:root[data-theme="light"] .scroll-indicator__dot {
-  background: rgba(10, 30, 60, 0.15) !important;
-  border-color: rgba(10, 30, 60, 0.25) !important;
-}
-:root[data-theme="light"] .scroll-indicator__dot.is-active,
-:root[data-theme="light"] .scroll-indicator__dot:hover {
-  background: var(--brand) !important;
-  border-color: var(--brand) !important;
-  box-shadow: 0 0 8px rgba(255, 144, 0, 0.5) !important;
-}
-:root[data-theme="light"] .scroll-indicator__label {
-  background: #1a1f2e !important;
-  color: #fff !important;
-}
 
 /* Top scroll-progress bar (the colored bar at very top) */
 :root[data-theme="light"] .scroll-progress {
   background: rgba(10, 30, 60, 0.08) !important;
-}
-:root[data-theme="light"] .scroll-progress__fill {
-  background: linear-gradient(90deg, var(--brand), #c66a00, #ff2bd6) !important;
 }
 
 /* Floating "scroll to top" button */
@@ -7780,10 +7686,6 @@ a.btn:focus-visible {
 :root[data-theme="light"] .exp-card--edu .exp-card__period {
   color: #b85c00 !important;
 }
-
-/* Education section uses same group label class */
-:root[data-theme="light"] .exp-group__label--edu { color: #b85c00 !important; }
-:root[data-theme="light"] .exp-group__label--edu::after { background: linear-gradient(90deg, rgba(184, 92, 0, 0.4), transparent) !important; }
 
 /* ============================================================
    Hotfix #8 — About Me section internals
@@ -9568,21 +9470,6 @@ body.page-dive-in {
   transform: perspective(800px) translateZ(8px) translateY(-2px);
 }
 
-/* ============================================================================
-   3D NAV LINKS — the sticky top nav gets z-pop on hover too so the whole
-   chrome feels in-system.
-   ============================================================================ */
-#fh5co-nav .menu-1 li a,
-#fh5co-nav .menu-2 li a {
-  transform-style: preserve-3d;
-  transition: transform var(--tx-fast) var(--ez-back),
-              color var(--tx-fast) var(--ez-soft);
-}
-#fh5co-nav .menu-1 li a:hover,
-#fh5co-nav .menu-2 li a:hover {
-  transform: perspective(400px) translateZ(6px) translateY(-1px);
-}
-
 /* Reduced motion: kill all the chip/social/cta/nav 3D so it stays calm. */
 @media (prefers-reduced-motion: reduce) {
   .tech-chip:hover, .exp-chip:hover,
@@ -10707,3 +10594,75 @@ html.is-scrolling .tech-marquee__row { animation-play-state: paused; }
   color: rgba(230, 235, 255, 0.72) !important;
   font-size: 16px;
 }
+
+/* =========================================================================
+   Brutal palette — last in the file so it beats the light-mode rules and
+   tokens of equal specificity (brutal forces light mode). The picker
+   preview lives with the other palette previews above.
+   ========================================================================= */
+/* raw HTML: paper white, black ink, default link blue, hard offset shadows (mirrors css/site.css) */
+:root.theme-brutal {
+  --cyan: #0000ee;
+  --cyan-dim: #0000ee;
+  --line: #000;
+  --line-strong: #000;
+  --glow-cyan: 6px 6px 0 #000;
+  --brand: #0000ee;
+  --magenta: #0000ee;
+}
+:root.theme-brutal *, :root.theme-brutal *::before, :root.theme-brutal *::after { border-radius: 0 !important; text-shadow: none !important; }
+:root.theme-brutal, :root.theme-brutal body { background: #fff !important; color: #000; }
+:root.theme-brutal body::before, :root.theme-brutal #page::after, :root.theme-brutal .viewport-hud, :root.theme-brutal.has-spotlight::before { display: none !important; }
+:root.theme-brutal #fh5co-header h1, :root.theme-brutal #fh5co-header h1 .glitch.glitch-text {
+  font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif !important;
+  background: none !important; color: #000 !important; -webkit-text-fill-color: #000 !important;
+}
+:root.theme-brutal .exp-card,
+:root.theme-brutal .proj-card,
+:root.theme-brutal .svc-card,
+:root.theme-brutal .skill-card,
+:root.theme-brutal .px-card,
+:root.theme-brutal .cta-card,
+:root.theme-brutal .code-card,
+:root.theme-brutal .about-panel,
+:root.theme-brutal .profile-config,
+:root.theme-brutal .hud,
+:root.theme-brutal .case-studies,
+:root.theme-brutal .git-log,
+:root.theme-brutal .dev-term,
+:root.theme-brutal .live-stats,
+:root.theme-brutal .stack-group,
+:root.theme-brutal .case-preview,
+:root.theme-brutal .cta-flow__step {
+  background: #fff !important; border: 3px solid #000 !important; box-shadow: 6px 6px 0 #000 !important;
+}
+:root.theme-brutal .btn, :root.theme-brutal .hire-btn, :root.theme-brutal #fh5co-header .tech-stack-strip .tech-chip, :root.theme-brutal .status-badge {
+  background: #fff !important; color: #000 !important; border: 3px solid #000 !important; box-shadow: 4px 4px 0 #000 !important;
+}
+:root.theme-brutal .btn-primary, :root.theme-brutal .hero-cta__primary, :root.theme-brutal #fh5co-nav .fh5co-nav-links li a.hire-btn { background: #0000ee !important; color: #fff !important; }
+:root.theme-brutal .hero-cta__primary { border: 3px solid #000 !important; box-shadow: 6px 6px 0 #000 !important; }
+:root.theme-brutal .btn:hover, :root.theme-brutal #fh5co-nav .fh5co-nav-links li a.hire-btn:hover { background: #ffe600 !important; color: #000 !important; }
+:root.theme-brutal img { filter: grayscale(1) contrast(1.15); }
+:root.theme-brutal .tech-chip::before, :root.theme-brutal .tech-chip::after { color: #000 !important; }
+:root.theme-brutal #fh5co-header h1 *::before, :root.theme-brutal #fh5co-header h1 *::after, :root.theme-brutal #fh5co-header h1::before, :root.theme-brutal #fh5co-header h1::after { display: none !important; }
+:root.theme-brutal #page, :root.theme-brutal .role-tag { background: #fff !important; }
+:root.theme-brutal .code-card__chrome,
+:root.theme-brutal .profile-config__chrome,
+:root.theme-brutal .px-card__chrome,
+:root.theme-brutal .exp-card__chrome,
+:root.theme-brutal .case-studies__chrome,
+:root.theme-brutal .cta-card__chrome,
+:root.theme-brutal .git-log__chrome,
+:root.theme-brutal .dev-term__bar {
+  background: #fff !important; border-bottom: 3px solid #000 !important; box-shadow: none !important;
+}
+:root.theme-brutal .fh5co-bg-color,
+:root.theme-brutal .fh5co-bg-dark,
+:root.theme-brutal .animate-box,
+:root.theme-brutal .services-foot,
+:root.theme-brutal .case-studies__foot,
+:root.theme-brutal .tech-marquee {
+  background: #fff !important;
+}
+:root.theme-brutal #fh5co-header.fh5co-cover { background: #fff !important; }
+:root.theme-brutal .overlay, :root.theme-brutal .tech-grid, :root.theme-brutal .scanline { display: none !important; }

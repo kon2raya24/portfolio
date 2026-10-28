@@ -10,8 +10,20 @@
   <managingEditor>turayalemmuel@gmail.com (Lemmuel Turaya)</managingEditor>
   <webMaster>turayalemmuel@gmail.com (Lemmuel Turaya)</webMaster>
   <generator>hand-written, no static-site generator</generator>
-  <lastBuildDate>Thu, 15 Oct 2026 21:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Wed, 28 Oct 2026 12:00:00 +0800</lastBuildDate>
   <ttl>1440</ttl>
+
+  <item>
+    <title>v8.6 — Brutalist theme: raw HTML, one switch in the nav</title>
+    <link>https://kon2raya.netlify.app/changelog.html#v8-6</link>
+    <guid isPermaLink="false">portfolio-v8.6-2026-10-28</guid>
+    <pubDate>Wed, 28 Oct 2026 12:00:00 +0800</pubDate>
+    <category>theme</category>
+    <description><![CDATA[
+      A brutal switch in the front-page nav turns the site into raw HTML: paper white, black ink, default link blue and
+      hard offset shadows, carried onto every case study. Plus about 13,000 lines of unused CSS removed.
+    ]]></description>
+  </item>
 
   <item>
     <title>v8.5 — Aswang Apocalypse: endless horde survival with a replay-verified daily leaderboard</title>

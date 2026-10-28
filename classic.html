@@ -37,10 +37,11 @@
 				if (mode !== 'light' && mode !== 'dark') {
 					mode = (!localStorage.getItem('portfolio.palette')) ? 'dark' : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark');
 				}
+				var palette = localStorage.getItem('portfolio.palette') || 'arcade';
+				if (palette === 'brutal') mode = 'light';
 				html.setAttribute('data-theme', mode);
 
-				var palette = localStorage.getItem('portfolio.palette') || 'arcade';
-				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade') {
+				if (palette === 'matrix' || palette === 'sunset' || palette === 'xeno' || palette === 'crt' || palette === 'arcade' || palette === 'brutal') {
 					html.classList.add('theme-' + palette);
 				}
 			} catch (e) {
@@ -290,6 +291,13 @@
 												<span class="theme-picker__preview-dots"><i></i><i></i><i></i></span>
 												<span class="theme-picker__preview-bar"></span>
 												<span class="theme-picker__preview-text">arcade · game</span>
+											</span>
+										</button>
+										<button type="button" class="theme-picker__dot" data-palette="brutal" role="menuitemradio" title="brutal · raw html" aria-label="brutal palette">
+											<span class="theme-picker__preview theme-picker__preview--brutal" aria-hidden="true">
+												<span class="theme-picker__preview-dots"><i></i><i></i><i></i></span>
+												<span class="theme-picker__preview-bar"></span>
+												<span class="theme-picker__preview-text">brutal · raw</span>
 											</span>
 										</button>
 									</div>

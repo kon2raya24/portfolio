@@ -66,6 +66,28 @@
 	})();
 
 	/* ---------------------------------------------------------------------
+	   Theme: brutalist toggle. <head> sets data-theme before first paint.
+	   --------------------------------------------------------------------- */
+	(function theme() {
+		var btn = $('[data-theme-toggle]');
+		if (!btn) return;
+		var root = d.documentElement, meta = $('meta[name="theme-color"]');
+		function sync() {
+			var on = root.dataset.theme === 'brutal';
+			btn.setAttribute('aria-pressed', String(on));
+			if (meta) meta.content = on ? '#ffffff' : '#0b0a0f';
+		}
+		btn.hidden = false;
+		sync();
+		btn.addEventListener('click', function () {
+			if (root.dataset.theme === 'brutal') delete root.dataset.theme;
+			else root.dataset.theme = 'brutal';
+			try { localStorage.setItem('pf.theme', root.dataset.theme || ''); } catch (e) {}
+			sync();
+		});
+	})();
+
+	/* ---------------------------------------------------------------------
 	   Ask: nav button + Cmd/Ctrl+K open the FAQ assistant (portfolio-chat.js)
 	   --------------------------------------------------------------------- */
 	function openAsk() { if (window.PortfolioChat) window.PortfolioChat.open(); }

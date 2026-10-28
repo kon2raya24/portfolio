@@ -627,3 +627,11 @@ body.pchat-active .viewport-hud {
   background: rgba(0, 0, 0, 0.45) !important;
   caret-color: #ffcc00;
 }
+
+/* Brutalist theme (css/site.css, css/case-study.css): the panel stays dark,
+   accents go highlighter yellow, edges go hard. */
+:root[data-theme="brutal"] .pchat__panel {
+  --cyan: #ffe600; --cyan-dim: #ffe600; --brand: #ffe600; --bg-dark: #000;
+  background: #000; border: 3px solid #000; box-shadow: 6px 6px 0 #000;
+}
+:root[data-theme="brutal"] .pchat__bubble { border: 3px solid #000; box-shadow: 6px 6px 0 #000; }

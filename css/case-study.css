@@ -557,29 +557,6 @@ body::before {
 .cs-code .tk-cmt { color: rgba(255, 255, 255, 0.35); font-style: italic; }
 .cs-code .tk-punct { color: rgba(255, 255, 255, 0.6); }
 
-/* Screenshot placeholder */
-.cs-shot {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(167, 139, 250, 0.05));
-  border: 1px dashed var(--line-strong);
-  border-radius: 8px;
-  padding: 60px 24px;
-  text-align: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: var(--cyan-dim);
-  text-transform: uppercase;
-  margin: 20px 0;
-}
-.cs-shot::before {
-  content: '📷';
-  display: block;
-  font-size: 28px;
-  margin-bottom: 10px;
-  filter: grayscale(0.5);
-}
-.cs-shot img { max-width: 100%; height: auto; border-radius: 4px; }
-
 /* Real screenshot figure (anonymized mock or actual product capture).
    Uses a clean card framing — no dashed border, no placeholder emoji. */
 .cs-shot-real {
@@ -681,51 +658,6 @@ body::before {
   margin: 0 2px;
   font-style: italic;
 }
-.cs-pending::before { content: '· '; opacity: 0.6; }
-
-/* Draft banner — sits at the very top of the case-study body */
-.cs-draft {
-  position: relative;
-  margin: 0 0 36px;
-  padding: 18px 22px 18px 22px;
-  background:
-    linear-gradient(90deg, rgba(167, 139, 250, 0.12), rgba(167, 139, 250, 0.04));
-  border: 1px solid rgba(167, 139, 250, 0.4);
-  border-left: 4px solid var(--brand);
-  border-radius: 8px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  font-family: 'JetBrains Mono', monospace;
-  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.08);
-}
-.cs-draft__badge {
-  font-size: 10px;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  background: var(--brand);
-  color: var(--bg-dark);
-  padding: 4px 9px;
-  border-radius: 3px;
-  font-weight: 700;
-  flex-shrink: 0;
-  margin-top: 2px;
-  box-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
-}
-.cs-draft__txt {
-  font-size: 13px;
-  line-height: 1.6;
-  color: rgba(215, 224, 218, 0.85);
-  margin: 0;
-}
-.cs-draft__txt strong { color: var(--brand); font-weight: 500; }
-.cs-draft__txt a {
-  color: var(--cyan);
-  border-bottom: 1px dashed var(--cyan);
-  text-decoration: none;
-  padding-bottom: 1px;
-}
-.cs-draft__txt a:hover { background: rgba(167, 139, 250, 0.1); }
 
 /* Cleaner screenshot placeholder — reads as intentional, not "missing" */
 .cs-shot--coming {
@@ -1139,10 +1071,7 @@ body::before {
   border-radius: 6px;
 }
 .cs-outcome-row + .cs-outcome-row { margin-top: 0; }
-.cs-outcome-row__pair {
-  display: grid;
-  gap: 4px;
-}
+
 .cs-outcome-row__tag {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -1803,3 +1732,43 @@ html.has-spotlight::before { display: none; }
 }
 .cs-metrics--top { background: var(--surface); border-radius: 0; }
 .cs-metrics--top .cs-metrics__label { letter-spacing: 0; color: var(--accent); }
+
+/* ==========================================================================
+   Brutalist theme — mirrors the one in css/site.css. Chosen on the front
+   page; each page's <head> applies it from localStorage before first paint.
+   ========================================================================== */
+:root[data-theme="brutal"] {
+  --bg: #fff; --bg-deep: #fff; --bg-dark: #fff; --surface: #fff;
+  --text: #000; --dim: #3a3a3a; --heading: #000;
+  --accent: #0000ee; --accent-soft: #0000ee; --accent-ink: #fff; --ai: #0000ee;
+  --cyan-dim: #0000ee; --line: #000; --line-strong: #000;
+  --font: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --display: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+  --hard: 6px 6px 0 #000;
+  color-scheme: light;
+
+  & *, & *::before, & *::after { border-radius: 0 !important; backdrop-filter: none !important; }
+  & body::before { display: none; }
+  & ::selection { background: #ffe600; color: #000; }
+  & a:hover { color: #000; background: #ffe600; }
+  & .cs-section p a, & .cs-section li a { text-decoration: underline; text-underline-offset: 3px; }
+  & :focus-visible { outline: 3px solid #000; outline-offset: 2px; }
+
+  & .cs-hero h1, & .cs-section h2, & .cs-section h3 { font-family: var(--display); font-weight: 900; letter-spacing: -0.03em; }
+  & .cs-nav { background: #fff; border-bottom: 3px solid #000; }
+  & .cs-meta, & .cs-metric, & .cs-toc, & .cs-cta, & .cs-code, & .cs-og-preview, & .cs-metrics--top,
+  & .cs-outcomes--top, & .cs-pager__link, & .cs-shot-real, & .cs-shot--coming, & .cs-btn {
+    background: #fff; border: 3px solid #000; box-shadow: var(--hard);
+  }
+  & .cs-btn--primary { background: #0000ee; color: #fff; }
+  & .cs-btn:hover, & .cs-pager__link:hover { background: #ffe600; color: #000; box-shadow: 9px 9px 0 #000; transform: translate(-3px, -3px); }
+  & .cs-chip { border: 2px solid #000; background: #fff; color: #000; }
+  & .cs-code, & .cs-code * { color: #000; }
+  & img { filter: grayscale(1) contrast(1.15); }
+  & .cs-progress { background: #0000ee; }
+  /* text these pages hard-code light for the dark theme */
+  & .cs-last-touched, & .cs-outcomes__label, & .cs-outcome-row__tag, & .cs-outcome-row__txt, & .cs-toc a,
+  & .cs-shot-real figcaption, & .cs-shot__title, & .cs-shot__sub, & .cs-cta h3, & .cs-cta p,
+  & .cs-og-preview__caption, & .cs-share__btn, & .cs-pager__title { color: #000 !important; }
+  & .cs-share { background: #fff; border: 3px solid #000; }
+}
