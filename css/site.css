@@ -195,7 +195,7 @@ figure { margin: 0; }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 76px; max-width: none; padding: 0 34px; position: relative; }
 .nav__logo { font: 700 16px var(--font); color: var(--heading); letter-spacing: 0.02em; }
 .nav__logo:hover { color: var(--accent); }
-.nav__email { position: absolute; left: 50%; transform: translateX(-50%); font: 500 14px var(--font); color: var(--text); letter-spacing: 0.02em; }
+.nav__email { margin-right: auto; font: 500 14px var(--font); color: var(--text); letter-spacing: 0.02em; }
 .nav__email:hover { color: var(--accent); }
 .nav__links { display: flex; align-items: center; gap: 26px; font: 500 13px var(--font); text-transform: uppercase; letter-spacing: 0.06em; }
 .nav__links > a { position: relative; color: var(--text); padding: 6px 0; }
