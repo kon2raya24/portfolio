@@ -1,0 +1,372 @@
+BEGIN_SHARECV_TEMPLATE_DATA
+TEMPLATE_KEY: modern-sidebar
+FULL_NAME: Lemmuel Turaya
+HEADLINE: Full-Stack & Mobile App Developer
+ABOUT: <p>Full-stack and mobile developer with 6+ years shipping production platforms across logistics, real estate, marketing, and education — 9 published case studies on the portfolio. Specializes in Vue.js / Nuxt.js + Laravel on the web, Flutter on mobile, and clean REST API design. Pairs daily with Claude Code in a Karpathy-style AI-augmented workflow — prototyping, refactoring, and shipping faster without compromising code review or tests. Also builds autonomous AI-engineer pipelines — a production multi-LLM agent system (Claude, Gemini, OpenAI, OpenRouter, Qwen) wired into a real ticketing workflow with security gates and independent test verification. Open to remote, hybrid, or onsite roles.</p>
+LOCATION: Biñan, Laguna, Philippines
+WEBSITE: https://kon2raya.netlify.app
+PHONE: +63 922 778 6152
+EMAIL: turayalemmuel@gmail.com
+SHOW_PUBLIC_EMAIL: true
+PROFILE_IMAGE_URL: https://kon2raya.netlify.app/images/1615352107595.jpg
+PRIMARY_CATEGORY: Programmer
+JOB_CATEGORIES: Programmer
+
+SOCIAL_LINKS:
+- TYPE: GitHub
+  URL: https://github.com/kon2raya24
+- TYPE: LinkedIn
+  URL: https://www.linkedin.com/in/lemmuel-turaya/
+- TYPE: Facebook
+  URL: https://www.facebook.com/lemmuel.turaya
+- TYPE: Instagram
+  URL: https://www.instagram.com/kon2raya/
+- TYPE: DeviantArt
+  URL: https://www.deviantart.com/lemmuelturaya
+
+EXPERIENCE:
+- JOB_TITLE: Senior Software Developer
+  COMPANY: Suhay OPC
+  LOCATION: Philippines
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2026-07-01
+  END_DATE: 
+  IS_CURRENT: true
+  DESCRIPTION: <p>Senior software developer building web and mobile applications end to end.</p>
+- JOB_TITLE: Application Developer
+  COMPANY: AAI Worldwide Logistics
+  LOCATION: Philippines
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2024-11-01
+  END_DATE: 2026-07-01
+  IS_CURRENT: false
+  DESCRIPTION: <p>Contributed to the development and enhancement of the company&#x27;s Financial Management System, connected logistics platforms, and a new Flutter-based Warehouse Management mobile app — integrating SAP and third-party services with internal applications.</p><ul><li>Designed and shipped a Flutter-based Warehouse Management System (WMS) mobile app from concept to production, enabling real-time inventory, receiving, and pick/pack operations on the warehouse floor.</li><li>Adopted Vibe Coding — AI-assisted delivery with Claude AI — to compress prototyping and refactoring cycles while keeping code review, tests, and engineering judgment in the loop.</li><li>Designed and implemented key FMS features — journal voucher creation, sundry expense invoice processing, inventory management, and reporting using Ag-Grid for data visualization and jsPDF for advanced reports.</li><li>Facilitated SAP-to-WMS order integration by converting XML payloads to JSON, generating updated XML files, and managing secure SFTP transfers for SAP validation.</li><li>Built CRM maintenance modules for Airline Rates, IATA Rates, and associated charges; created customizable forms with SurveyJS for Customer Service Representatives.</li><li>Developed a Trucking Rates module within the TMS using Vuetify for the front-end and Laravel for back-end logic.</li></ul><p><strong>Tech:</strong> Flutter, Dart, Laravel, Nuxt.js, Vue.js, Vuetify, Ag-Grid, jsPDF, SurveyJS, SAP API, Claude AI, Vibe Coding</p>
+- JOB_TITLE: Software Developer
+  COMPANY: Octal Philippines Inc.
+  LOCATION: Assigned to AAI Worldwide Logistics · PH
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2022-10-24
+  END_DATE: 2024-10-31
+  IS_CURRENT: false
+  DESCRIPTION: <p>Assigned to the AAI Worldwide Logistics IT department, contributing to core systems — FMS, CRM, TMS, and WMS — across two years of continuous delivery.</p><ul><li>Developed the Trucking Rates module for the TMS using Vuetify on the front-end and Laravel for back-end logic.</li><li>Built a TMS dashboard for the transport team to monitor truck availability, deployed-truck counts, and booking frequencies, with integrated graphs, filters, and other data-visualization tools.</li><li>Enhanced the Logistics Execution System (LES) UI using Vue.js for dynamic interactions, Ag-Grid for flexible data presentation, and jsPDF for report generation.</li><li>Integrated the FAREYE API for real-time package status updates from third-party providers, and shipped a single-page package tracker for end-user delivery monitoring.</li></ul><p><strong>Tech:</strong> Vue.js, Laravel, Vuetify, Ag-Grid, jsPDF, FAREYE API, MySQL</p>
+- JOB_TITLE: Full-Stack Developer
+  COMPANY: Uratex Philippines
+  LOCATION: Philippines
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2022-03-28
+  END_DATE: 2022-10-05
+  IS_CURRENT: false
+  DESCRIPTION: <p>Built internal tools, surveys, and brand landing pages supporting operations and marketing teams at Uratex.</p><ul><li>Designed and developed surveys in Laravel with detailed reporting to analyze demographics and other critical survey factors.</li><li>Created a Trip Management System for efficient scheduling and booking of company vehicles, improving resource management and accessibility.</li><li>Collaborated with cross-functional teams to design and develop the company&#x27;s corporate landing page, aligned with brand objectives.</li><li>Shipped a dynamic landing page for the company&#x27;s basketball association featuring a live countdown timer, built on the Statamic CMS for easy content updates.</li></ul><p><strong>Tech:</strong> Laravel, Statamic, PHP, JavaScript</p>
+- JOB_TITLE: Marketing Staff (Full-Stack Developer)
+  COMPANY: Lumina Homes, Inc.
+  LOCATION: Philippines
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2021-03-10
+  END_DATE: 2022-03-30
+  IS_CURRENT: false
+  DESCRIPTION: <p>Hybrid role combining full-stack development with digital marketing — building the technology and SEO that powered the marketing team&#x27;s lead pipeline.</p><ul><li>Developed, maintained, and optimized websites, landing pages, and applications that support marketing campaigns.</li><li>Enhanced the property-listing loan calculator, enabling public users to compute amortization details and receive results via email.</li><li>Optimized and maintained the real-estate website on SilverStripe, ensuring a seamless user experience.</li><li>Implemented SEO best practices using SEMrush and Ahrefs to manage and improve site visibility.</li><li>Continuously evaluate emerging technologies and marketing tools to recommend solutions aligned with business goals.</li></ul><p><strong>Tech:</strong> SilverStripe, PHP, SEMrush, Ahrefs, SEO</p>
+- JOB_TITLE: Junior Web Developer
+  COMPANY: Switch Connect Pty Ltd
+  LOCATION: Australia · Remote
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2019-08-05
+  END_DATE: 2020-09-28
+  IS_CURRENT: false
+  DESCRIPTION: <p>Contributed to the company&#x27;s ERP system, integrating multiple third-party APIs to streamline accounting, validation, and document workflows.</p><ul><li>Developed ERP modules that enhanced functionality and optimized day-to-day business processes.</li><li>Integrated Google Maps API for address validation in user accounts, ensuring accurate location data.</li><li>Implemented ABN Lookup for verifying Australian-based companies through an authorized API.</li><li>Integrated Xero for financial management — receipt generation and order monitoring — and Eversign for multi-party digital document signing.</li></ul><p><strong>Tech:</strong> PHP, JavaScript, Google Maps API, Xero, Eversign, ABN Lookup</p>
+- JOB_TITLE: Graphic Designer
+  COMPANY: Trimex Colleges
+  LOCATION: Philippines
+  EMPLOYMENT_TYPE: 
+  START_DATE: 2019-01-01
+  END_DATE: 2019-12-31
+  IS_CURRENT: false
+  DESCRIPTION: <p>Produced visual collateral for institutional campaigns, events, and publications.</p><ul><li>Designed posters, banners, social-media creatives, and event branding on tight deadlines using the Adobe Suite.</li><li>Refined the design fundamentals — typography, layout, hierarchy — that still inform my approach to UI and UX.</li></ul><p><strong>Tech:</strong> Photoshop, Illustrator, Branding, Typography</p>
+
+EDUCATION:
+- INSTITUTION: Trimex Colleges
+  DEGREE: Bachelor of Science
+  FIELD_OF_STUDY: Information Technology
+  START_DATE: 2015-06-01
+  END_DATE: 2019-04-30
+  CREDENTIAL_URL: 
+  DESCRIPTION: <p>GPA 1.50</p><p><strong>Courses:</strong> Web Development, Database Management, Programming, Software Engineering, Networking</p>
+
+PROJECTS:
+- TITLE: LLM-Friendly Wiki (Karpathy-style Obsidian Vault)
+  DESCRIPTION: <p>Hand-maintained Markdown knowledge base documenting a large enterprise WMS codebase, designed so both human engineers and AI coding agents (Claude Code, Cursor, Cline) share the same context. Every page has YAML frontmatter (source_paths, db_connection, related, tags, last_verified); per-folder _INDEX.md cuts agent token cost; same-turn-update discipline keeps the vault from rotting. Inspired by Andrej Karpathy&#x27;s thesis that the most valuable artifact for AI-assisted coding is a well-structured wiki of your own code.</p><ul><li>~20 top-level folders: Architecture, Backend, Database, Decisions, Examples, Frontend, Integrations, Modules, Modules-v2, Rules, Runbooks, Tags, Tutorials, Workflows, plus Glossary / STYLE / Paths-and-Patterns / TechDebt</li><li>7-field frontmatter contract: title, domain, source_paths, db_connection, related, tags, last_verified</li><li>Per-folder _INDEX.md so agents grep an index, not the full body</li><li>Explicit source -&gt; wiki mapping declared in each repo&#x27;s CLAUDE.md</li><li>Karpathy coding guidelines bundled into the agent guide</li></ul><p><strong>Tech:</strong> Obsidian, Markdown, YAML frontmatter, LLM context, Karpathy, Claude Code, Cursor, AI-friendly documentation</p>
+  URL: https://kon2raya.netlify.app/case-studies/llm-wiki.html
+  LINKS: 
+  START_DATE: 2026-01-01
+  END_DATE: 
+  CATEGORY: Documentation
+- TITLE: WMS v2 — Inventory Rewrite (Laravel 12 + Vue 3, canonical V3 pattern)
+  DESCRIPTION: <p>Active modernization of a multi-warehouse, multi-tenant inventory + WMS platform — replacing a Laravel 8 / Nuxt 2 legacy with Laravel 12 / Vue 3 organized around a single canonical V3 list-page pattern, BaseCrudController + BaseCrudService foundation, online schema migrations (ALGORITHM=INPLACE LOCK=NONE), and CI-enforced architectural guardrails.</p><ul><li>Five binding requirements: parity, flexibility, maintainability, scalability, performance</li><li>Canonical V3DataTable + BaseCrud pattern with ModuleSchemaInterface — new module = wiring, not design</li><li>CI guardrails encode architecture: ESLint rules (wms/no-inline-grid-columns, wms/no-axios-in-views), PHPStan rules (wms.controller.no-inline-query, wms.reports.no-get, wms.no-direct-audit-write), migration linter</li><li>Online schema migrations only — ALGORITHM=INPLACE LOCK=NONE, EXPLAIN snapshot per new index</li><li>~103 models, ~76 controllers, ~121 migrations, ~130 pages on the rewrite</li><li>Playwright e2e workspace with per-module artifact bucketing</li><li>Karpathy coding guidelines in the agent guide</li></ul><p><strong>Tech:</strong> Laravel 12, Vue 3, Spatie Laravel-Permission, AG Grid Enterprise, PHPStan, ESLint, Playwright, MySQL online DDL, BaseCrudController, ModuleSchemaInterface</p>
+  URL: https://kon2raya.netlify.app/case-studies/wms-v2.html
+  LINKS: 
+  START_DATE: 2025-09-01
+  END_DATE: 
+  CATEGORY: Application
+- TITLE: Autonomous AI Engineer (Ticketing)
+  DESCRIPTION: <p>Multi-LLM autonomous AI agent pipeline wired into a production ticketing system. `php artisan ai:work {ref}` picks up ASSIGNED tickets, auto-detects the target repository, dispatches to the operator-chosen brain (Claude / Gemini / OpenAI / OpenRouter / Qwen), persists per-ticket chat memory, and a separate `ai:verify` command runs the real PHPUnit suite before any merge.</p><ul><li>5 LLM brains wired in behind one AiHarnessService — Claude, Gemini, OpenAI, OpenRouter, Qwen</li><li>Security gate at command boundary — only ASSIGNED-status tickets are pickable</li><li>Auto repo detection from the systems table — no cross-repo drift</li><li>AIChatMemory Eloquent model persists per-ticket conversation history</li><li>Independent verifier runs `php artisan test` (or custom --cmd), logs pass/fail to the ticket comment thread</li><li>tickets:auto-close cron closes deployed tickets after 72 hours</li></ul><p><strong>Tech:</strong> Claude, Gemini, OpenAI, OpenRouter, Qwen, Laravel 11, Multi-LLM, Autonomous Agents, PHPUnit, Spatie Permissions</p>
+  URL: https://kon2raya.netlify.app/case-studies/ai-engineer.html
+  LINKS: 
+  START_DATE: 2025-06-01
+  END_DATE: 
+  CATEGORY: Platform
+- TITLE: Transport Management System (TMS)
+  DESCRIPTION: <p>Enterprise logistics TMS on Vue 3 + Laravel 11. Full booking → dispatch → live-GPS → costing → invoice lifecycle, with trucker partner registry, vehicle maintenance, and Spatie Permission RBAC. Companion to the WMS mobile app and the customer-service CRM.</p><ul><li>~68 Eloquent models, ~99 controllers, ~98 migrations, ~324 Vue pages across 20+ domain folders</li><li>Velzon admin theme on Vue CLI; AG Grid Enterprise tables; Sanctum bearer auth</li><li>Costing engine: Costing → CostingCost → CostingDetails → CostingTariffs</li><li>Live GPS map view with truck-position cards + fleet utilization tiles</li><li>Excel bulk import / export via maatwebsite/excel + mavinoo/laravel-batch</li></ul><p><strong>Tech:</strong> Vue 3, Laravel 11, Sanctum, Spatie Laravel-Permission, AG Grid Enterprise, DomPDF, MySQL, Live GPS</p>
+  URL: https://kon2raya.netlify.app/case-studies/tms.html
+  LINKS: 
+  START_DATE: 2024-11-01
+  END_DATE: 
+  CATEGORY: Application
+- TITLE: Enterprise HRIS
+  DESCRIPTION: <p>Modern HRIS on Laravel 12 + Vue 3 + Vite + Pinia + TypeScript + Vuestic Admin covering the complete employee lifecycle: records, organizational units, time and attendance, leave, payroll (with government contribution tables, tax tables, 13th-month), memos with concurrency-safe sequential numbering via MySQL GET_LOCK advisory locks, performance evaluations, and TOTP 2FA.</p><ul><li>~54 Eloquent models, ~41 controllers, ~57 migrations, ~95 Vue pages across 30 domain folders</li><li>TOTP 2FA via pragmarx/google2fa-laravel + bacon/bacon-qr-code QR enrollment</li><li>OU-scoped RBAC with Role + Permission + RolePermission + RoleOrganizationalUnit</li><li>Storybook for component stories, Playwright e2e workspace, dual CI/CD on Jenkins + Buddy</li><li>Concurrency-safe memo numbering via MySQL GET_LOCK advisory locks</li></ul><p><strong>Tech:</strong> Laravel 12, Vue 3, Vite, Pinia, TypeScript, Vuestic Admin, TOTP 2FA, AG Grid Enterprise, Storybook, Playwright</p>
+  URL: https://kon2raya.netlify.app/case-studies/hris.html
+  LINKS: 
+  START_DATE: 2024-08-01
+  END_DATE: 
+  CATEGORY: Platform
+- TITLE: @ph-dev-utils — Filipino Developer Utilities (12-package family)
+  DESCRIPTION: <p>Open-source family of 12 focused packages encoding Philippine-specific logic for both JavaScript/TypeScript (npm, @ph-dev-utils/*) and PHP (Packagist, phdevutils/*) — peso formatting and number-words, ~10 government-ID validators, the full PSGC address hierarchy, ZIP codes, payroll (SSS / PhilHealth / Pag-IBIG / BIR withholding to net take-home), BIR tax math, holiday-aware dates, seedable fake data, and a React address picker. 11 of the 12 publish identical behavior on both ecosystems, so a PHP backend and a JS frontend agree by construction. Fronted by a React 19 + TypeScript + Vite live playground (deployed on Vercel) that imports and runs the real published packages, so the showcase doubles as the family&#x27;s integration test.</p><ul><li>12 packages: core, payroll, bir, dates, faker, address-picker, banks, geo, psic, business, postal, psgc-barangays</li><li>JS / PHP parity — 11 packages dual-published on npm and Packagist with identical behavior</li><li>Datasets: 42,046 barangays (PSA Q4 2024), 2,048 ZIP codes, 1,573 city/municipality coordinates, 158 banks/e-money institutions</li><li>Single typed PACKAGES[] catalog drives every card, badge, and link on the site</li><li>Live in-browser playground runs the real packages — the marketing site is also the smoke test</li></ul><p><strong>Tech:</strong> TypeScript, React 19, Vite, PHP, npm, Packagist, Open Source, PSGC, Monorepo, Developer Tooling</p>
+  URL: https://kon2raya.netlify.app/case-studies/ph-dev-utils.html
+  LINKS: 
+  START_DATE: 2026-01-01
+  END_DATE: 
+  CATEGORY: Library
+- TITLE: WMS Mobile App (Flutter)
+  DESCRIPTION: <p>Flutter-based Warehouse Management System mobile app for AAI Worldwide Logistics — real-time inventory, receiving, and pick/pack on the warehouse floor.</p><ul><li>Offline-first reads with cached lookups for SKUs, locations, recent transactions</li><li>Write-through retry queue replays on reconnect, no lost writes</li><li>Laravel REST backend mirroring the existing WMS endpoints</li></ul><p><strong>Tech:</strong> Flutter, Dart, Laravel, REST, MySQL, Claude AI</p>
+  URL: https://kon2raya.netlify.app/case-studies/wms.html
+  LINKS: 
+  START_DATE: 2024-11-01
+  END_DATE: 
+  CATEGORY: Application
+- TITLE: Pamanaland Realty Management System
+  DESCRIPTION: <p>Full-stack realty management platform for Pamanaland Realty — property inventory, agent assignments, commission tracking, and role-based dashboards.</p><ul><li>Vue + Laravel monolith with role-aware UI</li><li>Auto-calculated commissions exportable per agent / period</li><li>CSV + PDF report exports replaced manual Excel reconciliations</li></ul><p><strong>Tech:</strong> Vue.js, Laravel, MySQL, Ag-Grid, jsPDF</p>
+  URL: https://kon2raya.netlify.app/case-studies/pamanaland.html
+  LINKS: 
+  START_DATE: 
+  END_DATE: 
+  CATEGORY: Application
+- TITLE: JBC Commission Management System
+  DESCRIPTION: <p>Sales commission management system for JBC Marketing OPC.</p><p><strong>Tech:</strong> Vue.js, Laravel, REST</p>
+  URL: https://kon2raya.netlify.app/case-studies/jbc.html
+  LINKS: 
+  START_DATE: 
+  END_DATE: 
+  CATEGORY: Application
+- TITLE: UPHDJGT Medical University
+  DESCRIPTION: <p>Institutional website for UPHDJGT Medical University.</p><p><strong>Tech:</strong> Vue.js, PHP, CMS</p>
+  URL: https://uphdjgtmedicaluniversity.edu.ph/
+  LINKS: 
+  START_DATE: 
+  END_DATE: 
+  CATEGORY: Website
+- TITLE: Portfolio (this site)
+  DESCRIPTION: <p>Hand-crafted HTML / CSS / JavaScript portfolio with cyber-themed UI, animated effects, interactive terminal, live GitHub stats, and AI-assisted-delivery framing. Deployed on Netlify.</p><ul><li>Zero frameworks — pure HTML/CSS/JS</li><li>Interactive dev terminal with real commands (~/portfolio bash)</li><li>Live visitor counter, GitHub events graph, recent repos panel</li><li>Multi-theme switcher (cyber / matrix / sunset)</li><li>Accessible: skip-link, ARIA labels, prefers-reduced-motion respected</li></ul><p><strong>Tech:</strong> HTML5, CSS3, JavaScript, Netlify</p>
+  URL: https://kon2raya.netlify.app
+  LINKS: 
+  START_DATE: 
+  END_DATE: 
+  CATEGORY: Portfolio
+
+SKILLS:
+- NAME: Vue.js
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: Nuxt.js
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: React
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: Vuetify
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: HTML5
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: CSS3
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: JavaScript
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: TypeScript
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: Bootstrap
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: jQuery
+  LEVEL: 
+  CATEGORY: Frontend
+- NAME: Laravel
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: PHP
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: Node.js
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: MySQL
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: SQL
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: REST API Design
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: SilverStripe
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: Statamic
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: WordPress
+  LEVEL: 
+  CATEGORY: Backend
+- NAME: Flutter
+  LEVEL: 
+  CATEGORY: Mobile
+- NAME: Dart
+  LEVEL: 
+  CATEGORY: Mobile
+- NAME: Firebase
+  LEVEL: 
+  CATEGORY: Mobile
+- NAME: Android Studio
+  LEVEL: 
+  CATEGORY: Mobile
+- NAME: Claude AI
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Claude Code
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Gemini
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: OpenAI API
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: OpenRouter
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Qwen
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: GitHub Copilot
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Autonomous Agents
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Multi-LLM Orchestration
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: AI Harness / Agent Services
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Prompt Engineering
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: n8n
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Zapier
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Make.com
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Workflow Automation
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: AI-Assisted Delivery
+  LEVEL: 
+  CATEGORY: AI & Automation
+- NAME: Ag-Grid
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: jsPDF
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: SurveyJS
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: SAP API
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: XERO
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: Eversign
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: ABN Lookup
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: Google Maps API
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: FAREYE API
+  LEVEL: 
+  CATEGORY: Libraries & Integrations
+- NAME: Git
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: GitHub
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: Docker
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: Linux
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: VS Code
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: Postman
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: Composer
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: npm
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: Vite
+  LEVEL: 
+  CATEGORY: DevOps & Tooling
+- NAME: Figma
+  LEVEL: 
+  CATEGORY: Design & SEO
+- NAME: Adobe Photoshop
+  LEVEL: 
+  CATEGORY: Design & SEO
+- NAME: Adobe Illustrator
+  LEVEL: 
+  CATEGORY: Design & SEO
+- NAME: SEMrush
+  LEVEL: 
+  CATEGORY: Design & SEO
+- NAME: Ahrefs
+  LEVEL: 
+  CATEGORY: Design & SEO
+- NAME: SEO
+  LEVEL: 
+  CATEGORY: Design & SEO
+
+CERTIFICATIONS:
+
+LANGUAGES:
+- NAME: English
+  PROFICIENCY: Professional
+- NAME: Filipino
+  PROFICIENCY: Native
+
+END_SHARECV_TEMPLATE_DATA

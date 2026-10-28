@@ -134,7 +134,7 @@ Do **not** auto-push. Ask the user before pushing — they may want to review th
 
 If the change touched `basics.summary`, `projects[]`, `work[]`, or `skills[]` in `resume.json` (not just `meta.lastModified`), invoke the **`update-linkedin-pack`** skill at `.claude/skills/update-linkedin-pack/SKILL.md` next. That keeps `linkedin-summary.md` (the LinkedIn copy-paste pack) in lockstep with the same resume change. Skip the chain for trivial `meta.lastModified` bumps or pure styling fixes.
 
-On the same trigger, also invoke **`update-sharecv-pack`** (`.claude/skills/update-sharecv-pack/SKILL.md`). It regenerates `sharecv-pack.md`, the paste-ready pack for the user's ShareCV profile.
+On the same trigger, also invoke **`update-sharecv-pack`** (`.claude/skills/update-sharecv-pack/SKILL.md`). It regenerates `sharecv-import.txt` and re-syncs the public ShareCV profile in one paste.
 
 ## Anti-patterns
 
